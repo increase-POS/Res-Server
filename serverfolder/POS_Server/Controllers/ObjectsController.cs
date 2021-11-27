@@ -69,11 +69,7 @@ namespace POS_Server.Controllers
                                    {
                                        objectId = c.objectId,
                                        name = c.name,
-                                       note = c.note,
-                                       createDate = c.createDate,
-                                       updateDate = c.updateDate,
-                                       createUserId = c.createUserId,
-                                       updateUserId = c.updateUserId,
+                                  
                                        parentObjectId = c.parentObjectId,
                                        objectType = c.objectType,
                                    })
@@ -223,11 +219,7 @@ namespace POS_Server.Controllers
                        {
                            c.objectId,
                            c.name,
-                           c.note,
-                           c.createDate,
-                           c.updateDate,
-                           c.createUserId,
-                           c.updateUserId,
+                         
                            c.parentObjectId,
                            c.objectType,
                        })
@@ -331,24 +323,13 @@ namespace POS_Server.Controllers
 
                      
 
-                            if (newObject.updateUserId == 0 || newObject.updateUserId == null)
-                            {
-                                Nullable<int> id = null;
-                                newObject.updateUserId = id;
-                            }
-                            if (newObject.createUserId == 0 || newObject.createUserId == null)
-                            {
-                                Nullable<int> id = null;
-                                newObject.createUserId = id;
-                            }
+                        
                             using (incposdbEntities entity = new incposdbEntities())
                             {
                                 var sEntity = entity.Set<objects>();
                                 if (newObject.objectId == 0)
                                 {
-                                    newObject.createDate = DateTime.Now;
-                                    newObject.updateDate = DateTime.Now;
-                                    newObject.updateUserId = newObject.createUserId;
+                                  
                                     sEntity.Add(newObject);
                                     entity.SaveChanges();
                                     message = newObject.objectId.ToString();
@@ -360,14 +341,10 @@ namespace POS_Server.Controllers
 
                                     tmps.objectId = newObject.objectId;
                                     tmps.name = newObject.name;
-                                    tmps.note = newObject.note;
-                                    tmps.note = newObject.note;
-
-                                    tmps.createDate = newObject.createDate;
-                                    tmps.updateDate = DateTime.Now;// server current date
+                               
                                     tmps.parentObjectId = newObject.parentObjectId;
                                     tmps.objectType = newObject.objectType;
-                                    tmps.updateUserId = newObject.updateUserId;
+                                
                                     entity.SaveChanges();
                                     message = tmps.objectId.ToString();
                                 }
@@ -536,9 +513,7 @@ namespace POS_Server.Controllers
                         {
 
                             objects Obj = entity.objects.Find(objectId);
-                            Obj.isActive = 0;
-                            Obj.updateUserId = userId;
-                            Obj.updateDate = DateTime.Now;
+                         
                             message = entity.SaveChanges().ToString();
                             //  return Ok("OK");
                             return TokenManager.GenerateToken(message);

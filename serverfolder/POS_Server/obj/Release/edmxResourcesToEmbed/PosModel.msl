@@ -735,14 +735,9 @@
         <MappingFragment StoreEntitySet="objects">
           <ScalarProperty Name="objectId" ColumnName="objectId" />
           <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="note" ColumnName="note" />
-          <ScalarProperty Name="createDate" ColumnName="createDate" />
-          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
-          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
-          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
-          <ScalarProperty Name="isActive" ColumnName="isActive" />
           <ScalarProperty Name="parentObjectId" ColumnName="parentObjectId" />
           <ScalarProperty Name="objectType" ColumnName="objectType" />
+          <ScalarProperty Name="translate" ColumnName="translate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -961,20 +956,6 @@
           <ScalarProperty Name="itemId" ColumnName="itemId" />
           <ScalarProperty Name="serialNum" ColumnName="serialNum" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
-          <ScalarProperty Name="createDate" ColumnName="createDate" />
-          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
-          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
-          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="servicesCosts">
-      <EntityTypeMapping TypeName="incposdbModel.servicesCosts">
-        <MappingFragment StoreEntitySet="servicesCosts">
-          <ScalarProperty Name="costId" ColumnName="costId" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="costVal" ColumnName="costVal" />
-          <ScalarProperty Name="itemId" ColumnName="itemId" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />

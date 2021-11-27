@@ -327,7 +327,6 @@
     <Compile Include="Controllers\PropertiesController.cs" />
     <Compile Include="Controllers\propertiesItemsController.cs" />
     <Compile Include="Controllers\serialsController.cs" />
-    <Compile Include="Controllers\servicesCostsController.cs" />
     <Compile Include="Controllers\UnitsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\OffersController.cs" />
@@ -533,9 +532,6 @@
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="serials.cs">
-      <DependentUpon>PosModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="servicesCosts.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="setting.cs">

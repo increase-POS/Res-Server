@@ -368,11 +368,7 @@ namespace POS_Server.Controllers
                                {
                                    objectId = c.objectId,
                                    name = c.name,
-                                   note = c.note,
-                                   createDate = c.createDate,
-                                   updateDate = c.updateDate,
-                                   createUserId = c.createUserId,
-                                   updateUserId = c.updateUserId,
+                                 
                                    parentObjectId = c.parentObjectId,
                                    objectType = c.objectType,
                                })

@@ -404,7 +404,6 @@
     <Property Name="createUserId" Type="Int32" />
     <Property Name="updateUserId" Type="Int32" />
     <Property Name="isActive" Type="Int32" />
-    <NavigationProperty Name="groups" Relationship="Self.FK_groupObject_groups" FromRole="groupObject" ToRole="groups" />
     <NavigationProperty Name="objects" Relationship="Self.FK_groupObject_objects" FromRole="groupObject" ToRole="objects" />
     <NavigationProperty Name="users" Relationship="Self.FK_groupObject_users" FromRole="groupObject" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_groupObject_users1" FromRole="groupObject" ToRole="users" />
@@ -421,10 +420,8 @@
     <Property Name="createUserId" Type="Int32" />
     <Property Name="updateUserId" Type="Int32" />
     <Property Name="isActive" Type="Int32" />
-    <NavigationProperty Name="groupObject" Relationship="Self.FK_groupObject_groups" FromRole="groups" ToRole="groupObject" />
     <NavigationProperty Name="users" Relationship="Self.FK_groups_users1" FromRole="groups" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_groups_users2" FromRole="groups" ToRole="users" />
-    <NavigationProperty Name="users2" Relationship="Self.FK_users_groups" FromRole="groups" ToRole="users" />
   </EntityType>
   <EntityType Name="Inventory">
     <Key>
@@ -603,7 +600,6 @@
     <NavigationProperty Name="itemsProp" Relationship="Self.FK_itemsProp_items" FromRole="items" ToRole="itemsProp" />
     <NavigationProperty Name="itemsUnits" Relationship="Self.FK_itemsUnits_items" FromRole="items" ToRole="itemsUnits" />
     <NavigationProperty Name="serials" Relationship="Self.FK_serials_items" FromRole="items" ToRole="serials" />
-    <NavigationProperty Name="servicesCosts" Relationship="Self.FK_servicesCosts_items" FromRole="items" ToRole="servicesCosts" />
   </EntityType>
   <EntityType Name="itemsLocations">
     <Key>
@@ -905,19 +901,12 @@
     </Key>
     <Property Name="objectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="createDate" Type="DateTime" Precision="7" />
-    <Property Name="updateDate" Type="DateTime" Precision="7" />
-    <Property Name="createUserId" Type="Int32" />
-    <Property Name="updateUserId" Type="Int32" />
-    <Property Name="isActive" Type="Int32" />
     <Property Name="parentObjectId" Type="Int32" />
     <Property Name="objectType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="translate" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="groupObject" Relationship="Self.FK_groupObject_objects" FromRole="objects" ToRole="groupObject" />
     <NavigationProperty Name="objects1" Relationship="Self.FK_objects_objects" FromRole="objects" ToRole="objects1" />
     <NavigationProperty Name="objects2" Relationship="Self.FK_objects_objects" FromRole="objects1" ToRole="objects" />
-    <NavigationProperty Name="users" Relationship="Self.FK_objects_users" FromRole="objects" ToRole="users" />
-    <NavigationProperty Name="users1" Relationship="Self.FK_objects_users1" FromRole="objects" ToRole="users" />
   </EntityType>
   <EntityType Name="offers">
     <Key>
@@ -1179,22 +1168,6 @@
     <NavigationProperty Name="users" Relationship="Self.FK_serials_users" FromRole="serials" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_serials_users1" FromRole="serials" ToRole="users" />
   </EntityType>
-  <EntityType Name="servicesCosts">
-    <Key>
-      <PropertyRef Name="costId" />
-    </Key>
-    <Property Name="costId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="costVal" Type="Decimal" Precision="20" Scale="3" />
-    <Property Name="itemId" Type="Int32" />
-    <Property Name="createDate" Type="DateTime" Precision="7" />
-    <Property Name="updateDate" Type="DateTime" Precision="7" />
-    <Property Name="createUserId" Type="Int32" />
-    <Property Name="updateUserId" Type="Int32" />
-    <NavigationProperty Name="items" Relationship="Self.FK_servicesCosts_items" FromRole="servicesCosts" ToRole="items" />
-    <NavigationProperty Name="users" Relationship="Self.FK_servicesCosts_users" FromRole="servicesCosts" ToRole="users" />
-    <NavigationProperty Name="users1" Relationship="Self.FK_servicesCosts_users1" FromRole="servicesCosts" ToRole="users" />
-  </EntityType>
   <EntityType Name="setting">
     <Key>
       <PropertyRef Name="settingId" />
@@ -1389,7 +1362,6 @@
     <NavigationProperty Name="groupObject1" Relationship="Self.FK_groupObject_users1" FromRole="users" ToRole="groupObject" />
     <NavigationProperty Name="groups" Relationship="Self.FK_groups_users1" FromRole="users" ToRole="groups" />
     <NavigationProperty Name="groups1" Relationship="Self.FK_groups_users2" FromRole="users" ToRole="groups" />
-    <NavigationProperty Name="groups2" Relationship="Self.FK_users_groups" FromRole="users" ToRole="groups" />
     <NavigationProperty Name="Inventory" Relationship="Self.FK_Inventory_users" FromRole="users" ToRole="Inventory" />
     <NavigationProperty Name="Inventory1" Relationship="Self.FK_Inventory_users1" FromRole="users" ToRole="Inventory" />
     <NavigationProperty Name="inventoryItemLocation" Relationship="Self.FK_inventoryItemLocation_users" FromRole="users" ToRole="inventoryItemLocation" />
@@ -1434,8 +1406,6 @@
     <NavigationProperty Name="notificationUser" Relationship="Self.FK_notificationUser_users" FromRole="users" ToRole="notificationUser" />
     <NavigationProperty Name="notificationUser1" Relationship="Self.FK_notificationUser_users1" FromRole="users" ToRole="notificationUser" />
     <NavigationProperty Name="notificationUser2" Relationship="Self.FK_notificationUser_users2" FromRole="users" ToRole="notificationUser" />
-    <NavigationProperty Name="objects" Relationship="Self.FK_objects_users" FromRole="users" ToRole="objects" />
-    <NavigationProperty Name="objects1" Relationship="Self.FK_objects_users1" FromRole="users" ToRole="objects" />
     <NavigationProperty Name="packages" Relationship="Self.FK_packages_users1" FromRole="users" ToRole="packages" />
     <NavigationProperty Name="packages1" Relationship="Self.FK_packages_users2" FromRole="users" ToRole="packages" />
     <NavigationProperty Name="Points" Relationship="Self.FK_Points_users" FromRole="users" ToRole="Points" />
@@ -1455,8 +1425,6 @@
     <NavigationProperty Name="propertiesItems1" Relationship="Self.FK_propertiesItems_users1" FromRole="users" ToRole="propertiesItems" />
     <NavigationProperty Name="serials" Relationship="Self.FK_serials_users" FromRole="users" ToRole="serials" />
     <NavigationProperty Name="serials1" Relationship="Self.FK_serials_users1" FromRole="users" ToRole="serials" />
-    <NavigationProperty Name="servicesCosts" Relationship="Self.FK_servicesCosts_users" FromRole="users" ToRole="servicesCosts" />
-    <NavigationProperty Name="servicesCosts1" Relationship="Self.FK_servicesCosts_users1" FromRole="users" ToRole="servicesCosts" />
     <NavigationProperty Name="sysEmails" Relationship="Self.FK_sysEmails_users" FromRole="users" ToRole="sysEmails" />
     <NavigationProperty Name="sysEmails1" Relationship="Self.FK_sysEmails_users1" FromRole="users" ToRole="sysEmails" />
     <NavigationProperty Name="userSetValues" Relationship="Self.FK_userSetValues_users" FromRole="users" ToRole="userSetValues" />
@@ -2273,18 +2241,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_groupObject_groups">
-    <End Role="groups" Type="Self.groups" Multiplicity="0..1" />
-    <End Role="groupObject" Type="Self.groupObject" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="groups">
-        <PropertyRef Name="groupId" />
-      </Principal>
-      <Dependent Role="groupObject">
-        <PropertyRef Name="groupId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_groupObject_objects">
     <End Role="objects" Type="Self.objects" Multiplicity="0..1" />
     <End Role="groupObject" Type="Self.groupObject" Multiplicity="*" />
@@ -2342,18 +2298,6 @@
       </Principal>
       <Dependent Role="groups">
         <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_users_groups">
-    <End Role="groups" Type="Self.groups" Multiplicity="0..1" />
-    <End Role="users" Type="Self.users" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="groups">
-        <PropertyRef Name="groupId" />
-      </Principal>
-      <Dependent Role="users">
-        <PropertyRef Name="groupId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2785,18 +2729,6 @@
         <PropertyRef Name="itemId" />
       </Principal>
       <Dependent Role="serials">
-        <PropertyRef Name="itemId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_servicesCosts_items">
-    <End Role="items" Type="Self.items" Multiplicity="0..1" />
-    <End Role="servicesCosts" Type="Self.servicesCosts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="items">
-        <PropertyRef Name="itemId" />
-      </Principal>
-      <Dependent Role="servicesCosts">
         <PropertyRef Name="itemId" />
       </Dependent>
     </ReferentialConstraint>
@@ -3413,30 +3345,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_objects_users">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="objects" Type="Self.objects" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="objects">
-        <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_objects_users1">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="objects" Type="Self.objects" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="objects">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_packages_users1">
     <End Role="users" Type="Self.users" Multiplicity="0..1" />
     <End Role="packages" Type="Self.packages" Multiplicity="*" />
@@ -3761,30 +3669,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_servicesCosts_users">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="servicesCosts" Type="Self.servicesCosts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="servicesCosts">
-        <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_servicesCosts_users1">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="servicesCosts" Type="Self.servicesCosts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="servicesCosts">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_setValues_setting">
     <End Role="setting" Type="Self.setting" Multiplicity="0..1" />
     <End Role="setValues" Type="Self.setValues" Multiplicity="*" />
@@ -3937,7 +3821,6 @@
     <EntitySet Name="propertiesItems" EntityType="Self.propertiesItems" />
     <EntitySet Name="sections" EntityType="Self.sections" />
     <EntitySet Name="serials" EntityType="Self.serials" />
-    <EntitySet Name="servicesCosts" EntityType="Self.servicesCosts" />
     <EntitySet Name="setting" EntityType="Self.setting" />
     <EntitySet Name="setValues" EntityType="Self.setValues" />
     <EntitySet Name="shippingCompanies" EntityType="Self.shippingCompanies" />
@@ -4209,10 +4092,6 @@
       <End Role="users" EntitySet="users" />
       <End Role="Expenses" EntitySet="Expenses" />
     </AssociationSet>
-    <AssociationSet Name="FK_groupObject_groups" Association="Self.FK_groupObject_groups">
-      <End Role="groups" EntitySet="groups" />
-      <End Role="groupObject" EntitySet="groupObject" />
-    </AssociationSet>
     <AssociationSet Name="FK_groupObject_objects" Association="Self.FK_groupObject_objects">
       <End Role="objects" EntitySet="objects" />
       <End Role="groupObject" EntitySet="groupObject" />
@@ -4232,10 +4111,6 @@
     <AssociationSet Name="FK_groups_users2" Association="Self.FK_groups_users2">
       <End Role="users" EntitySet="users" />
       <End Role="groups" EntitySet="groups" />
-    </AssociationSet>
-    <AssociationSet Name="FK_users_groups" Association="Self.FK_users_groups">
-      <End Role="groups" EntitySet="groups" />
-      <End Role="users" EntitySet="users" />
     </AssociationSet>
     <AssociationSet Name="FK_Inventory_pos" Association="Self.FK_Inventory_pos">
       <End Role="pos" EntitySet="pos" />
@@ -4380,10 +4255,6 @@
     <AssociationSet Name="FK_serials_items" Association="Self.FK_serials_items">
       <End Role="items" EntitySet="items" />
       <End Role="serials" EntitySet="serials" />
-    </AssociationSet>
-    <AssociationSet Name="FK_servicesCosts_items" Association="Self.FK_servicesCosts_items">
-      <End Role="items" EntitySet="items" />
-      <End Role="servicesCosts" EntitySet="servicesCosts" />
     </AssociationSet>
     <AssociationSet Name="FK_itemsLocations_itemsUnits" Association="Self.FK_itemsLocations_itemsUnits">
       <End Role="itemsUnits" EntitySet="itemsUnits" />
@@ -4589,14 +4460,6 @@
       <End Role="objects" EntitySet="objects" />
       <End Role="objects1" EntitySet="objects" />
     </AssociationSet>
-    <AssociationSet Name="FK_objects_users" Association="Self.FK_objects_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="objects" EntitySet="objects" />
-    </AssociationSet>
-    <AssociationSet Name="FK_objects_users1" Association="Self.FK_objects_users1">
-      <End Role="users" EntitySet="users" />
-      <End Role="objects" EntitySet="objects" />
-    </AssociationSet>
     <AssociationSet Name="FK_packages_users1" Association="Self.FK_packages_users1">
       <End Role="users" EntitySet="users" />
       <End Role="packages" EntitySet="packages" />
@@ -4704,14 +4567,6 @@
     <AssociationSet Name="FK_serials_users1" Association="Self.FK_serials_users1">
       <End Role="users" EntitySet="users" />
       <End Role="serials" EntitySet="serials" />
-    </AssociationSet>
-    <AssociationSet Name="FK_servicesCosts_users" Association="Self.FK_servicesCosts_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="servicesCosts" EntitySet="servicesCosts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_servicesCosts_users1" Association="Self.FK_servicesCosts_users1">
-      <End Role="users" EntitySet="users" />
-      <End Role="servicesCosts" EntitySet="servicesCosts" />
     </AssociationSet>
     <AssociationSet Name="FK_setValues_setting" Association="Self.FK_setValues_setting">
       <End Role="setting" EntitySet="setting" />

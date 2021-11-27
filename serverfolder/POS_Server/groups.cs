@@ -14,13 +14,6 @@ namespace POS_Server
     
     public partial class groups
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public groups()
-        {
-            this.groupObject = new HashSet<groupObject>();
-            this.users2 = new HashSet<users>();
-        }
-    
         public int groupId { get; set; }
         public string name { get; set; }
         public string notes { get; set; }
@@ -30,11 +23,7 @@ namespace POS_Server
         public Nullable<int> updateUserId { get; set; }
         public Nullable<int> isActive { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<groupObject> groupObject { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<users> users2 { get; set; }
     }
 }

@@ -695,14 +695,9 @@
     </Key>
     <Property Name="objectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="200" />
-    <Property Name="note" Type="ntext" />
-    <Property Name="createDate" Type="datetime2" Precision="7" />
-    <Property Name="updateDate" Type="datetime2" Precision="7" />
-    <Property Name="createUserId" Type="int" />
-    <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="int" />
     <Property Name="parentObjectId" Type="int" />
     <Property Name="objectType" Type="nvarchar" MaxLength="10" />
+    <Property Name="translate" Type="nvarchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="offers">
     <Key>
@@ -907,19 +902,6 @@
     <Property Name="itemId" Type="int" />
     <Property Name="serialNum" Type="nvarchar" MaxLength="200" />
     <Property Name="isActive" Type="tinyint" />
-    <Property Name="createDate" Type="datetime2" Precision="7" />
-    <Property Name="updateDate" Type="datetime2" Precision="7" />
-    <Property Name="createUserId" Type="int" />
-    <Property Name="updateUserId" Type="int" />
-  </EntityType>
-  <EntityType Name="servicesCosts">
-    <Key>
-      <PropertyRef Name="costId" />
-    </Key>
-    <Property Name="costId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nvarchar" MaxLength="200" />
-    <Property Name="costVal" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="itemId" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
@@ -1740,18 +1722,6 @@
       </Principal>
       <Dependent Role="Expenses">
         <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_groupObject_groups">
-    <End Role="groups" Type="Self.groups" Multiplicity="0..1" />
-    <End Role="groupObject" Type="Self.groupObject" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="groups">
-        <PropertyRef Name="groupId" />
-      </Principal>
-      <Dependent Role="groupObject">
-        <PropertyRef Name="groupId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2895,30 +2865,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_objects_users">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="objects" Type="Self.objects" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="objects">
-        <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_objects_users1">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="objects" Type="Self.objects" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="objects">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_packages_itemsUnits">
     <End Role="itemsUnits" Type="Self.itemsUnits" Multiplicity="0..1" />
     <End Role="packages" Type="Self.packages" Multiplicity="*" />
@@ -3303,42 +3249,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_servicesCosts_items">
-    <End Role="items" Type="Self.items" Multiplicity="0..1" />
-    <End Role="servicesCosts" Type="Self.servicesCosts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="items">
-        <PropertyRef Name="itemId" />
-      </Principal>
-      <Dependent Role="servicesCosts">
-        <PropertyRef Name="itemId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_servicesCosts_users">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="servicesCosts" Type="Self.servicesCosts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="servicesCosts">
-        <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_servicesCosts_users1">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="servicesCosts" Type="Self.servicesCosts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="servicesCosts">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_setValues_setting">
     <End Role="setting" Type="Self.setting" Multiplicity="0..1" />
     <End Role="setValues" Type="Self.setValues" Multiplicity="*" />
@@ -3396,18 +3306,6 @@
       </Principal>
       <Dependent Role="sysEmails">
         <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_users_groups">
-    <End Role="groups" Type="Self.groups" Multiplicity="0..1" />
-    <End Role="users" Type="Self.users" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="groups">
-        <PropertyRef Name="groupId" />
-      </Principal>
-      <Dependent Role="users">
-        <PropertyRef Name="groupId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3539,7 +3437,6 @@
     <EntitySet Name="propertiesItems" EntityType="Self.propertiesItems" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sections" EntityType="Self.sections" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="serials" EntityType="Self.serials" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="servicesCosts" EntityType="Self.servicesCosts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="setting" EntityType="Self.setting" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="setValues" EntityType="Self.setValues" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="shippingCompanies" EntityType="Self.shippingCompanies" Schema="dbo" store:Type="Tables" />
@@ -3766,10 +3663,6 @@
     <AssociationSet Name="FK_Expenses_users" Association="Self.FK_Expenses_users">
       <End Role="users" EntitySet="users" />
       <End Role="Expenses" EntitySet="Expenses" />
-    </AssociationSet>
-    <AssociationSet Name="FK_groupObject_groups" Association="Self.FK_groupObject_groups">
-      <End Role="groups" EntitySet="groups" />
-      <End Role="groupObject" EntitySet="groupObject" />
     </AssociationSet>
     <AssociationSet Name="FK_groupObject_objects" Association="Self.FK_groupObject_objects">
       <End Role="objects" EntitySet="objects" />
@@ -4151,14 +4044,6 @@
       <End Role="objects" EntitySet="objects" />
       <End Role="objects1" EntitySet="objects" />
     </AssociationSet>
-    <AssociationSet Name="FK_objects_users" Association="Self.FK_objects_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="objects" EntitySet="objects" />
-    </AssociationSet>
-    <AssociationSet Name="FK_objects_users1" Association="Self.FK_objects_users1">
-      <End Role="users" EntitySet="users" />
-      <End Role="objects" EntitySet="objects" />
-    </AssociationSet>
     <AssociationSet Name="FK_packages_itemsUnits" Association="Self.FK_packages_itemsUnits">
       <End Role="itemsUnits" EntitySet="itemsUnits" />
       <End Role="packages" EntitySet="packages" />
@@ -4287,18 +4172,6 @@
       <End Role="users" EntitySet="users" />
       <End Role="serials" EntitySet="serials" />
     </AssociationSet>
-    <AssociationSet Name="FK_servicesCosts_items" Association="Self.FK_servicesCosts_items">
-      <End Role="items" EntitySet="items" />
-      <End Role="servicesCosts" EntitySet="servicesCosts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_servicesCosts_users" Association="Self.FK_servicesCosts_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="servicesCosts" EntitySet="servicesCosts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_servicesCosts_users1" Association="Self.FK_servicesCosts_users1">
-      <End Role="users" EntitySet="users" />
-      <End Role="servicesCosts" EntitySet="servicesCosts" />
-    </AssociationSet>
     <AssociationSet Name="FK_setValues_setting" Association="Self.FK_setValues_setting">
       <End Role="setting" EntitySet="setting" />
       <End Role="setValues" EntitySet="setValues" />
@@ -4318,10 +4191,6 @@
     <AssociationSet Name="FK_sysEmails_users1" Association="Self.FK_sysEmails_users1">
       <End Role="users" EntitySet="users" />
       <End Role="sysEmails" EntitySet="sysEmails" />
-    </AssociationSet>
-    <AssociationSet Name="FK_users_groups" Association="Self.FK_users_groups">
-      <End Role="groups" EntitySet="groups" />
-      <End Role="users" EntitySet="users" />
     </AssociationSet>
     <AssociationSet Name="FK_userSetValues_setValues" Association="Self.FK_userSetValues_setValues">
       <End Role="setValues" EntitySet="setValues" />

@@ -75,7 +75,7 @@ namespace POS_Server.Controllers
                                         deleteOb = c.deleteOb,
                                         showOb = c.showOb,
 
-                                        desc = c.objects.note,
+                                       
 
                                         createDate = c.createDate,
                                         updateDate = c.updateDate,
@@ -834,7 +834,7 @@ namespace POS_Server.Controllers
                                         showOb = c.showOb,
 
                                         objectName = c.objects.name,
-                                        desc = c.objects.note,
+                                      
 
                                         createDate = c.createDate,
                                         updateDate = c.updateDate,

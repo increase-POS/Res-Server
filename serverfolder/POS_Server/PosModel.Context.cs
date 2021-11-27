@@ -80,7 +80,6 @@ namespace POS_Server
         public virtual DbSet<propertiesItems> propertiesItems { get; set; }
         public virtual DbSet<sections> sections { get; set; }
         public virtual DbSet<serials> serials { get; set; }
-        public virtual DbSet<servicesCosts> servicesCosts { get; set; }
         public virtual DbSet<setting> setting { get; set; }
         public virtual DbSet<setValues> setValues { get; set; }
         public virtual DbSet<shippingCompanies> shippingCompanies { get; set; }

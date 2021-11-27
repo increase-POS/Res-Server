@@ -30,7 +30,6 @@ namespace POS_Server
         public Nullable<int> updateUserId { get; set; }
         public Nullable<int> isActive { get; set; }
     
-        public virtual groups groups { get; set; }
         public virtual objects objects { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }

@@ -70,7 +70,7 @@ var strP = TokenManager.GetPrincipal(token);
                                 })
                        .ToList().OrderBy(x => x.location).ToList();
                     int sequence = 0;
-                    for(int i = 0; i< List.Count; i++)
+                    for(int i = 0; i< List.Count(); i++)
                     {
                         sequence++;
                         List[i].sequence = sequence;
