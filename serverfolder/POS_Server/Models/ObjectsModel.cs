@@ -18,5 +18,6 @@ namespace POS_Server.Models
         public Boolean canDelete { get; set; }
         public Nullable<int> parentObjectId { get; set; }
         public string objectType { get; set; }
+        public string translate { get; set; }
     }
 }

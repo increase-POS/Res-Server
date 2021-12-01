@@ -72,6 +72,7 @@ namespace POS_Server.Controllers
                                   
                                        parentObjectId = c.parentObjectId,
                                        objectType = c.objectType,
+                                       translate = c.translate,
                                    })
                                    .ToList();
                         if (List.Count > 0)
@@ -222,6 +223,7 @@ namespace POS_Server.Controllers
                          
                            c.parentObjectId,
                            c.objectType,
+                           c.translate,
                        })
                        .FirstOrDefault();
 
@@ -344,6 +346,7 @@ namespace POS_Server.Controllers
                                
                                     tmps.parentObjectId = newObject.parentObjectId;
                                     tmps.objectType = newObject.objectType;
+                                    tmps.translate = newObject.translate;
                                 
                                     entity.SaveChanges();
                                     message = tmps.objectId.ToString();
