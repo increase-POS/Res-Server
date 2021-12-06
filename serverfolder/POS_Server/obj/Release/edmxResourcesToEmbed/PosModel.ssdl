@@ -776,7 +776,7 @@
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="isActive" Type="tinyint" />
-    <Property Name="note" Type="ntext" />
+    <Property Name="notes" Type="ntext" />
     <Property Name="balanceAll" Type="decimal" Precision="20" Scale="3" />
   </EntityType>
   <EntityType Name="posSerials">
@@ -977,16 +977,6 @@
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="isActive" Type="tinyint" />
-  </EntityType>
-  <EntityType Name="sysdiagrams">
-    <Key>
-      <PropertyRef Name="diagram_id" />
-    </Key>
-    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="principal_id" Type="int" Nullable="false" />
-    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="version" Type="int" />
-    <Property Name="definition" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="sysEmails">
     <Key>
@@ -3442,7 +3432,6 @@
     <EntitySet Name="shippingCompanies" EntityType="Self.shippingCompanies" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="storageCost" EntityType="Self.storageCost" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="subscriptionFees" EntityType="Self.subscriptionFees" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysEmails" EntityType="Self.sysEmails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="units" EntityType="Self.units" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />

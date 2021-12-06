@@ -65,7 +65,6 @@
         <EntityTypeShape EntityType="incposdbModel.shippingCompanies" Width="1.5" PointX="17.25" PointY="79" IsExpanded="true" />
         <EntityTypeShape EntityType="incposdbModel.storageCost" Width="1.5" PointX="16.25" PointY="104.5" IsExpanded="true" />
         <EntityTypeShape EntityType="incposdbModel.subscriptionFees" Width="1.5" PointX="5.25" PointY="123.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="incposdbModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="incposdbModel.sysEmails" Width="1.5" PointX="5.25" PointY="98.125" IsExpanded="true" />
         <EntityTypeShape EntityType="incposdbModel.units" Width="1.5" PointX="11" PointY="76" IsExpanded="true" />
         <EntityTypeShape EntityType="incposdbModel.users" Width="1.5" PointX="0.75" PointY="80.375" IsExpanded="true" />

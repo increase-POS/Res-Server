@@ -57,7 +57,7 @@ var strP = TokenManager.GetPrincipal(token);
                                        updateUserId = p.updateUserId,
                                        isActive = p.isActive,
                                       balanceAll=p.balanceAll,
-                                       note = p.note,
+                                       notes = p.notes,
                                        branchCode = x.code,
                                    }).ToList();
 
@@ -125,7 +125,7 @@ var strP = TokenManager.GetPrincipal(token);
                                     updateUserId = p.updateUserId,
                                     isActive = p.isActive,
                                     balanceAll = p.balanceAll,
-                                    note = p.note,
+                                    notes = p.notes,
                                     branchCode = x.code,
                                 }).FirstOrDefault();
                     return TokenManager.GenerateToken(pos);
@@ -203,7 +203,7 @@ var strP = TokenManager.GetPrincipal(token);
                             tmpPos.name = newObject.name;
                             tmpPos.code = newObject.code;
                             tmpPos.branchId = newObject.branchId;
-                            tmpPos.note = newObject.note;
+                            tmpPos.notes = newObject.notes;
                             tmpPos.updateDate = DateTime.Now;
                             tmpPos.updateUserId = newObject.updateUserId;
                             tmpPos.isActive = newObject.isActive;
