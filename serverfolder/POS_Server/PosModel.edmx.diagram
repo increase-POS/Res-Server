@@ -262,6 +262,11 @@
         <AssociationConnector Association="incposdbModel.FK_userSetValues_users1" ManuallyRouted="false" />
         <AssociationConnector Association="incposdbModel.FK_userSetValues_users2" ManuallyRouted="false" />
         <AssociationConnector Association="incposdbModel.FK_usersLogs_users" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="incposdbModel.tags" Width="1.5" PointX="3" PointY="74.5" />
+        <AssociationConnector Association="incposdbModel.FK_items_tags" />
+        <AssociationConnector Association="incposdbModel.FK_tags_users" />
+        <AssociationConnector Association="incposdbModel.FK_tags_users1" />
+        <AssociationConnector Association="incposdbModel.FK_tags_users2" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -277,6 +277,7 @@
     <Compile Include="Controllers\BondsController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\BranchStoreController.cs" />
+    <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\CashTransferController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\cityController.cs" />
@@ -418,6 +419,7 @@
     <Compile Include="Models\BondsModel.cs" />
     <Compile Include="Models\BranchModel.cs" />
     <Compile Include="Models\BranchStoreModel.cs" />
+    <Compile Include="Models\TagsModel.cs" />
     <Compile Include="Models\CashTransferModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\CardModel.cs" />
@@ -552,6 +554,9 @@
     <Compile Include="sysEmails.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="tags.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="units.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
@@ -619,6 +624,7 @@
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="temp.temp.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -600,6 +600,8 @@
     <NavigationProperty Name="itemsProp" Relationship="Self.FK_itemsProp_items" FromRole="items" ToRole="itemsProp" />
     <NavigationProperty Name="itemsUnits" Relationship="Self.FK_itemsUnits_items" FromRole="items" ToRole="itemsUnits" />
     <NavigationProperty Name="serials" Relationship="Self.FK_serials_items" FromRole="items" ToRole="serials" />
+    <Property Name="tagId" Type="Int32" />
+    <NavigationProperty Name="tags" Relationship="incposdbModel.FK_items_tags" FromRole="items" ToRole="tags" />
   </EntityType>
   <EntityType Name="itemsLocations">
     <Key>
@@ -1421,6 +1423,9 @@
     <NavigationProperty Name="userSetValues1" Relationship="Self.FK_userSetValues_users1" FromRole="users" ToRole="userSetValues" />
     <NavigationProperty Name="userSetValues2" Relationship="Self.FK_userSetValues_users2" FromRole="users" ToRole="userSetValues" />
     <NavigationProperty Name="usersLogs" Relationship="Self.FK_usersLogs_users" FromRole="users" ToRole="usersLogs" />
+    <NavigationProperty Name="tags" Relationship="incposdbModel.FK_tags_users" FromRole="users" ToRole="tags" />
+    <NavigationProperty Name="tags1" Relationship="incposdbModel.FK_tags_users1" FromRole="users" ToRole="tags" />
+    <NavigationProperty Name="tags2" Relationship="incposdbModel.FK_tags_users2" FromRole="users" ToRole="tags" />
   </EntityType>
   <EntityType Name="userSetValues">
     <Key>
@@ -4589,5 +4594,88 @@
       <End Role="users" EntitySet="users" />
       <End Role="usersLogs" EntitySet="usersLogs" />
     </AssociationSet>
+    <EntitySet Name="tags" EntityType="incposdbModel.tags" />
+    <AssociationSet Name="FK_items_tags" Association="incposdbModel.FK_items_tags">
+      <End Role="tags" EntitySet="tags" />
+      <End Role="items" EntitySet="items" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tags_users" Association="incposdbModel.FK_tags_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="tags" EntitySet="tags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tags_users1" Association="incposdbModel.FK_tags_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="tags" EntitySet="tags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tags_users2" Association="incposdbModel.FK_tags_users2">
+      <End Role="users" EntitySet="users" />
+      <End Role="tags" EntitySet="tags" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="tags">
+    <Key>
+      <PropertyRef Name="tagId" />
+    </Key>
+    <Property Name="tagId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="tagName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="categoryId" Type="Int32" />
+    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="createUserId" Type="Int32" />
+    <Property Name="updateUserId" Type="Int32" />
+    <Property Name="createDate" Type="DateTime" Precision="7" />
+    <Property Name="updateDate" Type="DateTime" Precision="7" />
+    <Property Name="isActive" Type="Boolean" />
+    <NavigationProperty Name="items" Relationship="incposdbModel.FK_items_tags" FromRole="tags" ToRole="items" />
+    <NavigationProperty Name="users" Relationship="incposdbModel.FK_tags_users" FromRole="tags" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="incposdbModel.FK_tags_users1" FromRole="tags" ToRole="users" />
+    <NavigationProperty Name="users2" Relationship="incposdbModel.FK_tags_users2" FromRole="tags" ToRole="users" />
+  </EntityType>
+  <Association Name="FK_items_tags">
+    <End Type="incposdbModel.tags" Role="tags" Multiplicity="0..1" />
+    <End Type="incposdbModel.items" Role="items" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tags">
+        <PropertyRef Name="tagId" />
+      </Principal>
+      <Dependent Role="items">
+        <PropertyRef Name="tagId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tags_users">
+    <End Type="incposdbModel.users" Role="users" Multiplicity="0..1" />
+    <End Type="incposdbModel.tags" Role="tags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="tags">
+        <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tags_users1">
+    <End Type="incposdbModel.users" Role="users" Multiplicity="0..1" />
+    <End Type="incposdbModel.tags" Role="tags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="tags">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tags_users2">
+    <End Type="incposdbModel.users" Role="users" Multiplicity="0..1" />
+    <End Type="incposdbModel.tags" Role="tags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="tags">
+        <PropertyRef Name="categoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

@@ -43,6 +43,7 @@ namespace POS_Server
         public Nullable<int> minUnitId { get; set; }
         public Nullable<int> maxUnitId { get; set; }
         public Nullable<decimal> avgPurchasePrice { get; set; }
+        public Nullable<int> tagId { get; set; }
     
         public virtual categories categories { get; set; }
         public virtual units units { get; set; }
@@ -61,5 +62,6 @@ namespace POS_Server
         public virtual ICollection<itemsUnits> itemsUnits { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<serials> serials { get; set; }
+        public virtual tags tags { get; set; }
     }
 }

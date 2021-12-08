@@ -472,6 +472,7 @@
     <EntitySetMapping Name="items">
       <EntityTypeMapping TypeName="incposdbModel.items">
         <MappingFragment StoreEntitySet="items">
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
           <ScalarProperty Name="itemId" ColumnName="itemId" />
           <ScalarProperty Name="code" ColumnName="code" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -1130,6 +1131,21 @@
           <ScalarProperty Name="sOutDate" ColumnName="sOutDate" />
           <ScalarProperty Name="posId" ColumnName="posId" />
           <ScalarProperty Name="userId" ColumnName="userId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tags">
+      <EntityTypeMapping TypeName="incposdbModel.tags">
+        <MappingFragment StoreEntitySet="tags">
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+          <ScalarProperty Name="tagName" ColumnName="tagName" />
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

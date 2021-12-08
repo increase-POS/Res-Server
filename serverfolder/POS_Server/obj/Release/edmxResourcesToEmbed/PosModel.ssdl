@@ -466,6 +466,7 @@
     <Property Name="minUnitId" Type="int" />
     <Property Name="maxUnitId" Type="int" />
     <Property Name="avgPurchasePrice" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="tagId" Type="int" />
   </EntityType>
   <EntityType Name="itemsLocations">
     <Key>
@@ -998,6 +999,20 @@
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="isMajor" Type="bit" />
+  </EntityType>
+  <EntityType Name="tags">
+    <Key>
+      <PropertyRef Name="tagId" />
+    </Key>
+    <Property Name="tagId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="tagName" Type="nvarchar" MaxLength="200" />
+    <Property Name="categoryId" Type="int" />
+    <Property Name="notes" Type="ntext" />
+    <Property Name="createUserId" Type="int" />
+    <Property Name="updateUserId" Type="int" />
+    <Property Name="createDate" Type="datetime2" Precision="7" />
+    <Property Name="updateDate" Type="datetime2" Precision="7" />
+    <Property Name="isActive" Type="bit" />
   </EntityType>
   <EntityType Name="units">
     <Key>
@@ -2096,6 +2111,18 @@
       </Principal>
       <Dependent Role="items">
         <PropertyRef Name="categoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_items_tags">
+    <End Role="tags" Type="Self.tags" Multiplicity="0..1" />
+    <End Role="items" Type="Self.items" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tags">
+        <PropertyRef Name="tagId" />
+      </Principal>
+      <Dependent Role="items">
+        <PropertyRef Name="tagId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3299,6 +3326,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_tags_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="tags" Type="Self.tags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="tags">
+        <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tags_users1">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="tags" Type="Self.tags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="tags">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tags_users2">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="tags" Type="Self.tags" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="tags">
+        <PropertyRef Name="categoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_userSetValues_setValues">
     <End Role="setValues" Type="Self.setValues" Multiplicity="0..1" />
     <End Role="userSetValues" Type="Self.userSetValues" Multiplicity="*" />
@@ -3433,6 +3496,7 @@
     <EntitySet Name="storageCost" EntityType="Self.storageCost" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="subscriptionFees" EntityType="Self.subscriptionFees" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysEmails" EntityType="Self.sysEmails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tags" EntityType="Self.tags" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="units" EntityType="Self.units" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="userSetValues" EntityType="Self.userSetValues" Schema="dbo" store:Type="Tables" />
@@ -3779,6 +3843,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_items_categories" Association="Self.FK_items_categories">
       <End Role="categories" EntitySet="categories" />
+      <End Role="items" EntitySet="items" />
+    </AssociationSet>
+    <AssociationSet Name="FK_items_tags" Association="Self.FK_items_tags">
+      <End Role="tags" EntitySet="tags" />
       <End Role="items" EntitySet="items" />
     </AssociationSet>
     <AssociationSet Name="FK_items_units" Association="Self.FK_items_units">
@@ -4180,6 +4248,18 @@
     <AssociationSet Name="FK_sysEmails_users1" Association="Self.FK_sysEmails_users1">
       <End Role="users" EntitySet="users" />
       <End Role="sysEmails" EntitySet="sysEmails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tags_users" Association="Self.FK_tags_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="tags" EntitySet="tags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tags_users1" Association="Self.FK_tags_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="tags" EntitySet="tags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tags_users2" Association="Self.FK_tags_users2">
+      <End Role="users" EntitySet="users" />
+      <End Role="tags" EntitySet="tags" />
     </AssociationSet>
     <AssociationSet Name="FK_userSetValues_setValues" Association="Self.FK_userSetValues_setValues">
       <End Role="setValues" EntitySet="setValues" />
