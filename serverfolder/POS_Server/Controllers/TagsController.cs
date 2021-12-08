@@ -18,7 +18,7 @@ namespace POS_Server.Controllers
     [RoutePrefix("api/Tags")]
     public class TagsController : ApiController
     {
-        // GET api/<controller> get all cards
+        // GET api/<controller> get all tags
         [HttpPost]
         [Route("Get")]
         public string Get(string token)
@@ -34,43 +34,53 @@ var strP = TokenManager.GetPrincipal(token);
             {
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var cardsList = entity.cards
+                    var tagsList = entity.tags
 
-                   .Select(c => new CardModel()
+                   .Select(S => new TagsModel()
                    {
-                       cardId = c.cardId,
-                       name = c.name,
-                       notes = c.notes,
-                       createDate = c.createDate,
-                       updateDate = c.updateDate,
-                       createUserId = c.createUserId,
-                       updateUserId = c.updateUserId,
-                       isActive = c.isActive,
-                       hasProcessNum=c.hasProcessNum,
-                       image=c.image,
-    
+                       tagId = S.tagId,
+                       tagName = S.tagName,
+                       categoryId = S.categoryId,
+                       notes = S.notes,
+                       createUserId = S.createUserId,
+                       updateUserId = S.updateUserId,
+                       createDate = S.createDate,
+                       updateDate = S.updateDate,
+                       isActive = S.isActive,
 
-    })
-                   .ToList();
+
+
+                   }).ToList();
+                    /*
+       public int tagId { get; set; }
+        public string tagName { get; set; }
+        public Nullable<int> categoryId { get; set; }
+        public string notes { get; set; }
+        public Nullable<int> createUserId { get; set; }
+        public Nullable<int> updateUserId { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> updateDate { get; set; }
+        public Nullable<bool> isActive { get; set; }
+                     * */
 
                     // can delet or not
-                    if (cardsList.Count > 0)
+                    if (tagsList.Count > 0)
                     {
-                        foreach (CardModel carditem in cardsList)
+                        foreach (TagsModel item in tagsList)
                         {
                             canDelete = false;
-                            if (carditem.isActive == 1)
+                            if (item.isActive == true)
                             {
-                                int cId = (int)carditem.cardId;
-                                var casht = entity.cashTransfer.Where(x => x.cardId == cId).Select(x => new { x.cardId }).FirstOrDefault();
+                                int cId = (int)item.tagId;
+                                var casht = entity.items.Where(x => x.tagId == cId).Select(x => new { x.tagId }).FirstOrDefault();
 
                                 if ((casht is null))
                                     canDelete = true;
                             }
-                            carditem.canDelete = canDelete;
+                            item.canDelete = canDelete;
                         }
                     }
-                    return TokenManager.GenerateToken(cardsList);
+                    return TokenManager.GenerateToken(tagsList);
                 }
             }
         }
@@ -98,26 +108,26 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var card = entity.cards
-                   .Where(c => c.cardId == cId)
-                   .Select(c => new {
-                       c.cardId,
-                       c.name,
-                       c.notes,
-                       c.createDate,
-                       c.updateDate,
-                       c.createUserId,
-                       c.updateUserId,
-                       c.isActive,
-                   c.hasProcessNum,
-                       image = c.image,
+                    var card = entity.tags
+                   .Where(S=> S.tagId == cId)
+                   .Select(S => new {
+                       S.tagId,
+                       S.tagName,
+                       S.categoryId,
+                       S.notes,
+                       S.createUserId,
+                       S.updateUserId,
+                       S.createDate,
+                       S.updateDate,
+                       S.isActive,
+
                    })
                    .FirstOrDefault();
                     return TokenManager.GenerateToken(card);
                 }
             }
         }
-        // GET api/<controller>  Get card By is active
+      
         [HttpPost]
         [Route("GetByisActive")]
         public string GetByisActive(string token)
@@ -130,30 +140,29 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int isActive = 0;
+                bool isActive = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "isActive")
                     {
-                        isActive = int.Parse(c.Value);
+                        isActive = bool.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var card = entity.cards
-                   .Where(c => c.isActive == isActive)
-                   .Select(c => new {
-                       c.cardId,
-                       c.name,
-                       c.notes,
-                       c.createDate,
-                       c.updateDate,
-                       c.createUserId,
-                       c.updateUserId,
-                       c.isActive,
-                  c.hasProcessNum,
-                        c.image,
+                    var card = entity.tags
+                   .Where(S => S.isActive == isActive)
+                   .Select(S => new {
+                       S.tagId,
+                       S.tagName,
+                       S.categoryId,
+                       S.notes,
+                       S.createUserId,
+                       S.updateUserId,
+                       S.createDate,
+                       S.updateDate,
+                       S.isActive,
                    })
                    .ToList();
                     return TokenManager.GenerateToken(card);
@@ -175,7 +184,7 @@ var strP = TokenManager.GetPrincipal(token);
             else
             {
                 string cardObject = "";
-                cards Object = null;
+                tags Object = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -183,7 +192,7 @@ var strP = TokenManager.GetPrincipal(token);
                     {
                         cardObject = c.Value.Replace("\\", string.Empty);
                         cardObject = cardObject.Trim('"');
-                        Object = JsonConvert.DeserializeObject<cards>(cardObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                        Object = JsonConvert.DeserializeObject<tags>(cardObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
                         break;
                     }
                 }
@@ -191,36 +200,34 @@ var strP = TokenManager.GetPrincipal(token);
                 {
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        cards tmpcard = new cards();
-                        var cardEntity = entity.Set<cards>();
-                        if (Object.cardId == 0)
+                        tags tmpObject = new tags();
+                        var cardEntity = entity.Set<tags>();
+                        if (Object.tagId == 0)
                         {
                             Object.createDate = DateTime.Now;
                             Object.updateDate = DateTime.Now;
                             Object.updateUserId = Object.createUserId;
-                            tmpcard = cardEntity.Add(Object);
+                            tmpObject = cardEntity.Add(Object);
                             entity.SaveChanges();
-                            message = tmpcard.cardId.ToString();
+                            message = tmpObject.tagId.ToString();
 
                         }
                         else
                         {
 
-                            tmpcard = entity.cards.Where(p => p.cardId == Object.cardId).FirstOrDefault();
-                            tmpcard.cardId = Object.cardId;
-                            tmpcard.name = Object.name;
-                            tmpcard.notes = Object.notes;
-                            tmpcard.createDate = Object.createDate;
-                            tmpcard.updateDate = Object.updateDate;
-                            tmpcard.createUserId = Object.createUserId;
-                            tmpcard.updateUserId = Object.updateUserId;
-                            tmpcard.isActive = Object.isActive;
-                            tmpcard.updateDate = DateTime.Now;// server current date;
-                            tmpcard.updateUserId = Object.updateUserId;
-                            tmpcard.hasProcessNum = Object.hasProcessNum;
-                            tmpcard.image = Object.image;
+                            tmpObject = entity.tags.Where(p => p.tagId == Object.tagId).FirstOrDefault();
+                            tmpObject.tagId = Object.tagId;
+                            tmpObject.tagName = Object.tagName;
+                            tmpObject.categoryId = Object.categoryId;
+                            tmpObject.notes = Object.notes;
+                           // tmpObject.createUserId = Object.createUserId;
+                            tmpObject.updateUserId = Object.updateUserId;
+                            tmpObject.createDate = Object.createDate;
+                            tmpObject.updateDate = DateTime.Now;
+                            tmpObject.isActive = Object.isActive;
+
                             entity.SaveChanges();
-                            message = tmpcard.cardId.ToString();
+                            message = tmpObject.tagId.ToString();
                         }
 
                     }
@@ -247,7 +254,7 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int cardId = 0;
+                int tagId = 0;
                 int userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -255,7 +262,7 @@ var strP = TokenManager.GetPrincipal(token);
                 {
                     if (c.Type == "itemId")
                     {
-                        cardId = int.Parse(c.Value);
+                        tagId = int.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
@@ -272,8 +279,8 @@ var strP = TokenManager.GetPrincipal(token);
                     {
                         using (incposdbEntities entity = new incposdbEntities())
                         {
-                            cards cardObj = entity.cards.Find(cardId);
-                            entity.cards.Remove(cardObj);
+                            tags cardObj = entity.tags.Find(tagId);
+                            entity.tags.Remove(cardObj);
                             message = entity.SaveChanges().ToString();
                             return TokenManager.GenerateToken(message);
                         }
@@ -290,9 +297,9 @@ var strP = TokenManager.GetPrincipal(token);
                     {
                         using (incposdbEntities entity = new incposdbEntities())
                         {
-                            cards cardObj = entity.cards.Find(cardId);
+                            tags cardObj = entity.tags.Find(tagId);
 
-                            cardObj.isActive = 0;
+                            cardObj.isActive = false;
                             cardObj.updateUserId = userId;
                             cardObj.updateDate = DateTime.Now;
                             message = entity.SaveChanges().ToString();
@@ -307,139 +314,6 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
-        [HttpGet]
-        [Route("GetImage")]
-        public HttpResponseMessage GetImage(string imageName)
-        {
-            if (String.IsNullOrEmpty(imageName))
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-
-            string localFilePath;
-
-            localFilePath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\card"), imageName);
-
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-            response.Content = new StreamContent(new FileStream(localFilePath, FileMode.Open, FileAccess.Read));
-            response.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
-            response.Content.Headers.ContentDisposition.FileName = imageName;
-
-            return response;
-        }
-        [HttpPost]
-        [Route("UpdateImage")]
-        public string UpdateImage(string token)
-        {
-token = TokenManager.readToken(HttpContext.Current.Request);
-            string message = "";
-var strP = TokenManager.GetPrincipal(token);
-            if (strP != "0") //invalid authorization
-            {
-                return TokenManager.GenerateToken(strP);
-            }
-            else
-            {
-                string cardObject = "";
-                cards cardObj = null;
-                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
-                foreach (Claim c in claims)
-                {
-                    if (c.Type == "itemObject")
-                    {
-                        cardObject = c.Value.Replace("\\", string.Empty);
-                        cardObject = cardObject.Trim('"');
-                        cardObj = JsonConvert.DeserializeObject<cards>(cardObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
-                        break;
-                    }
-                }
-                try
-                {
-                    cards card;
-                    using (incposdbEntities entity = new incposdbEntities())
-                    {
-                        var userEntity = entity.Set<cards>();
-                        card = entity.cards.Where(p => p.cardId == cardObj.cardId).First();
-                        card.image = cardObj.image;
-                        entity.SaveChanges();
-                    }
-                    message = card.cardId.ToString();
-                    return TokenManager.GenerateToken(message);
-                }
-                catch
-                {
-                    message = "0";
-                    return TokenManager.GenerateToken(message);
-                }
-            }
-        }
-        [Route("PostCardImage")]
-        public IHttpActionResult PostCardImage()
-        {
-
-            try
-            {
-                var httpRequest = HttpContext.Current.Request;
-
-                foreach (string file in httpRequest.Files)
-                {
-
-                    HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
-
-                    var postedFile = httpRequest.Files[file];
-                    string imageName = postedFile.FileName;
-                    string imageWithNoExt = Path.GetFileNameWithoutExtension(postedFile.FileName);
-
-                    if (postedFile != null && postedFile.ContentLength > 0)
-                    {
-
-                        int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB
-
-                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp", ".jpeg", ".tiff", ".jfif" };
-                        var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
-                        var extension = ext.ToLower();
-
-                        if (!AllowedFileExtensions.Contains(extension))
-                        {
-
-                            var message = string.Format("Please Upload image of type .jpg,.gif,.png, .jfif, .bmp , .jpeg ,.tiff");
-                            return Ok(message);
-                        }
-                        else if (postedFile.ContentLength > MaxContentLength)
-                        {
-
-                            var message = string.Format("Please Upload a file upto 1 mb.");
-
-                            return Ok(message);
-                        }
-                        else
-                        {
-                            //  check if image exist
-                            var pathCheck = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\card"), imageWithNoExt);
-                            var files = Directory.GetFiles(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\card"), imageWithNoExt + ".*");
-                            if (files.Length > 0)
-                            {
-                                File.Delete(files[0]);
-                            }
-
-                            //Userimage myfolder name where i want to save my image
-                            var filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\card"), imageName);
-                            postedFile.SaveAs(filePath);
-
-                        }
-                    }
-
-                    var message1 = string.Format("Image Updated Successfully.");
-                    return Ok(message1);
-                }
-                var res = string.Format("Please Upload a image.");
-
-                return Ok(res);
-            }
-            catch (Exception ex)
-            {
-                var res = string.Format("some Message");
-
-                return Ok(res);
-            }
-        }
+  
     }
 }
