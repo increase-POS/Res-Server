@@ -86,7 +86,7 @@ var strP = TokenManager.GetPrincipal(token);
         }
         // GET api/<controller>  Get card By ID 
         [HttpPost]
-        [Route("GetcardByID")]
+        [Route("GetByID")]
         public string GetByID(string token)
         {
 token = TokenManager.readToken(HttpContext.Current.Request);
@@ -183,16 +183,16 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                string cardObject = "";
+                string itemObject = "";
                 tags Object = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemObject")
                     {
-                        cardObject = c.Value.Replace("\\", string.Empty);
-                        cardObject = cardObject.Trim('"');
-                        Object = JsonConvert.DeserializeObject<tags>(cardObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                        itemObject = c.Value.Replace("\\", string.Empty);
+                        itemObject = itemObject.Trim('"');
+                        Object = JsonConvert.DeserializeObject<tags>(itemObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
                         break;
                     }
                 }
