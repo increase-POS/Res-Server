@@ -751,6 +751,10 @@ namespace POS_Server.Controllers
                         break;
                     }
                 }
+                int branchId = 0;
+                int secId = 0;
+                int locId = 0;
+                int res = 0;
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
                     Nullable<int> id = null;
@@ -789,16 +793,101 @@ namespace POS_Server.Controllers
                             }
                             else
                             {
+
+                                //new branch
+
                                 newObject.createDate = DateTime.Now;
                                 newObject.updateDate = DateTime.Now;
                                 newObject.updateUserId = newObject.createUserId;
 
-                                branchEntity.Add(newObject);
-                                entity.SaveChanges();
-                                message = newObject.branchId.ToString();
-                            }
-                            return TokenManager.GenerateToken(message);
+                                //save branch
+                                try
+                                {
+                                    branchEntity.Add(newObject);
 
+                                    entity.SaveChanges();
+                                    branchId = newObject.branchId;
+                                    //save section
+                                    try
+                                    {
+
+                                        sections section = new sections();
+                                        section.name = "FreeZone";
+                                        section.branchId = branchId;
+                                        section.note = "";
+                                        section.createUserId = newObject.createUserId;
+                                        section.updateUserId = newObject.createUserId;
+                                        section.isActive = 1;
+                                        section.isFreeZone = 1;
+                                        secId = SaveSec(section);
+                                        res = secId;
+                                        if (res == -2)
+                                        {
+                                            res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+                                        }
+
+                                        //save location
+                                        try
+                                        {
+                                            locations location = new locations();
+                                            location.x = location.y = location.z = "0";
+                                            location.note = "";
+                                            location.createUserId = newObject.createUserId;
+                                            location.updateUserId = newObject.createUserId;
+                                            location.isActive = 1;
+                                            location.sectionId = secId;
+                                            location.branchId = branchId;
+                                            location.isFreeZone = 1;
+                                            locId = SaveLoc(location);
+                                            res = locId;
+                                            if (res == -2)
+                                            {
+                                                res = DeleteSec(secId, (int)newObject.createUserId, true);
+                                                res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+
+                                            }
+
+                                        }
+                                        catch
+                                        {
+                                            // error locaion : delete sec+branch
+
+                                            res = DeleteSec(secId, (int)newObject.createUserId, true);
+                                            res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+
+                                        }
+                                    }
+                                    catch
+                                    {
+                                        //error section: delete branch
+                                        res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+
+                                        //  return TokenManager.GenerateToken("0");
+
+                                    }
+
+                                }
+                                catch
+                                {
+                                    // error branch: return 0
+                                    return TokenManager.GenerateToken("0");
+                                }
+
+
+
+
+
+                            }
+                            if (branchId > 0 && secId > 0 && locId > 0)
+                            {
+                                return TokenManager.GenerateToken(branchId.ToString());
+                            }
+                            else
+                            {
+                                return TokenManager.GenerateToken("0");
+                            }
+
+                            //end new add
                         }
                         else
                         {
@@ -1044,24 +1133,7 @@ namespace POS_Server.Controllers
                 }
 
                 return TokenManager.GenerateToken(message);
-                //else
-                //{
-                //    try
-                //    {
-                //        using (incposdbEntities entity = new incposdbEntities())
-                //        {
-                //            var tmpBranch = entity.branches.Where(p => p.branchId == branchId).First();
-                //            entity.branches.Remove(tmpBranch);
-                //            message = entity.SaveChanges().ToString();
-                //        }
-                //        return TokenManager.GenerateToken(message);
-                //    }
-                //    catch
-                //    {
-                //        return TokenManager.GenerateToken("0");
-                //    }
-
-                //}
+   
             }
           
         }
@@ -1137,7 +1209,390 @@ namespace POS_Server.Controllers
             }
 
             }
+      
+        //functions for save branch
+        #region savefunctions
+        public int SaveSec(sections newObject)
+        {
+            int message = 0;
 
+            if (newObject.updateUserId == 0 || newObject.updateUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.updateUserId = id;
+            }
+            if (newObject.createUserId == 0 || newObject.createUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.createUserId = id;
+            }
+            if (newObject.branchId == 0 || newObject.branchId == null)
+            {
+                Nullable<int> id = null;
+                newObject.branchId = id;
+            }
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var sectionEntity = entity.Set<sections>();
+                    if (newObject.sectionId == 0)
+                    {
+                        newObject.createDate = DateTime.Now;
+                        newObject.updateDate = DateTime.Now;
+                        newObject.updateUserId = newObject.createUserId;
+
+                        sectionEntity.Add(newObject);
+                        entity.SaveChanges();
+                        message = newObject.sectionId;
+                    }
+                    else
+                    {
+                        var tmpSection = entity.sections.Where(p => p.sectionId == newObject.sectionId).FirstOrDefault();
+                        tmpSection.name = newObject.name;
+                        tmpSection.branchId = newObject.branchId;
+                        tmpSection.isActive = newObject.isActive;
+                        tmpSection.isFreeZone = newObject.isFreeZone;
+                        tmpSection.note = newObject.note;
+                        tmpSection.updateDate = DateTime.Now;
+                        tmpSection.updateUserId = newObject.updateUserId;
+                        entity.SaveChanges();
+                        message = tmpSection.sectionId;
+                    }
+
+                }
+            }
+            catch
+            {
+                message = -2;
+            }
+
+            return message;
+        }
+
+        public int DeleteSec(int sectionId, int userId, bool final = true)
+        {
+
+            int message = 0;
+            if (final)
+            {
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        sections sectionDelete = entity.sections.Find(sectionId);
+                        entity.sections.Remove(sectionDelete);
+                        message = entity.SaveChanges();
+                        return message;
+                    }
+                }
+                catch
+                {
+                    message = -2;
+                    return message;
+                }
+            }
+            else
+            {
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        sections sectionDelete = entity.sections.Find(sectionId);
+
+                        sectionDelete.isActive = 0;
+                        sectionDelete.updateUserId = userId;
+                        sectionDelete.updateDate = DateTime.Now;
+                        message = entity.SaveChanges();
+                        return message;
+                    }
+                }
+                catch
+                {
+                    message = -2;
+                    return message;
+                }
+            }
+        }
+
+
+        public int SaveLoc(locations newObject)
+        {
+            int message = 0;
+
+
+
+            if (newObject.updateUserId == 0 || newObject.updateUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.updateUserId = id;
+            }
+            if (newObject.createUserId == 0 || newObject.createUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.createUserId = id;
+            }
+            if (newObject.sectionId == 0 || newObject.sectionId == null)
+            {
+                Nullable<int> id = null;
+                newObject.sectionId = id;
+            }
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var locationEntity = entity.Set<locations>();
+                    if (newObject.locationId == 0)
+                    {
+                        newObject.createDate = DateTime.Now;
+                        newObject.updateDate = DateTime.Now;
+                        newObject.updateUserId = newObject.createUserId;
+
+                        locationEntity.Add(newObject);
+                        entity.SaveChanges();
+                        message = newObject.locationId;
+                    }
+                    else
+                    {
+                        var tmpLocation = entity.locations.Where(p => p.locationId == newObject.locationId).FirstOrDefault();
+                        tmpLocation.x = newObject.x;
+                        tmpLocation.y = newObject.y;
+                        tmpLocation.z = newObject.z;
+                        tmpLocation.branchId = newObject.branchId;
+                        tmpLocation.isFreeZone = newObject.isFreeZone;
+                        tmpLocation.updateDate = DateTime.Now;
+                        tmpLocation.updateUserId = newObject.updateUserId;
+                        tmpLocation.sectionId = newObject.sectionId;
+                        tmpLocation.note = newObject.note;
+                        entity.SaveChanges();
+
+                        message = tmpLocation.locationId;
+                    }
+                }
+            }
+            catch
+            {
+                message = -2;
+            }
+
+
+            return message;
+        }
+
+
+        public int DeleteLoc(int locationId, int userId, bool final = true)
+        {
+            int message = 0;
+            if (final)
+            {
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        locations locationDelete = entity.locations.Find(locationId);
+
+                        entity.locations.Remove(locationDelete);
+                        message = entity.SaveChanges();
+                        return message;
+                    }
+                }
+                catch
+                {
+                    message = -2;
+                    return message;
+                }
+            }
+            else
+            {
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        locations locationDelete = entity.locations.Find(locationId);
+
+                        locationDelete.isActive = 0;
+                        locationDelete.updateUserId = userId;
+                        locationDelete.updateDate = DateTime.Now;
+                        message = entity.SaveChanges();
+                        return message;
+                    }
+                }
+                catch
+                {
+                    message = -2;
+                    return message;
+                }
+
+            }
+        }
+
+        // delete branch
+
+
+        public int DeleteBranch(int branchId, int userId, bool final = true)
+        {
+            int message = 0;
+
+            using (incposdbEntities entity = new incposdbEntities())
+            {
+
+                if (!final)
+                {
+                    try
+                    {
+                        var tmpBranch = entity.branches.Where(p => p.branchId == branchId).First();
+                        tmpBranch.isActive = 0;
+                        tmpBranch.updateUserId = userId;
+                        tmpBranch.updateDate = DateTime.Now;
+                        message = entity.SaveChanges();
+
+                        return message;
+                    }
+                    catch
+                    {
+                        return -2;
+                    }
+
+                }
+                else
+                {
+                    int dbbranchId = 0;
+                    bool isdel = true;
+
+                    var res = entity.branches.Where(x => x.parentId == branchId).Select(x => new { x.branchId }).FirstOrDefault();
+                    if (res != null)
+                    {
+                        isdel = false;
+                    }
+                    else
+                    {
+
+
+                        var res1 = entity.Inventory.Where(x => x.branchId == branchId).Select(x => new { x.branchId }).FirstOrDefault();
+
+                        if (res1 != null)
+                        {
+                            isdel = false;
+                        }
+                        else
+                        {
+                            res1 = entity.invoices.Where(x => x.branchId == branchId).Select(x => new { x.branchId }).FirstOrDefault();
+
+                            if (res1 != null)
+                            {
+                                isdel = false;
+                            }
+                            else
+                            {
+                                var res3 = entity.invoices.Where(x => x.branchCreatorId == branchId).Select(x => new { x.branchCreatorId }).FirstOrDefault();
+                                if (res3 != null)
+                                {
+                                    isdel = false;
+                                }
+                                else
+                                {
+                                    res1 = entity.pos.Where(x => x.branchId == branchId).Select(x => new { x.branchId }).FirstOrDefault();
+                                    if (res1 != null)
+                                    {
+                                        isdel = false;
+                                    }
+                                    else
+                                    {
+
+
+
+                                        var item = (from L in entity.locations
+                                                    join IL in entity.itemsLocations on L.locationId equals IL.locationId
+                                                    join B in entity.branches on L.branchId equals B.branchId
+
+                                                    where B.branchId == branchId
+                                                    select new
+                                                    {
+                                                        // branch
+                                                        IL.itemsLocId,
+
+                                                    }).FirstOrDefault();
+                                        if (item != null)
+                                        {
+
+                                            isdel = false;
+                                        }
+                                        else
+                                        {
+
+                                            // delete
+                                            try
+                                            {
+
+
+                                                var tmploc = entity.locations.Where(p => p.branchId == branchId);
+                                                entity.locations.RemoveRange(tmploc);
+                                                message = entity.SaveChanges();
+
+                                                var tmpsections = entity.sections.Where(p => p.branchId == branchId);
+
+                                                entity.sections.RemoveRange(tmpsections);
+                                                message = entity.SaveChanges();
+
+
+
+
+                                                var tmpbranchesUsers = entity.branchesUsers.Where(p => p.branchId == branchId);
+                                                entity.branchesUsers.RemoveRange(tmpbranchesUsers);
+                                                message = entity.SaveChanges();
+
+                                                var tmpbranchStore = entity.branchStore.Where(p => p.branchId == branchId);
+                                                entity.branchStore.RemoveRange(tmpbranchStore);
+                                                message = entity.SaveChanges();
+
+                                                var tmpbranchStore1 = entity.branchStore.Where(p => p.storeId == branchId);
+                                                entity.branchStore.RemoveRange(tmpbranchStore1);
+                                                message = entity.SaveChanges();
+
+                                                var tmpsysEmails = entity.sysEmails.Where(p => p.branchId == branchId);
+                                                entity.sysEmails.RemoveRange(tmpsysEmails);
+                                                message = entity.SaveChanges();
+
+                                                var tmpBranch = entity.branches.Where(p => p.branchId == branchId).First();
+                                                entity.branches.Remove(tmpBranch);
+                                                message = entity.SaveChanges();
+                                                return message;
+                                            }
+                                            catch
+                                            {
+                                                return -2;
+                                            }
+                                        }
+
+
+                                    }
+
+
+
+                                }
+
+
+                            }
+
+                        }
+
+                    }
+
+
+
+                }
+
+
+
+            }
+
+            return message;
+
+
+
+        }
+
+        #endregion
 
     }
 }
