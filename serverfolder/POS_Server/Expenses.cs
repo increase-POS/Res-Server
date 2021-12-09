@@ -16,8 +16,8 @@ namespace POS_Server
     {
         public int exId { get; set; }
         public string expense { get; set; }
-        public string note { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public string notes { get; set; }
+        public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }

@@ -469,7 +469,7 @@ var strP = TokenManager.GetPrincipal(token);
                             tmpCategory.isActive = newObject.isActive;
                             entity.SaveChanges();
                             int categoryId = tmpCategory.categoryId;
-                            short? isActivecat = tmpCategory.isActive;
+                            byte isActivecat = tmpCategory.isActive;
                             int? updateuser = tmpCategory.updateUserId;
                             //update is active sons and items sons
                             // get all sub categories of categoryId

@@ -50,7 +50,7 @@ namespace POS_Server.Controllers
                        c.id,
                        c.userId,
                        c.valId,
-                       c.note,
+                       c.notes,
                        c.createDate,
                        c.updateDate,
                        c.createUserId,
@@ -163,7 +163,7 @@ namespace POS_Server.Controllers
                            c.id,
                            c.userId,
                            c.valId,
-                           c.note,
+                           c.notes,
                            c.createDate,
                            c.updateDate,
                            c.createUserId,
@@ -303,7 +303,7 @@ namespace POS_Server.Controllers
 
                                 tmpObject.valId = newObject.valId;
                                 tmpObject.userId = newObject.userId;
-                                tmpObject.note = newObject.note;
+                                tmpObject.notes = newObject.notes;
 
                                 entity.SaveChanges();
 

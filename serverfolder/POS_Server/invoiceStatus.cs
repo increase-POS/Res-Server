@@ -22,7 +22,7 @@ namespace POS_Server
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public string notes { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
     
         public virtual invoices invoices { get; set; }
         public virtual users users { get; set; }

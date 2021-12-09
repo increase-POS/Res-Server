@@ -16,8 +16,8 @@ namespace POS_Server.Models
         public Nullable<long> newLocked { get; set; }
         public Nullable<int> invoiceId { get; set; }
         public string invNumber { get; set; }
-        public Nullable<int> locationIdNew { get; set; }
-        public Nullable<int> locationIdOld { get; set; }
+        //public Nullable<int> locationIdNew { get; set; }
+        //public Nullable<int> locationIdOld { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }

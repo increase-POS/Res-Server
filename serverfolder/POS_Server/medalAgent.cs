@@ -18,7 +18,7 @@ namespace POS_Server
         public Nullable<int> medalId { get; set; }
         public Nullable<int> agentId { get; set; }
         public string notes { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }

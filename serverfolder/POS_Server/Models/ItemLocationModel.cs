@@ -19,7 +19,7 @@ namespace POS_Server.Models
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
         public Nullable<int> itemUnitId { get; set; }
-        public string note { get; set; }
+        public string notes { get; set; }
         public string itemName { get; set; }
         public string location { get; set; }
         public string section { get; set; }

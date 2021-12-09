@@ -42,7 +42,7 @@ var strP = TokenManager.GetPrincipal(token);
                       id = S.id,
                        branchId = S.branchId,
                        storeId = S.storeId,
-                       note = S.note,
+                       notes = S.notes,
                     
                        createDate = S.createDate,
                        updateDate = S.updateDate,
@@ -126,7 +126,7 @@ var strP = TokenManager.GetPrincipal(token);
                                     id = S.id,
                                     branchId = S.branchId,
                                     storeId = S.storeId,
-                                    note = S.note,
+                                    notes = S.notes,
 
                                     createDate = S.createDate,
                                     updateDate = S.updateDate,
@@ -203,7 +203,7 @@ var strP = TokenManager.GetPrincipal(token);
                     c.id,
                     c.branchId,
                     c.storeId,
-                    c.note,
+                    c.notes,
                     c.createDate,
                     c.updateDate,
                     c.createUserId,
@@ -289,10 +289,10 @@ var strP = TokenManager.GetPrincipal(token);
                             tmps.id = Object.id;
                             tmps.branchId = Object.branchId;
                             tmps.storeId = Object.storeId;
-                            tmps.note = Object.note;
+                            tmps.notes = Object.notes;
                             tmps.isActive = Object.isActive;
-                            tmps.note = Object.note;
-                            tmps.note=Object.note;
+                            tmps.notes = Object.notes;
+                          
                             tmps.createDate=Object.createDate;
                             tmps.updateDate = DateTime.Now;// server current date
                             

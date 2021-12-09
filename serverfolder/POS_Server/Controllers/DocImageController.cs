@@ -64,7 +64,7 @@ namespace POS_Server.Controllers
                                 b.image,
                                 b.tableName,
                                 b.tableId,
-                                b.note,
+                                b.notes,
                                 b.createDate,
                                 b.updateDate,
                                 b.createUserId,
@@ -380,7 +380,7 @@ namespace POS_Server.Controllers
                                 docImage.docName = newObject.docName;
                                 docImage.docnum = newObject.docnum;
                                 docImage.image = newObject.image;
-                                docImage.note = newObject.note;
+                                docImage.notes = newObject.notes;
                                 docImage.updateDate = DateTime.Now;
                                 docImage.updateUserId = newObject.updateUserId;
 

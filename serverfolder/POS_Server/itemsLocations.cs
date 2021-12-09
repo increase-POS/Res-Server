@@ -22,7 +22,7 @@ namespace POS_Server
     
         public int itemsLocId { get; set; }
         public Nullable<int> locationId { get; set; }
-        public Nullable<long> quantity { get; set; }
+        public long quantity { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
@@ -30,7 +30,7 @@ namespace POS_Server
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
         public Nullable<int> itemUnitId { get; set; }
-        public string note { get; set; }
+        public string notes { get; set; }
         public Nullable<int> invoiceId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

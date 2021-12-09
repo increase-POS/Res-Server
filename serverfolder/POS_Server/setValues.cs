@@ -22,8 +22,8 @@ namespace POS_Server
     
         public int valId { get; set; }
         public string value { get; set; }
-        public Nullable<int> isDefault { get; set; }
-        public Nullable<int> isSystem { get; set; }
+        public int isDefault { get; set; }
+        public int isSystem { get; set; }
         public string notes { get; set; }
         public Nullable<int> settingId { get; set; }
     

@@ -27,9 +27,9 @@ namespace POS_Server
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
         public string image { get; set; }
-        public Nullable<bool> hasProcessNum { get; set; }
+        public bool hasProcessNum { get; set; }
     
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }

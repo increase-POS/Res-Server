@@ -62,8 +62,7 @@ namespace POS_Server.Controllers
                                                 quantity = t.quantity,
                                                 invoiceId = entity.invoiceOrder.Where(x => x.itemsTransferId == t.itemsTransId).Select(x => x.orderId).FirstOrDefault(),
                                                 invNumber = inv.invNumber,
-                                                locationIdNew = t.locationIdNew,
-                                                locationIdOld = t.locationIdOld,
+                                             
                                                 createUserId = t.createUserId,
                                                 updateUserId = t.updateUserId,
                                                 notes = t.notes,

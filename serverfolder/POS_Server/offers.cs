@@ -25,9 +25,9 @@ namespace POS_Server
         public int offerId { get; set; }
         public string name { get; set; }
         public string code { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
         public string discountType { get; set; }
-        public Nullable<decimal> discountValue { get; set; }
+        public decimal discountValue { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }

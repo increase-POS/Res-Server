@@ -291,11 +291,7 @@ var strP = TokenManager.GetPrincipal(token);
                                 Nullable<int> id = null;
                                 tmp.createUserId = id;
                             }
-                            if (il.amountDestroyed == 0 || il.amountDestroyed == null)
-                            {
-                                Nullable<int> id = 0;
-                                tmp.amountDestroyed = id;
-                            }
+                         
                             tmp.inventoryId = inventoryId;
                             tmp.amount = il.amount;
                             tmp.amountDestroyed = il.amountDestroyed;

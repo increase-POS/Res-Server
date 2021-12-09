@@ -31,15 +31,15 @@ namespace POS_Server
         public int posId { get; set; }
         public string code { get; set; }
         public string name { get; set; }
-        public Nullable<decimal> balance { get; set; }
+        public decimal balance { get; set; }
         public Nullable<int> branchId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public Nullable<byte> isActive { get; set; }
-        public Nullable<decimal> balanceAll { get; set; }
+        public byte isActive { get; set; }
         public string notes { get; set; }
+        public decimal balanceAll { get; set; }
     
         public virtual branches branches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

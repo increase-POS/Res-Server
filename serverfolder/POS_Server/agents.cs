@@ -36,16 +36,16 @@ namespace POS_Server
         public string image { get; set; }
         public string type { get; set; }
         public string accType { get; set; }
-        public Nullable<decimal> balance { get; set; }
-        public Nullable<byte> balanceType { get; set; }
+        public decimal balance { get; set; }
+        public byte balanceType { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public string notes { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
         public string fax { get; set; }
-        public Nullable<decimal> maxDeserve { get; set; }
+        public decimal maxDeserve { get; set; }
         public bool isLimited { get; set; }
         public string payType { get; set; }
     

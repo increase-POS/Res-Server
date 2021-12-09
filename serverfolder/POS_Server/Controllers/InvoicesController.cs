@@ -2527,7 +2527,7 @@ var strP = TokenManager.GetPrincipal(token);
                                     startDate = il.startDate,
                                     endDate = il.endDate,
                                     itemUnitId = il.itemUnitId,
-                                    note = il.note,
+                                    notes = il.notes,
                                 };
                                 entity.itemsLocations.Add(loc);
                             }

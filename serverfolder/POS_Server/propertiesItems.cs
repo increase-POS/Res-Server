@@ -23,12 +23,12 @@ namespace POS_Server
         public int propertyItemId { get; set; }
         public string name { get; set; }
         public Nullable<int> propertyId { get; set; }
-        public Nullable<short> isDefault { get; set; }
+        public short isDefault { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemsProp> itemsProp { get; set; }

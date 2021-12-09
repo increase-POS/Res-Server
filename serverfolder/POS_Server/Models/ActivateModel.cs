@@ -43,7 +43,7 @@ namespace POS_Server.Models
         public int storeCount { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
         public bool islimitDate { get; set; }
-        public Nullable<bool> isOnlineServer { get; set; }
+        public bool isOnlineServer { get; set; }
         public string customerServerCode { get; set; }
 
 

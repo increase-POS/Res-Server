@@ -18,7 +18,7 @@ namespace POS_Server
         public Nullable<int> itemTransId { get; set; }
         public Nullable<int> offerId { get; set; }
         public string discountType { get; set; }
-        public Nullable<decimal> discountValue { get; set; }
+        public decimal discountValue { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }

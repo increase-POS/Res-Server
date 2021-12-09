@@ -21,17 +21,17 @@ namespace POS_Server
         }
     
         public int id { get; set; }
-        public Nullable<bool> isDestroyed { get; set; }
-        public Nullable<int> amount { get; set; }
-        public Nullable<int> amountDestroyed { get; set; }
-        public Nullable<int> realAmount { get; set; }
+        public bool isDestroyed { get; set; }
+        public int amount { get; set; }
+        public int amountDestroyed { get; set; }
+        public int realAmount { get; set; }
         public Nullable<int> itemLocationId { get; set; }
         public Nullable<int> inventoryId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
         public string notes { get; set; }
         public string cause { get; set; }
         public bool isFalls { get; set; }

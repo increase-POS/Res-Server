@@ -30,7 +30,7 @@ namespace POS_Server
         public string packageSaleCode { get; set; }
         public string customerServerCode { get; set; }
         public Nullable<System.DateTime> expireDate { get; set; }
-        public Nullable<bool> isOnlineServer { get; set; }
+        public bool isOnlineServer { get; set; }
         public string packageNumber { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
     }

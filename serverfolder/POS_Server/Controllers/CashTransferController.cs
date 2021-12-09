@@ -1991,7 +1991,7 @@ namespace POS_Server.Controllers
                 pos posobjectD = new pos();
                 int? posidPull = 0;
                 int? posidD = 0;
-                decimal? cash = 0;
+                decimal cash = 0;
 
                 try
                 {

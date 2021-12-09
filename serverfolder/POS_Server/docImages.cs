@@ -19,7 +19,7 @@ namespace POS_Server
         public string docnum { get; set; }
         public string image { get; set; }
         public string tableName { get; set; }
-        public string note { get; set; }
+        public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }

@@ -31,9 +31,9 @@ namespace POS_Server
         public string type { get; set; }
         public string image { get; set; }
         public Nullable<decimal> taxes { get; set; }
-        public Nullable<byte> isActive { get; set; }
-        public Nullable<int> min { get; set; }
-        public Nullable<int> max { get; set; }
+        public byte isActive { get; set; }
+        public int min { get; set; }
+        public int max { get; set; }
         public Nullable<int> categoryId { get; set; }
         public Nullable<int> parentId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
@@ -42,10 +42,11 @@ namespace POS_Server
         public Nullable<int> updateUserId { get; set; }
         public Nullable<int> minUnitId { get; set; }
         public Nullable<int> maxUnitId { get; set; }
-        public Nullable<decimal> avgPurchasePrice { get; set; }
+        public decimal avgPurchasePrice { get; set; }
         public Nullable<int> tagId { get; set; }
     
         public virtual categories categories { get; set; }
+        public virtual tags tags { get; set; }
         public virtual units units { get; set; }
         public virtual units units1 { get; set; }
         public virtual users users { get; set; }
@@ -62,6 +63,5 @@ namespace POS_Server
         public virtual ICollection<itemsUnits> itemsUnits { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<serials> serials { get; set; }
-        public virtual tags tags { get; set; }
     }
 }

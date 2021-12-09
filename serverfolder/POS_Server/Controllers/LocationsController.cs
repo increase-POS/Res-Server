@@ -50,7 +50,7 @@ var strP = TokenManager.GetPrincipal(token);
                                             branchId=L.branchId,
                                              sectionId =L.sectionId,
                                             sectionName = v.name,
-                                            note = L.note,
+                                            notes = L.notes,
                                         }).ToList();
 
                     if (locationsList.Count > 0)
@@ -61,9 +61,8 @@ var strP = TokenManager.GetPrincipal(token);
                             {
                                 int locationId = (int)locationsList[i].locationId;
                                 var itemsLocationL = entity.itemsLocations.Where(x => x.locationId == locationId).Select(b => new { b.itemsLocId }).FirstOrDefault();
-                                var itemsTransferL = entity.itemsTransfer.Where(x => x.locationIdNew == locationId || x.locationIdOld == locationId).Select(x => new { x.itemsTransId }).FirstOrDefault();
-                               
-                                if ((itemsLocationL is null) && (itemsTransferL is null) )
+                                 
+                                if ((itemsLocationL is null)  )
                                     canDelete = true;
                             }
                             locationsList[i].canDelete = canDelete;
@@ -115,7 +114,7 @@ var strP = TokenManager.GetPrincipal(token);
                        L.isFreeZone,
                        L.branchId,
                        L.sectionId,
-                       note = L.note,
+                       note = L.notes,
 
                    })
                    .FirstOrDefault();
@@ -169,7 +168,7 @@ var strP = TokenManager.GetPrincipal(token);
                                              branchId = L.branchId,
                                              sectionId = L.sectionId,
                                              sectionName = v.name,
-                                             note = L.note,
+                                             notes = L.notes,
 
                                          }).ToList();
 
@@ -181,9 +180,8 @@ var strP = TokenManager.GetPrincipal(token);
                             {
                                 int locationId = (int)locationsList[i].locationId;
                                 var itemsLocationL = entity.itemsLocations.Where(x => x.locationId == locationId).Select(b => new { b.itemsLocId }).FirstOrDefault();
-                                var itemsTransferL = entity.itemsTransfer.Where(x => x.locationIdNew == locationId || x.locationIdOld == locationId).Select(x => new { x.itemsTransId }).FirstOrDefault();
-
-                                if ((itemsLocationL is null) && (itemsTransferL is null))
+                                
+                                if ((itemsLocationL is null) )
                                     canDelete = true;
                             }
                             locationsList[i].canDelete = canDelete;
@@ -236,7 +234,7 @@ var strP = TokenManager.GetPrincipal(token);
                                              branchId = L.branchId,
                                              sectionId = L.sectionId,
                                              sectionName = v.name,
-                                             note = L.note,
+                                             notes = L.notes,
 
                                          }).ToList();
                     
@@ -313,7 +311,7 @@ var strP = TokenManager.GetPrincipal(token);
                             tmpLocation.updateDate = DateTime.Now;
                             tmpLocation.updateUserId = newObject.updateUserId;
                             tmpLocation.sectionId = newObject.sectionId;
-                            tmpLocation.note = newObject.note;
+                            tmpLocation.notes = newObject.notes;
                             entity.SaveChanges();
 
                             message = tmpLocation.locationId.ToString();

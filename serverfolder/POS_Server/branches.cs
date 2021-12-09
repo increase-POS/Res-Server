@@ -43,7 +43,7 @@ namespace POS_Server
         public Nullable<int> updateUserId { get; set; }
         public string notes { get; set; }
         public Nullable<int> parentId { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
         public string type { get; set; }
     
         public virtual users users { get; set; }

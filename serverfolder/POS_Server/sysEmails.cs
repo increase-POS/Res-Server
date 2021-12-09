@@ -18,18 +18,18 @@ namespace POS_Server
         public string name { get; set; }
         public string email { get; set; }
         public string password { get; set; }
-        public Nullable<int> port { get; set; }
-        public Nullable<bool> isSSL { get; set; }
+        public int port { get; set; }
+        public bool isSSL { get; set; }
         public string smtpClient { get; set; }
         public string side { get; set; }
         public string notes { get; set; }
         public Nullable<int> branchId { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<bool> isMajor { get; set; }
+        public bool isMajor { get; set; }
     
         public virtual branches branches { get; set; }
         public virtual users users { get; set; }

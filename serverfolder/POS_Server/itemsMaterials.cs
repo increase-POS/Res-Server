@@ -17,9 +17,9 @@ namespace POS_Server
         public int itemMatId { get; set; }
         public Nullable<int> itemId { get; set; }
         public Nullable<int> materialId { get; set; }
-        public Nullable<decimal> quantity { get; set; }
+        public decimal quantity { get; set; }
         public Nullable<int> unitId { get; set; }
-        public Nullable<decimal> price { get; set; }
+        public decimal price { get; set; }
     
         public virtual items items { get; set; }
         public virtual items items1 { get; set; }

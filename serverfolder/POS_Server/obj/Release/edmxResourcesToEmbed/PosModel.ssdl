@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="incposdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="agentMemberships">
     <Key>
       <PropertyRef Name="agentMembershipsId" />
@@ -16,7 +16,7 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="agents">
     <Key>
@@ -34,16 +34,16 @@
     <Property Name="image" Type="ntext" />
     <Property Name="type" Type="nvarchar" MaxLength="50" />
     <Property Name="accType" Type="nvarchar" MaxLength="50" />
-    <Property Name="balance" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="balanceType" Type="tinyint" />
+    <Property Name="balance" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="balanceType" Type="tinyint" Nullable="false" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="notes" Type="ntext" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="fax" Type="nvarchar" MaxLength="100" />
-    <Property Name="maxDeserve" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="maxDeserve" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="isLimited" Type="bit" Nullable="false" />
     <Property Name="payType" Type="nvarchar" MaxLength="20" />
   </EntityType>
@@ -62,7 +62,7 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="bondes">
     <Key>
@@ -70,16 +70,16 @@
     </Key>
     <Property Name="bondId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="number" Type="nvarchar" MaxLength="200" />
-    <Property Name="amount" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="amount" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="deserveDate" Type="datetime2" Precision="7" />
     <Property Name="type" Type="nvarchar" MaxLength="50" />
-    <Property Name="isRecieved" Type="tinyint" />
+    <Property Name="isRecieved" Type="tinyint" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="cashTransId" Type="int" />
   </EntityType>
   <EntityType Name="branches">
@@ -99,7 +99,7 @@
     <Property Name="updateUserId" Type="int" />
     <Property Name="notes" Type="ntext" />
     <Property Name="parentId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="type" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="branchesUsers">
@@ -121,12 +121,12 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="branchId" Type="int" />
     <Property Name="storeId" Type="int" />
-    <Property Name="note" Type="ntext" />
+    <Property Name="notes" Type="ntext" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="int" />
+    <Property Name="isActive" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="cards">
     <Key>
@@ -139,9 +139,9 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="image" Type="ntext" />
-    <Property Name="hasProcessNum" Type="bit" />
+    <Property Name="hasProcessNum" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="cashTransfer">
     <Key>
@@ -157,12 +157,12 @@
     <Property Name="transNum" Type="nvarchar" MaxLength="50" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
-    <Property Name="cash" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="cash" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="createUserId" Type="int" />
     <Property Name="notes" Type="ntext" />
     <Property Name="posIdCreator" Type="int" />
-    <Property Name="isConfirm" Type="tinyint" />
+    <Property Name="isConfirm" Type="tinyint" Nullable="false" />
     <Property Name="cashTransIdSource" Type="int" />
     <Property Name="side" Type="nvarchar" MaxLength="50" />
     <Property Name="docName" Type="nvarchar" MaxLength="100" />
@@ -183,8 +183,8 @@
     <Property Name="name" Type="nvarchar" MaxLength="100" />
     <Property Name="details" Type="ntext" />
     <Property Name="image" Type="ntext" />
-    <Property Name="isActive" Type="smallint" />
-    <Property Name="taxes" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
+    <Property Name="taxes" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="parentId" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
@@ -199,7 +199,7 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="categoryId" Type="int" />
     <Property Name="userId" Type="int" />
-    <Property Name="sequence" Type="int" />
+    <Property Name="sequence" Type="int" Nullable="false" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
@@ -231,16 +231,16 @@
     <Property Name="cId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="100" />
     <Property Name="code" Type="nvarchar" MaxLength="100" />
-    <Property Name="isActive" Type="tinyint" />
-    <Property Name="discountType" Type="tinyint" />
-    <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
+    <Property Name="discountType" Type="tinyint" Nullable="false" />
+    <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="startDate" Type="datetime2" Precision="7" />
     <Property Name="endDate" Type="datetime2" Precision="7" />
     <Property Name="notes" Type="ntext" />
-    <Property Name="quantity" Type="int" />
-    <Property Name="remainQ" Type="int" />
-    <Property Name="invMin" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="invMax" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="quantity" Type="int" Nullable="false" />
+    <Property Name="remainQ" Type="int" Nullable="false" />
+    <Property Name="invMin" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="invMax" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
@@ -258,8 +258,8 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="discountType" Type="tinyint" />
+    <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="discountType" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="docImages">
     <Key>
@@ -270,7 +270,7 @@
     <Property Name="docnum" Type="nvarchar" MaxLength="200" />
     <Property Name="image" Type="ntext" />
     <Property Name="tableName" Type="nvarchar" MaxLength="100" />
-    <Property Name="note" Type="ntext" />
+    <Property Name="notes" Type="ntext" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
@@ -297,8 +297,8 @@
     </Key>
     <Property Name="exId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="expense" Type="ntext" />
-    <Property Name="note" Type="ntext" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="notes" Type="ntext" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
@@ -322,7 +322,7 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="int" />
+    <Property Name="isActive" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="groups">
     <Key>
@@ -335,7 +335,7 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="int" />
+    <Property Name="isActive" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Inventory">
     <Key>
@@ -347,7 +347,7 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="inventoryType" Type="nvarchar" MaxLength="10" />
     <Property Name="branchId" Type="int" />
@@ -359,17 +359,17 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="isDestroyed" Type="bit" />
-    <Property Name="amount" Type="int" />
-    <Property Name="amountDestroyed" Type="int" />
-    <Property Name="realAmount" Type="int" />
+    <Property Name="isDestroyed" Type="bit" Nullable="false" />
+    <Property Name="amount" Type="int" Nullable="false" />
+    <Property Name="amountDestroyed" Type="int" Nullable="false" />
+    <Property Name="realAmount" Type="int" Nullable="false" />
     <Property Name="itemLocationId" Type="int" />
     <Property Name="inventoryId" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="cause" Type="ntext" />
     <Property Name="isFalls" Type="bit" Nullable="false" />
@@ -395,11 +395,11 @@
     <Property Name="createUserId" Type="int" />
     <Property Name="invType" Type="nvarchar" MaxLength="50" />
     <Property Name="discountType" Type="nvarchar" MaxLength="10" />
-    <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="total" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="totalNet" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="paid" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="deserved" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="total" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="totalNet" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="paid" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="deserved" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="deservedDate" Type="date" />
     <Property Name="invDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
@@ -412,10 +412,10 @@
     <Property Name="vendorInvDate" Type="datetime2" Precision="7" />
     <Property Name="branchId" Type="int" />
     <Property Name="posId" Type="int" />
-    <Property Name="tax" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="taxtype" Type="int" />
+    <Property Name="tax" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="taxtype" Type="int" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="200" />
-    <Property Name="isApproved" Type="tinyint" />
+    <Property Name="isApproved" Type="tinyint" Nullable="false" />
     <Property Name="shippingCompanyId" Type="int" />
     <Property Name="branchCreatorId" Type="int" />
     <Property Name="shipUserId" Type="int" />
@@ -424,7 +424,7 @@
     <Property Name="manualDiscountValue" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="manualDiscountType" Type="nvarchar" MaxLength="10" />
     <Property Name="isActive" Type="bit" Nullable="false" />
-    <Property Name="invoiceProfit" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="invoiceProfit" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="cashReturn" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="printedcount" Type="int" Nullable="false" />
     <Property Name="isOrginal" Type="bit" Nullable="false" />
@@ -441,7 +441,7 @@
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="notes" Type="ntext" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="items">
     <Key>
@@ -454,9 +454,9 @@
     <Property Name="type" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="image" Type="ntext" />
     <Property Name="taxes" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="isActive" Type="tinyint" />
-    <Property Name="min" Type="int" />
-    <Property Name="max" Type="int" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
+    <Property Name="min" Type="int" Nullable="false" />
+    <Property Name="max" Type="int" Nullable="false" />
     <Property Name="categoryId" Type="int" />
     <Property Name="parentId" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
@@ -465,7 +465,7 @@
     <Property Name="updateUserId" Type="int" />
     <Property Name="minUnitId" Type="int" />
     <Property Name="maxUnitId" Type="int" />
-    <Property Name="avgPurchasePrice" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="avgPurchasePrice" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="tagId" Type="int" />
   </EntityType>
   <EntityType Name="itemsLocations">
@@ -474,7 +474,7 @@
     </Key>
     <Property Name="itemsLocId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="locationId" Type="int" />
-    <Property Name="quantity" Type="bigint" />
+    <Property Name="quantity" Type="bigint" Nullable="false" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
@@ -482,7 +482,7 @@
     <Property Name="startDate" Type="date" />
     <Property Name="endDate" Type="date" />
     <Property Name="itemUnitId" Type="int" />
-    <Property Name="note" Type="ntext" />
+    <Property Name="notes" Type="ntext" />
     <Property Name="invoiceId" Type="int" />
   </EntityType>
   <EntityType Name="itemsMaterials">
@@ -492,9 +492,9 @@
     <Property Name="itemMatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="itemId" Type="int" />
     <Property Name="materialId" Type="int" />
-    <Property Name="quantity" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="quantity" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="unitId" Type="int" />
-    <Property Name="price" Type="decimal" Precision="20" Scale="2" />
+    <Property Name="price" Type="decimal" Precision="20" Scale="2" Nullable="false" />
   </EntityType>
   <EntityType Name="itemsOffers">
     <Key>
@@ -507,8 +507,8 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="quantity" Type="int" />
-    <Property Name="used" Type="int" />
+    <Property Name="quantity" Type="int" Nullable="false" />
+    <Property Name="used" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="itemsProp">
     <Key>
@@ -527,22 +527,20 @@
       <PropertyRef Name="itemsTransId" />
     </Key>
     <Property Name="itemsTransId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="quantity" Type="bigint" />
+    <Property Name="quantity" Type="bigint" Nullable="false" />
     <Property Name="invoiceId" Type="int" />
-    <Property Name="locationIdNew" Type="int" />
-    <Property Name="locationIdOld" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="notes" Type="ntext" />
-    <Property Name="price" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="price" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="itemUnitId" Type="int" />
     <Property Name="itemSerial" Type="nvarchar" MaxLength="200" Nullable="false" />
     <Property Name="inventoryItemLocId" Type="int" />
     <Property Name="offerId" Type="int" />
-    <Property Name="profit" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="purchasePrice" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="profit" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="purchasePrice" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="cause" Type="nvarchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="itemsUnits">
@@ -574,7 +572,7 @@
     <Property Name="itemTransId" Type="int" />
     <Property Name="offerId" Type="int" />
     <Property Name="discountType" Type="nvarchar" MaxLength="100" />
-    <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
@@ -593,7 +591,7 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="locations">
     <Key>
@@ -607,11 +605,11 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="sectionId" Type="int" />
-    <Property Name="note" Type="ntext" />
+    <Property Name="notes" Type="ntext" />
     <Property Name="branchId" Type="int" />
-    <Property Name="isFreeZone" Type="tinyint" />
+    <Property Name="isFreeZone" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="medalAgent">
     <Key>
@@ -621,7 +619,7 @@
     <Property Name="medalId" Type="int" />
     <Property Name="agentId" Type="int" />
     <Property Name="notes" Type="ntext" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
@@ -634,9 +632,9 @@
     <Property Name="medalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="200" />
     <Property Name="symbol" Type="ntext" />
-    <Property Name="CashPointsRequired" Type="int" />
-    <Property Name="invoiceCountPointsRequired" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="CashPointsRequired" Type="int" Nullable="false" />
+    <Property Name="invoiceCountPointsRequired" Type="int" Nullable="false" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
@@ -649,16 +647,16 @@
     </Key>
     <Property Name="membershipId" Type="int" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="100" />
-    <Property Name="deliveryDiscount" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="deliveryDiscount" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="deliveryDiscountType" Type="nvarchar" MaxLength="100" />
-    <Property Name="invoiceDiscount" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="invoiceDiscount" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="invoiceDiscountType" Type="nvarchar" MaxLength="100" />
     <Property Name="notes" Type="ntext" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="notification">
     <Key>
@@ -674,7 +672,7 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="notificationUser">
     <Key>
@@ -707,9 +705,9 @@
     <Property Name="offerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="code" Type="nvarchar" MaxLength="100" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="discountType" Type="nvarchar" MaxLength="100" />
-    <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="startDate" Type="datetime2" Precision="7" />
     <Property Name="endDate" Type="datetime2" Precision="7" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
@@ -747,20 +745,20 @@
       <PropertyRef Name="pointId" />
     </Key>
     <Property Name="pointId" Type="int" Nullable="false" />
-    <Property Name="Cash" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="CashPoints" Type="int" />
-    <Property Name="invoiceCount" Type="int" />
-    <Property Name="invoiceCountPoints" Type="int" />
-    <Property Name="CashArchive" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="CashPointsArchive" Type="int" />
-    <Property Name="invoiceCountArchive" Type="int" />
-    <Property Name="invoiceCountPoinstArchive" Type="int" />
+    <Property Name="Cash" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="CashPoints" Type="int" Nullable="false" />
+    <Property Name="invoiceCount" Type="int" Nullable="false" />
+    <Property Name="invoiceCountPoints" Type="int" Nullable="false" />
+    <Property Name="CashArchive" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="CashPointsArchive" Type="int" Nullable="false" />
+    <Property Name="invoiceCountArchive" Type="int" Nullable="false" />
+    <Property Name="invoiceCountPoinstArchive" Type="int" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="agentId" Type="int" />
   </EntityType>
   <EntityType Name="pos">
@@ -770,15 +768,15 @@
     <Property Name="posId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="code" Type="nvarchar" MaxLength="100" />
     <Property Name="name" Type="nvarchar" MaxLength="100" />
-    <Property Name="balance" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="balance" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="branchId" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="notes" Type="ntext" />
-    <Property Name="balanceAll" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="balanceAll" Type="decimal" Precision="20" Scale="3" Nullable="false" />
   </EntityType>
   <EntityType Name="posSerials">
     <Key>
@@ -850,7 +848,7 @@
     <Property Name="packageSaleCode" Type="nvarchar" MaxLength="500" />
     <Property Name="customerServerCode" Type="nvarchar" MaxLength="500" />
     <Property Name="expireDate" Type="datetime2" Precision="7" />
-    <Property Name="isOnlineServer" Type="bit" />
+    <Property Name="isOnlineServer" Type="bit" Nullable="false" />
     <Property Name="packageNumber" Type="nvarchar" MaxLength="500" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
   </EntityType>
@@ -864,7 +862,7 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="propertiesItems">
     <Key>
@@ -873,12 +871,12 @@
     <Property Name="propertyItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="100" />
     <Property Name="propertyId" Type="int" />
-    <Property Name="isDefault" Type="smallint" />
+    <Property Name="isDefault" Type="smallint" Nullable="false" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="sections">
     <Key>
@@ -891,9 +889,9 @@
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="branchId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
-    <Property Name="note" Type="ntext" />
-    <Property Name="isFreeZone" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
+    <Property Name="notes" Type="ntext" />
+    <Property Name="isFreeZone" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="serials">
     <Key>
@@ -902,7 +900,7 @@
     <Property Name="serialId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="itemId" Type="int" />
     <Property Name="serialNum" Type="nvarchar" MaxLength="200" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
@@ -922,8 +920,8 @@
     </Key>
     <Property Name="valId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="value" Type="ntext" />
-    <Property Name="isDefault" Type="int" />
-    <Property Name="isSystem" Type="int" />
+    <Property Name="isDefault" Type="int" Nullable="false" />
+    <Property Name="isSystem" Type="int" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="settingId" Type="int" />
   </EntityType>
@@ -933,17 +931,17 @@
     </Key>
     <Property Name="shippingCompanyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nchar" MaxLength="10" />
-    <Property Name="RealDeliveryCost" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="deliveryCost" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="RealDeliveryCost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="deliveryCost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="deliveryType" Type="nvarchar" MaxLength="100" />
     <Property Name="notes" Type="ntext" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="balance" Type="decimal" Precision="20" Scale="3" Nullable="false" />
-    <Property Name="balanceType" Type="tinyint" />
+    <Property Name="balanceType" Type="tinyint" Nullable="false" />
     <Property Name="email" Type="nvarchar" MaxLength="200" />
     <Property Name="phone" Type="nvarchar" MaxLength="100" />
     <Property Name="mobile" Type="nvarchar" MaxLength="100" />
@@ -957,8 +955,8 @@
     <Property Name="storageCostId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="200" />
     <Property Name="cost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
-    <Property Name="note" Type="ntext" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="notes" Type="ntext" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
@@ -970,14 +968,24 @@
     </Key>
     <Property Name="subscriptionFeesId" Type="int" Nullable="false" />
     <Property Name="membershipId" Type="int" />
-    <Property Name="monthsCount" Type="int" />
-    <Property Name="Amount" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="monthsCount" Type="int" Nullable="false" />
+    <Property Name="Amount" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="sysEmails">
     <Key>
@@ -987,18 +995,18 @@
     <Property Name="name" Type="nvarchar" MaxLength="100" />
     <Property Name="email" Type="nvarchar" MaxLength="100" />
     <Property Name="password" Type="nvarchar" MaxLength="100" />
-    <Property Name="port" Type="int" />
-    <Property Name="isSSL" Type="bit" />
+    <Property Name="port" Type="int" Nullable="false" />
+    <Property Name="isSSL" Type="bit" Nullable="false" />
     <Property Name="smtpClient" Type="nvarchar" MaxLength="100" />
     <Property Name="side" Type="nvarchar" MaxLength="100" />
     <Property Name="notes" Type="nvarchar" MaxLength="100" />
     <Property Name="branchId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
-    <Property Name="isMajor" Type="bit" />
+    <Property Name="isMajor" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="tags">
     <Key>
@@ -1012,7 +1020,7 @@
     <Property Name="updateUserId" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
-    <Property Name="isActive" Type="bit" />
+    <Property Name="isActive" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="units">
     <Key>
@@ -1020,14 +1028,14 @@
     </Key>
     <Property Name="unitId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nvarchar" MaxLength="100" />
-    <Property Name="isSmallest" Type="smallint" />
+    <Property Name="isSmallest" Type="smallint" Nullable="false" />
     <Property Name="smallestId" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="parentid" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="notes" Type="nvarchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="users">
@@ -1035,11 +1043,11 @@
       <PropertyRef Name="userId" />
     </Key>
     <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="username" Type="nvarchar" MaxLength="100" />
-    <Property Name="password" Type="nvarchar" MaxLength="100" />
-    <Property Name="name" Type="nvarchar" MaxLength="100" />
-    <Property Name="lastname" Type="nvarchar" MaxLength="100" />
-    <Property Name="job" Type="nvarchar" MaxLength="100" />
+    <Property Name="username" Type="nvarchar" MaxLength="200" />
+    <Property Name="password" Type="nvarchar" MaxLength="200" />
+    <Property Name="name" Type="nvarchar" MaxLength="200" />
+    <Property Name="lastname" Type="nvarchar" MaxLength="200" />
+    <Property Name="job" Type="nvarchar" MaxLength="200" />
     <Property Name="workHours" Type="nvarchar" MaxLength="100" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
@@ -1049,15 +1057,15 @@
     <Property Name="mobile" Type="nvarchar" MaxLength="50" />
     <Property Name="email" Type="nvarchar" MaxLength="100" />
     <Property Name="address" Type="ntext" />
-    <Property Name="isActive" Type="smallint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="notes" Type="ntext" />
-    <Property Name="isOnline" Type="tinyint" />
+    <Property Name="isOnline" Type="tinyint" Nullable="false" />
     <Property Name="role" Type="nvarchar" MaxLength="50" />
     <Property Name="image" Type="ntext" />
     <Property Name="groupId" Type="int" />
-    <Property Name="balance" Type="decimal" Precision="20" Scale="3" />
-    <Property Name="balanceType" Type="tinyint" />
-    <Property Name="isAdmin" Type="bit" />
+    <Property Name="balance" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="balanceType" Type="tinyint" Nullable="false" />
+    <Property Name="isAdmin" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="userSetValues">
     <Key>
@@ -1066,7 +1074,7 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="userId" Type="int" />
     <Property Name="valId" Type="int" />
-    <Property Name="note" Type="ntext" />
+    <Property Name="notes" Type="ntext" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
@@ -2450,30 +2458,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_itemsTransfer_locations">
-    <End Role="locations" Type="Self.locations" Multiplicity="0..1" />
-    <End Role="itemsTransfer" Type="Self.itemsTransfer" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="locations">
-        <PropertyRef Name="locationId" />
-      </Principal>
-      <Dependent Role="itemsTransfer">
-        <PropertyRef Name="locationIdNew" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_itemsTransfer_locations1">
-    <End Role="locations" Type="Self.locations" Multiplicity="0..1" />
-    <End Role="itemsTransfer" Type="Self.itemsTransfer" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="locations">
-        <PropertyRef Name="locationId" />
-      </Principal>
-      <Dependent Role="itemsTransfer">
-        <PropertyRef Name="locationIdOld" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_itemsTransfer_offers">
     <End Role="offers" Type="Self.offers" Multiplicity="0..1" />
     <End Role="itemsTransfer" Type="Self.itemsTransfer" Multiplicity="*" />
@@ -3434,7 +3418,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="incposdbModelStoreContainer">
+  <EntityContainer Name="PosModelStoreContainer">
     <EntitySet Name="agentMemberships" EntityType="Self.agentMemberships" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="agents" EntityType="Self.agents" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="banks" EntityType="Self.banks" Schema="dbo" store:Type="Tables" />
@@ -3495,6 +3479,7 @@
     <EntitySet Name="shippingCompanies" EntityType="Self.shippingCompanies" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="storageCost" EntityType="Self.storageCost" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="subscriptionFees" EntityType="Self.subscriptionFees" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysEmails" EntityType="Self.sysEmails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tags" EntityType="Self.tags" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="units" EntityType="Self.units" Schema="dbo" store:Type="Tables" />
@@ -3955,14 +3940,6 @@
     </AssociationSet>
     <AssociationSet Name="FK_itemsTransfer_itemsUnits" Association="Self.FK_itemsTransfer_itemsUnits">
       <End Role="itemsUnits" EntitySet="itemsUnits" />
-      <End Role="itemsTransfer" EntitySet="itemsTransfer" />
-    </AssociationSet>
-    <AssociationSet Name="FK_itemsTransfer_locations" Association="Self.FK_itemsTransfer_locations">
-      <End Role="locations" EntitySet="locations" />
-      <End Role="itemsTransfer" EntitySet="itemsTransfer" />
-    </AssociationSet>
-    <AssociationSet Name="FK_itemsTransfer_locations1" Association="Self.FK_itemsTransfer_locations1">
-      <End Role="locations" EntitySet="locations" />
       <End Role="itemsTransfer" EntitySet="itemsTransfer" />
     </AssociationSet>
     <AssociationSet Name="FK_itemsTransfer_offers" Association="Self.FK_itemsTransfer_offers">

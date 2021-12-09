@@ -27,9 +27,9 @@ namespace POS_Server
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public Nullable<int> branchId { get; set; }
-        public Nullable<byte> isActive { get; set; }
-        public string note { get; set; }
-        public Nullable<byte> isFreeZone { get; set; }
+        public byte isActive { get; set; }
+        public string notes { get; set; }
+        public byte isFreeZone { get; set; }
     
         public virtual branches branches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -10,7 +10,7 @@ namespace POS_Server.Models
         public int storageCostId { get; set; }
         public string name { get; set; }
         public decimal cost { get; set; }
-        public string note { get; set; }
+        public string notes { get; set; }
         public Nullable<byte> isActive { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }

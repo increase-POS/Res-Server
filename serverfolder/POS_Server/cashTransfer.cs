@@ -32,12 +32,12 @@ namespace POS_Server
         public string transNum { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<decimal> cash { get; set; }
+        public decimal cash { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public Nullable<int> createUserId { get; set; }
         public string notes { get; set; }
         public Nullable<int> posIdCreator { get; set; }
-        public Nullable<byte> isConfirm { get; set; }
+        public byte isConfirm { get; set; }
         public Nullable<int> cashTransIdSource { get; set; }
         public string side { get; set; }
         public string docName { get; set; }

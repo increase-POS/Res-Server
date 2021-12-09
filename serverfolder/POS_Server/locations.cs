@@ -18,8 +18,6 @@ namespace POS_Server
         public locations()
         {
             this.itemsLocations = new HashSet<itemsLocations>();
-            this.itemsTransfer = new HashSet<itemsTransfer>();
-            this.itemsTransfer1 = new HashSet<itemsTransfer>();
         }
     
         public int locationId { get; set; }
@@ -30,19 +28,15 @@ namespace POS_Server
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
         public Nullable<int> sectionId { get; set; }
-        public string note { get; set; }
+        public string notes { get; set; }
         public Nullable<int> branchId { get; set; }
-        public Nullable<byte> isFreeZone { get; set; }
+        public byte isFreeZone { get; set; }
     
         public virtual branches branches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemsLocations> itemsLocations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<itemsTransfer> itemsTransfer { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<itemsTransfer> itemsTransfer1 { get; set; }
         public virtual sections sections { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }

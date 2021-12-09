@@ -23,9 +23,9 @@ namespace POS_Server
         public int medalId { get; set; }
         public string name { get; set; }
         public string symbol { get; set; }
-        public Nullable<int> CashPointsRequired { get; set; }
-        public Nullable<int> invoiceCountPointsRequired { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public int CashPointsRequired { get; set; }
+        public int invoiceCountPointsRequired { get; set; }
+        public byte isActive { get; set; }
         public string notes { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }

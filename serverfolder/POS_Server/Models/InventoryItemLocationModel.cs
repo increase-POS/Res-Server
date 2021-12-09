@@ -9,17 +9,17 @@ namespace POS_Server.Models
     {
         public int id { get; set; }
         public int sequence { get; set; }
-        public Nullable<bool> isDestroyed { get; set; }
-        public Nullable<int> amount { get; set; }
-        public Nullable<int> amountDestroyed { get; set; }
-        public Nullable<int> quantity { get; set; }  //realAmount
+        public bool isDestroyed { get; set; }
+        public int amount { get; set; }
+        public int amountDestroyed { get; set; }
+        public int quantity { get; set; }  //realAmount
         public Nullable<int> itemLocationId { get; set; }
         public Nullable<int> inventoryId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public  byte isActive { get; set; }
         public string notes { get; set; }
         public Boolean canDelete { get; set; }
         public string itemName { get; set; }
@@ -36,6 +36,6 @@ namespace POS_Server.Models
         public string fallCause { get; set; }
 
         public bool isFalls { get; set; }
-        public Nullable<decimal> avgPurchasePrice { get; set; }
+        public  decimal avgPurchasePrice { get; set; }
     }
 }

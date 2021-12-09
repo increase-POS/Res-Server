@@ -28,7 +28,7 @@ namespace POS_Server
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public Nullable<int> isActive { get; set; }
+        public int isActive { get; set; }
     
         public virtual objects objects { get; set; }
         public virtual users users { get; set; }

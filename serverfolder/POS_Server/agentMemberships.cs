@@ -32,7 +32,7 @@ namespace POS_Server
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
     
         public virtual agents agents { get; set; }
         public virtual cashTransfer cashTransfer { get; set; }

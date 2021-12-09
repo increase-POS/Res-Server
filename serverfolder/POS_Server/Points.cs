@@ -21,20 +21,20 @@ namespace POS_Server
         }
     
         public int pointId { get; set; }
-        public Nullable<decimal> Cash { get; set; }
-        public Nullable<int> CashPoints { get; set; }
-        public Nullable<int> invoiceCount { get; set; }
-        public Nullable<int> invoiceCountPoints { get; set; }
-        public Nullable<decimal> CashArchive { get; set; }
-        public Nullable<int> CashPointsArchive { get; set; }
-        public Nullable<int> invoiceCountArchive { get; set; }
-        public Nullable<int> invoiceCountPoinstArchive { get; set; }
+        public decimal Cash { get; set; }
+        public int CashPoints { get; set; }
+        public int invoiceCount { get; set; }
+        public int invoiceCountPoints { get; set; }
+        public decimal CashArchive { get; set; }
+        public int CashPointsArchive { get; set; }
+        public int invoiceCountArchive { get; set; }
+        public int invoiceCountPoinstArchive { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
         public Nullable<int> agentId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

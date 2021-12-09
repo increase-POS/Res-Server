@@ -65,7 +65,7 @@ namespace POS_Server.Controllers
                                                 itemsLocId = b.itemsLocId,
                                                 itemUnitId = b.itemUnitId,
                                                 locationId = b.locationId,
-                                                note = b.note,
+                                                notes = b.notes,
                                                 quantity = b.quantity,
                                                 startDate = b.startDate,
 
@@ -131,7 +131,7 @@ namespace POS_Server.Controllers
                                                 itemsLocId = b.itemsLocId,
                                                 itemUnitId = b.itemUnitId,
                                                 locationId = b.locationId,
-                                                note = b.note,
+                                                notes = b.notes,
                                                 quantity = b.quantity,
                                                 startDate = b.startDate,
 
@@ -256,7 +256,7 @@ namespace POS_Server.Controllers
                                                 itemsLocId = b.itemsLocId,
                                                 itemUnitId = b.itemUnitId,
                                                 locationId = b.locationId,
-                                                note = b.note,
+                                                notes = b.notes,
                                                 quantity = b.quantity,
                                                 startDate = b.startDate,
 
@@ -466,7 +466,7 @@ namespace POS_Server.Controllers
                                                itemsLocId = b.itemsLocId,
                                                itemUnitId = b.itemUnitId,
                                                locationId = b.locationId,
-                                               note = b.note,
+                                               notes = b.notes,
                                                quantity = b.quantity,
                                                startDate = b.startDate,
 
@@ -605,7 +605,7 @@ namespace POS_Server.Controllers
                                                 itemsLocId = b.itemsLocId,
                                                 itemUnitId = b.itemUnitId,
                                                 locationId = b.locationId,
-                                                note = b.note,
+                                                notes = b.notes,
                                                 quantity = b.quantity,
                                                 startDate = b.startDate,
 
@@ -739,7 +739,7 @@ namespace POS_Server.Controllers
                                 b.itemsLocId,
                                 b.itemUnitId,
                                 b.locationId,
-                                b.note,
+                                b.notes,
                                 b.quantity,
                                 b.startDate,
 
@@ -870,7 +870,7 @@ namespace POS_Server.Controllers
                                     item.quantity = itemLoc.quantity;
                                     item.startDate = itemLoc.startDate;
                                     item.endDate = itemLoc.endDate;
-                                    item.note = itemLoc.note;
+                                    item.notes = itemLoc.notes;
                                     item.invoiceId = itemLoc.invoiceId;
                                     item.updateDate = DateTime.Now;
                                     item.updateUserId = itemLoc.updateUserId;
@@ -1851,7 +1851,7 @@ namespace POS_Server.Controllers
                                 newItemL.updateUserId = (int)newObject.createUserId;
                                 newItemL.itemUnitId = (int)newObject.itemUnitId;
                                 newItemL.locationId = (int)newObject.locationId;
-                                newItemL.note = newObject.note;
+                                newItemL.notes = newObject.notes;
                                 newItemL.quantity = (long)newObject.quantity;
                                 newItemL.invoiceId = newObject.invoiceId;
                                 entity.itemsLocations.Add(newItemL);
@@ -5091,7 +5091,7 @@ namespace POS_Server.Controllers
                                                itemsLocId = b.itemsLocId,
                                                itemUnitId = b.itemUnitId,
                                                locationId = b.locationId,
-                                               note = b.note,
+                                               notes = b.notes,
                                                quantity = b.quantity,
                                                startDate = b.startDate,
 
@@ -5355,7 +5355,7 @@ namespace POS_Server.Controllers
                                     startDate = newObject.startDate,
                                     endDate = newObject.endDate,
                                     itemUnitId = newObject.itemUnitId,
-                                    note = newObject.note,
+                                    notes = newObject.notes,
                                 };
                                 entity.itemsLocations.Add(loc);
                             }
@@ -5482,7 +5482,7 @@ namespace POS_Server.Controllers
                             startDate = itemLoc.startDate,
                             endDate = itemLoc.endDate,
                             itemUnitId = itemLoc.itemUnitId,
-                            note = itemLoc.note,
+                            notes = itemLoc.notes,
                         };
                         entity.itemsLocations.Add(loc);
                     }

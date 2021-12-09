@@ -814,7 +814,7 @@ namespace POS_Server.Controllers
                                         sections section = new sections();
                                         section.name = "FreeZone";
                                         section.branchId = branchId;
-                                        section.note = "";
+                                        section.notes = "";
                                         section.createUserId = newObject.createUserId;
                                         section.updateUserId = newObject.createUserId;
                                         section.isActive = 1;
@@ -831,7 +831,7 @@ namespace POS_Server.Controllers
                                         {
                                             locations location = new locations();
                                             location.x = location.y = location.z = "0";
-                                            location.note = "";
+                                            location.notes = "";
                                             location.createUserId = newObject.createUserId;
                                             location.updateUserId = newObject.createUserId;
                                             location.isActive = 1;
@@ -1253,7 +1253,7 @@ namespace POS_Server.Controllers
                         tmpSection.branchId = newObject.branchId;
                         tmpSection.isActive = newObject.isActive;
                         tmpSection.isFreeZone = newObject.isFreeZone;
-                        tmpSection.note = newObject.note;
+                        tmpSection.notes = newObject.notes;
                         tmpSection.updateDate = DateTime.Now;
                         tmpSection.updateUserId = newObject.updateUserId;
                         entity.SaveChanges();
@@ -1363,7 +1363,7 @@ namespace POS_Server.Controllers
                         tmpLocation.updateDate = DateTime.Now;
                         tmpLocation.updateUserId = newObject.updateUserId;
                         tmpLocation.sectionId = newObject.sectionId;
-                        tmpLocation.note = newObject.note;
+                        tmpLocation.notes = newObject.notes;
                         entity.SaveChanges();
 
                         message = tmpLocation.locationId;

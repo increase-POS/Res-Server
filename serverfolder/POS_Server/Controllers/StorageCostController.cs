@@ -38,7 +38,7 @@ var strP = TokenManager.GetPrincipal(token);
                                     storageCostId = S.storageCostId,
                                     name = S.name,
                                     cost = S.cost,
-                                    note = S.note,
+                                    notes = S.notes,
                                     isActive = S.isActive,
                                     createDate = S.createDate,
                                     updateDate = S.updateDate,
@@ -98,7 +98,7 @@ var strP = TokenManager.GetPrincipal(token);
                        S.storageCostId,
                        S.name,
                        S.cost,
-                       S.note,
+                       S.notes,
                        S.isActive,
                        S.createDate,
                        S.updateDate,
@@ -179,7 +179,7 @@ var strP = TokenManager.GetPrincipal(token);
 
                             tmpObject.name = newObject.name;
                             tmpObject.cost = newObject.cost;
-                            tmpObject.note = newObject.note;
+                            tmpObject.notes = newObject.notes;
 
                             tmpObject.isActive = newObject.isActive;
                             entity.SaveChanges();
