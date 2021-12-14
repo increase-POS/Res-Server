@@ -1313,7 +1313,6 @@ D:\myproj\Res-Server\serverfolder\POS_Server\bin\System.Web.WebPages.Deployment.
 D:\myproj\Res-Server\serverfolder\POS_Server\bin\System.Web.WebPages.Razor.xml
 D:\myproj\Res-Server\serverfolder\POS_Server\bin\Antlr3.Runtime.pdb
 D:\myproj\Res-Server\serverfolder\POS_Server\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.csprojAssemblyReference.cache
 D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.csproj.CoreCompileInputs.cache
 D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.csproj.CopyComplete
 D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.dll

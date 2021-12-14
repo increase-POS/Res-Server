@@ -1147,6 +1147,7 @@
     <Property Name="isFreeZone" Type="Byte" Nullable="false" />
     <NavigationProperty Name="branches" Relationship="Self.FK_sections_branches" FromRole="sections" ToRole="branches" />
     <NavigationProperty Name="locations" Relationship="Self.FK_locations_sections" FromRole="sections" ToRole="locations" />
+    <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="serials">
     <Key>

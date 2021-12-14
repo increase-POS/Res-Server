@@ -892,6 +892,7 @@
     <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="isFreeZone" Type="tinyint" Nullable="false" />
+    <Property Name="type" Type="nvarchar" MaxLength="20" />
   </EntityType>
   <EntityType Name="serials">
     <Key>

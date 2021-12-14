@@ -935,6 +935,7 @@
     <EntitySetMapping Name="sections">
       <EntityTypeMapping TypeName="PosModel.sections">
         <MappingFragment StoreEntitySet="sections">
+          <ScalarProperty Name="type" ColumnName="type" />
           <ScalarProperty Name="sectionId" ColumnName="sectionId" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />

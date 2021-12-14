@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="agentMemberships">
           <Key>
             <PropertyRef Name="agentMembershipsId" />
@@ -897,6 +897,7 @@
           <Property Name="isActive" Type="tinyint" Nullable="false" />
           <Property Name="notes" Type="ntext" />
           <Property Name="isFreeZone" Type="tinyint" Nullable="false" />
+          <Property Name="type" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="serials">
           <Key>
@@ -4268,8 +4269,7 @@
             <End Role="usersLogs" EntitySet="usersLogs" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -5420,6 +5420,7 @@
           <Property Name="isFreeZone" Type="Byte" Nullable="false" />
           <NavigationProperty Name="branches" Relationship="Self.FK_sections_branches" FromRole="sections" ToRole="branches" />
           <NavigationProperty Name="locations" Relationship="Self.FK_locations_sections" FromRole="sections" ToRole="locations" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="serials">
           <Key>
@@ -9864,6 +9865,7 @@
           <EntitySetMapping Name="sections">
             <EntityTypeMapping TypeName="PosModel.sections">
               <MappingFragment StoreEntitySet="sections">
+                <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="sectionId" ColumnName="sectionId" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />

@@ -47,6 +47,7 @@ var strP = TokenManager.GetPrincipal(token);
                                             updateDate=    L.updateDate,
                                             createUserId=  L.createUserId,
                                             updateUserId=  L.updateUserId,
+                                            type=L.type,
                        
                                         })
                                         .ToList();
@@ -112,8 +113,9 @@ var strP = TokenManager.GetPrincipal(token);
                                             updateDate=    L.updateDate,
                                             createUserId=  L.createUserId,
                                             updateUserId=  L.updateUserId,
-                       
-                                        })
+                                          type = L.type,
+
+                                      })
                                         .ToList();
 
                     if (sectionList.Count > 0)
@@ -176,6 +178,7 @@ var strP = TokenManager.GetPrincipal(token);
                        updateDate = L.updateDate,
                        createUserId = L.createUserId,
                        updateUserId = L.updateUserId,
+                       type = L.type,
 
                    })
                    .FirstOrDefault();
@@ -250,6 +253,7 @@ var strP = TokenManager.GetPrincipal(token);
                             tmpSection.notes = newObject.notes;
                             tmpSection.updateDate = DateTime.Now;
                             tmpSection.updateUserId = newObject.updateUserId;
+                            tmpSection.type = newObject.type;
                             entity.SaveChanges();
                             message = tmpSection.sectionId.ToString(); 
                         }
