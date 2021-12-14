@@ -458,7 +458,7 @@
           <Property Name="details" Type="ntext" />
           <Property Name="type" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="image" Type="ntext" />
-          <Property Name="taxes" Type="decimal" Precision="20" Scale="3" />
+          <Property Name="taxes" Type="decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="isActive" Type="tinyint" Nullable="false" />
           <Property Name="min" Type="int" Nullable="false" />
           <Property Name="max" Type="int" Nullable="false" />
@@ -556,18 +556,18 @@
           <Property Name="itemId" Type="int" />
           <Property Name="unitId" Type="int" />
           <Property Name="unitValue" Type="int" />
-          <Property Name="defaultSale" Type="smallint" />
-          <Property Name="defaultPurchase" Type="smallint" />
-          <Property Name="price" Type="decimal" Precision="20" Scale="3" />
+          <Property Name="defaultSale" Type="smallint" Nullable="false" />
+          <Property Name="defaultPurchase" Type="smallint" Nullable="false" />
+          <Property Name="price" Type="decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="barcode" Type="nvarchar" MaxLength="200" />
           <Property Name="createDate" Type="datetime2" Precision="7" />
           <Property Name="updateDate" Type="datetime2" Precision="7" />
           <Property Name="createUserId" Type="int" />
           <Property Name="updateUserId" Type="int" />
           <Property Name="subUnitId" Type="int" />
-          <Property Name="purchasePrice" Type="decimal" Precision="20" Scale="3" />
+          <Property Name="purchasePrice" Type="decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="storageCostId" Type="int" />
-          <Property Name="isActive" Type="tinyint" />
+          <Property Name="isActive" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="itemTransferOffer">
           <Key>
@@ -1066,7 +1066,6 @@
           <Property Name="isActive" Type="tinyint" Nullable="false" />
           <Property Name="notes" Type="ntext" />
           <Property Name="isOnline" Type="tinyint" Nullable="false" />
-          <Property Name="role" Type="nvarchar" MaxLength="50" />
           <Property Name="image" Type="ntext" />
           <Property Name="groupId" Type="int" />
           <Property Name="balance" Type="decimal" Precision="20" Scale="3" Nullable="false" />
@@ -4848,7 +4847,7 @@
           <Property Name="details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="taxes" Type="Decimal" Precision="20" Scale="3" />
+          <Property Name="taxes" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="isActive" Type="Byte" Nullable="false" />
           <Property Name="min" Type="Int32" Nullable="false" />
           <Property Name="max" Type="Int32" Nullable="false" />
@@ -4984,18 +4983,18 @@
           <Property Name="itemId" Type="Int32" />
           <Property Name="unitId" Type="Int32" />
           <Property Name="unitValue" Type="Int32" />
-          <Property Name="defaultSale" Type="Int16" />
-          <Property Name="defaultPurchase" Type="Int16" />
-          <Property Name="price" Type="Decimal" Precision="20" Scale="3" />
+          <Property Name="defaultSale" Type="Int16" Nullable="false" />
+          <Property Name="defaultPurchase" Type="Int16" Nullable="false" />
+          <Property Name="price" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="barcode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="createDate" Type="DateTime" Precision="7" />
           <Property Name="updateDate" Type="DateTime" Precision="7" />
           <Property Name="createUserId" Type="Int32" />
           <Property Name="updateUserId" Type="Int32" />
           <Property Name="subUnitId" Type="Int32" />
-          <Property Name="purchasePrice" Type="Decimal" Precision="20" Scale="3" />
+          <Property Name="purchasePrice" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="storageCostId" Type="Int32" />
-          <Property Name="isActive" Type="Byte" />
+          <Property Name="isActive" Type="Byte" Nullable="false" />
           <NavigationProperty Name="items" Relationship="Self.FK_itemsUnits_items" FromRole="itemsUnits" ToRole="items" />
           <NavigationProperty Name="itemsLocations" Relationship="Self.FK_itemsLocations_itemsUnits" FromRole="itemsUnits" ToRole="itemsLocations" />
           <NavigationProperty Name="itemsOffers" Relationship="Self.FK_itemsOffers_itemsUnits" FromRole="itemsUnits" ToRole="itemsOffers" />
@@ -5611,7 +5610,6 @@
           <Property Name="isActive" Type="Byte" Nullable="false" />
           <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="isOnline" Type="Byte" Nullable="false" />
-          <Property Name="role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="groupId" Type="Int32" />
           <Property Name="balance" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
@@ -10055,7 +10053,6 @@
                 <ScalarProperty Name="isActive" ColumnName="isActive" />
                 <ScalarProperty Name="notes" ColumnName="notes" />
                 <ScalarProperty Name="isOnline" ColumnName="isOnline" />
-                <ScalarProperty Name="role" ColumnName="role" />
                 <ScalarProperty Name="image" ColumnName="image" />
                 <ScalarProperty Name="groupId" ColumnName="groupId" />
                 <ScalarProperty Name="balance" ColumnName="balance" />

@@ -142,7 +142,6 @@ namespace POS_Server
         public byte isActive { get; set; }
         public string notes { get; set; }
         public byte isOnline { get; set; }
-        public string role { get; set; }
         public string image { get; set; }
         public Nullable<int> groupId { get; set; }
         public decimal balance { get; set; }

@@ -453,7 +453,7 @@
     <Property Name="details" Type="ntext" />
     <Property Name="type" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="image" Type="ntext" />
-    <Property Name="taxes" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="taxes" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="min" Type="int" Nullable="false" />
     <Property Name="max" Type="int" Nullable="false" />
@@ -551,18 +551,18 @@
     <Property Name="itemId" Type="int" />
     <Property Name="unitId" Type="int" />
     <Property Name="unitValue" Type="int" />
-    <Property Name="defaultSale" Type="smallint" />
-    <Property Name="defaultPurchase" Type="smallint" />
-    <Property Name="price" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="defaultSale" Type="smallint" Nullable="false" />
+    <Property Name="defaultPurchase" Type="smallint" Nullable="false" />
+    <Property Name="price" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="barcode" Type="nvarchar" MaxLength="200" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="subUnitId" Type="int" />
-    <Property Name="purchasePrice" Type="decimal" Precision="20" Scale="3" />
+    <Property Name="purchasePrice" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="storageCostId" Type="int" />
-    <Property Name="isActive" Type="tinyint" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="itemTransferOffer">
     <Key>
@@ -1061,7 +1061,6 @@
     <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="isOnline" Type="tinyint" Nullable="false" />
-    <Property Name="role" Type="nvarchar" MaxLength="50" />
     <Property Name="image" Type="ntext" />
     <Property Name="groupId" Type="int" />
     <Property Name="balance" Type="decimal" Precision="20" Scale="3" Nullable="false" />

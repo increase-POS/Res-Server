@@ -575,7 +575,7 @@
     <Property Name="details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="taxes" Type="Decimal" Precision="20" Scale="3" />
+    <Property Name="taxes" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="isActive" Type="Byte" Nullable="false" />
     <Property Name="min" Type="Int32" Nullable="false" />
     <Property Name="max" Type="Int32" Nullable="false" />
@@ -711,18 +711,18 @@
     <Property Name="itemId" Type="Int32" />
     <Property Name="unitId" Type="Int32" />
     <Property Name="unitValue" Type="Int32" />
-    <Property Name="defaultSale" Type="Int16" />
-    <Property Name="defaultPurchase" Type="Int16" />
-    <Property Name="price" Type="Decimal" Precision="20" Scale="3" />
+    <Property Name="defaultSale" Type="Int16" Nullable="false" />
+    <Property Name="defaultPurchase" Type="Int16" Nullable="false" />
+    <Property Name="price" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="barcode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <Property Name="createDate" Type="DateTime" Precision="7" />
     <Property Name="updateDate" Type="DateTime" Precision="7" />
     <Property Name="createUserId" Type="Int32" />
     <Property Name="updateUserId" Type="Int32" />
     <Property Name="subUnitId" Type="Int32" />
-    <Property Name="purchasePrice" Type="Decimal" Precision="20" Scale="3" />
+    <Property Name="purchasePrice" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="storageCostId" Type="Int32" />
-    <Property Name="isActive" Type="Byte" />
+    <Property Name="isActive" Type="Byte" Nullable="false" />
     <NavigationProperty Name="items" Relationship="Self.FK_itemsUnits_items" FromRole="itemsUnits" ToRole="items" />
     <NavigationProperty Name="itemsLocations" Relationship="Self.FK_itemsLocations_itemsUnits" FromRole="itemsUnits" ToRole="itemsLocations" />
     <NavigationProperty Name="itemsOffers" Relationship="Self.FK_itemsOffers_itemsUnits" FromRole="itemsUnits" ToRole="itemsOffers" />
@@ -1338,7 +1338,6 @@
     <Property Name="isActive" Type="Byte" Nullable="false" />
     <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="isOnline" Type="Byte" Nullable="false" />
-    <Property Name="role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="groupId" Type="Int32" />
     <Property Name="balance" Type="Decimal" Precision="20" Scale="3" Nullable="false" />

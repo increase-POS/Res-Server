@@ -8,19 +8,27 @@ namespace POS_Server.Models
     public class InventoryItemLocationModel
     {
         public int id { get; set; }
-        public int sequence { get; set; }
         public bool isDestroyed { get; set; }
         public int amount { get; set; }
         public int amountDestroyed { get; set; }
-        public int quantity { get; set; }  //realAmount
+        public int realAmount { get; set; }
         public Nullable<int> itemLocationId { get; set; }
         public Nullable<int> inventoryId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public  byte isActive { get; set; }
+        public byte isActive { get; set; }
         public string notes { get; set; }
+        public string cause { get; set; }
+        public bool isFalls { get; set; }
+        public string fallCause { get; set; }
+
+      
+        public int sequence { get; set; }
+      
+        public int quantity { get; set; }  //realAmount
+      
         public Boolean canDelete { get; set; }
         public string itemName { get; set; }
         public int itemId { get; set; }
@@ -32,10 +40,8 @@ namespace POS_Server.Models
         public string inventoryNum { get; set; }
         public Nullable<System.DateTime> inventoryDate { get; set; }
         public string itemType { get; set; }
-        public string cause { get; set; }
-        public string fallCause { get; set; }
 
-        public bool isFalls { get; set; }
+
         public  decimal avgPurchasePrice { get; set; }
     }
 }

@@ -7,21 +7,24 @@ namespace POS_Server.Models
 {
     public class BondsModel
     {
+
         public int bondId { get; set; }
         public string number { get; set; }
-        public Nullable<decimal> amount { get; set; }
+        public decimal amount { get; set; }
         public Nullable<System.DateTime> deserveDate { get; set; }
         public string type { get; set; }
-        public Nullable<byte> isRecieved { get; set; }
+        public byte isRecieved { get; set; }
         public string notes { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
-        public Boolean canDelete { get; set; }
-        public Nullable<byte> isActive { get; set; }
+        public byte isActive { get; set; }
         public Nullable<int> cashTransId { get; set; }
 
+      
+        public Boolean canDelete { get; set; }
+       
         // cash trans
 
         public int ctcashTransId { get; set; }
@@ -33,12 +36,12 @@ namespace POS_Server.Models
         public string cttransNum { get; set; }
         public Nullable<System.DateTime> ctcreateDate { get; set; }
         public Nullable<System.DateTime> ctupdateDate { get; set; }
-        public Nullable<decimal> ctcash { get; set; }
+        public decimal ctcash { get; set; }
         public Nullable<int> ctupdateUserId { get; set; }
         public Nullable<int> ctcreateUserId { get; set; }
         public string ctnotes { get; set; }
         public Nullable<int> ctposIdCreator { get; set; }
-        public Nullable<byte> ctisConfirm { get; set; }
+        public byte ctisConfirm { get; set; }
         public Nullable<int> ctcashTransIdSource { get; set; }
         public string ctside { get; set; }
         public string ctopSideNum { get; set; }
@@ -52,7 +55,7 @@ namespace POS_Server.Models
         public string ctusersLName { get; set; }
         public string ctposName { get; set; }
         public string ctposCreatorName { get; set; }
-        public Nullable<byte> ctisConfirm2 { get; set; }
+        public byte ctisConfirm2 { get; set; }
         public int ctcashTrans2Id { get; set; }
         public Nullable<int> ctpos2Id { get; set; }
 
@@ -65,7 +68,7 @@ namespace POS_Server.Models
         public string ctcreateUserLName { get; set; }
         public string ctcardName { get; set; }
         public Nullable<System.DateTime> ctbondDeserveDate { get; set; }
-        public Nullable<byte> ctbondIsRecieved { get; set; }
+        public byte ctbondIsRecieved { get; set; }
         public Nullable<int> ctshippingCompanyId { get; set; }
         public string ctshippingCompanyName { get; set; }
     }

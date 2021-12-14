@@ -1330,7 +1330,7 @@ var strP = TokenManager.GetPrincipal(token);
                                     iunlist.isNew = 1;
                                 }
                                 // end is new
-                                decimal? totaldis = 0;
+                                decimal totaldis = 0;
 
                                 foreach (var itofflist in itemsofferslist)
                                 {
@@ -1427,7 +1427,7 @@ var strP = TokenManager.GetPrincipal(token);
                                     iunlist.isNew = 1;
                                 }
                                 // end is new
-                                decimal? totaldis = 0;
+                                decimal totaldis = 0;
 
                                 foreach (var itofflist in itemsofferslist)
                                 {

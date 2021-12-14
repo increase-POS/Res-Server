@@ -14,11 +14,10 @@ namespace POS_Server.Models
         public string type { get; set; }
         public string image { get; set; }
         public Nullable<decimal> taxes { get; set; }
-        public Nullable<byte> isActive { get; set; }
-        public Nullable<int> min { get; set; }
-        public Nullable<int> max { get; set; }
+        public byte isActive { get; set; }
+        public int min { get; set; }
+        public int max { get; set; }
         public Nullable<int> categoryId { get; set; }
-        public string categoryName { get; set; }
         public Nullable<int> parentId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
@@ -26,10 +25,16 @@ namespace POS_Server.Models
         public Nullable<int> updateUserId { get; set; }
         public Nullable<int> minUnitId { get; set; }
         public Nullable<int> maxUnitId { get; set; }
+        public decimal avgPurchasePrice { get; set; }
+        public Nullable<int> tagId { get; set; }
+
+       
+        public string categoryName { get; set; }
+      
         public Boolean canDelete { get; set; }
 
         public Nullable<int> itemCount { get; set; }
-        public Nullable<decimal> avgPurchasePrice { get; set; }
+
 
         // new units and offers an is new
         //units

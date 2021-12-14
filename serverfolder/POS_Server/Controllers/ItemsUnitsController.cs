@@ -1060,7 +1060,7 @@ namespace POS_Server.Controllers
                         foreach (var row in itemUnitsList)
                         {
                              row.priceTax = row.price + Calc.percentValue(row.price, row.taxes);
-                            decimal? totaldis = 0;
+                            decimal totaldis = 0;
                             foreach (var itofflist in itemsofferslist)
                             {
                                 if (row.itemUnitId == itofflist.itemUnitId)
@@ -1229,7 +1229,7 @@ namespace POS_Server.Controllers
                         foreach (var iunlist in itemUnitsList)
                         {
                             // end is new
-                            decimal? totaldis = 0;
+                            decimal totaldis = 0;
                     iunlist.price = (decimal) iunlist.price + Calc.percentValue(iunlist.price, iunlist.taxes);
                     iunlist.priceTax = (decimal) iunlist.price + Calc.percentValue(iunlist.price, iunlist.taxes);
                             foreach (var itofflist in itemsofferslist)

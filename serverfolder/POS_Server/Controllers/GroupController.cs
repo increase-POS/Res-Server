@@ -277,7 +277,7 @@ namespace POS_Server.Controllers
                            c.email,
                            c.address,
                            c.isOnline,
-                           c.role,
+                        
                            c.image,
                            c.balance,
                            c.balanceType,

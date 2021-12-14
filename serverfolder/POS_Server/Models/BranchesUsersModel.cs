@@ -7,14 +7,16 @@ namespace POS_Server.Models
 {
     public class BranchesUsersModel
     {
-       
-            public int branchsUsersId { get; set; }
-            public Nullable<int> branchId { get; set; }
-            public Nullable<int> userId { get; set; }
-            public Nullable<System.DateTime> createDate { get; set; }
-            public Nullable<System.DateTime> updateDate { get; set; }
-            public Nullable<int> createUserId { get; set; }
-            public Nullable<int> updateUserId { get; set; }
+        public int branchsUsersId { get; set; }
+        public Nullable<int> branchId { get; set; }
+        public Nullable<int> userId { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> updateDate { get; set; }
+        public Nullable<int> createUserId { get; set; }
+        public Nullable<int> updateUserId { get; set; }
+
+
+
 
         // branch
         public int bbranchId { get; set; }
@@ -30,7 +32,7 @@ namespace POS_Server.Models
         public Nullable<int> bupdateUserId { get; set; }
         public string bnotes { get; set; }
         public Nullable<int> bparentId { get; set; }
-        public Nullable<byte> bisActive { get; set; }
+        public byte bisActive { get; set; }
         public string btype { get; set; }
 
         // user
@@ -50,8 +52,8 @@ namespace POS_Server.Models
         public string uemail { get; set; }
         public string unotes { get; set; }
         public string uaddress { get; set; }
-        public short? uisActive { get; set; }
-        public byte? uisOnline { get; set; }
+        public byte uisActive { get; set; }
+        public byte uisOnline { get; set; }
         public Boolean ucanDelete { get; set; }
         public string uimage { get; set; }
 

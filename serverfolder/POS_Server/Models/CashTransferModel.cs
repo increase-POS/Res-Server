@@ -8,6 +8,7 @@ namespace POS_Server.Models
     public class CashTransferModel
     {
         public int cashTransId { get; set; }
+        public Nullable<int> agentMembershipsId { get; set; }
         public string transType { get; set; }
         public Nullable<int> posId { get; set; }
         public Nullable<int> userId { get; set; }
@@ -24,11 +25,18 @@ namespace POS_Server.Models
         public byte isConfirm { get; set; }
         public Nullable<int> cashTransIdSource { get; set; }
         public string side { get; set; }
-        public string opSideNum { get; set; }
         public string docName { get; set; }
         public string docNum { get; set; }
         public string docImage { get; set; }
         public Nullable<int> bankId { get; set; }
+        public string processType { get; set; }
+        public Nullable<int> cardId { get; set; }
+        public Nullable<int> bondId { get; set; }
+        public Nullable<int> shippingCompanyId { get; set; }
+
+      
+        public string opSideNum { get; set; }
+      
         public string bankName { get; set; }
         public string agentName { get; set; }
         public string usersName { get; set; }
@@ -40,9 +48,7 @@ namespace POS_Server.Models
         public Nullable<int> pos2Id { get; set; }
 
         public string pos2Name { get; set; }
-        public string processType { get; set; }
-        public Nullable<int> cardId { get; set; }
-        public Nullable<int> bondId { get; set; }
+     
         public string createUserName { get; set; }
         public string updateUserName { get; set; }
         public string updateUserJob { get; set; }
@@ -54,7 +60,7 @@ namespace POS_Server.Models
         public Nullable<System.DateTime> bondDeserveDate { get; set; }
         public byte bondIsRecieved { get; set; }
         public string agentCompany { get; set; }
-        public Nullable<int> shippingCompanyId { get; set; }
+ 
         public string shippingCompanyName { get; set; }
         public string userAcc { get; set; }
     }

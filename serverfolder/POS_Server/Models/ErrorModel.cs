@@ -17,5 +17,7 @@ namespace POS_Server.Models
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<int> createUserId { get; set; }
 
+       
+
     }
 }

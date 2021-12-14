@@ -22,6 +22,8 @@ namespace POS_Server.Models
         public Nullable<int> parentId { get; set; }
         public byte isActive { get; set; }
         public string type { get; set; }
+
+      
         public Boolean canDelete { get; set; }
     }
 }

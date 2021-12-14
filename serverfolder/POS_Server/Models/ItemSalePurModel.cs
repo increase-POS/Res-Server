@@ -13,10 +13,10 @@ namespace POS_Server.Models
         public string details { get; set; }
         public string type { get; set; }
         public string image { get; set; }
-        public Nullable<decimal> taxes { get; set; }
-        public Nullable<byte> isActive { get; set; }
-        public Nullable<int> min { get; set; }
-        public Nullable<int> max { get; set; }
+        public decimal taxes { get; set; }
+        public byte isActive { get; set; }
+        public int min { get; set; }
+        public int max { get; set; }
         public Nullable<int> categoryId { get; set; }
         public string categoryName { get; set; }
         public Nullable<int> parentId { get; set; }
@@ -26,30 +26,30 @@ namespace POS_Server.Models
         public Nullable<int> updateUserId { get; set; }
         public Nullable<int> minUnitId { get; set; }
         public Nullable<int> maxUnitId { get; set; }
-        public Nullable<int> itemCount { get; set; }
+        public int itemCount { get; set; }
         public Boolean canDelete { get; set; }
 
 
         // offer item
         public Nullable<decimal> desPrice { get; set; }
-        public Nullable<int> isNew { get; set; }
-        public Nullable<int> isOffer { get; set; }
+        public int isNew { get; set; }
+        public int isOffer { get; set; }
         // unit item
-        public Nullable<decimal> price { get; set; }
+        public decimal price { get; set; }
         public Nullable<int> unitId { get; set; }
         public string unitName { get; set; }
         public string offerName { get; set; }
         public Nullable<int> offerId { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
-        public byte? isActiveOffer { get; set; }
+        public byte isActiveOffer { get; set; }
         public Nullable<int> itemUnitId { get; set; }
-        public Nullable<short> defaultSale { get; set; }
+        public short defaultSale { get; set; }
         public string discountType { get; set; }
-        public Nullable<decimal> discountValue { get; set; }
-        public Nullable<decimal> priceTax { get; set; }
-        public Nullable<short> defaultPurchase { get; set; }
-        public Nullable<int> used { get; set; }
+        public decimal discountValue { get; set; }
+        public decimal priceTax { get; set; }
+        public short defaultPurchase { get; set; }
+        public  int used { get; set; }
         public string parentName { get; set; }
         public string barcode { get; set; }
         public string minUnitName { get; set; }

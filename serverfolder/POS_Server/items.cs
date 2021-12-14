@@ -30,7 +30,7 @@ namespace POS_Server
         public string details { get; set; }
         public string type { get; set; }
         public string image { get; set; }
-        public Nullable<decimal> taxes { get; set; }
+        public decimal taxes { get; set; }
         public byte isActive { get; set; }
         public int min { get; set; }
         public int max { get; set; }

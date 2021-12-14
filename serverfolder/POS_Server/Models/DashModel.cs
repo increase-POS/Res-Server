@@ -15,8 +15,8 @@ namespace POS_Server.Models
     {
         public Nullable<int> branchCreatorId { get; set; }
         public string branchCreatorName { get; set; }
-        public Nullable<decimal> totalPur { get; set; }
-        public Nullable<decimal> totalSale { get; set; }
+        public decimal totalPur { get; set; }
+        public decimal totalSale { get; set; }
         public int countPur { get; set; }
         public int countSale { get; set; }
         public int day { get; set; }
@@ -38,10 +38,10 @@ namespace POS_Server.Models
     {
         public Nullable<int> branchId { get; set; }
         public string branchName { get; set; }
-        public Nullable<byte> branchisActive { get; set; }
+        public byte branchisActive { get; set; }
         public Nullable<int> posId { get; set; }
         public string posName { get; set; }
-        public Nullable<byte> posisActive { get; set; }
+        public byte posisActive { get; set; }
         public Nullable<int> userId { get; set; }
         public string usernameAccount { get; set; }
         public string userName { get; set; }
@@ -51,8 +51,8 @@ namespace POS_Server.Models
         public string mobile { get; set; }
         public string email { get; set; }
         public string address { get; set; }
-        public Nullable<short> userisActive { get; set; }
-        public Nullable<byte> isOnline { get; set; }
+        public short userisActive { get; set; }
+        public byte  isOnline { get; set; }
         public string image { get; set; }
 
     }
@@ -77,7 +77,7 @@ namespace POS_Server.Models
         public Nullable<int> unitId { get; set; }
         public string branchName { get; set; }
         public Nullable<int> branchId { get; set; }
-        public Nullable<long> quantity { get; set; }
+        public long quantity { get; set; }
 
 
 
