@@ -937,7 +937,7 @@
           </Key>
           <Property Name="shippingCompanyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="nchar" MaxLength="10" />
-          <Property Name="RealDeliveryCost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+          <Property Name="realDeliveryCost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="deliveryCost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="deliveryType" Type="nvarchar" MaxLength="100" />
           <Property Name="notes" Type="ntext" />
@@ -5465,7 +5465,6 @@
           </Key>
           <Property Name="shippingCompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="RealDeliveryCost" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="deliveryCost" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="deliveryType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -5483,6 +5482,7 @@
           <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="cashTransfer" Relationship="Self.FK_cashTransfer_shippingCompanies" FromRole="shippingCompanies" ToRole="cashTransfer" />
           <NavigationProperty Name="invoices" Relationship="Self.FK_invoices_shippingCompanies" FromRole="shippingCompanies" ToRole="invoices" />
+          <Property Name="realDeliveryCost" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
         </EntityType>
         <EntityType Name="storageCost">
           <Key>
@@ -9915,9 +9915,9 @@
           <EntitySetMapping Name="shippingCompanies">
             <EntityTypeMapping TypeName="PosModel.shippingCompanies">
               <MappingFragment StoreEntitySet="shippingCompanies">
+                <ScalarProperty Name="realDeliveryCost" ColumnName="realDeliveryCost" />
                 <ScalarProperty Name="shippingCompanyId" ColumnName="shippingCompanyId" />
                 <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="RealDeliveryCost" ColumnName="RealDeliveryCost" />
                 <ScalarProperty Name="deliveryCost" ColumnName="deliveryCost" />
                 <ScalarProperty Name="deliveryType" ColumnName="deliveryType" />
                 <ScalarProperty Name="notes" ColumnName="notes" />

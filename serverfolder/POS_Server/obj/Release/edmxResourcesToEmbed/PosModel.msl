@@ -987,9 +987,9 @@
     <EntitySetMapping Name="shippingCompanies">
       <EntityTypeMapping TypeName="PosModel.shippingCompanies">
         <MappingFragment StoreEntitySet="shippingCompanies">
+          <ScalarProperty Name="realDeliveryCost" ColumnName="realDeliveryCost" />
           <ScalarProperty Name="shippingCompanyId" ColumnName="shippingCompanyId" />
           <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="RealDeliveryCost" ColumnName="RealDeliveryCost" />
           <ScalarProperty Name="deliveryCost" ColumnName="deliveryCost" />
           <ScalarProperty Name="deliveryType" ColumnName="deliveryType" />
           <ScalarProperty Name="notes" ColumnName="notes" />

@@ -38,7 +38,7 @@ var strP = TokenManager.GetPrincipal(token);
                                 {
                                     shippingCompanyId = S.shippingCompanyId,
                                     name = S.name,
-                                    RealDeliveryCost = S.RealDeliveryCost,
+                                    realDeliveryCost = S.realDeliveryCost,
                                     deliveryCost = S.deliveryCost,
                                     deliveryType = S.deliveryType,
                                     notes = S.notes,
@@ -112,7 +112,7 @@ var strP = TokenManager.GetPrincipal(token);
                     {
                         shippingCompanyId = S.shippingCompanyId,
                         name = S.name,
-                        RealDeliveryCost = S.RealDeliveryCost,
+                        realDeliveryCost = S.realDeliveryCost,
                         deliveryCost = S.deliveryCost,
                         deliveryType = S.deliveryType,
                         notes = S.notes,
@@ -168,7 +168,7 @@ var strP = TokenManager.GetPrincipal(token);
                    {
                        S.shippingCompanyId,
                        S.name,
-                       S.RealDeliveryCost,
+                       S.realDeliveryCost,
                        S.deliveryCost,
                        S.deliveryType,
                        S.notes,
@@ -256,7 +256,7 @@ var strP = TokenManager.GetPrincipal(token);
                             tmpObject.updateUserId = newObject.updateUserId;
 
                             tmpObject.name = newObject.name;
-                            tmpObject.RealDeliveryCost = newObject.RealDeliveryCost;
+                            tmpObject.realDeliveryCost = newObject.realDeliveryCost;
                             tmpObject.deliveryCost = newObject.deliveryCost;
                             tmpObject.deliveryType = newObject.deliveryType;
                             tmpObject.notes = newObject.notes;

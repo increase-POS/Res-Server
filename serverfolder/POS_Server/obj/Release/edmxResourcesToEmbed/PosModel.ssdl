@@ -932,7 +932,7 @@
     </Key>
     <Property Name="shippingCompanyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="name" Type="nchar" MaxLength="10" />
-    <Property Name="RealDeliveryCost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="realDeliveryCost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="deliveryCost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="deliveryType" Type="nvarchar" MaxLength="100" />
     <Property Name="notes" Type="ntext" />

@@ -1193,7 +1193,6 @@
     </Key>
     <Property Name="shippingCompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-    <Property Name="RealDeliveryCost" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="deliveryCost" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="deliveryType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1211,6 +1210,7 @@
     <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="cashTransfer" Relationship="Self.FK_cashTransfer_shippingCompanies" FromRole="shippingCompanies" ToRole="cashTransfer" />
     <NavigationProperty Name="invoices" Relationship="Self.FK_invoices_shippingCompanies" FromRole="shippingCompanies" ToRole="invoices" />
+    <Property Name="realDeliveryCost" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
   </EntityType>
   <EntityType Name="storageCost">
     <Key>

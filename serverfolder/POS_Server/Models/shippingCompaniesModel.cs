@@ -9,7 +9,7 @@ namespace POS_Server.Models
     {
         public int shippingCompanyId { get; set; }
         public string name { get; set; }
-        public decimal RealDeliveryCost { get; set; }
+        public decimal realDeliveryCost { get; set; }
         public decimal deliveryCost { get; set; }
         public string deliveryType { get; set; }
         public string notes { get; set; }
