@@ -472,6 +472,8 @@
           <Property Name="maxUnitId" Type="int" />
           <Property Name="avgPurchasePrice" Type="decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="tagId" Type="int" />
+          <Property Name="notes" Type="ntext" />
+          <Property Name="categoryString" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="itemsLocations">
           <Key>
@@ -4874,6 +4876,8 @@
           <NavigationProperty Name="itemsProp" Relationship="Self.FK_itemsProp_items" FromRole="items" ToRole="itemsProp" />
           <NavigationProperty Name="itemsUnits" Relationship="Self.FK_itemsUnits_items" FromRole="items" ToRole="itemsUnits" />
           <NavigationProperty Name="serials" Relationship="Self.FK_serials_items" FromRole="items" ToRole="serials" />
+          <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="categoryString" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="itemsLocations">
           <Key>
@@ -9400,6 +9404,8 @@
           <EntitySetMapping Name="items">
             <EntityTypeMapping TypeName="PosModel.items">
               <MappingFragment StoreEntitySet="items">
+                <ScalarProperty Name="categoryString" ColumnName="categoryString" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
                 <ScalarProperty Name="itemId" ColumnName="itemId" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="name" ColumnName="name" />

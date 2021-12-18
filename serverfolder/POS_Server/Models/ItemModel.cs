@@ -27,8 +27,10 @@ namespace POS_Server.Models
         public Nullable<int> maxUnitId { get; set; }
         public decimal avgPurchasePrice { get; set; }
         public Nullable<int> tagId { get; set; }
+        public string notes { get; set; }
+        public string categoryString { get; set; }
 
-       
+
         public string categoryName { get; set; }
       
         public Boolean canDelete { get; set; }

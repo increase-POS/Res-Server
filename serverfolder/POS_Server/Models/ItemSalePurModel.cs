@@ -29,6 +29,9 @@ namespace POS_Server.Models
         public int itemCount { get; set; }
         public Boolean canDelete { get; set; }
 
+        public string notes { get; set; }
+        public string categoryString { get; set; }
+
 
         // offer item
         public Nullable<decimal> desPrice { get; set; }

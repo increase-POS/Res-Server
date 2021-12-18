@@ -44,6 +44,8 @@ namespace POS_Server
         public Nullable<int> maxUnitId { get; set; }
         public decimal avgPurchasePrice { get; set; }
         public Nullable<int> tagId { get; set; }
+        public string notes { get; set; }
+        public string categoryString { get; set; }
     
         public virtual categories categories { get; set; }
         public virtual tags tags { get; set; }

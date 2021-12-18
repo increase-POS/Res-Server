@@ -1317,3 +1317,4 @@ D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.csproj.CoreC
 D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.csproj.CopyComplete
 D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.dll
 D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.pdb
+D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.csprojAssemblyReference.cache

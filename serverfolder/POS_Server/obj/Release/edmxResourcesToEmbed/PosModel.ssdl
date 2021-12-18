@@ -467,6 +467,8 @@
     <Property Name="maxUnitId" Type="int" />
     <Property Name="avgPurchasePrice" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="tagId" Type="int" />
+    <Property Name="notes" Type="ntext" />
+    <Property Name="categoryString" Type="nvarchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="itemsLocations">
     <Key>

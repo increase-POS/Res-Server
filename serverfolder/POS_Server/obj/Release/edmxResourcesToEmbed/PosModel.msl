@@ -472,6 +472,8 @@
     <EntitySetMapping Name="items">
       <EntityTypeMapping TypeName="PosModel.items">
         <MappingFragment StoreEntitySet="items">
+          <ScalarProperty Name="categoryString" ColumnName="categoryString" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="itemId" ColumnName="itemId" />
           <ScalarProperty Name="code" ColumnName="code" />
           <ScalarProperty Name="name" ColumnName="name" />

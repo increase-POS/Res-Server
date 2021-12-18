@@ -30,8 +30,8 @@ namespace POS_Server.Controllers
         [Route("GetAllItems")]
         public string GetAllItems(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -42,40 +42,43 @@ var strP = TokenManager.GetPrincipal(token);
                 DateTime cmpdate = DateTime.Now.AddDays(newdays);
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var  itemsList = (from I in entity.items
+                    var itemsList = (from I in entity.items
 
-                                                 join c in entity.categories on I.categoryId equals c.categoryId into lj
-                                                 from x in lj.DefaultIfEmpty()
-                                                 select new ItemModel()
-                                                 {
-                                                     itemId = I.itemId,
-                                                     name = I.name,
-                                                     code = I.code,
-                                                     categoryId = I.categoryId,
-                                                     categoryName = x.name,
-                                                     max = I.max,
-                                                     maxUnitId = I.maxUnitId,
-                                                     minUnitId = I.minUnitId,
-                                                     min = I.min,
+                                     join c in entity.categories on I.categoryId equals c.categoryId into lj
+                                     from x in lj.DefaultIfEmpty()
+                                     select new ItemModel()
+                                     {
+                                         itemId = I.itemId,
+                                         name = I.name,
+                                         code = I.code,
+                                         categoryId = I.categoryId,
+                                         categoryName = x.name,
+                                         max = I.max,
+                                         maxUnitId = I.maxUnitId,
+                                         minUnitId = I.minUnitId,
+                                         min = I.min,
 
-                                                     parentId = I.parentId,
-                                                     isActive = I.isActive,
-                                                     image = I.image,
-                                                     type = I.type,
-                                                     details = I.details,
-                                                     taxes = I.taxes,
-                                                     createDate = I.createDate,
-                                                     updateDate = I.updateDate,
-                                                     createUserId = I.createUserId,
-                                                     updateUserId = I.updateUserId,
-                                                     isNew = 0,
-                                                     parentName = entity.items.Where(m => m.itemId == I.parentId).FirstOrDefault().name,
-                                                     minUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
-                                                     maxUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
+                                         parentId = I.parentId,
+                                         isActive = I.isActive,
+                                         image = I.image,
+                                         type = I.type,
+                                         details = I.details,
+                                         taxes = I.taxes,
+                                         createDate = I.createDate,
+                                         updateDate = I.updateDate,
+                                         createUserId = I.createUserId,
+                                         updateUserId = I.updateUserId,
+                                         isNew = 0,
+                                         parentName = entity.items.Where(m => m.itemId == I.parentId).FirstOrDefault().name,
+                                         minUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
+                                         maxUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
 
-                                                     avgPurchasePrice = I.avgPurchasePrice
+                                         avgPurchasePrice = I.avgPurchasePrice,
+                                         notes = I.notes,
+                                         categoryString = I.categoryString,
 
-                                                 })
+
+                                     })
                                    .ToList();
 
                     var itemsofferslist = (from off in entity.offers
@@ -103,6 +106,7 @@ var strP = TokenManager.GetPrincipal(token);
                                                discountType = off.discountType,
                                                desPrice = iu.price,
                                                defaultSale = iu.defaultSale,
+                                       
 
                                            }).Where(IO => IO.isActiveOffer == 1 && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0 && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1).Distinct().ToList();
                     //.Where(IO => IO.isActiveOffer == 1 && DateTime.Compare(IO.startDate,DateTime.Now)<0 && System.DateTime.Compare(IO.endDate, DateTime.Now) > 0).ToList();
@@ -137,7 +141,7 @@ var strP = TokenManager.GetPrincipal(token);
                                    unitName = untb.name,
                                    unitId = untb.unitId,
                                    price = unitm.price,
-
+                        
                                }).Where(a => a.defaultSale == 1).Distinct().ToList();
 
                     if (itemsList.Count > 0)
@@ -150,7 +154,7 @@ var strP = TokenManager.GetPrincipal(token);
                                 int itemId = (int)itemsList[i].itemId;
                                 var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
                                 var itemsPropL = entity.itemsProp.Where(x => x.itemId == itemId).Select(b => new { b.itemPropId }).FirstOrDefault();
-                                  var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
+                                var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                                 string itemType = itemsList[i].type;
                                 int isInInvoice = 0;
                                 int isInLocation = 0;
@@ -163,9 +167,9 @@ var strP = TokenManager.GetPrincipal(token);
                                 //var itemLocationsL = entity.itemsLocations.Where(x => x.itemId == itemId).Select(b => new { b.itemsLocId }).FirstOrDefault();
                                 var itemsMaterials = entity.itemsMaterials.Where(x => x.itemId == itemId).Select(b => new { b.itemMatId }).FirstOrDefault();
                                 var serials = entity.serials.Where(x => x.itemId == itemId).Select(b => new { b.serialId }).FirstOrDefault();
-                             
 
-                                if ((childItemL is null)&&(itemsPropL is null)  && ((itemUnitsL is null && !itemType.Equals("p") ) || (isInInvoice == 0 && itemType.Equals("p") && isInLocation == 0))  
+
+                                if ((childItemL is null) && (itemsPropL is null) && ((itemUnitsL is null && !itemType.Equals("p")) || (isInInvoice == 0 && itemType.Equals("p") && isInLocation == 0))
                                     && (itemsMaterials is null) && (serials is null))
                                     canDelete = true;
                             }
@@ -202,23 +206,23 @@ var strP = TokenManager.GetPrincipal(token);
 
                                     itemsList[i].price = itofflist.price;
                                     itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].taxes / 100);
-                                    
+
                                     itemsList[i].avgPurchasePrice = itemsList[i].avgPurchasePrice;
                                 }
                             }
                             //itemsList[i].desPrice = itemsList[i].priceTax - totaldis;
                             // is new
                             int res = DateTime.Compare((DateTime)itemsList[i].createDate, cmpdate);
-                                if (res >= 0)
-                                {
-                                itemsList[i].isNew= 1;
-                                }
-                            
+                            if (res >= 0)
+                            {
+                                itemsList[i].isNew = 1;
+                            }
+
                         }
                     }
-                    return  TokenManager.GenerateToken(itemsList);
+                    return TokenManager.GenerateToken(itemsList);
                 }
-            }  
+            }
         }
 
         // for service
@@ -271,8 +275,9 @@ var strP = TokenManager.GetPrincipal(token);
                                          minUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
                                          maxUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
 
-                                         avgPurchasePrice = I.avgPurchasePrice
-
+                                         avgPurchasePrice = I.avgPurchasePrice,
+                                             notes = I.notes,
+                                         categoryString = I.categoryString,
                                      })
                                    .ToList();
 
@@ -496,7 +501,8 @@ var strP = TokenManager.GetPrincipal(token);
 
 
                                      isNew = 0,
-
+                                     notes = itm.notes,
+                                     categoryString = itm.categoryString,
 
 
                                  }).Where(p => categoriesId.Contains((int)p.categoryId)).ToList();
@@ -559,8 +565,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetItemsWichHasUnits")]
         public string GetItemsWichHasUnits(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -591,10 +597,11 @@ var strP = TokenManager.GetPrincipal(token);
                                          updateUserId = I.updateUserId,
                                          isNew = 0,
                                          avgPurchasePrice = I.avgPurchasePrice,
-
+                                         notes = I.notes,
+                                         categoryString = I.categoryString,
                                      }).Where(x => x.isActive == 1).Distinct()
                                 .ToList();
-                    return  TokenManager.GenerateToken(itemsList) ;
+                    return TokenManager.GenerateToken(itemsList);
                 }
             }
         }
@@ -602,8 +609,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetItemsInCategory")]
         public string GetItemsInCategory(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -623,7 +630,8 @@ var strP = TokenManager.GetPrincipal(token);
                 {
                     var itemsList = entity.items
                    .Where(I => I.categoryId == categoryId && I.isActive == 1)
-                   .Select(I => new {
+                   .Select(I => new
+                   {
                        I.itemId,
                        I.name,
                        I.code,
@@ -642,11 +650,13 @@ var strP = TokenManager.GetPrincipal(token);
                        I.updateDate,
                        I.createUserId,
                        I.updateUserId,
-                       I.avgPurchasePrice
+                       I.avgPurchasePrice,
+                      I.notes,
+                       I.categoryString,
                    })
                    .ToList();
 
-                    return  TokenManager.GenerateToken(itemsList) ;
+                    return TokenManager.GenerateToken(itemsList);
                 }
             }
         }
@@ -655,8 +665,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetItemsInCategoryAndSub")]
         public string GetItemsInCategoryAndSub(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -727,8 +737,9 @@ var strP = TokenManager.GetPrincipal(token);
 
 
                                      isNew = 0,
+                                     notes = itm.notes,
+                                     categoryString = itm.categoryString,
 
-                                    
 
                                  }).Where(p => categoriesId.Contains((int)p.categoryId)).ToList();
 
@@ -776,7 +787,7 @@ var strP = TokenManager.GetPrincipal(token);
 
 
                     }
-                    return  TokenManager.GenerateToken(items) ;
+                    return TokenManager.GenerateToken(items);
                 }
             }
         }
@@ -785,8 +796,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetItemsByType")]
         public string GetItemsByType(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -806,7 +817,8 @@ var strP = TokenManager.GetPrincipal(token);
                 {
                     var items = entity.items
                    .Where(I => I.type == type)
-                   .Select(I => new {
+                   .Select(I => new
+                   {
                        I.itemId,
                        I.name,
                        I.code,
@@ -814,10 +826,12 @@ var strP = TokenManager.GetPrincipal(token);
                        I.type,
                        I.details,
                        I.isActive,
-                       I.avgPurchasePrice
+                       I.avgPurchasePrice,
+                       I.notes,
+             I.categoryString,
                    })
                    .ToList();
-                    return TokenManager.GenerateToken(items) ;
+                    return TokenManager.GenerateToken(items);
                 }
             }
         }
@@ -825,8 +839,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetItemByID")]
         public string GetItemByID(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -847,7 +861,8 @@ var strP = TokenManager.GetPrincipal(token);
 
                     var item = entity.items
                    .Where(I => I.itemId == itemId)
-                   .Select(I => new {
+                   .Select(I => new
+                   {
                        I.itemId,
                        I.name,
                        I.code,
@@ -867,10 +882,12 @@ var strP = TokenManager.GetPrincipal(token);
                        I.createUserId,
                        I.updateUserId,
 
-                       I.avgPurchasePrice
+                       I.avgPurchasePrice,
+                      I.notes,
+                     I.categoryString,
                    })
                    .FirstOrDefault();
-                    return  TokenManager.GenerateToken(item) ;
+                    return TokenManager.GenerateToken(item);
                 }
             }
         }
@@ -878,8 +895,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetItemsCodes")]
         public string GetItemsCodes(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -889,7 +906,7 @@ var strP = TokenManager.GetPrincipal(token);
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var itemsList = entity.items.Select(I => I.code).ToList();
-                    return  TokenManager.GenerateToken(itemsList);
+                    return TokenManager.GenerateToken(itemsList);
                 }
             }
         }
@@ -905,7 +922,7 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int categoryId=0;
+                int categoryId = 0;
                 short defaultSale = 0;
                 short defaultPurchase = 0;
                 int branchId = 0;
@@ -915,11 +932,11 @@ var strP = TokenManager.GetPrincipal(token);
                 {
                     if (c.Type == "categoryId")
                     {
-                        categoryId =int.Parse(c.Value);
+                        categoryId = int.Parse(c.Value);
                     }
                     else if (c.Type == "defaultSale")
                     {
-                        defaultSale =short.Parse(c.Value);
+                        defaultSale = short.Parse(c.Value);
                     }
                     else if (c.Type == "defaultPurchase")
                     {
@@ -1189,7 +1206,7 @@ var strP = TokenManager.GetPrincipal(token);
                                 }
                                 iunlist.desPrice = iunlist.priceTax - totaldis;
                             }
-                            return TokenManager.GenerateToken(itemsList) ;
+                            return TokenManager.GenerateToken(itemsList);
                         }
                         #endregion
                         #region items for sale
@@ -1227,7 +1244,8 @@ var strP = TokenManager.GetPrincipal(token);
                                                  isNew = 0,
                                                  price = I.itemsUnits.Where(iu => iu.itemId == I.itemId && iu.defaultSale == 1).Select(iu => iu.price).FirstOrDefault(),
                                                  itemUnitId = I.itemsUnits.Where(iu => iu.itemId == I.itemId && iu.defaultSale == 1).Select(iu => iu.itemUnitId).FirstOrDefault(),
-
+                                                 notes= I.notes,
+                                                 categoryString=I.categoryString,
 
                                              }).DistinctBy(x => x.itemId)
                                       .ToList();
@@ -1316,7 +1334,7 @@ var strP = TokenManager.GetPrincipal(token);
                                         iunlist.unitId = row.unitId;
                                         iunlist.price = row.price;
                                         iunlist.priceTax = iunlist.price + Calc.percentValue(row.price, iunlist.taxes);
-                                        
+
 
                                     }
                                 }
@@ -1348,7 +1366,7 @@ var strP = TokenManager.GetPrincipal(token);
                                                 }).FirstOrDefault();
                                             iunlist.unitName = un.name;
                                         }
-
+                                    
                                         iunlist.offerName = iunlist.offerName + "- " + itofflist.offerName;
                                         iunlist.isOffer = 1;
                                         iunlist.startDate = itofflist.startDate;
@@ -1356,7 +1374,7 @@ var strP = TokenManager.GetPrincipal(token);
                                         iunlist.itemUnitId = itofflist.itemUnitId;
                                         iunlist.offerId = itofflist.offerId;
                                         iunlist.isActiveOffer = itofflist.isActiveOffer;
-                                        
+
                                         iunlist.price = itofflist.price;
                                         iunlist.priceTax = iunlist.price + (iunlist.price * iunlist.taxes / 100);
                                         iunlist.discountType = itofflist.discountType;
@@ -1384,34 +1402,35 @@ var strP = TokenManager.GetPrincipal(token);
                             }
                             searchPredicate = searchPredicate.And(x => x.type == "sr");
                             var serviceItems = (from I in entity.items.Where(searchPredicate)
-                                             join u in entity.itemsUnits on I.itemId equals u.itemId
-                                             select new ItemSalePurModel()
-                                             {
-                                                 itemId = I.itemId,
-                                                 name = I.name,
-                                                 code = I.code,
-                                                 categoryId = I.categoryId,
-                                                 categoryName = I.categories.name,
-                                                 max = I.max,
-                                                 maxUnitId = I.maxUnitId,
-                                                 minUnitId = I.minUnitId,
-                                                 min = I.min,
-                                                 parentId = I.parentId,
-                                                 isActive = I.isActive,
-                                                 image = I.image,
-                                                 type = I.type,
-                                                 details = I.details,
-                                                 taxes = I.taxes,
-                                                 createDate = I.createDate,
-                                                 updateDate = I.updateDate,
-                                                 createUserId = I.createUserId,
-                                                 updateUserId = I.updateUserId,
-                                                 isNew = 0,
-                                                 price = I.itemsUnits.Where(iu => iu.itemId == I.itemId && iu.defaultSale == 1).Select(iu => iu.price).FirstOrDefault(),
-                                                 itemUnitId = I.itemsUnits.Where(iu => iu.itemId == I.itemId && iu.defaultSale == 1).Select(iu => iu.itemUnitId).FirstOrDefault(),
+                                                join u in entity.itemsUnits on I.itemId equals u.itemId
+                                                select new ItemSalePurModel()
+                                                {
+                                                    itemId = I.itemId,
+                                                    name = I.name,
+                                                    code = I.code,
+                                                    categoryId = I.categoryId,
+                                                    categoryName = I.categories.name,
+                                                    max = I.max,
+                                                    maxUnitId = I.maxUnitId,
+                                                    minUnitId = I.minUnitId,
+                                                    min = I.min,
+                                                    parentId = I.parentId,
+                                                    isActive = I.isActive,
+                                                    image = I.image,
+                                                    type = I.type,
+                                                    details = I.details,
+                                                    taxes = I.taxes,
+                                                    createDate = I.createDate,
+                                                    updateDate = I.updateDate,
+                                                    createUserId = I.createUserId,
+                                                    updateUserId = I.updateUserId,
+                                                    isNew = 0,
+                                                    price = I.itemsUnits.Where(iu => iu.itemId == I.itemId && iu.defaultSale == 1).Select(iu => iu.price).FirstOrDefault(),
+                                                    itemUnitId = I.itemsUnits.Where(iu => iu.itemId == I.itemId && iu.defaultSale == 1).Select(iu => iu.itemUnitId).FirstOrDefault(),
+                                                    notes = I.notes,
+                                                    categoryString = I.categoryString,
 
-
-                                             }).DistinctBy(x => x.itemId)
+                                                }).DistinctBy(x => x.itemId)
                                      .ToList();
                             foreach (var iunlist in serviceItems)
                             {
@@ -1480,7 +1499,7 @@ var strP = TokenManager.GetPrincipal(token);
                                 iunlist.priceTax = iunlist.priceTax - totaldis;
                             }
                             itemsList.AddRange(serviceItems.ToArray());
-                            return  TokenManager.GenerateToken(itemsList) ;
+                            return TokenManager.GenerateToken(itemsList);
                         }
                         #endregion
                         #region items for purchase
@@ -1528,16 +1547,16 @@ var strP = TokenManager.GetPrincipal(token);
                                     itemL.isNew = 1;
                                 }
                             }
-                            return TokenManager.GenerateToken(itemsList) ;
+                            return TokenManager.GenerateToken(itemsList);
                         }
                         #endregion
                     }
                 }
                 catch
                 {
-                    return  TokenManager.GenerateToken("0") ;
+                    return TokenManager.GenerateToken("0");
                 }
-                return TokenManager.GenerateToken("0") ;
+                return TokenManager.GenerateToken("0");
             }
         }
         private int getItemUnitAmount(int itemUnitId, int branchId)
@@ -1559,7 +1578,7 @@ var strP = TokenManager.GetPrincipal(token);
                                       il.itemUnitId,
                                       il.locationId,
                                       s.sectionId,
-                                      
+
                                   }).ToList();
                 for (int i = 0; i < itemInLocs.Count; i++)
                 {
@@ -1577,7 +1596,7 @@ var strP = TokenManager.GetPrincipal(token);
                 return amount;
             }
         }
-       
+
         [HttpPost]
         [Route("GetItemByBarcode")]
         public string GetItemByBarcode(string barcode)
@@ -1585,20 +1604,20 @@ var strP = TokenManager.GetPrincipal(token);
             int itemId = 0;
             using (incposdbEntities entity = new incposdbEntities())
             {
-               // itemId = (int)entity.barcodes
+                // itemId = (int)entity.barcodes
                 //    .Where(I => I.barcode == barcode)
                 //    .Select(I => I.itemId).SingleOrDefault();
             }
             string token = TokenManager.GenerateToken(itemId);
             //return GetItemByID(itemId);
             return GetItemByID(token);
-        }       
-        
+        }
 
-        public  IEnumerable<categories> Recursive(List<categories> categoriesList, int toplevelid)
+
+        public IEnumerable<categories> Recursive(List<categories> categoriesList, int toplevelid)
         {
             List<categories> inner = new List<categories>();
-            
+
             foreach (var t in categoriesList.Where(item => item.parentId == toplevelid))
             {
                 categoriesId.Add(t.categoryId);
@@ -1613,9 +1632,9 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("Save")]
         public string Save(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);            
+            token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "";
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1636,7 +1655,7 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                 }
                 if (itemObj != null)
-                {     
+                {
                     if (itemObj.updateUserId == 0 || itemObj.updateUserId == null)
                     {
                         Nullable<int> id = null;
@@ -1710,29 +1729,31 @@ var strP = TokenManager.GetPrincipal(token);
                                 itemModel.updateUserId = itemObj.updateUserId;
                                 itemModel.isActive = itemObj.isActive;
                                 itemModel.avgPurchasePrice = itemObj.avgPurchasePrice;
+                                itemModel.notes = itemObj.notes;
+                                itemModel.categoryString = itemObj.categoryString;
                                 entity.SaveChanges();
                                 message = itemModel.itemId.ToString();
                                 // return Ok(itemModel.itemId);
                             }
                         }
-                        return TokenManager.GenerateToken(message) ;
+                        return TokenManager.GenerateToken(message);
                     }
                     catch
                     {
                         message = "0";
-                        return TokenManager.GenerateToken(message) ;
+                        return TokenManager.GenerateToken(message);
                     }
                 }
-                return  TokenManager.GenerateToken(message) ;
+                return TokenManager.GenerateToken(message);
             }
         }
         [HttpPost]
         [Route("UpdateImage")]
         public string UpdateImage(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "";
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1763,12 +1784,12 @@ var strP = TokenManager.GetPrincipal(token);
                         entity.SaveChanges();
                     }
                     message = item.itemId.ToString();
-                    return  TokenManager.GenerateToken(message) ;
+                    return TokenManager.GenerateToken(message);
                 }
                 catch
                 {
                     message = "0";
-                    return  TokenManager.GenerateToken(message) ;
+                    return TokenManager.GenerateToken(message);
                 }
             }
         }
@@ -1776,9 +1797,9 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("Delete")]
         public string Delete(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "";
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1815,23 +1836,23 @@ var strP = TokenManager.GetPrincipal(token);
                             {
                                 var iuitems = entity.itemsUnits.Where(x => x.itemId == tmpItem.itemId).ToList();
                                 // remove from itemunituser table
-                                foreach(var row in iuitems)
+                                foreach (var row in iuitems)
                                 {
                                     var iuseritems = entity.itemUnitUser.Where(x => x.itemUnitId == row.itemUnitId).ToList();
                                     entity.itemUnitUser.RemoveRange(iuseritems);
                                     entity.SaveChanges();
                                 }
 
-                           // remove from itemunit table
+                                // remove from itemunit table
                                 entity.itemsUnits.RemoveRange(iuitems);
                                 entity.SaveChanges();
 
                             }
-                            entity.items.Remove(tmpItem);                          
-                         message=   entity.SaveChanges().ToString();
-                        
+                            entity.items.Remove(tmpItem);
+                            message = entity.SaveChanges().ToString();
+
                         }
-                        return  TokenManager.GenerateToken(message) ;
+                        return TokenManager.GenerateToken(message);
                     }
                     catch
                     {
@@ -1849,14 +1870,14 @@ var strP = TokenManager.GetPrincipal(token);
                             tmpItem.updateDate = DateTime.Now;
                             tmpItem.updateUserId = userId;
 
-                         message =   entity.SaveChanges().ToString();
-                            return  TokenManager.GenerateToken(message) ;
+                            message = entity.SaveChanges().ToString();
+                            return TokenManager.GenerateToken(message);
                         }
-                      
+
                     }
                     catch
                     {
-                        return TokenManager.GenerateToken("0") ;
+                        return TokenManager.GenerateToken("0");
                     }
 
                 }
@@ -1866,8 +1887,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetSubItems")]
         public string GetSubItems(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1889,17 +1910,18 @@ var strP = TokenManager.GetPrincipal(token);
                     {
                         var itemsList = entity.items
                        .Where(c => c.parentId == itemId && c.isActive == 1)
-                       .Select(I => new {
+                       .Select(I => new
+                       {
                            I.itemId,
                            I.name,
                            I.code,
-                          
+
                            I.max,
                            I.maxUnitId,
                            I.minUnitId,
                            I.min,
                            I.parentId,
-                          
+
                            I.image,
                            I.type,
                            I.details,
@@ -1908,26 +1930,29 @@ var strP = TokenManager.GetPrincipal(token);
                            I.createDate,
                            I.updateDate,
                            I.createUserId,
-                           I.updateUserId
+                           I.updateUserId,
+                           I.notes,
+                           I.categoryString,
                        })
                        .ToList();
-                        return  TokenManager.GenerateToken(itemsList) ;
+                        return TokenManager.GenerateToken(itemsList);
                     }
                     else
                     {
                         var itemsList = entity.items
                        .Where(c => c.parentId == 0 && c.isActive == 1)
-                       .Select(I => new {
+                       .Select(I => new
+                       {
                            I.itemId,
                            I.name,
                            I.code,
-                           
+
                            I.max,
                            I.maxUnitId,
                            I.minUnitId,
                            I.min,
                            I.parentId,
-                         
+
                            I.image,
                            I.type,
                            I.details,
@@ -1936,10 +1961,12 @@ var strP = TokenManager.GetPrincipal(token);
                            I.createDate,
                            I.updateDate,
                            I.createUserId,
-                           I.updateUserId
+                           I.updateUserId,
+                           I.notes,
+                           I.categoryString,
                        })
                        .ToList();
-                        return TokenManager.GenerateToken(itemsList) ;
+                        return TokenManager.GenerateToken(itemsList);
                     }
                 }
             }
@@ -1964,7 +1991,7 @@ var strP = TokenManager.GetPrincipal(token);
                     {
                         int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB
 
-                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp", ".jpeg", ".tiff",".jfif" };
+                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp", ".jpeg", ".tiff", ".jfif" };
                         var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
                         var extension = ext.ToLower();
 
@@ -1981,13 +2008,13 @@ var strP = TokenManager.GetPrincipal(token);
                             return Ok(message);
                         }
                         else
-                        {                           
+                        {
                             //  check if image exist
                             var pathCheck = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\item"), imageWithNoExt);
                             var files = Directory.GetFiles(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\item"), imageWithNoExt + ".*");
                             if (files.Length > 0)
                             {
-                                 File.Delete(files[0]);
+                                File.Delete(files[0]);
                             }
 
                             //Userimage myfolder name where i want to save my image
@@ -2029,7 +2056,7 @@ var strP = TokenManager.GetPrincipal(token);
 
             return response;
         }
-        
+
 
         // get all items where defaultSale is 1 and set isNew=1 if new item  and set isOffer=1 if Has Active Offer 
         int newdays = -15;
@@ -2087,6 +2114,8 @@ var strP = TokenManager.GetPrincipal(token);
                                          isNew = 0,
                                          offerName = "",
                                          createDate = itm.createDate,
+                                         notes= itm.notes,
+                                         categoryString=itm.categoryString,
 
                                      }).ToList();
 
@@ -2315,6 +2344,8 @@ var strP = TokenManager.GetPrincipal(token);
                                          price = itun.price,
                                          unitName = untb.name,
                                          itemUnitId = itun.itemUnitId,
+                                         notes = itm.notes,
+                                         categoryString = itm.categoryString,
                                      }).Where(p => p.defaultPurchase == 1).OrderBy(a => a.itemId).ToList();
 
 
@@ -2679,6 +2710,8 @@ var strP = TokenManager.GetPrincipal(token);
                                          price = itun.price,
                                          unitName = untb.name,
                                          itemUnitId = itun.itemUnitId,
+                                         notes = itm.notes,
+                                         categoryString = itm.categoryString,
                                      }).Where(p => p.defaultPurchase == 1 && categoriesId.Contains((int)p.categoryId)).ToList();
 
                     //.Where(t => categoriesId.Contains((int)t.categoryId))
