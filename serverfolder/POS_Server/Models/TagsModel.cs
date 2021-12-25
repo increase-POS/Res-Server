@@ -15,9 +15,9 @@ namespace POS_Server.Models
         public Nullable<int> updateUserId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public bool isActive { get; set; }
+        public byte isActive { get; set; }
 
-    
+
         public bool canDelete { get; set; }
 
     }

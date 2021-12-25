@@ -4,74 +4,73 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="444115a772e54c26b6b380019866bb2e" Name="Diagram1" ZoomLevel="75">
-        <EntityTypeShape EntityType="PosModel.agentMemberships" Width="1.5" PointX="7.5" PointY="101.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.agents" Width="1.5" PointX="6" PointY="91.125" IsExpanded="true" />
+      <Diagram DiagramId="290f32397fd748f1a14f5686c98abdca" Name="Diagram1">
+        <EntityTypeShape EntityType="PosModel.agentMemberships" Width="1.5" PointX="7.5" PointY="101.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.agents" Width="1.5" PointX="6" PointY="91.25" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.banks" Width="1.5" PointX="18.5" PointY="105.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.bondes" Width="1.5" PointX="26" PointY="96.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.bondes" Width="1.5" PointX="26" PointY="96.625" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.branches" Width="1.5" PointX="3" PointY="79" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.branchesUsers" Width="1.5" PointX="8.25" PointY="88.875" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.branchStore" Width="1.5" PointX="8.25" PointY="92.5" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.cards" Width="1.5" PointX="3" PointY="86.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.cashTransfer" Width="1.5" PointX="20.75" PointY="88.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.cashTransfer" Width="1.5" PointX="20.75" PointY="88.875" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.categories" Width="1.5" PointX="3" PointY="90.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.categoryuser" Width="1.5" PointX="8.25" PointY="97" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.categoryuser" Width="1.5" PointX="8.25" PointY="97.125" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.cities" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.countriesCodes" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.coupons" Width="1.5" PointX="3" PointY="95.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.coupons" Width="1.5" PointX="3" PointY="95.625" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.couponsInvoices" Width="1.5" PointX="23.75" PointY="85.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.docImages" Width="1.5" PointX="3" PointY="101.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.docImages" Width="1.5" PointX="3" PointY="101.375" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.error" Width="1.5" PointX="5.25" PointY="86.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.Expenses" Width="1.5" PointX="3" PointY="105.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.groupObject" Width="1.5" PointX="11" PointY="99.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.groups" Width="1.5" PointX="3" PointY="114.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.Expenses" Width="1.5" PointX="3" PointY="105.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.groupObject" Width="1.5" PointX="11" PointY="99.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.groups" Width="1.5" PointX="3" PointY="114.375" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.Inventory" Width="1.5" PointX="11.25" PointY="87.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.inventoryItemLocation" Width="1.5" PointX="29" PointY="92.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.inventoryItemLocation" Width="1.5" PointX="29" PointY="92.25" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.invoiceOrder" Width="1.5" PointX="18.75" PointY="84" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.invoices" Width="1.5" PointX="16.5" PointY="79.125" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.invoiceStatus" Width="1.5" PointX="21.75" PointY="99.75" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.items" Width="1.5" PointX="8.25" PointY="107.625" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.itemsLocations" Width="1.5" PointX="26.75" PointY="90.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.itemsMaterials" Width="1.5" PointX="10.5" PointY="110.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.itemsMaterials" Width="1.5" PointX="10.5" PointY="111.125" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.itemsOffers" Width="1.5" PointX="23.75" PointY="95" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.itemsProp" Width="1.5" PointX="13.5" PointY="98.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.itemsTransfer" Width="1.5" PointX="31.25" PointY="89.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.itemsUnits" Width="1.5" PointX="16.5" PointY="98.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.itemTransferOffer" Width="1.5" PointX="33.5" PointY="92.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.itemsProp" Width="1.5" PointX="13.5" PointY="99.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.itemsTransfer" Width="1.5" PointX="31.25" PointY="89.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.itemsUnits" Width="1.5" PointX="16.5" PointY="98.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.itemTransferOffer" Width="1.5" PointX="33.5" PointY="93" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.itemUnitUser" Width="1.5" PointX="23.75" PointY="90" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.locations" Width="1.5" PointX="10.5" PointY="93.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.medalAgent" Width="1.5" PointX="16.25" PointY="106" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.medals" Width="1.5" PointX="3" PointY="117.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.memberships" Width="1.5" PointX="3" PointY="122.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.notification" Width="1.5" PointX="3" PointY="127.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.notificationUser" Width="1.5" PointX="10.5" PointY="105.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.objects" Width="1.5" PointX="8.75" PointY="116.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.offers" Width="1.5" PointX="21.5" PointY="104.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.packages" Width="1.5" PointX="18.75" PointY="98.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.paperSize" Width="1.5" PointX="11.25" PointY="115" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.Points" Width="1.5" PointX="14.25" PointY="82.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.locations" Width="1.5" PointX="10.5" PointY="93.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.medalAgent" Width="1.5" PointX="16.25" PointY="106.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.medals" Width="1.5" PointX="3" PointY="118.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.memberships" Width="1.5" PointX="3" PointY="122.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.notification" Width="1.5" PointX="3" PointY="127.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.notificationUser" Width="1.5" PointX="10.5" PointY="105.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.objects" Width="1.5" PointX="8.75" PointY="116.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.offers" Width="1.5" PointX="21.5" PointY="104.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.packages" Width="1.5" PointX="18.75" PointY="99" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.paperSize" Width="1.5" PointX="11.25" PointY="115.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.Points" Width="1.5" PointX="14.25" PointY="82.375" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.pos" Width="1.5" PointX="8.25" PointY="82.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.posSerials" Width="1.5" PointX="11.25" PointY="117.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.posSetting" Width="1.5" PointX="13.5" PointY="102.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.posUsers" Width="1.5" PointX="13.5" PointY="88.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.printers" Width="1.5" PointX="3" PointY="131.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.posSerials" Width="1.5" PointX="11.25" PointY="118" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.posSetting" Width="1.5" PointX="13.5" PointY="103.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.posUsers" Width="1.5" PointX="13.5" PointY="88.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.printers" Width="1.5" PointX="3" PointY="131.875" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.ProgramDetails" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.properties" Width="1.5" PointX="3" PointY="135.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.propertiesItems" Width="1.5" PointX="5.25" PointY="104.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.sections" Width="1.5" PointX="5.25" PointY="109" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.serials" Width="1.5" PointX="18.5" PointY="93.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.setting" Width="1.5" PointX="6.5" PointY="78.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.setValues" Width="1.5" PointX="8.75" PointY="78.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.properties" Width="1.5" PointX="3" PointY="135.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.propertiesItems" Width="1.5" PointX="5.25" PointY="104.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.sections" Width="1.5" PointX="5.25" PointY="108.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.serials" Width="1.5" PointX="18.5" PointY="94.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.setting" Width="1.5" PointX="1.5" PointY="75.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.setValues" Width="1.5" PointX="3.75" PointY="75.5" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.shippingCompanies" Width="1.5" PointX="14.25" PointY="75.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.storageCost" Width="1.5" PointX="14.25" PointY="110.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.subscriptionFees" Width="1.5" PointX="5.25" PointY="122.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.storageCost" Width="1.5" PointX="14.25" PointY="111.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.subscriptionFees" Width="1.5" PointX="5.25" PointY="123" IsExpanded="true" />
         <EntityTypeShape EntityType="PosModel.sysEmails" Width="1.5" PointX="13.25" PointY="93" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.tags" Width="1.5" PointX="3" PointY="139.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.units" Width="1.5" PointX="6" PointY="113.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.users" Width="1.5" PointX="0.75" PointY="81.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.userSetValues" Width="1.5" PointX="11" PointY="83" IsExpanded="true" />
-        <EntityTypeShape EntityType="PosModel.usersLogs" Width="1.5" PointX="15.5" PointY="92.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.tags" Width="1.5" PointX="3" PointY="139.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.units" Width="1.5" PointX="6" PointY="113.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.users" Width="1.5" PointX="0.75" PointY="82" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.userSetValues" Width="1.5" PointX="6" PointY="82.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PosModel.usersLogs" Width="1.5" PointX="15.5" PointY="92.625" IsExpanded="true" />
         <AssociationConnector Association="PosModel.FK_agentMemberships_agents" ManuallyRouted="false" />
         <AssociationConnector Association="PosModel.FK_agentMemberships_cashTransfer" ManuallyRouted="false" />
         <AssociationConnector Association="PosModel.FK_agentMemberships_memberships2" ManuallyRouted="false" />

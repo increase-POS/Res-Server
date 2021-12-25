@@ -23,6 +23,7 @@ namespace POS_Server
     
         public int shippingCompanyId { get; set; }
         public string name { get; set; }
+        public decimal realDeliveryCost { get; set; }
         public decimal deliveryCost { get; set; }
         public string deliveryType { get; set; }
         public string notes { get; set; }
@@ -38,7 +39,6 @@ namespace POS_Server
         public string mobile { get; set; }
         public string fax { get; set; }
         public string address { get; set; }
-        public decimal realDeliveryCost { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<cashTransfer> cashTransfer { get; set; }

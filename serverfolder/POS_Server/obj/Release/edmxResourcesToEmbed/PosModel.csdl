@@ -249,6 +249,7 @@
     <Property Name="createUserId" Type="Int32" />
     <Property Name="updateUserId" Type="Int32" />
     <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="users" Relationship="Self.FK_categories_users" FromRole="categories" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_categories_users1" FromRole="categories" ToRole="users" />
     <NavigationProperty Name="categoryuser" Relationship="Self.FK_categoryuser_categories" FromRole="categories" ToRole="categoryuser" />
@@ -589,6 +590,8 @@
     <Property Name="maxUnitId" Type="Int32" />
     <Property Name="avgPurchasePrice" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="tagId" Type="Int32" />
+    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="categoryString" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="categories" Relationship="Self.FK_items_categories" FromRole="items" ToRole="categories" />
     <NavigationProperty Name="tags" Relationship="Self.FK_items_tags" FromRole="items" ToRole="tags" />
     <NavigationProperty Name="units" Relationship="Self.FK_items_units" FromRole="items" ToRole="units" />
@@ -602,8 +605,6 @@
     <NavigationProperty Name="itemsProp" Relationship="Self.FK_itemsProp_items" FromRole="items" ToRole="itemsProp" />
     <NavigationProperty Name="itemsUnits" Relationship="Self.FK_itemsUnits_items" FromRole="items" ToRole="itemsUnits" />
     <NavigationProperty Name="serials" Relationship="Self.FK_serials_items" FromRole="items" ToRole="serials" />
-    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="categoryString" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="itemsLocations">
     <Key>
@@ -1147,9 +1148,9 @@
     <Property Name="isActive" Type="Byte" Nullable="false" />
     <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="isFreeZone" Type="Byte" Nullable="false" />
+    <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="branches" Relationship="Self.FK_sections_branches" FromRole="sections" ToRole="branches" />
     <NavigationProperty Name="locations" Relationship="Self.FK_locations_sections" FromRole="sections" ToRole="locations" />
-    <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="serials">
     <Key>
@@ -1195,6 +1196,7 @@
     </Key>
     <Property Name="shippingCompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="realDeliveryCost" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="deliveryCost" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="deliveryType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1212,7 +1214,6 @@
     <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="cashTransfer" Relationship="Self.FK_cashTransfer_shippingCompanies" FromRole="shippingCompanies" ToRole="cashTransfer" />
     <NavigationProperty Name="invoices" Relationship="Self.FK_invoices_shippingCompanies" FromRole="shippingCompanies" ToRole="invoices" />
-    <Property Name="realDeliveryCost" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
   </EntityType>
   <EntityType Name="storageCost">
     <Key>
@@ -1245,16 +1246,6 @@
     <Property Name="isActive" Type="Byte" Nullable="false" />
     <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_subscriptionFees" FromRole="subscriptionFees" ToRole="agentMemberships" />
     <NavigationProperty Name="memberships" Relationship="Self.FK_subscriptionFees_memberships" FromRole="subscriptionFees" ToRole="memberships" />
-  </EntityType>
-  <EntityType Name="sysdiagrams">
-    <Key>
-      <PropertyRef Name="diagram_id" />
-    </Key>
-    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="principal_id" Type="Int32" Nullable="false" />
-    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="version" Type="Int32" />
-    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
   <EntityType Name="sysEmails">
     <Key>
@@ -1292,7 +1283,7 @@
     <Property Name="updateUserId" Type="Int32" />
     <Property Name="createDate" Type="DateTime" Precision="7" />
     <Property Name="updateDate" Type="DateTime" Precision="7" />
-    <Property Name="isActive" Type="Boolean" Nullable="false" />
+    <Property Name="isActive" Type="Byte" Nullable="false" />
     <NavigationProperty Name="items" Relationship="Self.FK_items_tags" FromRole="tags" ToRole="items" />
     <NavigationProperty Name="users" Relationship="Self.FK_tags_users" FromRole="tags" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_tags_users1" FromRole="tags" ToRole="users" />
@@ -3869,7 +3860,6 @@
     <EntitySet Name="shippingCompanies" EntityType="Self.shippingCompanies" />
     <EntitySet Name="storageCost" EntityType="Self.storageCost" />
     <EntitySet Name="subscriptionFees" EntityType="Self.subscriptionFees" />
-    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
     <EntitySet Name="sysEmails" EntityType="Self.sysEmails" />
     <EntitySet Name="tags" EntityType="Self.tags" />
     <EntitySet Name="units" EntityType="Self.units" />

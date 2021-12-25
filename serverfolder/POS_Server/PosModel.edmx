@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="agentMemberships">
           <Key>
             <PropertyRef Name="agentMembershipsId" />
@@ -196,6 +196,7 @@
           <Property Name="createUserId" Type="int" />
           <Property Name="updateUserId" Type="int" />
           <Property Name="notes" Type="ntext" />
+          <Property Name="type" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="categoryuser">
           <Key>
@@ -985,16 +986,6 @@
           <Property Name="updateUserId" Type="int" />
           <Property Name="isActive" Type="tinyint" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
         <EntityType Name="sysEmails">
           <Key>
             <PropertyRef Name="emailId" />
@@ -1028,7 +1019,7 @@
           <Property Name="updateUserId" Type="int" />
           <Property Name="createDate" Type="datetime2" Precision="7" />
           <Property Name="updateDate" Type="datetime2" Precision="7" />
-          <Property Name="isActive" Type="bit" Nullable="false" />
+          <Property Name="isActive" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="units">
           <Key>
@@ -3486,7 +3477,6 @@
           <EntitySet Name="shippingCompanies" EntityType="Self.shippingCompanies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="storageCost" EntityType="Self.storageCost" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="subscriptionFees" EntityType="Self.subscriptionFees" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysEmails" EntityType="Self.sysEmails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tags" EntityType="Self.tags" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="units" EntityType="Self.units" Schema="dbo" store:Type="Tables" />
@@ -4270,7 +4260,8 @@
             <End Role="usersLogs" EntitySet="usersLogs" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -4523,6 +4514,7 @@
           <Property Name="createUserId" Type="Int32" />
           <Property Name="updateUserId" Type="Int32" />
           <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="users" Relationship="Self.FK_categories_users" FromRole="categories" ToRole="users" />
           <NavigationProperty Name="users1" Relationship="Self.FK_categories_users1" FromRole="categories" ToRole="users" />
           <NavigationProperty Name="categoryuser" Relationship="Self.FK_categoryuser_categories" FromRole="categories" ToRole="categoryuser" />
@@ -4863,6 +4855,8 @@
           <Property Name="maxUnitId" Type="Int32" />
           <Property Name="avgPurchasePrice" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="tagId" Type="Int32" />
+          <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="categoryString" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="categories" Relationship="Self.FK_items_categories" FromRole="items" ToRole="categories" />
           <NavigationProperty Name="tags" Relationship="Self.FK_items_tags" FromRole="items" ToRole="tags" />
           <NavigationProperty Name="units" Relationship="Self.FK_items_units" FromRole="items" ToRole="units" />
@@ -4876,8 +4870,6 @@
           <NavigationProperty Name="itemsProp" Relationship="Self.FK_itemsProp_items" FromRole="items" ToRole="itemsProp" />
           <NavigationProperty Name="itemsUnits" Relationship="Self.FK_itemsUnits_items" FromRole="items" ToRole="itemsUnits" />
           <NavigationProperty Name="serials" Relationship="Self.FK_serials_items" FromRole="items" ToRole="serials" />
-          <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="categoryString" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="itemsLocations">
           <Key>
@@ -5421,9 +5413,9 @@
           <Property Name="isActive" Type="Byte" Nullable="false" />
           <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="isFreeZone" Type="Byte" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="branches" Relationship="Self.FK_sections_branches" FromRole="sections" ToRole="branches" />
           <NavigationProperty Name="locations" Relationship="Self.FK_locations_sections" FromRole="sections" ToRole="locations" />
-          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="serials">
           <Key>
@@ -5469,6 +5461,7 @@
           </Key>
           <Property Name="shippingCompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="realDeliveryCost" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="deliveryCost" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="deliveryType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -5486,7 +5479,6 @@
           <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="cashTransfer" Relationship="Self.FK_cashTransfer_shippingCompanies" FromRole="shippingCompanies" ToRole="cashTransfer" />
           <NavigationProperty Name="invoices" Relationship="Self.FK_invoices_shippingCompanies" FromRole="shippingCompanies" ToRole="invoices" />
-          <Property Name="realDeliveryCost" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
         </EntityType>
         <EntityType Name="storageCost">
           <Key>
@@ -5519,16 +5511,6 @@
           <Property Name="isActive" Type="Byte" Nullable="false" />
           <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_subscriptionFees" FromRole="subscriptionFees" ToRole="agentMemberships" />
           <NavigationProperty Name="memberships" Relationship="Self.FK_subscriptionFees_memberships" FromRole="subscriptionFees" ToRole="memberships" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="sysEmails">
           <Key>
@@ -5566,7 +5548,7 @@
           <Property Name="updateUserId" Type="Int32" />
           <Property Name="createDate" Type="DateTime" Precision="7" />
           <Property Name="updateDate" Type="DateTime" Precision="7" />
-          <Property Name="isActive" Type="Boolean" Nullable="false" />
+          <Property Name="isActive" Type="Byte" Nullable="false" />
           <NavigationProperty Name="items" Relationship="Self.FK_items_tags" FromRole="tags" ToRole="items" />
           <NavigationProperty Name="users" Relationship="Self.FK_tags_users" FromRole="tags" ToRole="users" />
           <NavigationProperty Name="users1" Relationship="Self.FK_tags_users1" FromRole="tags" ToRole="users" />
@@ -8143,7 +8125,6 @@
           <EntitySet Name="shippingCompanies" EntityType="Self.shippingCompanies" />
           <EntitySet Name="storageCost" EntityType="Self.storageCost" />
           <EntitySet Name="subscriptionFees" EntityType="Self.subscriptionFees" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="sysEmails" EntityType="Self.sysEmails" />
           <EntitySet Name="tags" EntityType="Self.tags" />
           <EntitySet Name="units" EntityType="Self.units" />
@@ -9132,6 +9113,7 @@
                 <ScalarProperty Name="createUserId" ColumnName="createUserId" />
                 <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
                 <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="type" ColumnName="type" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -9404,8 +9386,6 @@
           <EntitySetMapping Name="items">
             <EntityTypeMapping TypeName="PosModel.items">
               <MappingFragment StoreEntitySet="items">
-                <ScalarProperty Name="categoryString" ColumnName="categoryString" />
-                <ScalarProperty Name="notes" ColumnName="notes" />
                 <ScalarProperty Name="itemId" ColumnName="itemId" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -9426,6 +9406,8 @@
                 <ScalarProperty Name="maxUnitId" ColumnName="maxUnitId" />
                 <ScalarProperty Name="avgPurchasePrice" ColumnName="avgPurchasePrice" />
                 <ScalarProperty Name="tagId" ColumnName="tagId" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="categoryString" ColumnName="categoryString" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -9869,7 +9851,6 @@
           <EntitySetMapping Name="sections">
             <EntityTypeMapping TypeName="PosModel.sections">
               <MappingFragment StoreEntitySet="sections">
-                <ScalarProperty Name="type" ColumnName="type" />
                 <ScalarProperty Name="sectionId" ColumnName="sectionId" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
@@ -9880,6 +9861,7 @@
                 <ScalarProperty Name="isActive" ColumnName="isActive" />
                 <ScalarProperty Name="notes" ColumnName="notes" />
                 <ScalarProperty Name="isFreeZone" ColumnName="isFreeZone" />
+                <ScalarProperty Name="type" ColumnName="type" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -9921,9 +9903,9 @@
           <EntitySetMapping Name="shippingCompanies">
             <EntityTypeMapping TypeName="PosModel.shippingCompanies">
               <MappingFragment StoreEntitySet="shippingCompanies">
-                <ScalarProperty Name="realDeliveryCost" ColumnName="realDeliveryCost" />
                 <ScalarProperty Name="shippingCompanyId" ColumnName="shippingCompanyId" />
                 <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="realDeliveryCost" ColumnName="realDeliveryCost" />
                 <ScalarProperty Name="deliveryCost" ColumnName="deliveryCost" />
                 <ScalarProperty Name="deliveryType" ColumnName="deliveryType" />
                 <ScalarProperty Name="notes" ColumnName="notes" />
@@ -9970,17 +9952,6 @@
                 <ScalarProperty Name="createUserId" ColumnName="createUserId" />
                 <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
                 <ScalarProperty Name="isActive" ColumnName="isActive" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="PosModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

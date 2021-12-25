@@ -69,7 +69,7 @@ var strP = TokenManager.GetPrincipal(token);
                         foreach (TagsModel item in tagsList)
                         {
                             canDelete = false;
-                            if (item.isActive == true)
+                            if (item.isActive == 1)
                             {
                                 int cId = (int)item.tagId;
                                 var casht = entity.items.Where(x => x.tagId == cId).Select(x => new { x.tagId }).FirstOrDefault();
@@ -140,13 +140,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                bool isActive = false;
+                int isActive = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "isActive")
                     {
-                        isActive = bool.Parse(c.Value);
+                        isActive = int.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -299,7 +299,7 @@ var strP = TokenManager.GetPrincipal(token);
                         {
                             tags cardObj = entity.tags.Find(tagId);
 
-                            cardObj.isActive = false;
+                            cardObj.isActive = 0;
                             cardObj.updateUserId = userId;
                             cardObj.updateDate = DateTime.Now;
                             message = entity.SaveChanges().ToString();

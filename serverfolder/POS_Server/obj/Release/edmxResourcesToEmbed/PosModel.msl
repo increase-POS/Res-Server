@@ -200,6 +200,7 @@
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
           <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
           <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="type" ColumnName="type" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -472,8 +473,6 @@
     <EntitySetMapping Name="items">
       <EntityTypeMapping TypeName="PosModel.items">
         <MappingFragment StoreEntitySet="items">
-          <ScalarProperty Name="categoryString" ColumnName="categoryString" />
-          <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="itemId" ColumnName="itemId" />
           <ScalarProperty Name="code" ColumnName="code" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -494,6 +493,8 @@
           <ScalarProperty Name="maxUnitId" ColumnName="maxUnitId" />
           <ScalarProperty Name="avgPurchasePrice" ColumnName="avgPurchasePrice" />
           <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="categoryString" ColumnName="categoryString" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -937,7 +938,6 @@
     <EntitySetMapping Name="sections">
       <EntityTypeMapping TypeName="PosModel.sections">
         <MappingFragment StoreEntitySet="sections">
-          <ScalarProperty Name="type" ColumnName="type" />
           <ScalarProperty Name="sectionId" ColumnName="sectionId" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
@@ -948,6 +948,7 @@
           <ScalarProperty Name="isActive" ColumnName="isActive" />
           <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="isFreeZone" ColumnName="isFreeZone" />
+          <ScalarProperty Name="type" ColumnName="type" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -989,9 +990,9 @@
     <EntitySetMapping Name="shippingCompanies">
       <EntityTypeMapping TypeName="PosModel.shippingCompanies">
         <MappingFragment StoreEntitySet="shippingCompanies">
-          <ScalarProperty Name="realDeliveryCost" ColumnName="realDeliveryCost" />
           <ScalarProperty Name="shippingCompanyId" ColumnName="shippingCompanyId" />
           <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="realDeliveryCost" ColumnName="realDeliveryCost" />
           <ScalarProperty Name="deliveryCost" ColumnName="deliveryCost" />
           <ScalarProperty Name="deliveryType" ColumnName="deliveryType" />
           <ScalarProperty Name="notes" ColumnName="notes" />
@@ -1038,17 +1039,6 @@
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
           <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="sysdiagrams">
-      <EntityTypeMapping TypeName="PosModel.sysdiagrams">
-        <MappingFragment StoreEntitySet="sysdiagrams">
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-          <ScalarProperty Name="version" ColumnName="version" />
-          <ScalarProperty Name="definition" ColumnName="definition" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
