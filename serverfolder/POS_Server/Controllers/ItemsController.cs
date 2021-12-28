@@ -1760,17 +1760,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                string itemObject = "";
-                items itemObj = null;
+                string imageName = "";
+                int itemId =0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
-                    if (c.Type == "itemObject")
+                    if (c.Type == "itemId")
                     {
-                        itemObject = c.Value.Replace("\\", string.Empty);
-                        itemObject = itemObject.Trim('"');
-                        itemObj = JsonConvert.DeserializeObject<items>(itemObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
-                        break;
+                        itemId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "imageName")
+                    {
+                        imageName = c.Value;
                     }
                 }
                 try
@@ -1779,8 +1780,8 @@ namespace POS_Server.Controllers
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var itemEntity = entity.Set<items>();
-                        item = entity.items.Where(p => p.itemId == itemObj.itemId).First();
-                        item.image = itemObj.image;
+                        item = entity.items.Where(p => p.itemId == itemId).First();
+                        item.image = imageName;
                         entity.SaveChanges();
                     }
                     message = item.itemId.ToString();

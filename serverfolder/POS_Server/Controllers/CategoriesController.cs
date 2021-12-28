@@ -23,12 +23,46 @@ namespace POS_Server.Controllers
         List<int> categoriesId = new List<int>();
 
         [HttpPost]
+        [Route("Get")]
+        public string Get(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var category = entity.categories.Select(p => new {
+                       p.categoryId,
+                       p.name,
+                       p.categoryCode,
+                       p.createDate,
+                       p.createUserId,
+                       p.details,
+                       p.image,
+                       p.notes,
+                       p.parentId,
+                       p.taxes,
+                       p.updateDate,
+                       p.updateUserId,
+                       p.type,
+                   }).ToList();
+                    return TokenManager.GenerateToken(category);
+                }
+            }
+        }
+
+        [HttpPost]
         [Route("GetAllCategories")]
         public string GetAllCategories(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             Boolean canDelete = false;
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
