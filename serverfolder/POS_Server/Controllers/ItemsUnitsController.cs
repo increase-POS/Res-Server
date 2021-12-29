@@ -454,13 +454,9 @@ namespace POS_Server.Controllers
         [Route("Save")]
         public string Save(string token)
         {
-
             string message = "";
-
-            //string itemsUnitsObject
-
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request); 
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -503,23 +499,23 @@ namespace POS_Server.Controllers
                                 var iu = entity.itemsUnits.Where(x => x.itemId == newObject.itemId).FirstOrDefault();
                                 if (iu == null)
                                 {
-                                    newObject.defaultSale = 1;
+                                   // newObject.defaultSale = 1;
                                     newObject.defaultPurchase = 1;
                                 }
                                 else
                                 {
                                     //create
-                                    // set the other default sale or purchase to 0 if the new object.default is 1
+                                    // set the other purchase to 0 if the new object.default is 1
 
-                                    if (newObject.defaultSale == 1)
-                                    { // get the row with same itemId of newObject
-                                        itemsUnits defItemUnit = entity.itemsUnits.Where(p => p.itemId == newObject.itemId && p.defaultSale == 1).FirstOrDefault();
-                                        if (defItemUnit != null)
-                                        {
-                                            defItemUnit.defaultSale = 0;
-                                            entity.SaveChanges();
-                                        }
-                                    }
+                                    //if (newObject.defaultSale == 1)
+                                    //{ // get the row with same itemId of newObject
+                                    //    itemsUnits defItemUnit = entity.itemsUnits.Where(p => p.itemId == newObject.itemId && p.defaultSale == 1).FirstOrDefault();
+                                    //    if (defItemUnit != null)
+                                    //    {
+                                    //        defItemUnit.defaultSale = 0;
+                                    //        entity.SaveChanges();
+                                    //    }
+                                    //}
                                     if (newObject.defaultPurchase == 1)
                                     {
                                         var defItemUnit = entity.itemsUnits.Where(p => p.itemId == newObject.itemId && p.defaultPurchase == 1).FirstOrDefault();
@@ -545,15 +541,15 @@ namespace POS_Server.Controllers
                                 int itemUnitId = newObject.itemUnitId;
                                 var tmpItemUnit = entity.itemsUnits.Find(itemUnitId);
 
-                                if (newObject.defaultSale == 1)
-                                {
-                                    itemsUnits saleItemUnit = entity.itemsUnits.Where(p => p.itemId == tmpItemUnit.itemId && p.defaultSale == 1).FirstOrDefault();
-                                    if (saleItemUnit != null)
-                                    {
-                                        saleItemUnit.defaultSale = 0;
-                                        entity.SaveChanges();
-                                    }
-                                }
+                                //if (newObject.defaultSale == 1)
+                                //{
+                                //    itemsUnits saleItemUnit = entity.itemsUnits.Where(p => p.itemId == tmpItemUnit.itemId && p.defaultSale == 1).FirstOrDefault();
+                                //    if (saleItemUnit != null)
+                                //    {
+                                //        saleItemUnit.defaultSale = 0;
+                                //        entity.SaveChanges();
+                                //    }
+                                //}
                                 if (newObject.defaultPurchase == 1)
                                 {
                                     var defItemUnit = entity.itemsUnits.Where(p => p.itemId == tmpItemUnit.itemId && p.defaultPurchase == 1).FirstOrDefault();
@@ -570,7 +566,7 @@ namespace POS_Server.Controllers
                                 tmpItemUnit.unitId = newObject.unitId;
                                 tmpItemUnit.unitValue = newObject.unitValue;
                                 tmpItemUnit.defaultPurchase = newObject.defaultPurchase;
-                                tmpItemUnit.defaultSale = newObject.defaultSale;
+                                //tmpItemUnit.defaultSale = newObject.defaultSale;
                                 tmpItemUnit.updateDate = DateTime.Now;
                                 tmpItemUnit.updateUserId = newObject.updateUserId;
                                 tmpItemUnit.storageCostId = newObject.storageCostId;
