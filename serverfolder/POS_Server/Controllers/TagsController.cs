@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 using System.Web;
+using System.Data.Entity.Validation;
 
 namespace POS_Server.Controllers
 {
@@ -174,9 +175,9 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("Save")]
         public string Save(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "";
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -199,46 +200,29 @@ var strP = TokenManager.GetPrincipal(token);
                 try
                 {
                     using (incposdbEntities entity = new incposdbEntities())
-                    {
-                        tags tmpObject = new tags();
-                        var cardEntity = entity.Set<tags>();
-                        if (Object.tagId == 0)
                         {
-                            Object.createDate = DateTime.Now;
-                            Object.updateDate = DateTime.Now;
-                            Object.updateUserId = Object.createUserId;
-                            tmpObject = cardEntity.Add(Object);
-                            entity.SaveChanges();
-                            message = tmpObject.tagId.ToString();
-
-                        }
-                        else
-                        {
-
-                            tmpObject = entity.tags.Where(p => p.tagId == Object.tagId).FirstOrDefault();
-                            tmpObject.tagId = Object.tagId;
-                            tmpObject.tagName = Object.tagName;
-                            tmpObject.categoryId = Object.categoryId;
-                            tmpObject.notes = Object.notes;
-                           // tmpObject.createUserId = Object.createUserId;
-                            tmpObject.updateUserId = Object.updateUserId;
-                            tmpObject.createDate = Object.createDate;
-                            tmpObject.updateDate = DateTime.Now;
-                            tmpObject.isActive = Object.isActive;
-
-                            entity.SaveChanges();
-                            message = tmpObject.tagId.ToString();
-                        }
-
+                            tags tmpObject = new tags();
+                            if (Object.tagId == 0)
+                            {
+                                Object.createDate = DateTime.Now;
+                                Object.updateDate = DateTime.Now;
+                                Object.updateUserId = Object.createUserId;
+                                entity.tags.Add(Object);
+                            }
+                            else
+                            {
+                                tmpObject = entity.tags.Find(Object.tagId);
+                                tmpObject.tagName = Object.tagName;
+                                tmpObject.categoryId = Object.categoryId;
+                                tmpObject.notes = Object.notes;
+                                tmpObject.updateUserId = Object.updateUserId;
+                                tmpObject.updateDate = DateTime.Now;
+                            }
+                        message =  entity.SaveChanges().ToString();
                     }
-                    return TokenManager.GenerateToken(message);
+                        return TokenManager.GenerateToken(message);
                 }
-
-                catch
-                {
-                    message = "0";
-                    return TokenManager.GenerateToken(message);
-                }
+                catch {return TokenManager.GenerateToken("0");}
             }
         }
         [HttpPost]
