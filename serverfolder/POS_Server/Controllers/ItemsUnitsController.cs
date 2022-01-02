@@ -478,234 +478,95 @@ namespace POS_Server.Controllers
                 }
                 if (newObject != null)
                 {
-
-                    if (newObject.updateUserId == 0 || newObject.updateUserId == null)
-                    {
-                        Nullable<int> id = null;
-                        newObject.updateUserId = id;
-                    }
-                    if (newObject.createUserId == 0 || newObject.createUserId == null)
-                    {
-                        Nullable<int> id = null;
-                        newObject.createUserId = id;
-                    }
-                    try
-                    {
-                        using (incposdbEntities entity = new incposdbEntities())
-                        {
-                            var itemUnitEntity = entity.Set<itemsUnits>();
-                            if (newObject.itemUnitId == 0)
-                            {
-                                var iu = entity.itemsUnits.Where(x => x.itemId == newObject.itemId).FirstOrDefault();
-                                if (iu == null)
-                                {
-                                   // newObject.defaultSale = 1;
-                                    newObject.defaultPurchase = 1;
-                                }
-                                else
-                                {
-                                    //create
-                                    // set the other purchase to 0 if the new object.default is 1
-
-                                    //if (newObject.defaultSale == 1)
-                                    //{ // get the row with same itemId of newObject
-                                    //    itemsUnits defItemUnit = entity.itemsUnits.Where(p => p.itemId == newObject.itemId && p.defaultSale == 1).FirstOrDefault();
-                                    //    if (defItemUnit != null)
-                                    //    {
-                                    //        defItemUnit.defaultSale = 0;
-                                    //        entity.SaveChanges();
-                                    //    }
-                                    //}
-                                    if (newObject.defaultPurchase == 1)
-                                    {
-                                        var defItemUnit = entity.itemsUnits.Where(p => p.itemId == newObject.itemId && p.defaultPurchase == 1).FirstOrDefault();
-                                        if (defItemUnit != null)
-                                        {
-                                            defItemUnit.defaultPurchase = 0;
-                                            entity.SaveChanges();
-                                        }
-                                    }
-                                }
-                                newObject.createDate = DateTime.Now;
-                                newObject.updateDate = DateTime.Now;
-                                newObject.updateUserId = newObject.createUserId;
-                                newObject.isActive = 1;
-
-                                itemUnitEntity.Add(newObject);
-                                //  message = "Item Unit Is Added Successfully";
-                            }
-                            else
-                            {
-                                //update
-                                // set the other default sale or purchase to 0 if the new object.default is 1
-                                int itemUnitId = newObject.itemUnitId;
-                                var tmpItemUnit = entity.itemsUnits.Find(itemUnitId);
-
-                                //if (newObject.defaultSale == 1)
-                                //{
-                                //    itemsUnits saleItemUnit = entity.itemsUnits.Where(p => p.itemId == tmpItemUnit.itemId && p.defaultSale == 1).FirstOrDefault();
-                                //    if (saleItemUnit != null)
-                                //    {
-                                //        saleItemUnit.defaultSale = 0;
-                                //        entity.SaveChanges();
-                                //    }
-                                //}
-                                if (newObject.defaultPurchase == 1)
-                                {
-                                    var defItemUnit = entity.itemsUnits.Where(p => p.itemId == tmpItemUnit.itemId && p.defaultPurchase == 1).FirstOrDefault();
-                                    if (defItemUnit != null)
-                                    {
-                                        defItemUnit.defaultPurchase = 0;
-                                        entity.SaveChanges();
-                                    }
-                                }
-                                tmpItemUnit.barcode = newObject.barcode;
-                                // tmpItemUnit.itemId = newObject.itemId;
-                                tmpItemUnit.price = newObject.price;
-                                tmpItemUnit.subUnitId = newObject.subUnitId;
-                                tmpItemUnit.unitId = newObject.unitId;
-                                tmpItemUnit.unitValue = newObject.unitValue;
-                                tmpItemUnit.defaultPurchase = newObject.defaultPurchase;
-                                //tmpItemUnit.defaultSale = newObject.defaultSale;
-                                tmpItemUnit.updateDate = DateTime.Now;
-                                tmpItemUnit.updateUserId = newObject.updateUserId;
-                                tmpItemUnit.storageCostId = newObject.storageCostId;
-                                tmpItemUnit.isActive = newObject.isActive;
-                                //  message = "Item Unit Is Updated Successfully";
-                            }
-                            message = entity.SaveChanges().ToString();
-                            return TokenManager.GenerateToken(message);
-
-                        }
-                    }
-                    catch
-                    {
-                        message = "0";
-                        return TokenManager.GenerateToken(message);
-                    }
-
-
+                   message = saveItemUnit(newObject);
                 }
                 else
                 {
-                    return TokenManager.GenerateToken("0");
+                    message = "0";
                 }
-
-
             }
-
-            //var re = Request;
-            //var headers = re.Headers;
-            //string token = "";
-            //string message = "";
-            //if (headers.Contains("APIKey"))
-            //{
-            //    token = headers.GetValues("APIKey").First();
-            //}
-            //Validation validation = new Validation();
-            //bool valid = validation.CheckApiKey(token);
-
-            //if (valid)
-            //{
-            //    itemsUnitsObject = itemsUnitsObject.Replace("\\", string.Empty);
-            //    itemsUnitsObject = itemsUnitsObject.Trim('"');
-            //    itemsUnits newObject = JsonConvert.DeserializeObject<itemsUnits>(itemsUnitsObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
-            //    if (newObject.updateUserId == 0 || newObject.updateUserId == null)
-            //    {
-            //        Nullable<int> id = null;
-            //        newObject.updateUserId = id;
-            //    }
-            //    if (newObject.createUserId == 0 || newObject.createUserId == null)
-            //    {
-            //        Nullable<int> id = null;
-            //        newObject.createUserId = id;
-            //    }
-            //    try
-            //    {
-            //        using (incposdbEntities entity = new incposdbEntities())
-            //        {
-            //            var itemUnitEntity = entity.Set<itemsUnits>();
-            //            if (newObject.itemUnitId == 0)
-            //            {
-            //                //create
-            //                // set the other default sale or purchase to 0 if the new object.default is 1
-
-            //                if (newObject.defaultSale == 1)
-            //                { // get the row with same itemId of newObject
-            //                    itemsUnits defItemUnit = entity.itemsUnits.Where(p => p.itemId == newObject.itemId && p.defaultSale == 1).FirstOrDefault();
-            //                    if (defItemUnit != null)
-            //                    {
-            //                        defItemUnit.defaultSale = 0;
-            //                        entity.SaveChanges();
-            //                    }
-            //                }
-            //                if (newObject.defaultPurchase == 1)
-            //                {
-            //                    var defItemUnit = entity.itemsUnits.Where(p => p.itemId == newObject.itemId && p.defaultPurchase == 1).FirstOrDefault();
-            //                    if (defItemUnit != null)
-            //                    {
-            //                        defItemUnit.defaultPurchase = 0;
-            //                        entity.SaveChanges();
-            //                    }
-            //                }
-            //                newObject.createDate = DateTime.Now;
-            //                newObject.updateDate = DateTime.Now;
-            //                newObject.updateUserId = newObject.createUserId;
-            //                newObject.isActive = 1;
-
-            //                itemUnitEntity.Add(newObject);
-            //                message = "Item Unit Is Added Successfully";
-            //            }
-            //            else
-            //            {
-            //                //update
-            //                // set the other default sale or purchase to 0 if the new object.default is 1
-            //                int itemUnitId = newObject.itemUnitId;
-            //                var tmpItemUnit = entity.itemsUnits.Find(itemUnitId);
-
-            //                if (newObject.defaultSale == 1)
-            //                {
-            //                    itemsUnits saleItemUnit = entity.itemsUnits.Where(p => p.itemId == tmpItemUnit.itemId && p.defaultSale == 1).FirstOrDefault();
-            //                    if (saleItemUnit != null)
-            //                    {
-            //                        saleItemUnit.defaultSale = 0;
-            //                        entity.SaveChanges();
-            //                    }
-            //                }
-            //                if (newObject.defaultPurchase == 1)
-            //                {
-            //                    var defItemUnit = entity.itemsUnits.Where(p => p.itemId == tmpItemUnit.itemId && p.defaultPurchase == 1).FirstOrDefault();
-            //                    if (defItemUnit != null)
-            //                    {
-            //                        defItemUnit.defaultPurchase = 0;
-            //                        entity.SaveChanges();
-            //                    }
-            //                }
-            //                tmpItemUnit.barcode = newObject.barcode;
-            //               // tmpItemUnit.itemId = newObject.itemId;
-            //                tmpItemUnit.price = newObject.price;
-            //                tmpItemUnit.subUnitId = newObject.subUnitId;
-            //                tmpItemUnit.unitId = newObject.unitId;
-            //                tmpItemUnit.unitValue = newObject.unitValue;
-            //                tmpItemUnit.defaultPurchase = newObject.defaultPurchase;
-            //                tmpItemUnit.defaultSale = newObject.defaultSale;
-            //                tmpItemUnit.updateDate = DateTime.Now;
-            //                tmpItemUnit.updateUserId = newObject.updateUserId;
-            //                tmpItemUnit.storageCostId = newObject.storageCostId;
-            //                tmpItemUnit.isActive = newObject.isActive;
-            //                message = "Item Unit Is Updated Successfully";
-            //            }
-            //            entity.SaveChanges();
-            //        }
-            //    }
-            //    catch
-            //    {
-            //        message = "an error ocurred";
-            //    }
-            //}
-            //return Ok( message);
+            return TokenManager.GenerateToken(message);
         }
+        public string saveItemUnit( itemsUnits newObject)
+        {
+            string message = "";
+            if (newObject.updateUserId == 0 || newObject.updateUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.updateUserId = id;
+            }
+            if (newObject.createUserId == 0 || newObject.createUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.createUserId = id;
+            }
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var itemUnitEntity = entity.Set<itemsUnits>();
+                    if (newObject.itemUnitId == 0)
+                    {
+                        var iu = entity.itemsUnits.Where(x => x.itemId == newObject.itemId).FirstOrDefault();
+                        if (iu == null)
+                        {
+                            newObject.defaultPurchase = 1;
+                        }
+                        else
+                        {
+                            if (newObject.defaultPurchase == 1)
+                            {
+                                var defItemUnit = entity.itemsUnits.Where(p => p.itemId == newObject.itemId && p.defaultPurchase == 1).FirstOrDefault();
+                                if (defItemUnit != null)
+                                {
+                                    defItemUnit.defaultPurchase = 0;
+                                    entity.SaveChanges();
+                                }
+                            }
+                        }
+                        newObject.createDate = DateTime.Now;
+                        newObject.updateDate = DateTime.Now;
+                        newObject.updateUserId = newObject.createUserId;
+                        newObject.isActive = 1;
 
+                        itemUnitEntity.Add(newObject);
+                    }
+                    else
+                    {
+                        //update
+                        // set the other default sale or purchase to 0 if the new object.default is 1
+                        int itemUnitId = newObject.itemUnitId;
+                        var tmpItemUnit = entity.itemsUnits.Find(itemUnitId);
+
+                        if (newObject.defaultPurchase == 1)
+                        {
+                            var defItemUnit = entity.itemsUnits.Where(p => p.itemId == tmpItemUnit.itemId && p.defaultPurchase == 1).FirstOrDefault();
+                            if (defItemUnit != null)
+                            {
+                                defItemUnit.defaultPurchase = 0;
+                                entity.SaveChanges();
+                            }
+                        }
+                        tmpItemUnit.barcode = newObject.barcode;
+                        tmpItemUnit.price = newObject.price;
+                        tmpItemUnit.subUnitId = newObject.subUnitId;
+                        tmpItemUnit.unitId = newObject.unitId;
+                        tmpItemUnit.unitValue = newObject.unitValue;
+                        tmpItemUnit.defaultPurchase = newObject.defaultPurchase;
+                        tmpItemUnit.updateDate = DateTime.Now;
+                        tmpItemUnit.updateUserId = newObject.updateUserId;
+                        tmpItemUnit.storageCostId = newObject.storageCostId;
+                        tmpItemUnit.isActive = newObject.isActive;
+                    }
+                    message = entity.SaveChanges().ToString();
+                }
+            }
+            catch
+            {
+                message = "0";
+            }
+            return message;
+        }
         [HttpPost]
         [Route("Delete")]
         public string Delete(string token)

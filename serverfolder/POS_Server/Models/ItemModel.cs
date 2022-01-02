@@ -28,6 +28,7 @@ namespace POS_Server.Models
         public decimal avgPurchasePrice { get; set; }
         public Nullable<int> tagId { get; set; }
         public string notes { get; set; }
+        public string barcode { get; set; }
         public string categoryString { get; set; }
 
 

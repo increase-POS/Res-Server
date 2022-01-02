@@ -13,6 +13,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web;
 using System.Data.Entity.Validation;
+using LinqKit;
 
 namespace POS_Server.Controllers
 {
@@ -24,19 +25,31 @@ namespace POS_Server.Controllers
         [Route("Get")]
         public string Get(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             Boolean canDelete = false;
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
             }
             else
             {
+                int categoryId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "categoryId")
+                    {
+                        categoryId = int.Parse(c.Value);
+                    }
+                }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var tagsList = entity.tags
+                    var searchPredicate = PredicateBuilder.New<tags>();
+                    if (categoryId != 0)
+                        searchPredicate.And(x => x.categoryId == categoryId);
 
+                    var tagsList = entity.tags
                    .Select(S => new TagsModel()
                    {
                        tagId = S.tagId,
@@ -48,21 +61,7 @@ var strP = TokenManager.GetPrincipal(token);
                        createDate = S.createDate,
                        updateDate = S.updateDate,
                        isActive = S.isActive,
-
-
-
                    }).ToList();
-                    /*
-       public int tagId { get; set; }
-        public string tagName { get; set; }
-        public Nullable<int> categoryId { get; set; }
-        public string notes { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
-        public Nullable<System.DateTime> createDate { get; set; }
-        public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<bool> isActive { get; set; }
-                     * */
 
                     // can delet or not
                     if (tagsList.Count > 0)
