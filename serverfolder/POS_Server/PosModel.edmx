@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="agentMemberships">
           <Key>
             <PropertyRef Name="agentMembershipsId" />
@@ -3308,7 +3308,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tags_users">
+        <Association Name="FK_tags_users3">
           <End Role="users" Type="Self.users" Multiplicity="0..1" />
           <End Role="tags" Type="Self.tags" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3320,7 +3320,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tags_users1">
+        <Association Name="FK_tags_users4">
           <End Role="users" Type="Self.users" Multiplicity="0..1" />
           <End Role="tags" Type="Self.tags" Multiplicity="*" />
           <ReferentialConstraint>
@@ -3329,18 +3329,6 @@
             </Principal>
             <Dependent Role="tags">
               <PropertyRef Name="updateUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tags_users2">
-          <End Role="users" Type="Self.users" Multiplicity="0..1" />
-          <End Role="tags" Type="Self.tags" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="tags">
-              <PropertyRef Name="categoryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4223,15 +4211,11 @@
             <End Role="users" EntitySet="users" />
             <End Role="sysEmails" EntitySet="sysEmails" />
           </AssociationSet>
-          <AssociationSet Name="FK_tags_users" Association="Self.FK_tags_users">
+          <AssociationSet Name="FK_tags_users3" Association="Self.FK_tags_users3">
             <End Role="users" EntitySet="users" />
             <End Role="tags" EntitySet="tags" />
           </AssociationSet>
-          <AssociationSet Name="FK_tags_users1" Association="Self.FK_tags_users1">
-            <End Role="users" EntitySet="users" />
-            <End Role="tags" EntitySet="tags" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tags_users2" Association="Self.FK_tags_users2">
+          <AssociationSet Name="FK_tags_users4" Association="Self.FK_tags_users4">
             <End Role="users" EntitySet="users" />
             <End Role="tags" EntitySet="tags" />
           </AssociationSet>
@@ -4260,8 +4244,7 @@
             <End Role="usersLogs" EntitySet="usersLogs" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
