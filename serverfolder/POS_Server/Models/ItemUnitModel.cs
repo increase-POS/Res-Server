@@ -31,7 +31,8 @@ namespace POS_Server.Models
         public string itemName { get; set; }
         public string itemCode { get; set; }
         public string unitName { get; set; }
-       
+        public string type { get; set; }
+        public Nullable<int> categoryId { get; set; }
         public Boolean canDelete { get; set; }
 
         public Nullable<decimal> taxes { get; set; }

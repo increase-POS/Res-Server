@@ -308,9 +308,6 @@ namespace POS_Server.Controllers
                                        
 
                                            }).Where(IO => IO.isActiveOffer == 1 && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0 && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1).Distinct().ToList();
-                    //.Where(IO => IO.isActiveOffer == 1 && DateTime.Compare(IO.startDate,DateTime.Now)<0 && System.DateTime.Compare(IO.endDate, DateTime.Now) > 0).ToList();
-
-                    // test
 
                     var unt = (from unitm in entity.itemsUnits
                                join untb in entity.units on unitm.unitId equals untb.unitId
@@ -363,7 +360,6 @@ namespace POS_Server.Controllers
                                     isInLocation = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsLocId).FirstOrDefault();
 
                                 }
-                                //var itemLocationsL = entity.itemsLocations.Where(x => x.itemId == itemId).Select(b => new { b.itemsLocId }).FirstOrDefault();
                                 var itemsMaterials = entity.itemsMaterials.Where(x => x.itemId == itemId).Select(b => new { b.itemMatId }).FirstOrDefault();
                                 var serials = entity.serials.Where(x => x.itemId == itemId).Select(b => new { b.serialId }).FirstOrDefault();
 
@@ -1993,10 +1989,17 @@ namespace POS_Server.Controllers
                 if (itemObj != null)
                 {
                     message = saveItem(itemObj);
-                    if(int.Parse(message) > 0)
+                    int itemId = int.Parse(message);
+                    int itemUnitId = 0;
+                    if (int.Parse(message) > 0)
                     {
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+                           itemUnitId = entity.itemsUnits.Where(x => x.itemId == itemId).Select(x => x.itemUnitId).FirstOrDefault();
+                        }
                         ItemsUnitsController ic = new ItemsUnitsController();
                         itemUnitObj.itemId = int.Parse(message);
+                        itemUnitObj.itemUnitId = itemUnitId;
                         ic.saveItemUnit(itemUnitObj);
                     }
                 }
