@@ -269,14 +269,11 @@ namespace POS_Server.Controllers
                                          updateUserId = I.updateUserId,
                                          isNew = 0,
                                          parentName = entity.items.Where(m => m.itemId == I.parentId).FirstOrDefault().name,
-                                         minUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
-                                         maxUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
-
                                          avgPurchasePrice = I.avgPurchasePrice,
                                          notes = I.notes,
                                          categoryString = I.categoryString,
-
-
+                                         tagId = I.tagId,
+                                         price = entity.itemsUnits.Where(m => m.itemId == I.itemId).FirstOrDefault().price,
                                      })
                                    .ToList();
 
@@ -309,36 +306,36 @@ namespace POS_Server.Controllers
 
                                            }).Where(IO => IO.isActiveOffer == 1 && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0 && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1).Distinct().ToList();
 
-                    var unt = (from unitm in entity.itemsUnits
-                               join untb in entity.units on unitm.unitId equals untb.unitId
-                               join itemtb in entity.items on unitm.itemId equals itemtb.itemId
+                    //var unt = (from unitm in entity.itemsUnits
+                    //           join untb in entity.units on unitm.unitId equals untb.unitId
+                    //           join itemtb in entity.items on unitm.itemId equals itemtb.itemId
 
-                               select new ItemSalePurModel()
-                               {
-                                   itemId = itemtb.itemId,
-                                   name = itemtb.name,
-                                   code = itemtb.code,
+                    //           select new ItemSalePurModel()
+                    //           {
+                    //               itemId = itemtb.itemId,
+                    //               name = itemtb.name,
+                    //               code = itemtb.code,
 
 
-                                   max = itemtb.max,
-                                   maxUnitId = itemtb.maxUnitId,
-                                   minUnitId = itemtb.minUnitId,
-                                   min = itemtb.min,
+                    //               max = itemtb.max,
+                    //               maxUnitId = itemtb.maxUnitId,
+                    //               minUnitId = itemtb.minUnitId,
+                    //               min = itemtb.min,
 
-                                   parentId = itemtb.parentId,
-                                   isActive = itemtb.isActive,
+                    //               parentId = itemtb.parentId,
+                    //               isActive = itemtb.isActive,
 
-                                   isOffer = 0,
-                                   desPrice = 0,
+                    //               isOffer = 0,
+                    //               desPrice = 0,
 
-                                   offerName = "",
-                                   createDate = itemtb.createDate,
-                                   defaultSale = unitm.defaultSale,
-                                   unitName = untb.name,
-                                   unitId = untb.unitId,
-                                   price = unitm.price,
+                    //               offerName = "",
+                    //               createDate = itemtb.createDate,
+                    //               defaultSale = unitm.defaultSale,
+                    //               unitName = untb.name,
+                    //               unitId = untb.unitId,
+                    //               price = unitm.price,
                         
-                               }).Where(a => a.defaultSale == 1).Distinct().ToList();
+                    //           }).Where(a => a.defaultSale == 1).Distinct().ToList();
 
                     if (itemsList.Count > 0)
                     {
