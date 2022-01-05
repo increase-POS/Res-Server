@@ -581,6 +581,7 @@
     <EntitySetMapping Name="itemsUnits">
       <EntityTypeMapping TypeName="PosModel.itemsUnits">
         <MappingFragment StoreEntitySet="itemsUnits">
+          <ScalarProperty Name="isCountable" ColumnName="isCountable" />
           <ScalarProperty Name="itemUnitId" ColumnName="itemUnitId" />
           <ScalarProperty Name="itemId" ColumnName="itemId" />
           <ScalarProperty Name="unitId" ColumnName="unitId" />

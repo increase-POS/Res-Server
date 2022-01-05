@@ -566,6 +566,7 @@
     <Property Name="purchasePrice" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="storageCostId" Type="int" />
     <Property Name="isActive" Type="tinyint" Nullable="false" />
+    <Property Name="isCountable" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="itemTransferOffer">
     <Key>

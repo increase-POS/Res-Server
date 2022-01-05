@@ -571,6 +571,7 @@
           <Property Name="purchasePrice" Type="decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="storageCostId" Type="int" />
           <Property Name="isActive" Type="tinyint" Nullable="false" />
+          <Property Name="isCountable" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="itemTransferOffer">
           <Key>
@@ -4985,6 +4986,7 @@
           <NavigationProperty Name="itemUnitUser" Relationship="Self.FK_itemUnitUser_itemsUnits" FromRole="itemsUnits" ToRole="itemUnitUser" />
           <NavigationProperty Name="packages" Relationship="Self.FK_packages_itemsUnits" FromRole="itemsUnits" ToRole="packages" />
           <NavigationProperty Name="packages1" Relationship="Self.FK_packages_itemsUnits1" FromRole="itemsUnits" ToRole="packages" />
+          <Property Name="isCountable" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="itemTransferOffer">
           <Key>
@@ -9477,6 +9479,7 @@
           <EntitySetMapping Name="itemsUnits">
             <EntityTypeMapping TypeName="PosModel.itemsUnits">
               <MappingFragment StoreEntitySet="itemsUnits">
+                <ScalarProperty Name="isCountable" ColumnName="isCountable" />
                 <ScalarProperty Name="itemUnitId" ColumnName="itemUnitId" />
                 <ScalarProperty Name="itemId" ColumnName="itemId" />
                 <ScalarProperty Name="unitId" ColumnName="unitId" />
