@@ -265,6 +265,8 @@ namespace POS_Server.Controllers
                         }
                         else
                         {
+                            if (!Directory.Exists(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\docImage")))
+                                Directory.CreateDirectory(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\docImage"));
                             //  check if image exist
                             var pathCheck = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\docImage"), imageWithNoExt);
                             var files = Directory.GetFiles(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\docImage"), imageWithNoExt + ".*");
