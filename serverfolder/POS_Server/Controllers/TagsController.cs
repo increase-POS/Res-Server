@@ -49,7 +49,7 @@ namespace POS_Server.Controllers
                     if (categoryId != 0)
                         searchPredicate.And(x => x.categoryId == categoryId);
 
-                    var tagsList = entity.tags
+                    var tagsList = entity.tags.Where(searchPredicate)
                    .Select(S => new TagsModel()
                    {
                        tagId = S.tagId,
