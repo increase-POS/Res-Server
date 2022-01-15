@@ -39,6 +39,7 @@ namespace POS_Server.Models
         public int isOffer { get; set; }
         // unit item
         public decimal price { get; set; }
+        public decimal priceWithService { get; set; }
         public Nullable<int> unitId { get; set; }
         public string unitName { get; set; }
         public string offerName { get; set; }

@@ -14,6 +14,7 @@ namespace POS_Server.Models
         public short defaultSale { get; set; }
         public short defaultPurchase { get; set; }
         public decimal price { get; set; }
+        public decimal priceWithService { get; set; }
         public string barcode { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }

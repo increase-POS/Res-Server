@@ -465,6 +465,7 @@ namespace POS_Server.Controllers
                                          notes = I.notes,
                                          categoryString = I.categoryString,
                                          tagId = I.tagId,
+                                         priceWithService = entity.itemsUnits.Where(m => m.itemId == I.itemId).FirstOrDefault().priceWithService,
                                          price = entity.itemsUnits.Where(m => m.itemId == I.itemId).FirstOrDefault().price,
                                      })
                                    .ToList();
