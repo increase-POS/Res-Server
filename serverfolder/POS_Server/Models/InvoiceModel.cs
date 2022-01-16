@@ -37,6 +37,7 @@ namespace POS_Server.Models
         public Nullable<int> shippingCompanyId { get; set; }
         public Nullable<int> branchCreatorId { get; set; }
         public Nullable<int> shipUserId { get; set; }
+        public Nullable<int> waiterId { get; set; }
         public string prevStatus { get; set; }
         public Nullable<int> userId { get; set; }
         public decimal manualDiscountValue { get; set; }

@@ -26,7 +26,7 @@ namespace POS_Server.Controllers
         private Classes.Calculate Calc = new Classes.Calculate();
 
         List<int> categoriesId = new List<int>();
-
+        List<string> purchaseTypes = new List<string>() { "PurchaseNormal", "PurchaseExpire" };
         [HttpPost]
         [Route("GetAllItems")]
         public string GetAllItems(string token)
@@ -154,24 +154,15 @@ namespace POS_Server.Controllers
                             {
                                 int itemId = (int)itemsList[i].itemId;
                                 var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
-                                var itemsPropL = entity.itemsProp.Where(x => x.itemId == itemId).Select(b => new { b.itemPropId }).FirstOrDefault();
                                 var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                                 string itemType = itemsList[i].type;
                                 int isInInvoice = 0;
-                                int isInLocation = 0;
-                                if (itemType == "p" && itemUnitsL != null)
+                                if (itemUnitsL != null)
                                 {
                                     isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
-                                    isInLocation = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsLocId).FirstOrDefault();
-
                                 }
-                                //var itemLocationsL = entity.itemsLocations.Where(x => x.itemId == itemId).Select(b => new { b.itemsLocId }).FirstOrDefault();
-                                var itemsMaterials = entity.itemsMaterials.Where(x => x.itemId == itemId).Select(b => new { b.itemMatId }).FirstOrDefault();
-                                var serials = entity.serials.Where(x => x.itemId == itemId).Select(b => new { b.serialId }).FirstOrDefault();
 
-
-                                if ((childItemL is null) && (itemsPropL is null) && ((itemUnitsL is null && !itemType.Equals("p")) || (isInInvoice == 0 && itemType.Equals("p") && isInLocation == 0))
-                                    && (itemsMaterials is null) && (serials is null))
+                                if (childItemL is null && (itemUnitsL is null || itemUnitsL != null && isInInvoice == 0))
                                     canDelete = true;
                             }
                             itemsList[i].canDelete = canDelete;
@@ -239,10 +230,10 @@ namespace POS_Server.Controllers
             {
                 Boolean canDelete = false;
                 DateTime cmpdate = DateTime.Now.AddDays(newdays);
-               List<string> purchaseTypes = new List<string>() { "PurchaseNormal", "PurchaseExpire" };
+              
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var itemsList = (from I in entity.items.Where(x => purchaseTypes.Contains(x.type))
+                    var itemsList = (from I in entity.items.Where(x => purchaseTypes.Contains(x.type) && x.isActive == 1)
                                      select new ItemModel()
                                      {
                                          itemId = I.itemId,
@@ -347,24 +338,15 @@ namespace POS_Server.Controllers
                             {
                                 int itemId = (int)itemsList[i].itemId;
                                 var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
-                                var itemsPropL = entity.itemsProp.Where(x => x.itemId == itemId).Select(b => new { b.itemPropId }).FirstOrDefault();
                                 var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                                 string itemType = itemsList[i].type;
                                 int isInInvoice = 0;
-                                int isInLocation = 0;
-                                if (itemType == "p" && itemUnitsL != null)
+                                if (itemUnitsL != null)
                                 {
                                     isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
-                                    isInLocation = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsLocId).FirstOrDefault();
-
                                 }
-                                //var itemLocationsL = entity.itemsLocations.Where(x => x.itemId == itemId).Select(b => new { b.itemsLocId }).FirstOrDefault();
-                                var itemsMaterials = entity.itemsMaterials.Where(x => x.itemId == itemId).Select(b => new { b.itemMatId }).FirstOrDefault();
-                                var serials = entity.serials.Where(x => x.itemId == itemId).Select(b => new { b.serialId }).FirstOrDefault();
 
-
-                                if ((childItemL is null) && (itemsPropL is null) && ((itemUnitsL is null && !itemType.Equals("p")) || (isInInvoice == 0 && itemType.Equals("p") && isInLocation == 0))
-                                    && (itemsMaterials is null) && (serials is null))
+                                if (childItemL is null && (itemUnitsL is null || itemUnitsL != null && isInInvoice == 0))
                                     canDelete = true;
                             }
                             itemsList[i].canDelete = canDelete;
@@ -431,9 +413,22 @@ namespace POS_Server.Controllers
             {
                 Boolean canDelete = false;
                 DateTime cmpdate = DateTime.Now.AddDays(newdays);
+                string type = "";
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "type")
+                    {
+                        type = c.Value;
+                    }
+                }
+               
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var itemsList = (from I in entity.items
+                        var searchPredicate = PredicateBuilder.New<items>();
+                    if (type != "")
+                        searchPredicate = searchPredicate.And(x => x.type == type);
+                        var itemsList = (from I in entity.items.Where(searchPredicate)
                                      join u in entity.itemsUnits on I.itemId equals u.itemId
                                      join c in entity.categories on I.categoryId equals c.categoryId into lj
                                      from x in lj.DefaultIfEmpty()
@@ -539,23 +534,15 @@ namespace POS_Server.Controllers
                             {
                                 int itemId = (int)itemsList[i].itemId;
                                 var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
-                                var itemsPropL = entity.itemsProp.Where(x => x.itemId == itemId).Select(b => new { b.itemPropId }).FirstOrDefault();
                                 var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                                 string itemType = itemsList[i].type;
                                 int isInInvoice = 0;
-                                int isInLocation = 0;
-                                if (itemType == "p" && itemUnitsL != null)
+                                if ( itemUnitsL != null)
                                 {
                                     isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
-                                    isInLocation = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsLocId).FirstOrDefault();
-
                                 }
-                                var itemsMaterials = entity.itemsMaterials.Where(x => x.itemId == itemId).Select(b => new { b.itemMatId }).FirstOrDefault();
-                                var serials = entity.serials.Where(x => x.itemId == itemId).Select(b => new { b.serialId }).FirstOrDefault();
 
-
-                                if ((childItemL is null) && (itemsPropL is null) && ((itemUnitsL is null && !itemType.Equals("p")) || (isInInvoice == 0 && itemType.Equals("p") && isInLocation == 0))
-                                    && (itemsMaterials is null) && (serials is null))
+                                if (childItemL is null  && (itemUnitsL is null || itemUnitsL != null && isInInvoice == 0))
                                     canDelete = true;
                             }
                             itemsList[i].canDelete = canDelete;
@@ -737,24 +724,15 @@ namespace POS_Server.Controllers
                             {
                                 int itemId = (int)itemsList[i].itemId;
                                 var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
-                                var itemsPropL = entity.itemsProp.Where(x => x.itemId == itemId).Select(b => new { b.itemPropId }).FirstOrDefault();
                                 var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                                 string itemType = itemsList[i].type;
                                 int isInInvoice = 0;
-                                int isInLocation = 0;
-                                if (itemType == "p" && itemUnitsL != null)
+                                if (itemUnitsL != null)
                                 {
                                     isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
-                                    isInLocation = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsLocId).FirstOrDefault();
-
                                 }
-                                //var itemLocationsL = entity.itemsLocations.Where(x => x.itemId == itemId).Select(b => new { b.itemsLocId }).FirstOrDefault();
-                                var itemsMaterials = entity.itemsMaterials.Where(x => x.itemId == itemId).Select(b => new { b.itemMatId }).FirstOrDefault();
-                                var serials = entity.serials.Where(x => x.itemId == itemId).Select(b => new { b.serialId }).FirstOrDefault();
 
-
-                                if ((childItemL is null) && (itemsPropL is null) && ((itemUnitsL is null && !itemType.Equals("p")) || (isInInvoice == 0 && itemType.Equals("p") && isInLocation == 0))
-                                    && (itemsMaterials is null) && (serials is null))
+                                if (childItemL is null && (itemUnitsL is null || itemUnitsL != null && isInInvoice == 0))
                                     canDelete = true;
                             }
                             itemsList[i].canDelete = canDelete;
@@ -906,24 +884,15 @@ namespace POS_Server.Controllers
                         {
                             int itemId = (int)item.itemId;
                             var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
-                            var itemsPropL = entity.itemsProp.Where(x => x.itemId == itemId).Select(b => new { b.itemPropId }).FirstOrDefault();
                             var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                             string itemType = item.type;
                             int isInInvoice = 0;
-                            int isInLocation = 0;
-                            if (itemType == "p" && itemUnitsL != null)
+                            if (itemUnitsL != null)
                             {
                                 isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
-                                isInLocation = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsLocId).FirstOrDefault();
-
                             }
-                            //var itemLocationsL = entity.itemsLocations.Where(x => x.itemId == itemId).Select(b => new { b.itemsLocId }).FirstOrDefault();
-                            var itemsMaterials = entity.itemsMaterials.Where(x => x.itemId == itemId).Select(b => new { b.itemMatId }).FirstOrDefault();
-                            var serials = entity.serials.Where(x => x.itemId == itemId).Select(b => new { b.serialId }).FirstOrDefault();
 
-
-                            if ((childItemL is null) && (itemsPropL is null) && ((itemUnitsL is null && !itemType.Equals("p")) || (isInInvoice == 0 && itemType.Equals("p") && isInLocation == 0))
-                                && (itemsMaterials is null) && (serials is null))
+                            if (childItemL is null && (itemUnitsL is null || itemUnitsL != null && isInInvoice == 0))
                                 canDelete = true;
                         }
                         item.canDelete = canDelete;
@@ -1142,24 +1111,15 @@ namespace POS_Server.Controllers
                         {
                             int itemId = (int)item.itemId;
                             var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
-                            var itemsPropL = entity.itemsProp.Where(x => x.itemId == itemId).Select(b => new { b.itemPropId }).FirstOrDefault();
                             var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                             string itemType = item.type;
                             int isInInvoice = 0;
-                            int isInLocation = 0;
-                            if (itemType == "p" && itemUnitsL != null)
+                            if (itemUnitsL != null)
                             {
                                 isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
-                                isInLocation = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsLocId).FirstOrDefault();
-
                             }
-                            //var itemLocationsL = entity.itemsLocations.Where(x => x.itemId == itemId).Select(b => new { b.itemsLocId }).FirstOrDefault();
-                            var itemsMaterials = entity.itemsMaterials.Where(x => x.itemId == itemId).Select(b => new { b.itemMatId }).FirstOrDefault();
-                            var serials = entity.serials.Where(x => x.itemId == itemId).Select(b => new { b.serialId }).FirstOrDefault();
 
-
-                            if ((childItemL is null) && (itemsPropL is null) && ((itemUnitsL is null && !itemType.Equals("p")) || (isInInvoice == 0 && itemType.Equals("p") && isInLocation == 0))
-                                && (itemsMaterials is null) && (serials is null))
+                            if (childItemL is null && (itemUnitsL is null || itemUnitsL != null && isInInvoice == 0))
                                 canDelete = true;
                         }
                         item.canDelete = canDelete;
@@ -2282,22 +2242,12 @@ namespace POS_Server.Controllers
                         using (incposdbEntities entity = new incposdbEntities())
                         {
                             var tmpItem = entity.items.Where(I => I.itemId == itemId).First();
-                            if (tmpItem.type == "p")
-                            {
-                                var iuitems = entity.itemsUnits.Where(x => x.itemId == tmpItem.itemId).ToList();
-                                // remove from itemunituser table
-                                foreach (var row in iuitems)
-                                {
-                                    var iuseritems = entity.itemUnitUser.Where(x => x.itemUnitId == row.itemUnitId).ToList();
-                                    entity.itemUnitUser.RemoveRange(iuseritems);
-                                    entity.SaveChanges();
-                                }
 
-                                // remove from itemunit table
-                                entity.itemsUnits.RemoveRange(iuitems);
-                                entity.SaveChanges();
+                            var iuitems = entity.itemsUnits.Where(x => x.itemId == tmpItem.itemId).ToList();
+                            // remove from itemunit table
+                            entity.itemsUnits.RemoveRange(iuitems);
+                            entity.SaveChanges();
 
-                            }
                             entity.items.Remove(tmpItem);
                             message = entity.SaveChanges().ToString();
 
