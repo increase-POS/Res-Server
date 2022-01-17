@@ -76,9 +76,10 @@ namespace POS_Server.Controllers
                             if (item.isActive == 1)
                             {
                                 int cId = (int)item.tableId;
-                                var casht = entity.items.Where(x => x.tagId == cId).Select(x => new { x.tagId }).FirstOrDefault();
+                                var invTable = entity.invoiceTables.Where(x => x.tableId == cId).FirstOrDefault();
+                                var reservTable = entity.tablesReservations.Where(x => x.tableId == cId).FirstOrDefault();
 
-                                if ((casht is null))
+                                if (invTable is null && reservTable is null)
                                     canDelete = true;
                             }
                             item.canDelete = canDelete;
@@ -185,11 +186,10 @@ namespace POS_Server.Controllers
                         {
                             tmpObject = entity.tables.Find(Object.tableId);
                             tmpObject.name = Object.name;
-                            tmpObject.sectionId = Object.sectionId;
-                            tmpObject.branchId = Object.branchId;
                             tmpObject.status = Object.status;
                             tmpObject.personsCount = Object.personsCount;
                             tmpObject.notes = Object.notes;
+                            tmpObject.isActive = Object.isActive;
                             tmpObject.updateUserId = Object.updateUserId;
                             tmpObject.updateDate = DateTime.Now;
                         }
@@ -198,6 +198,80 @@ namespace POS_Server.Controllers
                     return TokenManager.GenerateToken(message);
                 }
                 catch { return TokenManager.GenerateToken("0"); }
+            }
+        }
+
+        [HttpPost]
+        [Route("Delete")]
+        public string Delete(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int tableId = 0;
+                int userId = 0;
+                Boolean final = false;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "tableId")
+                    {
+                        tableId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "final")
+                    {
+                        final = bool.Parse(c.Value);
+                    }
+                }
+                if (final)
+                {
+                    try
+                    {
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+                            tables tableObj = entity.tables.Find(tableId);
+                            entity.tables.Remove(tableObj);
+                            message = entity.SaveChanges().ToString();
+                            return TokenManager.GenerateToken(message);
+                        }
+                    }
+                    catch
+                    {
+                        message = "0";
+                        return TokenManager.GenerateToken(message);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+                            tables tableObj = entity.tables.Find(tableId);
+
+                            tableObj.isActive = 0;
+                            tableObj.updateUserId = userId;
+                            tableObj.updateDate = DateTime.Now;
+                            message = entity.SaveChanges().ToString();
+                            return TokenManager.GenerateToken(message);
+                        }
+                    }
+                    catch
+                    {
+                        message = "0";
+                        return TokenManager.GenerateToken(message);
+                    }
+                }
             }
         }
     }
