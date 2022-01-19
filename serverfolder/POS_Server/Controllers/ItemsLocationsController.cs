@@ -1002,9 +1002,9 @@ namespace POS_Server.Controllers
 
                 if (newObject != null)
                 {
-                    try
-                    {
-                        using (incposdbEntities entity = new incposdbEntities())
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
                         {
                             var freeZoneLocation = (from s in entity.sections.Where(x => x.branchId == branchId && x.isFreeZone == 1)
                                                     join l in entity.locations on s.sectionId equals l.sectionId
@@ -1035,19 +1035,19 @@ namespace POS_Server.Controllers
 
                         }
                         return TokenManager.GenerateToken("1");
-                }
-                    catch
-                {
-                    message = "0";
-                    return TokenManager.GenerateToken(message);
-                }
             }
+                catch
+            {
+                message = "0";
+                return TokenManager.GenerateToken(message);
+            }
+        }
                 else
                 {
                     return TokenManager.GenerateToken("0");
                 }
-            }          
         }
+    }
 
         public bool isExceddMaxQuantity(int itemUnitId, int branchId, int userId)
         {
@@ -5289,13 +5289,9 @@ namespace POS_Server.Controllers
         [Route("unlockItem")]
         public string unlockItem(string token)
         {
-            //string itemLocation
-
-
             string message = "";
-
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -5304,10 +5300,8 @@ namespace POS_Server.Controllers
             {
                 string Object = "";
                 int branchId = 0;
-
                 itemsLocations newObject = new itemsLocations();
-              
-             
+
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -5317,10 +5311,9 @@ namespace POS_Server.Controllers
                         Object = c.Value.Replace("\\", string.Empty);
                         Object = Object.Trim('"');
                         newObject = JsonConvert.DeserializeObject<itemsLocations>(Object, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
-                      
-
                     }
-                   
+                    else if (c.Type == "branchId")
+                        branchId = int.Parse(c.Value);
                 }
 
                 if (newObject != null)
@@ -5332,6 +5325,7 @@ namespace POS_Server.Controllers
                             var itemLoc = (from b in entity.itemsLocations
                                            where b.invoiceId == null && b.itemUnitId == newObject.itemUnitId && b.locationId == newObject.locationId
                                            && b.startDate == newObject.startDate && b.endDate == newObject.endDate
+                                           && b.locations.sections.branchId == branchId
                                            select new ItemLocationModel
                                            {
                                                itemsLocId = b.itemsLocId,
@@ -5369,7 +5363,7 @@ namespace POS_Server.Controllers
                             }
                             entity.SaveChanges();
                         }
-                       // return Ok();
+                        // return Ok();
                         return TokenManager.GenerateToken("1");
                     }
 
@@ -5390,69 +5384,6 @@ namespace POS_Server.Controllers
 
 
             }
-
-
-            //var re = Request;
-            //var headers = re.Headers;
-            //string token = "";
-            //if (headers.Contains("APIKey"))
-            //{
-            //    token = headers.GetValues("APIKey").First();
-            //}
-            //Validation validation = new Validation();
-            //bool valid = validation.CheckApiKey(token);
-
-            //if (valid) // APIKey is valid
-            //{
-            //    itemsLocations il = JsonConvert.DeserializeObject<itemsLocations>(itemLocation, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
-            //    using (incposdbEntities entity = new incposdbEntities())
-            //    {
-            //        var itemLoc = (from b in entity.itemsLocations
-            //                       where b.invoiceId == null && b.itemUnitId == il.itemUnitId && b.locationId == il.locationId
-            //                       && b.startDate == il.startDate && b.endDate == il.endDate
-            //                       select new ItemLocationModel
-            //                       {
-            //                           itemsLocId = b.itemsLocId,
-            //                       }).FirstOrDefault();
-            //        var orderItem = entity.itemsLocations.Find(il.itemsLocId);
-            //        if (orderItem.quantity == il.quantity)
-            //            entity.itemsLocations.Remove(orderItem);
-            //        else
-            //            orderItem.quantity -= il.quantity;
-
-            //        if (itemLoc == null)
-            //        {
-            //            var loc = new itemsLocations()
-            //            {
-            //                locationId = il.locationId,
-            //                quantity = il.quantity,
-            //                createDate = DateTime.Now,
-            //                updateDate = DateTime.Now,
-            //                createUserId = il.createUserId,
-            //                updateUserId = il.createUserId,
-            //                startDate = il.startDate,
-            //                endDate = il.endDate,
-            //                itemUnitId = il.itemUnitId,
-            //                note = il.note,
-            //            };
-            //            entity.itemsLocations.Add(loc);
-            //        }
-            //        else
-            //        {
-            //            var loc = entity.itemsLocations.Find(itemLoc.itemsLocId);
-            //            loc.quantity += il.quantity;
-            //            loc.updateDate = DateTime.Now;
-            //            loc.updateUserId = il.updateUserId;
-
-            //        }
-            //        entity.SaveChanges();
-            //    }
-            //    return Ok();
-            //}
-            ////else
-            //return NotFound();
-
-
         }
         public void unlockQuantity(int invoiceId, int itemUnitId, int quantity)
         {
