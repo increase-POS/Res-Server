@@ -54,6 +54,7 @@ namespace POS_Server.Controllers
                        createUserId = c.createUserId,
                        updateUserId = c.updateUserId,
                        barcode = c.barcode,
+                       membershipId  = c.membershipId,
                    })
                    .ToList();
 
@@ -116,6 +117,7 @@ namespace POS_Server.Controllers
                        createUserId = c.createUserId,
                        updateUserId = c.updateUserId,
                        barcode = c.barcode,
+                       membershipId = c.membershipId,
                    })
                    .ToList();
 
@@ -169,6 +171,7 @@ namespace POS_Server.Controllers
                        c.createUserId,
                        c.updateUserId,
                        c.barcode,
+                       c.membershipId,
                    })
                    .FirstOrDefault();
 
@@ -222,6 +225,7 @@ namespace POS_Server.Controllers
                        c.createUserId,
                        c.updateUserId,
                        c.barcode,
+                       c.membershipId,
                    })
                    .FirstOrDefault();
 
@@ -275,6 +279,7 @@ namespace POS_Server.Controllers
                        c.createUserId,
                        c.updateUserId,
                        c.barcode,
+                       c.membershipId,
                    })
                    .FirstOrDefault();
 
@@ -367,6 +372,7 @@ namespace POS_Server.Controllers
                        c.updateDate,
                        c.createUserId,
                        c.updateUserId,
+                       c.membershipId,
                    })
                    .ToList();
 
@@ -436,6 +442,7 @@ namespace POS_Server.Controllers
                             tmpcoupon.remainQ = Object.remainQ;
                             tmpcoupon.invMin = Object.invMin;
                             tmpcoupon.invMax = Object.invMax;
+                            tmpcoupon.membershipId = Object.membershipId;
 
                             tmpcoupon.updateDate = DateTime.Now;// server current date;
 

@@ -32,8 +32,9 @@ namespace POS_Server.Models
         public decimal maxDeserve { get; set; }
         public bool isLimited { get; set; }
         public string payType { get; set; }
+        public bool canReserve { get; set; }
+        public string disallowReason { get; set; }
 
-       
         public Boolean canDelete { get; set; }
       
 
