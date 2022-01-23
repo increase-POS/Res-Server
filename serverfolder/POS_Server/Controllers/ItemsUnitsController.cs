@@ -96,11 +96,14 @@ namespace POS_Server.Controllers
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var itemUnitsList = (from IU in entity.itemsUnits
+                                             join u in entity.units on IU.unitId equals u.unitId into lj
+                                             from v in lj.DefaultIfEmpty()
                                              join I in entity.items on IU.itemId equals I.itemId
                                              select new ItemUnitModel()
                                              {
                                                  itemUnitId = IU.itemUnitId,
                                                  unitId = IU.unitId,
+                                                 mainUnit = v.name,
                                                  itemId = IU.itemId,
                                                  unitValue = IU.unitValue,
                                                  createDate = IU.createDate,

@@ -2335,7 +2335,182 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+        [HttpPost]
+        [Route("SaveWithItems")]
+        public string SaveWithItems(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string invoiceObject = "";
+                string itemsObject = "";
+                invoices newObject = null;
+                List<itemsTransfer> items = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceObject")
+                    {
+                        invoiceObject = c.Value.Replace("\\", string.Empty);
+                        invoiceObject = invoiceObject.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<invoices>(invoiceObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                    else if (c.Type == "itemsObject")
+                    {
+                        itemsObject = c.Value.Replace("\\", string.Empty);
+                        itemsObject = itemsObject.Trim('"');
+                        items = JsonConvert.DeserializeObject<List<itemsTransfer>>(itemsObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
 
+                try
+                {
+                    invoices tmpInvoice;
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var invoiceEntity = entity.Set<invoices>();
+                        if (newObject.invoiceId == 0)
+                        {
+                            if (newObject.cashReturn == null)
+                                newObject.cashReturn = 0;
+                            newObject.invDate = DateTime.Now;
+                            newObject.invTime = DateTime.Now.TimeOfDay;
+                            newObject.updateDate = DateTime.Now;
+                            newObject.updateUserId = newObject.createUserId;
+                            newObject.isActive = true;
+                            newObject.isOrginal = true;
+                            tmpInvoice = invoiceEntity.Add(newObject);
+                            entity.SaveChanges();
+                            message = tmpInvoice.invoiceId.ToString();
+                            //return TokenManager.GenerateToken(message);
+
+                        }
+                        else
+                        {
+                            tmpInvoice = entity.invoices.Where(p => p.invoiceId == newObject.invoiceId).FirstOrDefault();
+                            tmpInvoice.invNumber = newObject.invNumber;
+                            tmpInvoice.agentId = newObject.agentId;
+                            tmpInvoice.invType = newObject.invType;
+                            tmpInvoice.total = newObject.total;
+                            tmpInvoice.totalNet = newObject.totalNet;
+                            tmpInvoice.paid = newObject.paid;
+                            tmpInvoice.deserved = newObject.deserved;
+                            tmpInvoice.deservedDate = newObject.deservedDate;
+                            tmpInvoice.invoiceMainId = newObject.invoiceMainId;
+                            tmpInvoice.invCase = newObject.invCase;
+                            tmpInvoice.notes = newObject.notes;
+                            tmpInvoice.vendorInvNum = newObject.vendorInvNum;
+                            tmpInvoice.vendorInvDate = newObject.vendorInvDate;
+                            tmpInvoice.updateDate = DateTime.Now;
+                            tmpInvoice.updateUserId = newObject.updateUserId;
+                            tmpInvoice.branchId = newObject.branchId;
+                            tmpInvoice.discountType = newObject.discountType;
+                            tmpInvoice.discountValue = newObject.discountValue;
+                            tmpInvoice.tax = newObject.tax;
+                            tmpInvoice.taxtype = newObject.taxtype;
+                            tmpInvoice.name = newObject.name;
+                            tmpInvoice.isApproved = newObject.isApproved;
+                            tmpInvoice.branchCreatorId = newObject.branchCreatorId;
+                            tmpInvoice.shippingCompanyId = newObject.shippingCompanyId;
+                            tmpInvoice.shipUserId = newObject.shipUserId;
+                            tmpInvoice.userId = newObject.userId;
+                            tmpInvoice.manualDiscountType = newObject.manualDiscountType;
+                            tmpInvoice.manualDiscountValue = newObject.manualDiscountValue;
+                            tmpInvoice.cashReturn = newObject.cashReturn;
+                            entity.SaveChanges();
+                            message = tmpInvoice.invoiceId.ToString();
+                            //return TokenManager.GenerateToken(message);
+                        }
+                        string res = saveInvoiceItems(items, tmpInvoice.invoiceId);
+                        if (res == "0")
+                            message = "0";
+                        return TokenManager.GenerateToken(message);
+
+                    }
+                }
+                catch
+                {
+                    message = "0";
+                    return TokenManager.GenerateToken(message);
+                }
+            }
+        }
+
+        private string saveInvoiceItems(List<itemsTransfer> newObject, int invoiceId)
+        {
+            string message = "";
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    List<invoiceOrder> iol = entity.invoiceOrder.Where(x => x.invoiceId == invoiceId).ToList();
+                    entity.invoiceOrder.RemoveRange(iol);
+                    entity.SaveChanges();
+
+                    List<itemsTransfer> items = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
+                    entity.itemsTransfer.RemoveRange(items);
+                    entity.SaveChanges();
+
+                    var invoice = entity.invoices.Find(invoiceId);
+                    for (int i = 0; i < newObject.Count; i++)
+                    {
+                        itemsTransfer t;
+                        if (newObject[i].createUserId == 0 || newObject[i].createUserId == null)
+                        {
+                            Nullable<int> id = null;
+                            newObject[i].createUserId = id;
+                        }
+                        if (newObject[i].offerId == 0)
+                        {
+                            Nullable<int> id = null;
+                            newObject[i].offerId = id;
+                        }
+                        if (newObject[i].itemSerial == null)
+                            newObject[i].itemSerial = "";
+
+                        var transferEntity = entity.Set<itemsTransfer>();
+                        int orderId = (int)newObject[i].invoiceId;
+                        newObject[i].invoiceId = invoiceId;
+                        newObject[i].createDate = DateTime.Now;
+                        newObject[i].updateDate = DateTime.Now;
+                        newObject[i].updateUserId = newObject[i].createUserId;
+
+                        t = entity.itemsTransfer.Add(newObject[i]);
+                        entity.SaveChanges();
+
+                        if (orderId != 0)
+                        {
+                            invoiceOrder invoiceOrder = new invoiceOrder()
+                            {
+                                invoiceId = invoiceId,
+                                orderId = orderId,
+                                quantity = (int)newObject[i].quantity,
+                                itemsTransferId = t.itemsTransId,
+                            };
+                            entity.invoiceOrder.Add(invoiceOrder);
+                        }
+                        if (newObject[i].offerId != null && invoice.invType == "s")
+                        {
+                            int offerId = (int)newObject[i].offerId;
+                            int itemUnitId = (int)newObject[i].itemUnitId;
+                            var offer = entity.itemsOffers.Where(x => x.iuId == itemUnitId && x.offerId == offerId).FirstOrDefault();
+
+                            offer.used += (int)newObject[i].quantity;
+                        }
+                    }
+                    entity.SaveChanges();
+                    message = "1";
+                }
+            }
+            catch { message = "0"; }
+            return message;
+        }
         [HttpPost]
         [Route("updateprintstat")]
         public string updateprintstat(string token)
