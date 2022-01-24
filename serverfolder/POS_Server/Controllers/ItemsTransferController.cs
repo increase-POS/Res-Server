@@ -124,83 +124,95 @@ namespace POS_Server.Controllers
                 }
                 if (newObject != null)
                 {
-
-                try
-                {
-                  // delete old invoice items
-                    using (incposdbEntities entity = new incposdbEntities())
-                        {
-                            List<invoiceOrder> iol = entity.invoiceOrder.Where(x => x.invoiceId == invoiceId).ToList();
-                            entity.invoiceOrder.RemoveRange(iol);
-                            entity.SaveChanges();
-                            
-                            List<itemsTransfer> items = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
-                            entity.itemsTransfer.RemoveRange(items);
-                            entity.SaveChanges();
-
-                            var invoice = entity.invoices.Find(invoiceId);
-                            for (int i = 0; i < newObject.Count; i++)
-                            {
-                                itemsTransfer t;
-                                if (newObject[i].createUserId == 0 || newObject[i].createUserId == null)
-                                {
-                                    Nullable<int> id = null;
-                                    newObject[i].createUserId = id;
-                                }
-                            if (newObject[i].offerId == 0 )
-                                {
-                                    Nullable<int> id = null;
-                                    newObject[i].offerId = id;
-                                }
-                                if (newObject[i].itemSerial == null)
-                                    newObject[i].itemSerial = "";
-
-                                var transferEntity = entity.Set<itemsTransfer>();
-                                int orderId = (int)newObject[i].invoiceId;
-                                newObject[i].invoiceId = invoiceId;
-                                newObject[i].createDate = DateTime.Now;
-                                newObject[i].updateDate = DateTime.Now;
-                                newObject[i].updateUserId = newObject[i].createUserId;
-                      
-                            t = entity.itemsTransfer.Add(newObject[i]);
-                                entity.SaveChanges();
-                             
-                                if (orderId != 0)
-                                {
-                                    invoiceOrder invoiceOrder = new invoiceOrder()
-                                    {
-                                        invoiceId = invoiceId,
-                                        orderId = orderId,
-                                        quantity = (int)newObject[i].quantity,
-                                        itemsTransferId = t.itemsTransId,
-                                    };
-                                    entity.invoiceOrder.Add(invoiceOrder);
-                                }
-                                if(newObject[i].offerId != null && invoice.invType =="s")
-                                {
-                                    int offerId = (int)newObject[i].offerId;
-                                    int itemUnitId = (int)newObject[i].itemUnitId;
-                                    var offer = entity.itemsOffers.Where(x => x.iuId == itemUnitId && x.offerId == offerId).FirstOrDefault();                         
-
-                                    offer.used += (int)newObject[i].quantity;
-                                }
-                            }
-                            entity.SaveChanges();
-                            message ="1";
-                            return TokenManager.GenerateToken(message);
-                        }
-            }
+                    try
+                    {
+                  string res = saveInvoiceItems(newObject,invoiceId);
+                        if (res == "0")
+                            message = "0";
+                        else
+                            message = "1";
+                        return TokenManager.GenerateToken(message);
+                    }
                     catch
-            {
-                message = "0";
-                return TokenManager.GenerateToken(message);
-            }
-        }
+                    {
+                        message = "0";
+                        return TokenManager.GenerateToken(message);
+                    }
+                }
                 else
                 {
                     return TokenManager.GenerateToken("0");
                 }
            } 
+        }
+        public string saveInvoiceItems(List<itemsTransfer> newObject, int invoiceId)
+        {
+            string message = "";
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    List<invoiceOrder> iol = entity.invoiceOrder.Where(x => x.invoiceId == invoiceId).ToList();
+                    entity.invoiceOrder.RemoveRange(iol);
+                    entity.SaveChanges();
+
+                    List<itemsTransfer> items = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
+                    entity.itemsTransfer.RemoveRange(items);
+                    entity.SaveChanges();
+
+                    var invoice = entity.invoices.Find(invoiceId);
+                    for (int i = 0; i < newObject.Count; i++)
+                    {
+                        itemsTransfer t;
+                        if (newObject[i].createUserId == 0 || newObject[i].createUserId == null)
+                        {
+                            Nullable<int> id = null;
+                            newObject[i].createUserId = id;
+                        }
+                        if (newObject[i].offerId == 0)
+                        {
+                            Nullable<int> id = null;
+                            newObject[i].offerId = id;
+                        }
+                        if (newObject[i].itemSerial == null)
+                            newObject[i].itemSerial = "";
+
+                        var transferEntity = entity.Set<itemsTransfer>();
+                        int orderId = (int)newObject[i].invoiceId;
+                        newObject[i].invoiceId = invoiceId;
+                        newObject[i].createDate = DateTime.Now;
+                        newObject[i].updateDate = DateTime.Now;
+                        newObject[i].updateUserId = newObject[i].createUserId;
+
+                        t = entity.itemsTransfer.Add(newObject[i]);
+                        entity.SaveChanges();
+
+                        if (orderId != 0)
+                        {
+                            invoiceOrder invoiceOrder = new invoiceOrder()
+                            {
+                                invoiceId = invoiceId,
+                                orderId = orderId,
+                                quantity = (int)newObject[i].quantity,
+                                itemsTransferId = t.itemsTransId,
+                            };
+                            entity.invoiceOrder.Add(invoiceOrder);
+                        }
+                        if (newObject[i].offerId != null && invoice.invType == "s")
+                        {
+                            int offerId = (int)newObject[i].offerId;
+                            int itemUnitId = (int)newObject[i].itemUnitId;
+                            var offer = entity.itemsOffers.Where(x => x.iuId == itemUnitId && x.offerId == offerId).FirstOrDefault();
+
+                            offer.used += (int)newObject[i].quantity;
+                        }
+                    }
+                    entity.SaveChanges();
+                    message = "1";
+                }
+            }
+            catch { message = "0"; }
+            return message;
         }
         [HttpPost]
         [Route("getOrderItems")]

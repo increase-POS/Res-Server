@@ -5030,9 +5030,6 @@ namespace POS_Server.Controllers
         [Route("getSpecificItemLocation")]
         public string getSpecificItemLocation(string token)
         {
-            //string itemUnitsIds, int branchId
-
-
             string message = "";
 
             token = TokenManager.readToken(HttpContext.Current.Request);
@@ -5098,6 +5095,7 @@ namespace POS_Server.Controllers
                                                updateDate = b.updateDate,
                                                updateUserId = b.updateUserId,
                                                itemName = i.name,
+                                               unitName = entity.units.Where(x => x.unitId == u.unitId).FirstOrDefault().name,
                                                sectionId = s.sectionId,
                                                isFreeZone = s.isFreeZone,
                                                itemType = i.type,
