@@ -559,17 +559,14 @@ namespace POS_Server.Controllers
         [Route("GetFreeZoneItems")]
         public string GetFreeZoneItems(string token)
         {
-            //int branchId string token
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request); 
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
             }
             else
             {
-
-
                 int branchId = 0;
 
 
@@ -625,9 +622,6 @@ namespace POS_Server.Controllers
                         return TokenManager.GenerateToken(docImageList);
 
                     }
-
-
-
                 }
                 catch
                 {
@@ -5095,7 +5089,7 @@ namespace POS_Server.Controllers
                                                updateDate = b.updateDate,
                                                updateUserId = b.updateUserId,
                                                itemName = i.name,
-                                               unitName = entity.units.Where(x => x.unitId == u.unitId).FirstOrDefault().name,
+                                               unitName = u.units.name,
                                                sectionId = s.sectionId,
                                                isFreeZone = s.isFreeZone,
                                                itemType = i.type,

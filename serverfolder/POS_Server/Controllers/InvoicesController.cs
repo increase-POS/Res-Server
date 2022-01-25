@@ -2431,10 +2431,8 @@ var strP = TokenManager.GetPrincipal(token);
                         string res = tc.saveInvoiceItems(items, tmpInvoice.invoiceId);
                         if (res == "0")
                             message = "0";
-                        else
-                            message = "1";
-                        return TokenManager.GenerateToken(message);
 
+                        return TokenManager.GenerateToken(message);
                     }
                 }
                 catch
