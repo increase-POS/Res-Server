@@ -21,9 +21,9 @@ namespace POS_Server.Controllers
         [Route("Get")]
         public string Get(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             Boolean canDelete = false;
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -72,8 +72,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetByID")]
         public string GetByID(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -104,15 +104,10 @@ var strP = TokenManager.GetPrincipal(token);
                        S.updateDate,
                        S.createUserId,
                        S.updateUserId,
-
-
-
-                   })
-                   .FirstOrDefault();
+                   }).FirstOrDefault();
                     return TokenManager.GenerateToken(row);
                 }
             }
-
         }
 
         // add or update location
@@ -120,9 +115,9 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("Save")]
         public string Save(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "";
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -194,7 +189,63 @@ var strP = TokenManager.GetPrincipal(token);
             }
             return TokenManager.GenerateToken(message);
         }
-
+        [HttpPost]
+        [Route("setCostToUnits")]
+        public string setCostToUnits(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string itemsUnits = "";
+                int storageCostId = 0;
+                int userId = 0;
+                List<int> itemsUnitsIds = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemsUnitsIds")
+                    {
+                        itemsUnits = c.Value.Replace("\\", string.Empty);
+                        itemsUnits = itemsUnits.Trim('"');
+                        itemsUnitsIds = JsonConvert.DeserializeObject<List<int>>(itemsUnits, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                    }
+                    else if (c.Type == "storageCostId")
+                        storageCostId = int.Parse(c.Value);
+                    else if (c.Type == "userId")
+                        userId = int.Parse(c.Value);
+                }
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var sotrageCostUnits = entity.itemsUnits.Where(x => x.storageCostId == storageCostId).ToList();
+                        foreach(itemsUnits iu in sotrageCostUnits)
+                        {
+                            iu.storageCostId = null;
+                            iu.updateDate = DateTime.Now;
+                            iu.updateUserId = userId;
+                        }
+                        entity.SaveChanges();
+                        var itemsUnitsList = entity.itemsUnits.Where(x => itemsUnitsIds.Contains(x.itemUnitId)).ToList();
+                        itemsUnitsList.ForEach(x => x.storageCostId = storageCostId);
+                        itemsUnitsList.ForEach(x => x.updateUserId = userId);
+                        itemsUnitsList.ForEach(x => x.updateDate = DateTime.Now);
+                        entity.SaveChanges();                        
+                    }
+                }
+                catch
+                {
+                    message = "-1";
+                }
+            }
+            return TokenManager.GenerateToken(message);
+        }
         [HttpPost]
         [Route("Delete")]
         public string Delete(string token)
