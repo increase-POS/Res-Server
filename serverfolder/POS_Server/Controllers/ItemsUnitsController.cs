@@ -98,13 +98,14 @@ namespace POS_Server.Controllers
                         var itemUnitsList = (from IU in entity.itemsUnits
                                              join u in entity.units on IU.unitId equals u.unitId into lj
                                              from v in lj.DefaultIfEmpty()
-                                             join I in entity.items on IU.itemId equals I.itemId
+                                             join I in entity.items.Where(x => x.isActive == 1) on IU.itemId equals I.itemId
                                              select new ItemUnitModel()
                                              {
                                                  itemUnitId = IU.itemUnitId,
                                                  unitId = IU.unitId,
                                                  mainUnit = v.name,
                                                  itemId = IU.itemId,
+                                                 itemName = I.name,
                                                  unitValue = IU.unitValue,
                                                  createDate = IU.createDate,
                                                  createUserId = IU.createUserId,
