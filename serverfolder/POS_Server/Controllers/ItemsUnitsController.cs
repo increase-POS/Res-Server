@@ -103,7 +103,7 @@ namespace POS_Server.Controllers
                                              {
                                                  itemUnitId = IU.itemUnitId,
                                                  unitId = IU.unitId,
-                                                 mainUnit = v.name,
+                                                 unitName = v.name,
                                                  itemId = IU.itemId,
                                                  itemName = I.name,
                                                  unitValue = IU.unitValue,
@@ -122,7 +122,7 @@ namespace POS_Server.Controllers
                                                  isActive = IU.isActive,
                                                  type = I.type,
                                                  categoryId = I.categoryId,
-                                             }).ToList();
+                                             }).OrderBy(x => x.itemName).ToList();
                         return TokenManager.GenerateToken(itemUnitsList);
                     }
                 }

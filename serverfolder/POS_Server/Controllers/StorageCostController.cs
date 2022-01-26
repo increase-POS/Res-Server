@@ -66,7 +66,63 @@ namespace POS_Server.Controllers
             }
 
         }
+        [HttpPost]
+        [Route("GetStorageCostUnits")]
+        public string GetStorageCostUnits(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int storageCostId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "storageCostId")
+                    {
+                        storageCostId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var List = (from IU in entity.itemsUnits.Where(x => x.storageCostId == storageCostId)
+                                join u in entity.units on IU.unitId equals u.unitId into lj
+                                from v in lj.DefaultIfEmpty()
+                                join I in entity.items.Where(x => x.isActive == 1) on IU.itemId equals I.itemId
+                                select new ItemUnitModel()
+                                {
+                                    itemUnitId = IU.itemUnitId,
+                                    unitId = IU.unitId,
+                                    mainUnit = v.name,
+                                    itemId = IU.itemId,
+                                    itemName = I.name +"-" + v.name,
+                                    unitValue = IU.unitValue,
+                                    createDate = IU.createDate,
+                                    createUserId = IU.createUserId,
+                                    defaultPurchase = IU.defaultPurchase,
+                                    defaultSale = IU.defaultSale,
+                                    price = IU.price,
+                                    priceWithService = IU.priceWithService,
+                                    subUnitId = IU.subUnitId,
+                                    barcode = IU.barcode,
+                                    updateDate = IU.updateDate,
+                                    updateUserId = IU.updateUserId,
+                                    storageCostId = IU.storageCostId,
+                                    purchasePrice = IU.purchasePrice,
+                                    isActive = IU.isActive,
+                                    type = I.type,
+                                    categoryId = I.categoryId,
+                                }).ToList();
+                  
+                    return TokenManager.GenerateToken(List);
+                }
+            }
 
+        }
         // GET api/<controller>
         [HttpPost]
         [Route("GetByID")]
@@ -209,7 +265,7 @@ namespace POS_Server.Controllers
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
-                    if (c.Type == "itemsUnitsIds")
+                    if (c.Type == "itemUnitsIds")
                     {
                         itemsUnits = c.Value.Replace("\\", string.Empty);
                         itemsUnits = itemsUnits.Trim('"');
@@ -236,7 +292,8 @@ namespace POS_Server.Controllers
                         itemsUnitsList.ForEach(x => x.storageCostId = storageCostId);
                         itemsUnitsList.ForEach(x => x.updateUserId = userId);
                         itemsUnitsList.ForEach(x => x.updateDate = DateTime.Now);
-                        entity.SaveChanges();                        
+                        entity.SaveChanges();
+                        message = "1";
                     }
                 }
                 catch
@@ -250,9 +307,9 @@ namespace POS_Server.Controllers
         [Route("Delete")]
         public string Delete(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "";
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
