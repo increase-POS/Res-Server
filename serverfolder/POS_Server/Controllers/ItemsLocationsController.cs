@@ -1405,13 +1405,9 @@ namespace POS_Server.Controllers
         [Route("receiptOrder")]
         public string receiptOrder(string token)
         {
-            //string itemLocationObject,string orderList, int toBranch, int userId, string objectName, string notificationObj
             string message = "";
-
-
-
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request); 
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1436,47 +1432,36 @@ namespace POS_Server.Controllers
                         Object = c.Value.Replace("\\", string.Empty);
                         Object = Object.Trim('"');
                         newObject = JsonConvert.DeserializeObject<List<itemsLocations>>(Object, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
-
                     }
                     else if (c.Type == "orderList")
                     {
-                        Object = c.Value.Replace("\\", string.Empty);
-                        Object = Object.Trim('"');
-                        items = JsonConvert.DeserializeObject<List<itemsTransfer>>(Object, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
-
+                        orderList = c.Value.Replace("\\", string.Empty);
+                        orderList = orderList.Trim('"');
+                        items = JsonConvert.DeserializeObject<List<itemsTransfer>>(orderList, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
                     }
-
                     else if (c.Type == "toBranch")
                     {
                         toBranch = int.Parse(c.Value);
-
                     }
                     else if (c.Type == "userId")
                     {
                         userId = int.Parse(c.Value);
-
                     }
                     else if (c.Type == "objectName")
                     {
                         objectName = c.Value;
-
                     }
                     else if (c.Type == "notificationObj")
                     {
                         notificationObj = c.Value;
-
                     }
 
                 }
 
                 if (newObject != null)
                 {
-
-
-
                     try
                     {
-
                         using (incposdbEntities entity = new incposdbEntities())
                         {
                             var freeZoneLocation = (from s in entity.sections.Where(x => x.branchId == toBranch && x.isFreeZone == 1)
@@ -1526,29 +1511,19 @@ namespace POS_Server.Controllers
                                     notificationController.addNotifications(objectName, notificationObj, toBranch, itemV.name);
                                 }
                             }
-                            //  return Ok(1);
-
                             return TokenManager.GenerateToken("1");
                         }
                     }
-
-
-
-
                     catch
                     {
                         message = "0";
                         return TokenManager.GenerateToken(message);
                     }
-
-
                 }
                 else
                 {
                     return TokenManager.GenerateToken("0");
                 }
-
-
             }
 
             //var re = Request;
@@ -2578,28 +2553,18 @@ namespace POS_Server.Controllers
         [Route("getAmountInBranch")]
         public string getAmountInBranch(string token)
         {
-
-            //int itemUnitId, int branchId string
             string message = "";
 
-
-
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request); 
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
             }
             else
             {
-
-
                 int itemUnitId = 0;
                 int branchId = 0;
-
-
-
-
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -2607,53 +2572,25 @@ namespace POS_Server.Controllers
                     if (c.Type == "itemUnitId")
                     {
                         itemUnitId = int.Parse(c.Value);
-
                     }
                     else if (c.Type == "branchId")
                     {
                         branchId = int.Parse(c.Value);
-
                     }
-
-
-
-
                 }
-
                 try
                 {
                     int amount = 0;
                     amount += getItemUnitAmount(itemUnitId, branchId); // from bigger unit
                     amount += getSmallItemUnitAmount(itemUnitId, branchId);
-                    //return amount;
                     return TokenManager.GenerateToken(amount.ToString());
                 }
-
-
                 catch
                 {
                     message = "0";
                     return TokenManager.GenerateToken(message);
                 }
-            }
-
-            //var re = Request;
-            //var headers = re.Headers;
-            //string token = "";
-            //int amount = 0;
-            //if (headers.Contains("APIKey"))
-            //{
-            //    token = headers.GetValues("APIKey").First();
-            //}
-            //Validation validation = new Validation();
-            //bool valid = validation.CheckApiKey(token);
-
-            //if (valid)
-            //{
-            //    amount += getItemUnitAmount(itemUnitId, branchId); // from bigger unit
-            //    amount += getSmallItemUnitAmount(itemUnitId, branchId);
-            //}
-            //return amount;
+            }           
         }
 
         public int getBranchAmount(int itemUnitId, int branchId)
