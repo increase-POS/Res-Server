@@ -323,7 +323,6 @@ var strP = TokenManager.GetPrincipal(token);
                             invItem.amountDestroyed = il.amountDestroyed;
                             invItem.cause = il.cause;
                             invItem.notes = il.notes;
-                            invItem.isActive = il.isActive;
                             invItem.updateDate = DateTime.Now;
                             invItem.updateUserId = il.updateUserId;
                             message = invItem.id.ToString();

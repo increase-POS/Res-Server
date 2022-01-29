@@ -18,7 +18,7 @@ namespace POS_Server.Models
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
-        public byte isActive { get; set; }
+        public Nullable<byte> isActive { get; set; }
         public string notes { get; set; }
         public string cause { get; set; }
         public bool isFalls { get; set; }
@@ -42,6 +42,6 @@ namespace POS_Server.Models
         public string itemType { get; set; }
 
 
-        public  decimal avgPurchasePrice { get; set; }
+        public Nullable<decimal> avgPurchasePrice { get; set; }
     }
 }
