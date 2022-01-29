@@ -54,7 +54,6 @@ namespace POS_Server.Controllers
                        createUserId = c.createUserId,
                        updateUserId = c.updateUserId,
                        barcode = c.barcode,
-                       membershipId  = c.membershipId,
                    })
                    .ToList();
 
@@ -95,7 +94,11 @@ namespace POS_Server.Controllers
             {
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var couponsList = entity.coupons.Where(x => x.remainQ > 0 && x.startDate <= DateTime.Now && x.endDate >= DateTime.Now && x.isActive == 1)
+                    /*
+                     * var couponsList = entity.coupons.Where(x => (x.remainQ > 0 || x.quantity == 0) &&( (x.startDate <= DateTime.Now && x.endDate >= DateTime.Now)||x.endDate ==null )&& x.isActive == 1)
+                     * */
+
+                    var couponsList = entity.coupons.Where(x => (x.remainQ > 0 || x.quantity == 0) && (x.startDate <= DateTime.Now || x.startDate == null ) && (x.endDate >= DateTime.Now || x.endDate == null)  && x.isActive == 1)
 
                    .Select(c => new CouponModel
                    {
@@ -117,7 +120,6 @@ namespace POS_Server.Controllers
                        createUserId = c.createUserId,
                        updateUserId = c.updateUserId,
                        barcode = c.barcode,
-                       membershipId = c.membershipId,
                    })
                    .ToList();
 
@@ -171,7 +173,6 @@ namespace POS_Server.Controllers
                        c.createUserId,
                        c.updateUserId,
                        c.barcode,
-                       c.membershipId,
                    })
                    .FirstOrDefault();
 
@@ -225,7 +226,6 @@ namespace POS_Server.Controllers
                        c.createUserId,
                        c.updateUserId,
                        c.barcode,
-                       c.membershipId,
                    })
                    .FirstOrDefault();
 
@@ -279,7 +279,6 @@ namespace POS_Server.Controllers
                        c.createUserId,
                        c.updateUserId,
                        c.barcode,
-                       c.membershipId,
                    })
                    .FirstOrDefault();
 
@@ -372,7 +371,6 @@ namespace POS_Server.Controllers
                        c.updateDate,
                        c.createUserId,
                        c.updateUserId,
-                       c.membershipId,
                    })
                    .ToList();
 
@@ -442,7 +440,6 @@ namespace POS_Server.Controllers
                             tmpcoupon.remainQ = Object.remainQ;
                             tmpcoupon.invMin = Object.invMin;
                             tmpcoupon.invMax = Object.invMax;
-                            tmpcoupon.membershipId = Object.membershipId;
 
                             tmpcoupon.updateDate = DateTime.Now;// server current date;
 

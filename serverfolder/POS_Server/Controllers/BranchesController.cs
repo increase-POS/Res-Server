@@ -839,6 +839,7 @@ namespace POS_Server.Controllers
                                             location.branchId = branchId;
                                             location.isFreeZone = 1;
                                             locId = SaveLoc(location);
+                                            return locId.ToString();
                                             res = locId;
                                             if (res == -2)
                                             {

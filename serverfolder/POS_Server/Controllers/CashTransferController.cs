@@ -1991,7 +1991,7 @@ namespace POS_Server.Controllers
                 pos posobjectD = new pos();
                 int? posidPull = 0;
                 int? posidD = 0;
-                decimal cash = 0;
+                decimal? cash = 0;
 
                 try
                 {
@@ -2027,7 +2027,7 @@ namespace POS_Server.Controllers
                                         posidD = ctObject.posId;
                                         posobject = entity.pos.Where(p => p.posId == posidPull).FirstOrDefault();
 
-                                        posobject.balance = posobject.balance - cash;
+                                        posobject.balance = (decimal)posobject.balance - (decimal)cash;
                                         posobject.updateUserId = userIdD;
                                         posobject.updateDate = DateTime.Now;
                                         // end
@@ -2037,7 +2037,7 @@ namespace POS_Server.Controllers
                                         {
                                             posobjectD.balance = 0;
                                         }
-                                        posobjectD.balance = posobjectD.balance + cash;
+                                        posobjectD.balance = (decimal)posobjectD.balance + (decimal)cash;
                                         posobjectD.updateUserId = userIdD;
                                         posobjectD.updateDate = DateTime.Now;
                                         entity.SaveChanges();
@@ -2838,7 +2838,7 @@ namespace POS_Server.Controllers
                                             if (amount >= inv.deserved)
                                             {
                                                 paid = (decimal)inv.deserved;
-                                                invObj.paid += inv.deserved;
+                                                invObj.paid += (decimal)inv.deserved;
                                                 invObj.deserved = 0;
                                                 amount -= (decimal)inv.deserved;
                                             }
@@ -2922,7 +2922,7 @@ namespace POS_Server.Controllers
                                             if (amount >= inv.deserved)
                                             {
                                                 paid = (decimal)inv.deserved;
-                                                invObj.paid = invObj.paid + inv.deserved;
+                                                invObj.paid = (decimal)invObj.paid + (decimal)inv.deserved;
                                                 invObj.deserved = 0;
                                                 amount -= (decimal)inv.deserved;
                                             }
@@ -3541,7 +3541,7 @@ namespace POS_Server.Controllers
                                             if (amount >= inv.deserved)
                                             {
                                                 paid = (decimal)inv.deserved;
-                                                invObj.paid = invObj.paid + inv.deserved;
+                                                invObj.paid = (decimal)invObj.paid + (decimal)inv.deserved;
                                                 invObj.deserved = 0;
                                                 amount -= (decimal)inv.deserved;
                                             }
@@ -4015,7 +4015,7 @@ namespace POS_Server.Controllers
                                             if (amount >= inv.deserved)
                                             {
                                                 paid = (decimal)inv.deserved;
-                                                invObj.paid = invObj.paid + inv.deserved;
+                                                invObj.paid = (decimal)invObj.paid + (decimal)inv.deserved;
                                                 invObj.deserved = 0;
                                                 amount -= (decimal)inv.deserved;
                                             }

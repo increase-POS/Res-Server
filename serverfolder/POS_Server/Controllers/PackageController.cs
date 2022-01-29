@@ -484,8 +484,6 @@ namespace POS_Server.Controllers
 
             string message = "";
 
-
-
           token = TokenManager.readToken(HttpContext.Current.Request); 
  var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
