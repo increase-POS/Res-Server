@@ -2745,19 +2745,20 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                 }
 
-            try
-            {
+                try
+                {
                 using (incposdbEntities entity = new incposdbEntities())
                     {
                         var set = entity.setting.Where(x => x.name == "Pur_inv_avg_count").FirstOrDefault();
                         string invoiceNum = "0";
-                    if(set != null)
-                        invoiceNum = entity.setValues.Where(x => x.settingId == (int)set.settingId).Select(x => x.value).Single();
-                    foreach (itemsTransfer item in newObject)
+                        if(set != null)
+                            invoiceNum = entity.setValues.Where(x => x.settingId == (int)set.settingId).Select(x => x.value).Single();
+                        foreach (itemsTransfer item in newObject)
                         {
                             var itemId = entity.itemsUnits.Where(x => x.itemUnitId == (int)item.itemUnitId).Select(x => x.itemId).Single();
-                  
+                           
                             decimal price = GetAvgPrice((int)item.itemUnitId,(int)itemId,int.Parse(invoiceNum));
+
                             var itemO = entity.items.Find(itemId);
                             itemO.avgPurchasePrice = price;                         
                         }
@@ -2766,11 +2767,11 @@ var strP = TokenManager.GetPrincipal(token);
                         return TokenManager.GenerateToken(message);
                     }
             }
-            catch
-            {
-                message = "0";
-                return TokenManager.GenerateToken(message);
-            }
+            //catch
+            //{
+            //    message = "0";
+            //    return TokenManager.GenerateToken(message);
+            //}
 
         }
     }
@@ -2780,15 +2781,15 @@ var strP = TokenManager.GetPrincipal(token);
             int totalNum = 0;
             decimal smallUnitPrice = 0;
 
-                using (incposdbEntities entity = new incposdbEntities())
-                {
-                    var itemUnits = (from i in entity.itemsUnits where (i.itemId == itemId) select (i.itemUnitId)).ToList();
+            using (incposdbEntities entity = new incposdbEntities())
+            {
+                var itemUnits = (from i in entity.itemsUnits where (i.itemId == itemId) select (i.itemUnitId)).ToList();
                 List<int> invoicesIds = new List<int>();
                 if (numInvoice == 0)
                 {
-                   invoicesIds = (from p in entity.invoices
-                                  where p.isActive == true && p.invType == "p"
-                                    select p).Select(x => x.invoiceId).ToList();
+                    invoicesIds = (from p in entity.invoices
+                                   where p.isActive == true && p.invType == "p"
+                                   select p).Select(x => x.invoiceId).ToList();
                 }
                 else
                 {
@@ -2796,36 +2797,18 @@ var strP = TokenManager.GetPrincipal(token);
                                     where p.isActive == true && p.invType == "p"
                                     orderby p.invDate descending
                                     select p).Take(numInvoice);
-                   invoicesIds = invoices.Select(x => x.invoiceId).ToList();
+                    invoicesIds = invoices.Select(x => x.invoiceId).ToList();
+
+
                 }
-                price += getLastPrice(itemUnits,invoicesIds);
-
-                    totalNum = getItemUnitLastNum(itemUnits, invoicesIds);
-
-                    if (totalNum != 0)
-                        smallUnitPrice = price / totalNum;
-
-                    var smallestUnitId = (from iu in entity.itemsUnits
-                                          where (itemUnits.Contains((int)iu.itemUnitId) && iu.unitId == iu.subUnitId)
-                                          select iu.itemUnitId).FirstOrDefault();
-
-                    if (smallestUnitId == null || smallestUnitId == 0)
-                    {
-                        smallestUnitId = (from u in entity.itemsUnits
-                                          where !entity.itemsUnits.Any(y => u.subUnitId == y.unitId)
-                                          where (itemUnits.Contains((int)u.itemUnitId))
-                                          select u.itemUnitId).FirstOrDefault();
-                    }
-                    if (itemUnitId == smallestUnitId || smallestUnitId == null || smallestUnitId == 0)
-                        return smallUnitPrice;
-                    else
-                    {
-                        smallUnitPrice = smallUnitPrice * getUpperUnitValue(smallestUnitId, itemUnitId);
-                        return smallUnitPrice;
-                    }
-                }
+                price += getLastPrice(itemUnits, invoicesIds);
+                totalNum = getItemUnitLastNum(itemUnits, invoicesIds);
+                if (totalNum != 0)
+                    smallUnitPrice = price / totalNum;
+                return smallUnitPrice;
+                
+            }
         }
-
         private int getUpperUnitValue(int itemUnitId, int basicItemUnitId)
         {
             int unitValue = 0;
@@ -2863,7 +2846,7 @@ var strP = TokenManager.GetPrincipal(token);
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
-                var sumPrice = (from  s in entity.itemsTransfer.Where(x => itemUnits.Contains((int)x.itemUnitId) && invoiceIds.Contains((int)x.invoiceId)) 
+                var sumPrice = (from s in entity.itemsTransfer.Where(x => itemUnits.Contains((int)x.itemUnitId) && invoiceIds.Contains((int)x.invoiceId))
                                 select s.quantity * s.price).Sum();
 
                 if (sumPrice != null)
@@ -2888,9 +2871,14 @@ var strP = TokenManager.GetPrincipal(token);
                                       where (itemUnits.Contains((int)u.itemUnitId))
                                       select u.itemUnitId).FirstOrDefault();
                 }
+                var lst = entity.itemsTransfer.Where(x => x.itemUnitId == smallestUnitId && invoiceIds.Contains((int)x.invoiceId))
+                           .Select (t => new ItemLocationModel {
+                                   quantity = t.quantity  ,
+                               }).ToList();
+                long sumNum = 0;
+                if (lst.Count > 0)
+                    sumNum = lst.Sum(x => x.quantity);
 
-                var sumNum = (from s in entity.itemsTransfer.Where(x => x.itemUnitId == smallestUnitId && invoiceIds.Contains((int)x.invoiceId)) 
-                              select s.quantity).Sum();
 
                 if (sumNum == null)
                     sumNum = 0;
@@ -2901,19 +2889,30 @@ var strP = TokenManager.GetPrincipal(token);
                 if (upperUnit != null && upperUnit.itemUnitId != smallestUnitId)
                     sumNum += (int)upperUnit.unitValue * getLastNum(upperUnit.itemUnitId, invoiceIds);
 
-                if (sumNum != null)
+                try
+                {
                     return (int)sumNum;
-                else
+                }
+                catch
+                {
                     return 0;
+                }
             }
         }
         private long getLastNum(int itemUnitId, List<int> invoiceIds)
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
-                var sumNum = (from s in entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitId && invoiceIds.Contains((int)x.invoiceId))
-                              select s.quantity).Sum();
-
+                //var sumNum = (from s in entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitId && invoiceIds.Contains((int)x.invoiceId))
+                //              select s.quantity).Sum();
+                var lst = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitId && invoiceIds.Contains((int)x.invoiceId))
+                           .Select(t => new ItemLocationModel
+                           {
+                               quantity = t.quantity,
+                           }).ToList();
+                long sumNum = 0;
+                if (lst.Count > 0)
+                    sumNum = lst.Sum(x => x.quantity);
                 if (sumNum == null)
                     sumNum = 0;
 
