@@ -825,6 +825,25 @@ namespace POS_Server.Controllers
                                         {
                                             res = DeleteBranch(branchId, (int)newObject.createUserId, true);
                                         }
+                                        else
+                                        {
+                                            //save kitchen section
+                                            section = new sections();
+                                            section.name = "FreeZone";
+                                            section.branchId = branchId;
+                                            section.notes = "";
+                                            section.createUserId = newObject.createUserId;
+                                            section.updateUserId = newObject.createUserId;
+                                            section.isActive = 1;
+                                            section.isFreeZone = 0;
+                                            section.isKitchen = 1;
+                                            secId = SaveSec(section);
+                                            if (res == -2)
+                                            {
+                                                res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+                                            }
+                                        }
+                               
 
                                         //save location
                                         try
@@ -839,13 +858,35 @@ namespace POS_Server.Controllers
                                             location.branchId = branchId;
                                             location.isFreeZone = 1;
                                             locId = SaveLoc(location);
-                                            return locId.ToString();
+                                          //  return locId.ToString();
                                             res = locId;
                                             if (res == -2)
                                             {
                                                 res = DeleteSec(secId, (int)newObject.createUserId, true);
                                                 res = DeleteBranch(branchId, (int)newObject.createUserId, true);
 
+                                            }
+                                            else
+                                            {
+                                                location = new locations();
+                                                location.x = location.y = location.z = "0";
+                                                location.notes = "";
+                                                location.createUserId = newObject.createUserId;
+                                                location.updateUserId = newObject.createUserId;
+                                                location.isActive = 1;
+                                                location.sectionId = secId;
+                                                location.branchId = branchId;
+                                                location.isFreeZone = 0;
+                                                location.isKitchen = 1;
+                                                locId = SaveLoc(location);
+                                              
+                                                res = locId;
+                                                if (res == -2)
+                                                {
+                                                    res = DeleteSec(secId, (int)newObject.createUserId, true);
+                                                    res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+
+                                                }
                                             }
 
                                         }

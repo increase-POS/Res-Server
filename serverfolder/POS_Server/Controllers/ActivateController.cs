@@ -387,6 +387,69 @@ namespace POS_Server.Controllers
 
         }
 
-      
+        [HttpPost]
+        [Route("CheckPeriod")]
+        public string CheckPeriod(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int res = CheckPeriod();
+                return TokenManager.GenerateToken(res.ToString());
+
+            }
+        }
+
+        public int CheckPeriod()
+        {
+            ProgramDetails tmpObject;
+            // 1 :  time not end-
+            //  0 : time is end 
+
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var locationEntity = entity.Set<ProgramDetails>();
+                    tmpObject = entity.ProgramDetails.FirstOrDefault();
+                    if (tmpObject != null)
+                    {
+                        if (tmpObject.isLimitDate == false)
+                        {
+                            return 1;
+                        }
+                        else
+                        {// limited
+                            if (tmpObject.expireDate <= DateTime.Now || tmpObject.expireDate == null)
+                            {
+                                return 0;
+                            }
+                            else
+                            {
+                                return 1;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+
+            }
+            catch
+            {
+
+                return -1;
+
+            }
+
+        }
+
     }
 }
