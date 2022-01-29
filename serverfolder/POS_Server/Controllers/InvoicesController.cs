@@ -2767,13 +2767,13 @@ var strP = TokenManager.GetPrincipal(token);
                         return TokenManager.GenerateToken(message);
                     }
             }
-            //catch
-            //{
-            //    message = "0";
-            //    return TokenManager.GenerateToken(message);
-            //}
+                catch
+                {
+                    message = "0";
+                    return TokenManager.GenerateToken(message);
+                }
 
-        }
+            }
     }
         private decimal GetAvgPrice(int itemUnitId, int itemId, int numInvoice)
         {
