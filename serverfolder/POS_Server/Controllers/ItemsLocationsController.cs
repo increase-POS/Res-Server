@@ -92,6 +92,59 @@ namespace POS_Server.Controllers
             }
         }
         [HttpPost]
+        [Route("GetItemsHasQuantity")]
+        public string GetItemsHasQuantity(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request); 
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int branchId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                }
+
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var itemsList = (from b in entity.itemsLocations
+                                            where b.quantity > 0 && b.invoiceId == null 
+                                            join u in entity.itemsUnits on b.itemUnitId equals u.itemUnitId
+                                            join I in entity.items on u.itemId equals I.itemId
+                                            join l in entity.locations on b.locationId equals l.locationId
+                                            join s in entity.sections on l.sectionId equals s.sectionId
+                                            where s.branchId == branchId && s.isKitchen != 1
+
+                                            select new ItemModel()
+                                            {
+                                                itemId = I.itemId,
+                                                name = I.name,
+                                                type = I.type,
+                                                isActive = I.isActive,
+                                                avgPurchasePrice = I.avgPurchasePrice,
+                                            }).Where(x => x.isActive == 1).Distinct().ToList();
+
+
+                        return TokenManager.GenerateToken(itemsList);
+                    }
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+        [HttpPost]
         [Route("GetLockedItems")]
         public string GetLockedItems(string token)
         {

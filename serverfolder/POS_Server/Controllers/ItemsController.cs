@@ -927,6 +927,18 @@ namespace POS_Server.Controllers
             }
             else
             {
+                string type = "";
+                List<string> typeLst = new List<string>();
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "type")
+                    {
+                        type = c.Value;
+                       typeLst = JsonConvert.DeserializeObject<List<string>>(type, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
+
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var itemsList = (from I in entity.items
@@ -935,27 +947,18 @@ namespace POS_Server.Controllers
                                      {
                                          itemId = I.itemId,
                                          name = I.name,
-                                         categoryId = I.categoryId,
-                                         max = I.max,
-                                         maxUnitId = I.maxUnitId,
-                                         minUnitId = I.minUnitId,
-                                         min = I.min,
-
-                                         parentId = I.parentId,
-                                         isActive = I.isActive,
                                          type = I.type,
-                                         taxes = I.taxes,
-                                         createDate = I.createDate,
-                                         updateDate = I.updateDate,
-                                         createUserId = I.createUserId,
-                                         updateUserId = I.updateUserId,
-                                         isNew = 0,
+                                         isActive = I.isActive,
                                          avgPurchasePrice = I.avgPurchasePrice,
-                                         notes = I.notes,
-                                         categoryString = I.categoryString,
                                      }).Where(x => x.isActive == 1).Distinct()
                                 .ToList();
-                    return TokenManager.GenerateToken(itemsList);
+                    if (typeLst.Count == 0)
+                        return TokenManager.GenerateToken(itemsList);
+                    else
+                    {
+                        var itemsWithType = itemsList.Where(x => typeLst.Contains(x.type)).ToList();
+                        return TokenManager.GenerateToken(itemsWithType);
+                    }
                 }
             }
         }
