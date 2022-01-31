@@ -1135,6 +1135,111 @@ namespace POS_Server.Controllers
             }          
         }
         [HttpPost]
+        [Route("transferToKitchen")]
+        public string transferToKitchen(string token)
+        {
+            string message = "";
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string Object = "";
+                string orderList = "";
+
+                int branchId = 0;
+                int userId = 0;
+                string objectName = "";
+                string notificationObj = "";
+
+                List<itemsLocations> newObject = new List<itemsLocations>();
+                List<itemsTransfer> items = new List<itemsTransfer>();
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "Object")
+                    {
+                        Object = c.Value.Replace("\\", string.Empty);
+                        Object = Object.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<List<itemsLocations>>(Object, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                    }
+                    else if (c.Type == "orderList")
+                    {
+                        orderList = c.Value.Replace("\\", string.Empty);
+                        orderList = orderList.Trim('"');
+                        items = JsonConvert.DeserializeObject<List<itemsTransfer>>(orderList, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "objectName")
+                    {
+                        objectName = c.Value;
+                    }
+                    else if (c.Type == "notificationObj")
+                    {
+                        notificationObj = c.Value;
+                    }
+
+                }
+
+                if (newObject != null)
+                {
+                    try
+                    {
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+                            var kitchenLocation = (from s in entity.sections.Where(x => x.branchId == branchId &&  x.isKitchen == 1)
+                                                    join l in entity.locations on s.sectionId equals l.sectionId
+                                                    select l.locationId).SingleOrDefault();
+                            foreach (itemsLocations item in newObject)
+                            {
+                                itemsLocations itemL = new itemsLocations();
+
+                                itemL = entity.itemsLocations.Find(item.itemsLocId);
+                                itemL.quantity -= item.quantity;
+                                itemL.updateDate = DateTime.Now;
+                                itemL.updateUserId = userId;
+                                entity.SaveChanges();
+
+                                var itemId = entity.itemsUnits.Where(x => x.itemUnitId == item.itemUnitId).Select(x => x.itemId).Single();
+
+                                var itemV = entity.items.Find(itemId);
+                                int quantity = (int)item.quantity;
+                               
+                                if (quantity != 0)
+                                    increaseItemQuantity(item.itemUnitId.Value, kitchenLocation, quantity, userId);
+
+                                //bool isExcedded = isExceddMaxQuantity((int)item.itemUnitId, branchId, userId);
+                                //if (isExcedded == true) //add notification
+                                //{
+                                    notificationController.addNotifications(objectName, notificationObj, branchId, itemV.name);
+                                //}
+                            }
+                            return TokenManager.GenerateToken("1");
+                        }
+                    }
+                    catch
+                    {
+                        message = "0";
+                        return TokenManager.GenerateToken(message);
+                    }
+                }
+                else
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+        [HttpPost]
         [Route("transferAmountbetweenUnits")]
         public string transferAmountbetweenUnits(string token)
         {
@@ -1212,7 +1317,7 @@ namespace POS_Server.Controllers
             using (incposdbEntities entity = new incposdbEntities())
             {
                 var itemUnit = (from il in entity.itemsLocations
-                                where il.itemUnitId == itemUnitId && il.locationId == locationId && il.invoiceId == null && il.locations.isKitchen != 1
+                                where il.itemUnitId == itemUnitId && il.locationId == locationId && il.invoiceId == null
                                 select new { il.itemsLocId }
                                 ).FirstOrDefault();
                 itemsLocations itemL = new itemsLocations();
