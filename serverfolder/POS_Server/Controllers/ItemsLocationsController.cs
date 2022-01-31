@@ -1152,8 +1152,6 @@ namespace POS_Server.Controllers
 
                 int branchId = 0;
                 int userId = 0;
-                string objectName = "";
-                string notificationObj = "";
 
                 List<itemsLocations> newObject = new List<itemsLocations>();
                 List<itemsTransfer> items = new List<itemsTransfer>();
@@ -1179,14 +1177,6 @@ namespace POS_Server.Controllers
                     else if (c.Type == "userId")
                     {
                         userId = int.Parse(c.Value);
-                    }
-                    else if (c.Type == "objectName")
-                    {
-                        objectName = c.Value;
-                    }
-                    else if (c.Type == "notificationObj")
-                    {
-                        notificationObj = c.Value;
                     }
 
                 }
@@ -1217,12 +1207,6 @@ namespace POS_Server.Controllers
                                
                                 if (quantity != 0)
                                     increaseItemQuantity(item.itemUnitId.Value, kitchenLocation, quantity, userId);
-
-                                //bool isExcedded = isExceddMaxQuantity((int)item.itemUnitId, branchId, userId);
-                                //if (isExcedded == true) //add notification
-                                //{
-                                    notificationController.addNotifications(objectName, notificationObj, branchId, itemV.name);
-                                //}
                             }
                             return TokenManager.GenerateToken("1");
                         }
