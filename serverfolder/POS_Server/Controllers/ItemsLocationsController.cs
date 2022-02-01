@@ -2303,6 +2303,79 @@ namespace POS_Server.Controllers
             }
         }
         [HttpPost]
+        [Route("returnSpendingOrder")]
+        public string returnSpendingOrder(string token)
+        {
+            string message = "";
+
+            token = TokenManager.readToken(HttpContext.Current.Request); 
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string Object = "";
+
+                int branchId = 0;
+                int userId = 0;
+
+                List<itemsTransfer> newObject = new List<itemsTransfer>();
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "Object")
+                    {
+                        Object = c.Value.Replace("\\", string.Empty);
+                        Object = Object.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<List<itemsTransfer>>(Object, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+
+                    }
+                }
+
+                if (newObject != null)
+                {
+                    try
+                    {
+
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+                            var freeZoneLocation = (from s in entity.sections.Where(x => x.branchId == branchId &&  x.isKitchen != 1)
+                                                    join l in entity.locations on s.sectionId equals l.sectionId
+                                                    select l.locationId).SingleOrDefault();
+                            foreach (itemsTransfer item in newObject)
+                            {
+                                decreaseItemQuantity(item.itemUnitId.Value, freeZoneLocation, (int)item.quantity, userId);
+                            }
+                        }
+                        return TokenManager.GenerateToken("1");
+                    }
+                    catch
+                    {
+                        message = "0";
+                        return TokenManager.GenerateToken(message);
+                    }
+
+                }
+                else
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+        [HttpPost]
         [Route("destroyItem")]
         public string destroyItem(string token)
         {
