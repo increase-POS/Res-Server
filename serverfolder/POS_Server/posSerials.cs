@@ -23,6 +23,7 @@ namespace POS_Server
         public int id { get; set; }
         public string posSerial { get; set; }
         public string notes { get; set; }
+        public bool isActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<posSetting> posSetting { get; set; }

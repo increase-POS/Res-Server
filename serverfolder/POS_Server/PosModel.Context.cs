@@ -91,5 +91,13 @@ namespace POS_Server
         public virtual DbSet<users> users { get; set; }
         public virtual DbSet<userSetValues> userSetValues { get; set; }
         public virtual DbSet<usersLogs> usersLogs { get; set; }
+        public virtual DbSet<dishIngredients> dishIngredients { get; set; }
+        public virtual DbSet<invoiceTables> invoiceTables { get; set; }
+        public virtual DbSet<menuSettings> menuSettings { get; set; }
+        public virtual DbSet<reservations> reservations { get; set; }
+        public virtual DbSet<tables> tables { get; set; }
+        public virtual DbSet<tablesReservations> tablesReservations { get; set; }
+        public virtual DbSet<residentialSectors> residentialSectors { get; set; }
+        public virtual DbSet<residentialSectorsUsers> residentialSectorsUsers { get; set; }
     }
 }
