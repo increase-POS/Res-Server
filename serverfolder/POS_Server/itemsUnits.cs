@@ -23,6 +23,8 @@ namespace POS_Server
             this.itemUnitUser = new HashSet<itemUnitUser>();
             this.packages = new HashSet<packages>();
             this.packages1 = new HashSet<packages>();
+            this.dishIngredients = new HashSet<dishIngredients>();
+            this.menuSettings = new HashSet<menuSettings>();
         }
     
         public int itemUnitId { get; set; }
@@ -42,6 +44,7 @@ namespace POS_Server
         public Nullable<int> storageCostId { get; set; }
         public byte isActive { get; set; }
         public bool isCountable { get; set; }
+        public decimal priceWithService { get; set; }
     
         public virtual items items { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -60,5 +63,9 @@ namespace POS_Server
         public virtual ICollection<packages> packages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<packages> packages1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<dishIngredients> dishIngredients { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<menuSettings> menuSettings { get; set; }
     }
 }

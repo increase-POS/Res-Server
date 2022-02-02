@@ -277,6 +277,7 @@
     <Compile Include="Controllers\BondsController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\BranchStoreController.cs" />
+    <Compile Include="Controllers\ProgramDetailsController.cs" />
     <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\CashTransferController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
@@ -341,6 +342,9 @@
     <Compile Include="couponsInvoices.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="dishIngredients.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="docImages.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
@@ -369,6 +373,9 @@
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="invoiceStatus.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="invoiceTables.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="items.cs">
@@ -410,6 +417,9 @@
     <Compile Include="memberships.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="menuSettings.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ActivateModel.cs" />
     <Compile Include="Models\BackupModel.cs" />
     <Compile Include="Models\BranchesUsersModel.cs" />
@@ -419,6 +429,7 @@
     <Compile Include="Models\BondsModel.cs" />
     <Compile Include="Models\BranchModel.cs" />
     <Compile Include="Models\BranchStoreModel.cs" />
+    <Compile Include="Models\ProgramDetailsModel.cs" />
     <Compile Include="Models\TagsModel.cs" />
     <Compile Include="Models\CashTransferModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
@@ -530,6 +541,9 @@
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="reservations.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="sections.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
@@ -552,6 +566,12 @@
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="sysEmails.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tables.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tablesReservations.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="tags.cs">

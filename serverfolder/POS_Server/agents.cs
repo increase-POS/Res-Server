@@ -48,6 +48,10 @@ namespace POS_Server
         public decimal maxDeserve { get; set; }
         public bool isLimited { get; set; }
         public string payType { get; set; }
+        public bool canReserve { get; set; }
+        public string disallowReason { get; set; }
+        public Nullable<int> residentSecId { get; set; }
+        public string GPSAddress { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agentMemberships> agentMemberships { get; set; }
@@ -62,5 +66,6 @@ namespace POS_Server
         public virtual ICollection<medalAgent> medalAgent { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Points> Points1 { get; set; }
+        public virtual residentialSectors residentialSectors { get; set; }
     }
 }

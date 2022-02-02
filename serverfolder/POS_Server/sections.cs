@@ -18,6 +18,7 @@ namespace POS_Server
         public sections()
         {
             this.locations = new HashSet<locations>();
+            this.tables = new HashSet<tables>();
         }
     
         public int sectionId { get; set; }
@@ -31,9 +32,13 @@ namespace POS_Server
         public string notes { get; set; }
         public byte isFreeZone { get; set; }
         public string type { get; set; }
+        public string details { get; set; }
+        public byte isKitchen { get; set; }
     
         public virtual branches branches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<locations> locations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tables> tables { get; set; }
     }
 }

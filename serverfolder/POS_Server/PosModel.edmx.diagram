@@ -265,6 +265,40 @@
         <AssociationConnector Association="PosModel.FK_userSetValues_users1" ManuallyRouted="false" />
         <AssociationConnector Association="PosModel.FK_userSetValues_users2" ManuallyRouted="false" />
         <AssociationConnector Association="PosModel.FK_usersLogs_users" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PosModel.dishIngredients" Width="1.5" PointX="26.75" PointY="86.25" />
+        <EntityTypeShape EntityType="PosModel.invoiceTables" Width="1.5" PointX="27.75" PointY="102" />
+        <EntityTypeShape EntityType="PosModel.menuSettings" Width="1.5" PointX="24.75" PointY="101.875" />
+        <EntityTypeShape EntityType="PosModel.reservations" Width="1.5" PointX="3" PointY="70" />
+        <EntityTypeShape EntityType="PosModel.tables" Width="1.5" PointX="10.5" PointY="81.75" />
+        <EntityTypeShape EntityType="PosModel.tablesReservations" Width="1.5" PointX="21.75" PointY="81.125" />
+        <AssociationConnector Association="PosModel.FK_tables_branches" />
+        <AssociationConnector Association="PosModel.FK_coupons_memberships" />
+        <AssociationConnector Association="PosModel.FK_dishIngredients_itemsUnits" />
+        <AssociationConnector Association="PosModel.FK_dishIngredients_users" />
+        <AssociationConnector Association="PosModel.FK_dishIngredients_users1" />
+        <AssociationConnector Association="PosModel.FK_invoices_waiters" />
+        <AssociationConnector Association="PosModel.FK_invoiceTables_invoices" />
+        <AssociationConnector Association="PosModel.FK_invoiceTables_updateUsers" />
+        <AssociationConnector Association="PosModel.FK_invoiceTables_users" />
+        <AssociationConnector Association="PosModel.FK_menuSettings_itemsUnits" />
+        <AssociationConnector Association="PosModel.FK_menuSettings_users" />
+        <AssociationConnector Association="PosModel.FK_reservations_updateUsers" />
+        <AssociationConnector Association="PosModel.FK_reservations_users" />
+        <AssociationConnector Association="PosModel.FK_tables_sections" />
+        <AssociationConnector Association="PosModel.FK_tables_updateUsers" />
+        <AssociationConnector Association="PosModel.FK_tables_users" />
+        <AssociationConnector Association="PosModel.FK_tablesReservations_tables" />
+        <AssociationConnector Association="PosModel.FK_tablesReservations_updateUsers" />
+        <AssociationConnector Association="PosModel.FK_tablesReservations_users" />
+        <EntityTypeShape EntityType="PosModel.residentialSectors" Width="1.5" PointX="3" PointY="109.75" />
+        <EntityTypeShape EntityType="PosModel.residentialSectorsUsers" Width="1.5" PointX="19.25" PointY="109.875" />
+        <AssociationConnector Association="PosModel.FK_agents_residentialSectors" />
+        <AssociationConnector Association="PosModel.FK_residentialSectors_users" />
+        <AssociationConnector Association="PosModel.FK_residentialSectors_users1" />
+        <AssociationConnector Association="PosModel.FK_residentialSectorsUsers_residentialSectors" />
+        <AssociationConnector Association="PosModel.FK_residentialSectorsUsers_users" />
+        <AssociationConnector Association="PosModel.FK_residentialSectorsUsers_users1" />
+        <AssociationConnector Association="PosModel.FK_residentialSectorsUsers_users2" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

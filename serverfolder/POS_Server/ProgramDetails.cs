@@ -30,8 +30,26 @@ namespace POS_Server
         public string packageSaleCode { get; set; }
         public string customerServerCode { get; set; }
         public Nullable<System.DateTime> expireDate { get; set; }
-        public bool isOnlineServer { get; set; }
+        public Nullable<bool> isOnlineServer { get; set; }
         public string packageNumber { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
+        public Nullable<bool> isLimitDate { get; set; }
+        public Nullable<bool> isLimitCount { get; set; }
+        public bool isActive { get; set; }
+        public string packageName { get; set; }
+        public Nullable<System.DateTime> bookDate { get; set; }
+        public Nullable<int> pId { get; set; }
+        public Nullable<int> pcdId { get; set; }
+        public string customerName { get; set; }
+        public string customerLastName { get; set; }
+        public string agentName { get; set; }
+        public string agentLastName { get; set; }
+        public string agentAccountName { get; set; }
+        public bool isServerActivated { get; set; }
+        public Nullable<System.DateTime> activatedate { get; set; }
+        public Nullable<System.DateTime> pocrDate { get; set; }
+        public Nullable<int> poId { get; set; }
+        public string upnum { get; set; }
+        public string notes { get; set; }
     }
 }

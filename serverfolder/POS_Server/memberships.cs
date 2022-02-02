@@ -19,6 +19,7 @@ namespace POS_Server
         {
             this.agentMemberships = new HashSet<agentMemberships>();
             this.subscriptionFees = new HashSet<subscriptionFees>();
+            this.coupons = new HashSet<coupons>();
         }
     
         public int membershipId { get; set; }
@@ -40,5 +41,7 @@ namespace POS_Server
         public virtual users users1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<subscriptionFees> subscriptionFees { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<coupons> coupons { get; set; }
     }
 }
