@@ -48,6 +48,8 @@
     <Property Name="payType" Type="nvarchar" MaxLength="20" />
     <Property Name="canReserve" Type="bit" Nullable="false" />
     <Property Name="disallowReason" Type="ntext" />
+    <Property Name="residentSecId" Type="int" />
+    <Property Name="GPSAddress" Type="nvarchar" MaxLength="1000" />
   </EntityType>
   <EntityType Name="banks">
     <Key>
@@ -974,6 +976,32 @@
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
   </EntityType>
+  <EntityType Name="residentialSectors">
+    <Key>
+      <PropertyRef Name="residentSecId" />
+    </Key>
+    <Property Name="residentSecId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="100" />
+    <Property Name="notes" Type="nvarchar" MaxLength="500" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
+    <Property Name="createDate" Type="datetime2" Precision="7" />
+    <Property Name="updateDate" Type="datetime2" Precision="7" />
+    <Property Name="createUserId" Type="int" />
+    <Property Name="updateUserId" Type="int" />
+  </EntityType>
+  <EntityType Name="residentialSectorsUsers">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="residentSecId" Type="int" />
+    <Property Name="userId" Type="int" />
+    <Property Name="notes" Type="nvarchar" MaxLength="500" />
+    <Property Name="createDate" Type="datetime2" Precision="7" />
+    <Property Name="updateDate" Type="datetime2" Precision="7" />
+    <Property Name="createUserId" Type="int" />
+    <Property Name="updateUserId" Type="int" />
+  </EntityType>
   <EntityType Name="sections">
     <Key>
       <PropertyRef Name="sectionId" />
@@ -1290,6 +1318,18 @@
       </Principal>
       <Dependent Role="agents">
         <PropertyRef Name="pointId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_agents_residentialSectors">
+    <End Role="residentialSectors" Type="Self.residentialSectors" Multiplicity="0..1" />
+    <End Role="agents" Type="Self.agents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="residentialSectors">
+        <PropertyRef Name="residentSecId" />
+      </Principal>
+      <Dependent Role="agents">
+        <PropertyRef Name="residentSecId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3465,6 +3505,78 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_residentialSectors_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="residentialSectors" Type="Self.residentialSectors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="residentialSectors">
+        <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectors_users1">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="residentialSectors" Type="Self.residentialSectors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="residentialSectors">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectorsUsers_residentialSectors">
+    <End Role="residentialSectors" Type="Self.residentialSectors" Multiplicity="0..1" />
+    <End Role="residentialSectorsUsers" Type="Self.residentialSectorsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="residentialSectors">
+        <PropertyRef Name="residentSecId" />
+      </Principal>
+      <Dependent Role="residentialSectorsUsers">
+        <PropertyRef Name="residentSecId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectorsUsers_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="residentialSectorsUsers" Type="Self.residentialSectorsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="residentialSectorsUsers">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectorsUsers_users1">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="residentialSectorsUsers" Type="Self.residentialSectorsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="residentialSectorsUsers">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectorsUsers_users2">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="residentialSectorsUsers" Type="Self.residentialSectorsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="residentialSectorsUsers">
+        <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_sections_branches">
     <End Role="branches" Type="Self.branches" Multiplicity="0..1" />
     <End Role="sections" Type="Self.sections" Multiplicity="*" />
@@ -3811,6 +3923,8 @@
     <EntitySet Name="properties" EntityType="Self.properties" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="propertiesItems" EntityType="Self.propertiesItems" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="reservations" EntityType="Self.reservations" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="residentialSectors" EntityType="Self.residentialSectors" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="residentialSectorsUsers" EntityType="Self.residentialSectorsUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sections" EntityType="Self.sections" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="serials" EntityType="Self.serials" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="setting" EntityType="Self.setting" Schema="dbo" store:Type="Tables" />
@@ -3852,6 +3966,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_agents_Points" Association="Self.FK_agents_Points">
       <End Role="Points" EntitySet="Points" />
+      <End Role="agents" EntitySet="agents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_agents_residentialSectors" Association="Self.FK_agents_residentialSectors">
+      <End Role="residentialSectors" EntitySet="residentialSectors" />
       <End Role="agents" EntitySet="agents" />
     </AssociationSet>
     <AssociationSet Name="FK_agents_users" Association="Self.FK_agents_users">
@@ -4577,6 +4695,30 @@
     <AssociationSet Name="FK_reservations_users" Association="Self.FK_reservations_users">
       <End Role="users" EntitySet="users" />
       <End Role="reservations" EntitySet="reservations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectors_users" Association="Self.FK_residentialSectors_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="residentialSectors" EntitySet="residentialSectors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectors_users1" Association="Self.FK_residentialSectors_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="residentialSectors" EntitySet="residentialSectors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectorsUsers_residentialSectors" Association="Self.FK_residentialSectorsUsers_residentialSectors">
+      <End Role="residentialSectors" EntitySet="residentialSectors" />
+      <End Role="residentialSectorsUsers" EntitySet="residentialSectorsUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectorsUsers_users" Association="Self.FK_residentialSectorsUsers_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="residentialSectorsUsers" EntitySet="residentialSectorsUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectorsUsers_users1" Association="Self.FK_residentialSectorsUsers_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="residentialSectorsUsers" EntitySet="residentialSectorsUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectorsUsers_users2" Association="Self.FK_residentialSectorsUsers_users2">
+      <End Role="users" EntitySet="users" />
+      <End Role="residentialSectorsUsers" EntitySet="residentialSectorsUsers" />
     </AssociationSet>
     <AssociationSet Name="FK_sections_branches" Association="Self.FK_sections_branches">
       <End Role="branches" EntitySet="branches" />

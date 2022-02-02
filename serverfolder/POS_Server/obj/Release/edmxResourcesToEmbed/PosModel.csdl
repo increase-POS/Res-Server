@@ -63,6 +63,9 @@
     <NavigationProperty Name="Points1" Relationship="Self.FK_Points_agents" FromRole="agents" ToRole="Points" />
     <Property Name="canReserve" Type="Boolean" Nullable="false" />
     <Property Name="disallowReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="residentSecId" Type="Int32" />
+    <Property Name="GPSAddress" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="residentialSectors" Relationship="PosModel.FK_agents_residentialSectors" FromRole="agents" ToRole="residentialSectors" />
   </EntityType>
   <EntityType Name="banks">
     <Key>
@@ -1491,6 +1494,11 @@
     <NavigationProperty Name="tables1" Relationship="PosModel.FK_tables_users" FromRole="users" ToRole="tables" />
     <NavigationProperty Name="tablesReservations" Relationship="PosModel.FK_tablesReservations_updateUsers" FromRole="users" ToRole="tablesReservations" />
     <NavigationProperty Name="tablesReservations1" Relationship="PosModel.FK_tablesReservations_users" FromRole="users" ToRole="tablesReservations" />
+    <NavigationProperty Name="residentialSectors" Relationship="PosModel.FK_residentialSectors_users" FromRole="users" ToRole="residentialSectors" />
+    <NavigationProperty Name="residentialSectors1" Relationship="PosModel.FK_residentialSectors_users1" FromRole="users" ToRole="residentialSectors" />
+    <NavigationProperty Name="residentialSectorsUsers" Relationship="PosModel.FK_residentialSectorsUsers_users" FromRole="users" ToRole="residentialSectorsUsers" />
+    <NavigationProperty Name="residentialSectorsUsers1" Relationship="PosModel.FK_residentialSectorsUsers_users1" FromRole="users" ToRole="residentialSectorsUsers" />
+    <NavigationProperty Name="residentialSectorsUsers2" Relationship="PosModel.FK_residentialSectorsUsers_users2" FromRole="users" ToRole="residentialSectorsUsers" />
   </EntityType>
   <EntityType Name="userSetValues">
     <Key>
@@ -4774,6 +4782,36 @@
       <End Role="users" EntitySet="users" />
       <End Role="tablesReservations" EntitySet="tablesReservations" />
     </AssociationSet>
+    <EntitySet Name="residentialSectors" EntityType="PosModel.residentialSectors" />
+    <EntitySet Name="residentialSectorsUsers" EntityType="PosModel.residentialSectorsUsers" />
+    <AssociationSet Name="FK_agents_residentialSectors" Association="PosModel.FK_agents_residentialSectors">
+      <End Role="residentialSectors" EntitySet="residentialSectors" />
+      <End Role="agents" EntitySet="agents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectors_users" Association="PosModel.FK_residentialSectors_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="residentialSectors" EntitySet="residentialSectors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectors_users1" Association="PosModel.FK_residentialSectors_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="residentialSectors" EntitySet="residentialSectors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectorsUsers_residentialSectors" Association="PosModel.FK_residentialSectorsUsers_residentialSectors">
+      <End Role="residentialSectors" EntitySet="residentialSectors" />
+      <End Role="residentialSectorsUsers" EntitySet="residentialSectorsUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectorsUsers_users" Association="PosModel.FK_residentialSectorsUsers_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="residentialSectorsUsers" EntitySet="residentialSectorsUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectorsUsers_users1" Association="PosModel.FK_residentialSectorsUsers_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="residentialSectorsUsers" EntitySet="residentialSectorsUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_residentialSectorsUsers_users2" Association="PosModel.FK_residentialSectorsUsers_users2">
+      <End Role="users" EntitySet="users" />
+      <End Role="residentialSectorsUsers" EntitySet="residentialSectorsUsers" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="dishIngredients">
     <Key>
@@ -5113,6 +5151,124 @@
         <PropertyRef Name="userId" />
       </Principal>
       <Dependent Role="tablesReservations">
+        <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="residentialSectors">
+    <Key>
+      <PropertyRef Name="residentSecId" />
+    </Key>
+    <Property Name="residentSecId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="notes" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="isActive" Type="Byte" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="7" />
+    <Property Name="updateDate" Type="DateTime" Precision="7" />
+    <Property Name="createUserId" Type="Int32" />
+    <Property Name="updateUserId" Type="Int32" />
+    <NavigationProperty Name="agents" Relationship="PosModel.FK_agents_residentialSectors" FromRole="residentialSectors" ToRole="agents" />
+    <NavigationProperty Name="users" Relationship="PosModel.FK_residentialSectors_users" FromRole="residentialSectors" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="PosModel.FK_residentialSectors_users1" FromRole="residentialSectors" ToRole="users" />
+    <NavigationProperty Name="residentialSectorsUsers" Relationship="PosModel.FK_residentialSectorsUsers_residentialSectors" FromRole="residentialSectors" ToRole="residentialSectorsUsers" />
+  </EntityType>
+  <EntityType Name="residentialSectorsUsers">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="residentSecId" Type="Int32" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="notes" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="createDate" Type="DateTime" Precision="7" />
+    <Property Name="updateDate" Type="DateTime" Precision="7" />
+    <Property Name="createUserId" Type="Int32" />
+    <Property Name="updateUserId" Type="Int32" />
+    <NavigationProperty Name="residentialSectors" Relationship="PosModel.FK_residentialSectorsUsers_residentialSectors" FromRole="residentialSectorsUsers" ToRole="residentialSectors" />
+    <NavigationProperty Name="users" Relationship="PosModel.FK_residentialSectorsUsers_users" FromRole="residentialSectorsUsers" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="PosModel.FK_residentialSectorsUsers_users1" FromRole="residentialSectorsUsers" ToRole="users" />
+    <NavigationProperty Name="users2" Relationship="PosModel.FK_residentialSectorsUsers_users2" FromRole="residentialSectorsUsers" ToRole="users" />
+  </EntityType>
+  <Association Name="FK_agents_residentialSectors">
+    <End Type="PosModel.residentialSectors" Role="residentialSectors" Multiplicity="0..1" />
+    <End Type="PosModel.agents" Role="agents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="residentialSectors">
+        <PropertyRef Name="residentSecId" />
+      </Principal>
+      <Dependent Role="agents">
+        <PropertyRef Name="residentSecId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectors_users">
+    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
+    <End Type="PosModel.residentialSectors" Role="residentialSectors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="residentialSectors">
+        <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectors_users1">
+    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
+    <End Type="PosModel.residentialSectors" Role="residentialSectors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="residentialSectors">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectorsUsers_residentialSectors">
+    <End Type="PosModel.residentialSectors" Role="residentialSectors" Multiplicity="0..1" />
+    <End Type="PosModel.residentialSectorsUsers" Role="residentialSectorsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="residentialSectors">
+        <PropertyRef Name="residentSecId" />
+      </Principal>
+      <Dependent Role="residentialSectorsUsers">
+        <PropertyRef Name="residentSecId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectorsUsers_users">
+    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
+    <End Type="PosModel.residentialSectorsUsers" Role="residentialSectorsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="residentialSectorsUsers">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectorsUsers_users1">
+    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
+    <End Type="PosModel.residentialSectorsUsers" Role="residentialSectorsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="residentialSectorsUsers">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_residentialSectorsUsers_users2">
+    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
+    <End Type="PosModel.residentialSectorsUsers" Role="residentialSectorsUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="residentialSectorsUsers">
         <PropertyRef Name="createUserId" />
       </Dependent>
     </ReferentialConstraint>
