@@ -963,6 +963,71 @@ namespace POS_Server.Controllers
             }
         }
         [HttpPost]
+        [Route("GetKitchenItems")]
+        public string GetKitchenItems(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int branchId = 0;
+                int categoryId = 0;
+                List<string> typeLst = new List<string>();
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "categoryId")
+                    {
+                        categoryId = int.Parse(c.Value);
+                    }
+                }
+
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var searchPredicate = PredicateBuilder.New<items>();
+                    if (categoryId != 0)
+                        searchPredicate = searchPredicate.And(x => x.categoryId == categoryId);
+                    var itemsList = (from I in entity.items
+                                     join u in entity.itemsUnits on I.itemId equals u.itemId
+                                     join l in entity.itemsLocations.Where(x => x.locations.branchId == branchId && x.locations.isKitchen == 1 && x.quantity > 0) on u.itemUnitId equals l.itemUnitId 
+                                     select new ItemModel()
+                                     {
+                                         itemId = I.itemId,
+                                         name = I.name,
+                                         code = I.code,
+                                         type = I.type,
+                                         isActive = I.isActive,
+                                         updateDate = I.updateDate,
+                                         itemUnitId = I.itemsUnits.Where(iu => iu.itemId == I.itemId && iu.defaultPurchase == 1).Select(iu => iu.itemUnitId).FirstOrDefault(),
+                                     }).Where(x => x.isActive == 1).Distinct().ToList();
+
+                   foreach(ItemModel item in itemsList)
+                    {
+                        var itemO = entity.items.Find(item.itemId);
+                        if (item.itemUnitId != null && item.itemUnitId != 0)
+                        {
+                            int itemUnitId = (int)item.itemUnitId;
+                            int count = getItemUnitAmount(itemUnitId, branchId);
+                            item.itemCount = count;
+                            
+                        }
+                        item.details = itemO.details;
+                        item.image = itemO.image;
+                    }
+                    return TokenManager.GenerateToken(itemsList);
+                   
+                }
+            }
+        }
+        [HttpPost]
         [Route("GetItemsInCategory")]
         public string GetItemsInCategory(string token)
         {
@@ -1907,7 +1972,7 @@ namespace POS_Server.Controllers
                 return TokenManager.GenerateToken("0");
             }
         }
-        private int getItemUnitAmount(int itemUnitId, int branchId)
+        private int getItemUnitAmount(int itemUnitId, int branchId, int isKitchen = 0)
         {
             int amount = 0;
 
@@ -1915,7 +1980,7 @@ namespace POS_Server.Controllers
             {
                 var itemInLocs = (from b in entity.branches
                                   where b.branchId == branchId
-                                  join s in entity.sections on b.branchId equals s.branchId
+                                  join s in entity.sections.Where(x => x.isKitchen == isKitchen) on b.branchId equals s.branchId
                                   join l in entity.locations on s.sectionId equals l.sectionId
                                   join il in entity.itemsLocations on l.locationId equals il.locationId
                                   where il.itemUnitId == itemUnitId && il.quantity > 0
@@ -1934,12 +1999,12 @@ namespace POS_Server.Controllers
                 }
 
                 var unit = entity.itemsUnits.Where(x => x.itemUnitId == itemUnitId).Select(x => new { x.unitId, x.itemId }).FirstOrDefault();
-                var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
+                var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId && x.isActive == 1).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
 
                 if (upperUnit != null && itemUnitId == upperUnit.itemUnitId)
                     return amount;
                 if (upperUnit != null)
-                    amount += (int)upperUnit.unitValue * getItemUnitAmount(upperUnit.itemUnitId, branchId);
+                    amount += (int)upperUnit.unitValue * getItemUnitAmount(upperUnit.itemUnitId, branchId, isKitchen);
 
                 return amount;
             }

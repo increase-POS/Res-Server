@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Web;
 
 using Newtonsoft.Json.Converters;
+using LinqKit;
 
 namespace POS_Server.Controllers
 {
@@ -1529,7 +1530,7 @@ namespace POS_Server.Controllers
                             dic = checkUpperUnit(itemUnitId, branchId, requiredAmount, userId);
 
                             var unit = entity.itemsUnits.Where(x => x.itemUnitId == itemUnitId).Select(x => new { x.unitId, x.itemId }).FirstOrDefault();
-                            var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId && x.subUnitId != x.unitId).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
+                            var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId && x.subUnitId != x.unitId && x.isActive == 1).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
 
 
                             if (dic["remainQuantity"] > 0)
@@ -1587,17 +1588,19 @@ namespace POS_Server.Controllers
             }        
         }
 
-        public int updateItemQuantity(int itemUnitId, int branchId, int requiredAmount, int userId)
+        public int updateItemQuantity(int itemUnitId, int branchId, int requiredAmount, int userId, int isKitchen = 0)
         {
             Dictionary<string, int> dic = new Dictionary<string, int>();
             using (incposdbEntities entity = new incposdbEntities())
             {
+                var searchPredicate = PredicateBuilder.New<sections>();
+                searchPredicate = searchPredicate.And(x => x.isKitchen == isKitchen);
                 var itemInLocs = (from b in entity.branches
                                   where b.branchId == branchId
-                                  join s in entity.sections on b.branchId equals s.branchId
+                                  join s in entity.sections.Where(searchPredicate) on b.branchId equals s.branchId
                                   join l in entity.locations on s.sectionId equals l.sectionId
                                   join il in entity.itemsLocations on l.locationId equals il.locationId
-                                  where il.itemUnitId == itemUnitId && il.quantity > 0 && il.invoiceId == null && s.isKitchen != 1
+                                  where il.itemUnitId == itemUnitId && il.quantity > 0 && il.invoiceId == null 
                                   select new
                                   {
                                       il.itemsLocId,
@@ -1630,18 +1633,18 @@ namespace POS_Server.Controllers
                 }
                 if (requiredAmount != 0)
                 {
-                    dic = checkUpperUnit(itemUnitId, branchId, requiredAmount, userId);
+                    dic = checkUpperUnit(itemUnitId, branchId, requiredAmount, userId,isKitchen);
 
                     var unit = entity.itemsUnits.Where(x => x.itemUnitId == itemUnitId).Select(x => new { x.unitId, x.itemId }).FirstOrDefault();
-                    var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId && x.subUnitId != x.unitId).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
+                    var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId && x.subUnitId != x.unitId && x.isActive == 1).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
 
 
                     if (dic["remainQuantity"] > 0)
                     {
                         var item = (from il in entity.itemsLocations
-                                    where il.itemUnitId == itemUnitId && il.invoiceId == null && il.locations.isKitchen != 1
+                                    where il.itemUnitId == itemUnitId && il.invoiceId == null 
                                     join l in entity.locations on il.locationId equals l.locationId
-                                    join s in entity.sections on l.sectionId equals s.sectionId
+                                    join s in entity.sections.Where(searchPredicate) on l.sectionId equals s.sectionId
                                     where s.branchId == branchId
                                     select new
                                     {
@@ -1655,7 +1658,7 @@ namespace POS_Server.Controllers
                         }
                         else
                         {
-                            var locations = entity.locations.Where(x => x.branchId == branchId && x.isActive == 1).Select(x => new { x.locationId }).OrderBy(x => x.locationId).ToList();
+                            var locations = entity.locations.Where(x => x.branchId == branchId && x.isActive == 1 && x.isKitchen == isKitchen).Select(x => new { x.locationId }).OrderBy(x => x.locationId).ToList();
                             // if (locations.Count > 0)
                             // {
                             int locationId = dic["locationId"];
@@ -1676,7 +1679,7 @@ namespace POS_Server.Controllers
                     }
                     if (dic["requiredQuantity"] > 0)
                     {
-                        checkLowerUnit(itemUnitId, branchId, dic["requiredQuantity"], userId);
+                        checkLowerUnit(itemUnitId, branchId, dic["requiredQuantity"], userId, isKitchen);
                     }
 
                 }
@@ -1685,7 +1688,7 @@ namespace POS_Server.Controllers
 
         }
 
-        private Dictionary<string, int> checkUpperUnit(int itemUnitId, int branchId, int requiredAmount, int userId)
+        private Dictionary<string, int> checkUpperUnit(int itemUnitId, int branchId, int requiredAmount, int userId, int isKitchen = 0)
         {
             Dictionary<string, int> dic = new Dictionary<string, int>();
             dic.Add("remainQuantity", 0);
@@ -1697,8 +1700,11 @@ namespace POS_Server.Controllers
             decimal newQuant = 0;
             using (incposdbEntities entity = new incposdbEntities())
             {
+                var searchPredicate = PredicateBuilder.New<sections>();
+                searchPredicate = searchPredicate.And(x => x.isKitchen == isKitchen);
+
                 var unit = entity.itemsUnits.Where(x => x.itemUnitId == itemUnitId).Select(x => new { x.unitId, x.itemId }).FirstOrDefault();
-                var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId && x.subUnitId != x.unitId).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
+                var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId && x.subUnitId != x.unitId && x.isActive == 1).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
 
                 if (upperUnit != null)
                 {
@@ -1707,10 +1713,10 @@ namespace POS_Server.Controllers
                     newQuant = (decimal)(breakNum * upperUnit.unitValue);
                     var itemInLocs = (from b in entity.branches
                                       where b.branchId == branchId
-                                      join s in entity.sections on b.branchId equals s.branchId
+                                      join s in entity.sections.Where(searchPredicate) on b.branchId equals s.branchId
                                       join l in entity.locations on s.sectionId equals l.sectionId
                                       join il in entity.itemsLocations on l.locationId equals il.locationId
-                                      where il.itemUnitId == upperUnit.itemUnitId && il.quantity > 0 && il.invoiceId == null && il.locations.isKitchen != 1
+                                      where il.itemUnitId == upperUnit.itemUnitId && il.quantity > 0 && il.invoiceId == null
                                       select new
                                       {
                                           il.itemsLocId,
@@ -1725,7 +1731,7 @@ namespace POS_Server.Controllers
                     {
                         dic["isConsumed"] = 1;
                         var itemL = entity.itemsLocations.Find(itemInLocs[i].itemsLocId);
-                        var smallUnitLocId = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitId && x.invoiceId == null && x.locations.isKitchen != 1).
+                        var smallUnitLocId = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitId && x.invoiceId == null && x.locations.isKitchen == isKitchen).
                             Select(x => x.itemsLocId).FirstOrDefault();
 
                         if (breakNum <= itemInLocs[i].quantity)
@@ -1753,12 +1759,12 @@ namespace POS_Server.Controllers
                     if (breakNum != 0)
                     {
                         dic = new Dictionary<string, int>();
-                        dic = checkUpperUnit(upperUnit.itemUnitId, branchId, breakNum, userId);
+                        dic = checkUpperUnit(upperUnit.itemUnitId, branchId, breakNum, userId,isKitchen);
                         var item = (from s in entity.sections
                                     where s.branchId == branchId
                                     join l in entity.locations on s.sectionId equals l.sectionId
                                     join il in entity.itemsLocations on l.locationId equals il.locationId
-                                    where il.itemUnitId == upperUnit.itemUnitId && il.invoiceId == null && il.locations.isKitchen != 1
+                                    where il.itemUnitId == upperUnit.itemUnitId && il.invoiceId == null && il.locations.isKitchen == isKitchen
                                     select new
                                     {
                                         il.itemsLocId,
@@ -1771,7 +1777,7 @@ namespace POS_Server.Controllers
                         }
                         else
                         {
-                            var locations = entity.locations.Where(x => x.branchId == branchId && x.isActive == 1).Select(x => new { x.locationId }).OrderBy(x => x.locationId).ToList();
+                            var locations = entity.locations.Where(x => x.branchId == branchId && x.isActive == 1 && x.isKitchen == isKitchen).Select(x => new { x.locationId }).OrderBy(x => x.locationId).ToList();
 
                             int locationId = dic["locationId"];
                             if (locationId == 0 && locations.Count > 1)
@@ -1817,7 +1823,7 @@ namespace POS_Server.Controllers
             }
             return dic;
         }
-        private Dictionary<string, int> checkLowerUnit(int itemUnitId, int branchId, int requiredAmount, int userId)
+        private Dictionary<string, int> checkLowerUnit(int itemUnitId, int branchId, int requiredAmount, int userId, int isKitchen = 0)
         {
             Dictionary<string, int> dic = new Dictionary<string, int>();
             int remainQuantity = 0;
@@ -1826,7 +1832,7 @@ namespace POS_Server.Controllers
             using (incposdbEntities entity = new incposdbEntities())
             {
                 var unit = entity.itemsUnits.Where(x => x.itemUnitId == itemUnitId).Select(x => new { x.unitId, x.itemId, x.subUnitId, x.unitValue }).FirstOrDefault();
-                var lowerUnit = entity.itemsUnits.Where(x => x.unitId == unit.subUnitId && x.itemId == unit.itemId).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
+                var lowerUnit = entity.itemsUnits.Where(x => x.unitId == unit.subUnitId && x.itemId == unit.itemId && x.isActive == 1).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
 
                 if (lowerUnit != null)
                 {
@@ -1835,10 +1841,10 @@ namespace POS_Server.Controllers
                     newQuant = (decimal)Math.Ceiling(breakNum / (decimal)lowerUnit.unitValue);
                     var itemInLocs = (from b in entity.branches
                                       where b.branchId == branchId
-                                      join s in entity.sections on b.branchId equals s.branchId
+                                      join s in entity.sections.Where(x => x.isKitchen == isKitchen) on b.branchId equals s.branchId
                                       join l in entity.locations on s.sectionId equals l.sectionId
                                       join il in entity.itemsLocations on l.locationId equals il.locationId
-                                      where il.itemUnitId == lowerUnit.itemUnitId && il.quantity > 0 && il.invoiceId == null && il.locations.isKitchen != 1
+                                      where il.itemUnitId == lowerUnit.itemUnitId && il.quantity > 0 && il.invoiceId == null 
                                       select new
                                       {
                                           il.itemsLocId,
@@ -1853,7 +1859,7 @@ namespace POS_Server.Controllers
                     {
 
                         var itemL = entity.itemsLocations.Find(itemInLocs[i].itemsLocId);
-                        var smallUnitLocId = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitId && x.invoiceId == null && x.locations.isKitchen != 1).
+                        var smallUnitLocId = entity.itemsLocations.Where(x => x.itemUnitId == itemUnitId && x.invoiceId == null && x.locations.isKitchen == isKitchen).
                             Select(x => x.itemsLocId).FirstOrDefault();
 
                         if (breakNum <= itemInLocs[i].quantity)
@@ -1882,7 +1888,7 @@ namespace POS_Server.Controllers
                     if (breakNum != 0)
                     {
                         dic = new Dictionary<string, int>();
-                        dic = checkLowerUnit(lowerUnit.itemUnitId, branchId, breakNum, userId);
+                        dic = checkLowerUnit(lowerUnit.itemUnitId, branchId, breakNum, userId,isKitchen);
                        
                         dic["remainQuantity"] = (int)newQuant - firstRequir;
                         dic["requiredQuantity"] = breakNum;
@@ -2717,6 +2723,79 @@ namespace POS_Server.Controllers
                                     var itemV = entity.items.Find(itemId);
                                     notificationController.addNotifications(objectName, notificationObj, (int)branchId, itemV.name);
                                 }
+                            }
+                        }
+                        //  return true;
+
+                        return TokenManager.GenerateToken("1");
+                    }
+
+                    catch
+                    {
+                        message = "0";
+                        return TokenManager.GenerateToken(message);
+                    }
+
+                }
+                else
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+
+
+            }
+        }
+        [HttpPost]
+        [Route("decreaseAmountsInKitchen")]
+        public string decreaseAmountsInKitchen(string token)
+        {
+            string message = "";
+
+            token = TokenManager.readToken(HttpContext.Current.Request); 
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string Object = "";
+                int branchId = 0;
+                int userId = 0;
+                List<itemsTransfer> newObject = new List<itemsTransfer>();
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "Object")
+                    {
+                        Object = c.Value.Replace("\\", string.Empty);
+                        Object = Object.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<List<itemsTransfer>>(Object, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+
+                    }                  
+                }
+
+                if (newObject != null)
+                {
+                    try
+                    {
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+                            foreach (itemsTransfer item in newObject)
+                            {
+                                updateItemQuantity(item.itemUnitId.Value, branchId, (int)item.quantity, userId,1);
+
                             }
                         }
                         //  return true;
