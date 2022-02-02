@@ -2302,13 +2302,29 @@ namespace POS_Server.Controllers
 
             }
         }
+        private void decreaseItemQuantity(int itemUnitId, int locationId, int quantity, int userId)
+        {
+            using (incposdbEntities entity = new incposdbEntities())
+            {
+                var itemUnit = (from il in entity.itemsLocations
+                                where il.itemUnitId == itemUnitId && il.locationId == locationId && il.invoiceId == null && il.locations.isKitchen != 1
+                                select new { il.itemsLocId }
+                                ).FirstOrDefault();
+                itemsLocations itemL = new itemsLocations();
+
+                itemL = entity.itemsLocations.Find(itemUnit.itemsLocId);
+                itemL.quantity -= quantity;
+                itemL.updateDate = DateTime.Now;
+                itemL.updateUserId = userId;
+                entity.SaveChanges();
+            }
+        }
         [HttpPost]
         [Route("returnSpendingOrder")]
         public string returnSpendingOrder(string token)
         {
             string message = "";
-
-            token = TokenManager.readToken(HttpContext.Current.Request); 
+            token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
@@ -2317,10 +2333,8 @@ namespace POS_Server.Controllers
             else
             {
                 string Object = "";
-
                 int branchId = 0;
                 int userId = 0;
-
                 List<itemsTransfer> newObject = new List<itemsTransfer>();
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -2343,31 +2357,45 @@ namespace POS_Server.Controllers
                         userId = int.Parse(c.Value);
 
                     }
+
                 }
 
                 if (newObject != null)
                 {
                     try
                     {
-
                         using (incposdbEntities entity = new incposdbEntities())
                         {
-                            var freeZoneLocation = (from s in entity.sections.Where(x => x.branchId == branchId &&  x.isKitchen != 1)
+                            var freeZoneLocation = (from s in entity.sections.Where(x => x.branchId == branchId && x.isFreeZone == 1 && x.isKitchen != 1)
                                                     join l in entity.locations on s.sectionId equals l.sectionId
                                                     select l.locationId).SingleOrDefault();
                             foreach (itemsTransfer item in newObject)
                             {
-                                decreaseItemQuantity(item.itemUnitId.Value, freeZoneLocation, (int)item.quantity, userId);
+                                var itemL = entity.itemsLocations.Where(x => x.itemUnitId == item.itemUnitId && x.locations.isKitchen == 1).FirstOrDefault();
+                                if (item.quantity > 0)
+                                {
+                                    itemL.quantity -= item.quantity;
+                                    itemL.updateDate = DateTime.Now;
+                                    itemL.updateUserId = userId;
+                                    entity.SaveChanges();
+
+                                    var itemId = entity.itemsUnits.Where(x => x.itemUnitId == item.itemUnitId).Select(x => x.itemId).Single();
+
+                                    var itemV = entity.items.Find(itemId);
+                                    int quantity = (int)item.quantity;
+
+                                    if (quantity != 0)
+                                        increaseItemQuantity(item.itemUnitId.Value, freeZoneLocation, quantity, userId);
+                                }
                             }
+                            return TokenManager.GenerateToken("1");
                         }
-                        return TokenManager.GenerateToken("1");
                     }
                     catch
                     {
                         message = "0";
                         return TokenManager.GenerateToken(message);
                     }
-
                 }
                 else
                 {
@@ -2375,6 +2403,7 @@ namespace POS_Server.Controllers
                 }
             }
         }
+       
         [HttpPost]
         [Route("destroyItem")]
         public string destroyItem(string token)
@@ -2449,24 +2478,7 @@ namespace POS_Server.Controllers
 
 
             }
-        }
-        private void decreaseItemQuantity(int itemUnitId, int locationId, int quantity, int userId)
-        {
-            using (incposdbEntities entity = new incposdbEntities())
-            {
-                var itemUnit = (from il in entity.itemsLocations
-                                where il.itemUnitId == itemUnitId && il.locationId == locationId && il.invoiceId == null && il.locations.isKitchen != 1
-                                select new { il.itemsLocId }
-                                ).FirstOrDefault();
-                itemsLocations itemL = new itemsLocations();
-
-                itemL = entity.itemsLocations.Find(itemUnit.itemsLocId);
-                itemL.quantity -= quantity;
-                itemL.updateDate = DateTime.Now;
-                itemL.updateUserId = userId;
-                entity.SaveChanges();
-            }
-        }
+        }      
 
 
 
