@@ -271,6 +271,7 @@
     <Compile Include="Controllers\ActivateController.cs" />
     <Compile Include="Controllers\AgentController.cs" />
     <Compile Include="Controllers\BackupController.cs" />
+    <Compile Include="Controllers\ResidentialSectorsController.cs" />
     <Compile Include="Controllers\BranchesUsersController.cs" />
     <Compile Include="Controllers\AgentMembershipsController.cs" />
     <Compile Include="Controllers\BanksController.cs" />
@@ -422,6 +423,7 @@
     </Compile>
     <Compile Include="Models\ActivateModel.cs" />
     <Compile Include="Models\BackupModel.cs" />
+    <Compile Include="Models\ResidentialSectorsModel.cs" />
     <Compile Include="Models\BranchesUsersModel.cs" />
     <Compile Include="Models\AgentMembershipsModel.cs" />
     <Compile Include="Models\AgentModel.cs" />
@@ -542,6 +544,12 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="reservations.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="residentialSectors.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="residentialSectorsUsers.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="sections.cs">

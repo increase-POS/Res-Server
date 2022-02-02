@@ -23,6 +23,8 @@
     <EntitySetMapping Name="agents">
       <EntityTypeMapping TypeName="PosModel.agents">
         <MappingFragment StoreEntitySet="agents">
+          <ScalarProperty Name="GPSAddress" ColumnName="GPSAddress" />
+          <ScalarProperty Name="residentSecId" ColumnName="residentSecId" />
           <ScalarProperty Name="disallowReason" ColumnName="disallowReason" />
           <ScalarProperty Name="canReserve" ColumnName="canReserve" />
           <ScalarProperty Name="agentId" ColumnName="agentId" />
@@ -1279,6 +1281,34 @@
           <ScalarProperty Name="tableId" ColumnName="tableId" />
           <ScalarProperty Name="reservationId" ColumnName="reservationId" />
           <ScalarProperty Name="tableReservId" ColumnName="tableReservId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="residentialSectors">
+      <EntityTypeMapping TypeName="PosModel.residentialSectors">
+        <MappingFragment StoreEntitySet="residentialSectors">
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="residentSecId" ColumnName="residentSecId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="residentialSectorsUsers">
+      <EntityTypeMapping TypeName="PosModel.residentialSectorsUsers">
+        <MappingFragment StoreEntitySet="residentialSectorsUsers">
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="residentSecId" ColumnName="residentSecId" />
+          <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

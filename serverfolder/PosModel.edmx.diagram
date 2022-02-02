@@ -290,6 +290,15 @@
         <AssociationConnector Association="PosModel.FK_tablesReservations_tables" />
         <AssociationConnector Association="PosModel.FK_tablesReservations_updateUsers" />
         <AssociationConnector Association="PosModel.FK_tablesReservations_users" />
+        <EntityTypeShape EntityType="PosModel.residentialSectors" Width="1.5" PointX="3" PointY="109.75" />
+        <EntityTypeShape EntityType="PosModel.residentialSectorsUsers" Width="1.5" PointX="19.25" PointY="109.875" />
+        <AssociationConnector Association="PosModel.FK_agents_residentialSectors" />
+        <AssociationConnector Association="PosModel.FK_residentialSectors_users" />
+        <AssociationConnector Association="PosModel.FK_residentialSectors_users1" />
+        <AssociationConnector Association="PosModel.FK_residentialSectorsUsers_residentialSectors" />
+        <AssociationConnector Association="PosModel.FK_residentialSectorsUsers_users" />
+        <AssociationConnector Association="PosModel.FK_residentialSectorsUsers_users1" />
+        <AssociationConnector Association="PosModel.FK_residentialSectorsUsers_users2" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
