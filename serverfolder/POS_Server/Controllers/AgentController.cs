@@ -76,8 +76,9 @@ namespace POS_Server.Controllers
                        payType = p.payType,
                        canReserve = p.canReserve,
                        disallowReason = p.disallowReason,
-                       
-                    })
+                       residentSecId = p.residentSecId,
+                       GPSAddress = p.GPSAddress,
+                   })
                    .ToList();
                     if (agentsList.Count > 0)
                     {
@@ -103,8 +104,8 @@ namespace POS_Server.Controllers
         [Route("GetActive")]
         public string GetActive(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-             
+            token = TokenManager.readToken(HttpContext.Current.Request);
+
             string type = "";
             var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
@@ -150,6 +151,8 @@ token = TokenManager.readToken(HttpContext.Current.Request);
                        p.payType,
                        p.canReserve,
                        p.disallowReason,
+                        p.residentSecId,
+                     p.GPSAddress,
                    })
                    .ToList();
 
@@ -190,8 +193,8 @@ token = TokenManager.readToken(HttpContext.Current.Request);
                 {
 
                     var agentsList = entity.agents
-                   .Where(p => p.type == type && (p.isActive == 1 || 
-                                                 (p.isActive == 0 && payType == "p" && p.balanceType == 0) || 
+                   .Where(p => p.type == type && (p.isActive == 1 ||
+                                                 (p.isActive == 0 && payType == "p" && p.balanceType == 0) ||
                                                  (p.isActive == 0 && payType == "d" && p.balanceType == 1)))
                    .Select(p => new
                    {
@@ -217,6 +220,8 @@ token = TokenManager.readToken(HttpContext.Current.Request);
                        p.payType,
                        p.canReserve,
                        p.disallowReason,
+                       p.residentSecId,
+                    p.GPSAddress,
                    })
                    .ToList();
                     return TokenManager.GenerateToken(agentsList);
@@ -228,7 +233,7 @@ token = TokenManager.readToken(HttpContext.Current.Request);
         [Route("GetAgentByID")]
         public string GetAgentByID(string token)
         {
-            token = TokenManager.readToken(HttpContext.Current.Request);var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request); var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -249,9 +254,12 @@ token = TokenManager.readToken(HttpContext.Current.Request);
                     {
                         var agent = entity.agents
                        .Where(p => p.agentId == agentId)
-                       .Select(p => new { p.agentId, p.name, p.accType, p.address, p.balance, p.balanceType, p.code, p.company, p.createDate, p.createUserId, p.email, p.mobile, p.notes, p.phone, p.type, p.image, p.maxDeserve, p.fax, p.isActive, p.updateDate, p.updateUserId, p.isLimited , p.payType,p.disallowReason,p.canReserve})
+                       .Select(p => new { p.agentId, p.name, p.accType, p.address, p.balance, p.balanceType, p.code, p.company, p.createDate, p.createUserId, p.email, p.mobile, p.notes, p.phone, p.type, p.image, p.maxDeserve, p.fax, p.isActive, p.updateDate, p.updateUserId, p.isLimited, p.payType, p.disallowReason, p.canReserve,
+                             p.residentSecId,
+                            p.GPSAddress,
+                       })
                        .FirstOrDefault();
-                    return TokenManager.GenerateToken(agent);
+                        return TokenManager.GenerateToken(agent);
                     }
                 }
             }
@@ -303,7 +311,7 @@ token = TokenManager.readToken(HttpContext.Current.Request);
                             if (agentCount >= agentMaxCount)
                             {
                                 message = "-1";
-                    return TokenManager.GenerateToken(message);
+                                return TokenManager.GenerateToken(message);
                             }
                             else
                             {
@@ -338,6 +346,8 @@ token = TokenManager.readToken(HttpContext.Current.Request);
                             agent.payType = agentObj.payType;
                             agent.canReserve = agentObj.canReserve;
                             agent.disallowReason = agentObj.disallowReason;
+                            agent.residentSecId = agentObj.residentSecId;
+                            agent.GPSAddress = agentObj.GPSAddress;
                         }
                         entity.SaveChanges();
                         message = agent.agentId.ToString();
@@ -397,11 +407,11 @@ token = TokenManager.readToken(HttpContext.Current.Request);
 
                             message = entity.SaveChanges().ToString();
                         }
-                    return TokenManager.GenerateToken(message);
+                        return TokenManager.GenerateToken(message);
                     }
                     catch
                     {
-                    return TokenManager.GenerateToken("0");
+                        return TokenManager.GenerateToken("0");
                     }
                 }
                 else
@@ -414,21 +424,21 @@ token = TokenManager.readToken(HttpContext.Current.Request);
                             entity.agents.Remove(tmpAgent);
                             message = entity.SaveChanges().ToString();
                         }
-                    return TokenManager.GenerateToken(message);
+                        return TokenManager.GenerateToken(message);
                     }
                     catch
                     {
-                    return TokenManager.GenerateToken("0");
+                        return TokenManager.GenerateToken("0");
                     }
                 }
             }
-            
+
         }
 
         [Route("PostUserImage")]
-        public  IHttpActionResult PostUserImage()
+        public IHttpActionResult PostUserImage()
         {
-          
+
             try
             {
                 var httpRequest = HttpContext.Current.Request;
@@ -546,7 +556,7 @@ token = TokenManager.readToken(HttpContext.Current.Request);
                     agents agent;
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        var agentEntity = entity.Set<agents>();                      
+                        var agentEntity = entity.Set<agents>();
                         agent = entity.agents.Where(p => p.agentId == agentObj.agentId).First();
                         agent.image = agentObj.image;
                         entity.SaveChanges();
@@ -561,7 +571,7 @@ token = TokenManager.readToken(HttpContext.Current.Request);
                     return TokenManager.GenerateToken(message);
                 }
             }
-           
+
         }
         [HttpPost]
         [Route("UpdateBalance")]
@@ -653,7 +663,7 @@ token = TokenManager.readToken(HttpContext.Current.Request);
                     }
                 }
                 message = lastNum.ToString();
-                    return TokenManager.GenerateToken(message);
+                return TokenManager.GenerateToken(message);
             }
         }
 
