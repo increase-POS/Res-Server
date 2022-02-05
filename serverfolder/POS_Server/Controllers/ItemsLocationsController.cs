@@ -1915,6 +1915,7 @@ namespace POS_Server.Controllers
             {
                 int itemUnitId = 0;
                 int branchId = 0;
+                int isKitchen = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -1927,12 +1928,16 @@ namespace POS_Server.Controllers
                     {
                         branchId = int.Parse(c.Value);
                     }
+                    else if (c.Type == "isKitchen")
+                    {
+                        isKitchen = int.Parse(c.Value);
+                    }
                 }
                 try
                 {
                     int amount = 0;
-                    amount += getItemUnitAmount(itemUnitId, branchId); // from bigger unit
-                    amount += getSmallItemUnitAmount(itemUnitId, branchId);
+                    amount += getItemUnitAmount(itemUnitId, branchId,isKitchen); // from bigger unit
+                    amount += getSmallItemUnitAmount(itemUnitId, branchId,isKitchen);
                     return TokenManager.GenerateToken(amount.ToString());
                 }
                 catch
@@ -1943,19 +1948,19 @@ namespace POS_Server.Controllers
             }           
         }
 
-        public int getBranchAmount(int itemUnitId, int branchId)
+        public int getBranchAmount(int itemUnitId, int branchId,int isKitchen = 0)
         {
 
             int amount = 0;
-            amount += getItemUnitAmount(itemUnitId, branchId); // from bigger unit
-                amount += getSmallItemUnitAmount(itemUnitId, branchId);
+            amount += getItemUnitAmount(itemUnitId, branchId,isKitchen); // from bigger unit
+                amount += getSmallItemUnitAmount(itemUnitId, branchId, isKitchen);
             
             return amount;
         }
 
 
 
-        private int getItemUnitAmount(int itemUnitId, int branchId)
+        private int getItemUnitAmount(int itemUnitId, int branchId, int isKitchen = 0)
         {
             int amount = 0;
 
@@ -1966,7 +1971,7 @@ namespace POS_Server.Controllers
                                   join s in entity.sections on b.branchId equals s.branchId
                                   join l in entity.locations on s.sectionId equals l.sectionId
                                   join il in entity.itemsLocations on l.locationId equals il.locationId
-                                  where il.itemUnitId == itemUnitId && il.quantity > 0 && il.invoiceId == null && il.locations.isKitchen != 1
+                                  where il.itemUnitId == itemUnitId && il.quantity > 0 && il.invoiceId == null && il.locations.isKitchen == isKitchen
                                   select new
                                   {
                                       il.itemsLocId,
@@ -1981,17 +1986,17 @@ namespace POS_Server.Controllers
                 }
 
                 var unit = entity.itemsUnits.Where(x => x.itemUnitId == itemUnitId).Select(x => new { x.unitId, x.itemId }).FirstOrDefault();
-                var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId && x.subUnitId != x.unitId).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
+                var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId && x.subUnitId != x.unitId && x.isActive == 1).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
 
                 if ((upperUnit != null && itemUnitId == upperUnit.itemUnitId))
                     return amount;
                 if (upperUnit != null)
-                    amount += (int)upperUnit.unitValue * getItemUnitAmount(upperUnit.itemUnitId, branchId);
+                    amount += (int)upperUnit.unitValue * getItemUnitAmount(upperUnit.itemUnitId, branchId,isKitchen);
 
                 return amount;
             }
         }
-        private int getSmallItemUnitAmount(int itemUnitId, int branchId)
+        private int getSmallItemUnitAmount(int itemUnitId, int branchId, int isKitchen = 0)
         {
             int amount = 0;
 
@@ -1999,7 +2004,7 @@ namespace POS_Server.Controllers
             {
                 var unit = entity.itemsUnits.Where(x => x.itemUnitId == itemUnitId).Select(x => new { x.subUnitId, x.unitId, x.unitValue, x.itemId }).FirstOrDefault();
 
-                var smallUnit = entity.itemsUnits.Where(x => x.unitId == unit.subUnitId && x.itemId == unit.itemId).Select(x => new { x.itemUnitId }).FirstOrDefault();
+                var smallUnit = entity.itemsUnits.Where(x => x.unitId == unit.subUnitId && x.itemId == unit.itemId && x.isActive == 1).Select(x => new { x.itemUnitId }).FirstOrDefault();
                 if (smallUnit == null || smallUnit.itemUnitId == itemUnitId)
                 {
                     return 0;
@@ -2011,7 +2016,7 @@ namespace POS_Server.Controllers
                                       join s in entity.sections on b.branchId equals s.branchId
                                       join l in entity.locations on s.sectionId equals l.sectionId
                                       join il in entity.itemsLocations on l.locationId equals il.locationId
-                                      where il.itemUnitId == smallUnit.itemUnitId && il.quantity > 0 && il.invoiceId == null && il.locations.isKitchen != 1
+                                      where il.itemUnitId == smallUnit.itemUnitId && il.quantity > 0 && il.invoiceId == null && il.locations.isKitchen == isKitchen
                                       select new
                                       {
                                           il.itemsLocId,

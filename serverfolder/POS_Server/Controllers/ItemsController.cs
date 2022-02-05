@@ -974,6 +974,7 @@ namespace POS_Server.Controllers
             }
             else
             {
+                ItemsLocationsController ilc = new ItemsLocationsController();
                 int branchId = 0;
                 int categoryId = 0;
                 List<string> typeLst = new List<string>();
@@ -1015,7 +1016,7 @@ namespace POS_Server.Controllers
                         if (item.itemUnitId != null && item.itemUnitId != 0)
                         {
                             int itemUnitId = (int)item.itemUnitId;
-                            int count = getItemUnitAmount(itemUnitId, branchId);
+                            int count = ilc.getBranchAmount(itemUnitId, branchId,1);
                             item.itemCount = count;
                             
                         }
