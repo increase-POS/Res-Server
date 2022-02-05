@@ -996,7 +996,7 @@ namespace POS_Server.Controllers
                     var searchPredicate = PredicateBuilder.New<items>();
                     if (categoryId != 0)
                         searchPredicate = searchPredicate.And(x => x.categoryId == categoryId);
-                    var itemsList = (from I in entity.items
+                    var itemsList = (from I in entity.items.Where(searchPredicate)
                                      join u in entity.itemsUnits on I.itemId equals u.itemId
                                      join l in entity.itemsLocations.Where(x => x.locations.branchId == branchId && x.locations.isKitchen == 1 && x.quantity > 0) on u.itemUnitId equals l.itemUnitId 
                                      select new ItemModel()
@@ -1025,6 +1025,61 @@ namespace POS_Server.Controllers
                     }
                     return TokenManager.GenerateToken(itemsList);
                    
+                }
+            }
+        }
+        [HttpPost]
+        [Route("GetKitchenItemsWithUnits")]
+        public string GetKitchenItemsWithUnits(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                ItemsLocationsController ilc = new ItemsLocationsController();
+                int branchId = 0;
+                int categoryId = 0;
+                List<string> typeLst = new List<string>();
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "categoryId")
+                    {
+                        categoryId = int.Parse(c.Value);
+                    }
+                }
+
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var searchPredicate = PredicateBuilder.New<items>();
+                    searchPredicate.And(x => true);
+                    if (categoryId != 0)
+                        searchPredicate = searchPredicate.And(x => x.categoryId == categoryId);
+                    var itemsList = (from I in entity.items.Where(searchPredicate)
+                                     join u in entity.itemsUnits on I.itemId equals u.itemId
+                                     join l in entity.itemsLocations.Where(x => x.locations.branchId == branchId && x.locations.isKitchen == 1 && x.quantity > 0) on u.itemUnitId equals l.itemUnitId 
+                                     select new ItemModel()
+                                     {
+                                         itemId = I.itemId,
+                                         name = I.name,
+                                         code = I.code,
+                                         type = I.type,
+                                         isActive = I.isActive,
+                                         updateDate = I.updateDate,
+                                        unitName = u.units.name,
+                                        itemCount = (int)l.quantity,
+                                        endDate = l.endDate,
+                                        details = I.details,
+                                     }).Where(x => x.isActive == 1).ToList();
+                    return TokenManager.GenerateToken(itemsList);                 
                 }
             }
         }
