@@ -51,7 +51,7 @@ namespace POS_Server.Controllers
                         searchPredicate.And(x => x.branchId == branchId);
                     if (sectionId != 0)
                         searchPredicate.And(x => x.sectionId == sectionId);
-                    var tablesList = entity.tables.Select(S => new TableModel()
+                    var tablesList = entity.tables.Where(searchPredicate).Select(S => new TableModel()
                    {
                        tableId = S.tableId,
                        name = S.name,
