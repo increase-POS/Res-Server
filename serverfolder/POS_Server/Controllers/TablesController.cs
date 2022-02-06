@@ -274,5 +274,119 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [Route("AddTablesToSection")]
+        public string AddTablesToSection(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int sectionId = 0;
+                int userId = 0;
+                string locationsObject = "";
+                List<tables> Object = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemObject")
+                    {
+                        locationsObject = c.Value.Replace("\\", string.Empty);
+                        locationsObject = locationsObject.Trim('"');
+                        Object = JsonConvert.DeserializeObject<List<tables>>(locationsObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                        //break;
+                    }
+                    else if (c.Type == "sectionId")
+                    {
+                        sectionId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var oldList = entity.tables.Where(x => x.sectionId == sectionId).Select(x => new { x.tableId }).ToList();
+                    for (int i = 0; i < oldList.Count; i++)
+                    {
+                        int locationId = (int)oldList[i].tableId;
+                        var loc = entity.tables.Find(locationId);
+
+                        if (Object != null && Object.Count > 0)
+                        {
+                            var isExist = Object.Find(x => x.tableId == oldList[i].tableId);
+                            if (isExist == null)// unlink location to section
+                            {
+                                loc.sectionId = null;
+                                loc.updateDate = DateTime.Now;
+                                loc.updateUserId = userId;
+                            }
+                            else// edit location info
+                            {
+
+                            }
+                        }
+                        else // clear section from location
+                        {
+                            loc.sectionId = null;
+                            loc.updateDate = DateTime.Now;
+                            loc.updateUserId = userId;
+                        }
+                    }
+                    foreach (tables loc in Object)// loop to add new locations
+                    {
+                        Boolean isInList = false;
+                        if (oldList != null)
+                        {
+                            var old = oldList.ToList().Find(x => x.tableId == loc.tableId);
+                            if (old != null)
+                            {
+                                isInList = true;
+
+                            }
+
+                            if (!isInList)
+                            {
+                                var loc1 = entity.tables.Find(loc.tableId);
+                                if (loc1.updateUserId == 0 || loc1.updateUserId == null)
+                                {
+                                    Nullable<int> id = null;
+                                    loc1.updateUserId = id;
+                                }
+                                if (loc1.createUserId == 0 || loc1.createUserId == null)
+                                {
+                                    Nullable<int> id = null;
+                                    loc1.createUserId = id;
+                                }
+                                loc1.updateDate = DateTime.Now;
+                                loc1.sectionId = sectionId;
+                                loc.updateUserId = userId;
+                                //entity.SaveChanges();
+                            }
+                        }
+                        try
+                        {
+                            entity.SaveChanges();
+                        }
+                        catch
+                        {
+                            message = "0";
+                            return TokenManager.GenerateToken(message);
+                        }
+                    }
+                    entity.SaveChanges();
+                }
+            }
+            message = "1";
+            return TokenManager.GenerateToken(message);
+        }
+
     }
 }
