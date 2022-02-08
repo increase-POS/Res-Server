@@ -41,7 +41,7 @@ namespace POS_Server.Controllers
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var searchPredicate = PredicateBuilder.New<menuSettings>();
-                    searchPredicate.And(x => x.isActive == true);
+                    searchPredicate.And(x => x.isActive == 1);
                     if (itemUnitId != 0)
                         searchPredicate.And(x => x.itemUnitId == itemUnitId);
 
