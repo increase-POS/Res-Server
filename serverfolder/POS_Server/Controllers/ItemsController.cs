@@ -469,6 +469,98 @@ namespace POS_Server.Controllers
             }
         }
         [HttpPost]
+        [Route("GetItemsMenuSetting")]
+        public string GetItemsMenuSetting(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int branchId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                }
+                DateTime cmpdate = DateTime.Now.AddDays(newdays);
+
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    try
+                    {
+                        var itemsList = (from I in entity.items.Where(x => salesTypes.Contains(x.type) && x.isActive == 1)
+                                         join iu in entity.itemsUnits on I.itemId equals iu.itemId
+                                         join m in entity.menuSettings.Where(x => x.branchId == branchId) on iu.itemUnitId equals m.itemUnitId into yj
+                                         from ms in yj.DefaultIfEmpty()
+                                         select new MenuSettingModel()
+                                         {
+                                             menuSettingId = ms.menuSettingId,
+                                             isActive =  ms.isActive == null ? (byte)0: ms.isActive,
+                                             preparingTime = ms.preparingTime,
+                                             sat = ms.sat,
+                                             sun = ms.sun,
+                                             mon = ms.mon,
+                                             tues = ms.tues,
+                                             wed = ms.wed,
+                                             thur = ms.thur,
+                                             fri = ms.fri,
+                                             branchId = ms.branchId,
+                                             itemId = I.itemId,
+                                             name = I.name,
+                                             code = I.code,
+                                             categoryId = I.categoryId,
+                                             tagId = I.tagId,
+                                             image = I.image,
+                                             type = I.type,
+                                             details = I.details,
+                                             createDate = I.createDate,
+                                             updateDate = I.updateDate,
+                                             createUserId = ms.createUserId,
+                                             updateUserId = ms.updateUserId,
+                                             itemUnitId = iu.itemUnitId,
+                                             price = iu.price,
+                                             priceWithService = iu.priceWithService,
+
+                                         })
+                                       .ToList();
+
+                        for (int i = 0; i < itemsList.Count; i++)
+                        {
+                            // is new
+                            int res = DateTime.Compare((DateTime)itemsList[i].createDate, cmpdate);
+                            if (res >= 0)
+                            {
+                                itemsList[i].isNew = 1;
+                            }
+
+                        }
+
+                        return TokenManager.GenerateToken(itemsList);
+                    }
+                    catch (DbEntityValidationException dbEx)
+                    {
+                        return TokenManager.GenerateToken("0");
+                        //string message = "";
+                        //foreach (var validationErrors in dbEx.EntityValidationErrors)
+                        //{
+                        //    foreach (var validationError in validationErrors.ValidationErrors)
+                        //    {
+                        //       message += "Property: {0} Error: {1}"+ validationError.PropertyName+ validationError.ErrorMessage;
+                        //    }
+                        //}
+                        //return message;
+                    }
+                }
+            }
+        }
+        [HttpPost]
         [Route("GetSalesItems")]
         public string GetSalesItems(string token)
         {
