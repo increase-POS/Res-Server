@@ -28,7 +28,6 @@ namespace POS_Server
         public string image { get; set; }
         public byte isActive { get; set; }
         public decimal taxes { get; set; }
-        public Nullable<int> parentId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }

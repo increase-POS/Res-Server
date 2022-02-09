@@ -40,10 +40,10 @@ namespace POS_Server
         public string barcode { get; set; }
         public Nullable<int> membershipId { get; set; }
     
+        public virtual memberships memberships { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<couponsInvoices> couponsInvoices { get; set; }
-        public virtual memberships memberships { get; set; }
     }
 }

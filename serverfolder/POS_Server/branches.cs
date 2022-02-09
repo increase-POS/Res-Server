@@ -29,6 +29,7 @@ namespace POS_Server
             this.sections = new HashSet<sections>();
             this.sysEmails = new HashSet<sysEmails>();
             this.tables = new HashSet<tables>();
+            this.menuSettings = new HashSet<menuSettings>();
         }
     
         public int branchId { get; set; }
@@ -73,5 +74,7 @@ namespace POS_Server
         public virtual ICollection<sysEmails> sysEmails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tables> tables { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<menuSettings> menuSettings { get; set; }
     }
 }

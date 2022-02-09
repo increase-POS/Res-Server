@@ -17,14 +17,14 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public itemsUnits()
         {
+            this.dishIngredients = new HashSet<dishIngredients>();
             this.itemsLocations = new HashSet<itemsLocations>();
             this.itemsOffers = new HashSet<itemsOffers>();
             this.itemsTransfer = new HashSet<itemsTransfer>();
             this.itemUnitUser = new HashSet<itemUnitUser>();
+            this.menuSettings = new HashSet<menuSettings>();
             this.packages = new HashSet<packages>();
             this.packages1 = new HashSet<packages>();
-            this.dishIngredients = new HashSet<dishIngredients>();
-            this.menuSettings = new HashSet<menuSettings>();
         }
     
         public int itemUnitId { get; set; }
@@ -34,7 +34,9 @@ namespace POS_Server
         public short defaultSale { get; set; }
         public short defaultPurchase { get; set; }
         public decimal price { get; set; }
+        public decimal priceWithService { get; set; }
         public string barcode { get; set; }
+        public bool isCountable { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
@@ -43,9 +45,9 @@ namespace POS_Server
         public decimal purchasePrice { get; set; }
         public Nullable<int> storageCostId { get; set; }
         public byte isActive { get; set; }
-        public bool isCountable { get; set; }
-        public decimal priceWithService { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<dishIngredients> dishIngredients { get; set; }
         public virtual items items { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemsLocations> itemsLocations { get; set; }
@@ -60,12 +62,10 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemUnitUser> itemUnitUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<menuSettings> menuSettings { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<packages> packages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<packages> packages1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<dishIngredients> dishIngredients { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<menuSettings> menuSettings { get; set; }
     }
 }

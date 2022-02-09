@@ -45,11 +45,12 @@ namespace POS_Server.Controllers
                        p.details,
                        p.image,
                        p.notes,
-                       p.parentId,
+                     
                        p.taxes,
                        p.updateDate,
                        p.updateUserId,
                        p.type,
+                       p.isActive,
                    }).ToList();
                     return TokenManager.GenerateToken(category);
                 }
@@ -92,12 +93,14 @@ namespace POS_Server.Controllers
                                  details = p.details,
                                  image = p.image,
                                  notes = p.notes,
-                                 parentId = p.parentId,
+                                
                                  taxes = p.taxes,
                                  updateDate = p.updateDate,
                                  updateUserId = p.updateUserId,
                                  isActive = p.isActive,
                                  sequence = cu.sequence,
+                                 type=p.type,
+                              
                              }).ToList().OrderBy(x => x.sequence).ToList();
                     if (categoriesList.Count > 0)
                     {
@@ -108,9 +111,9 @@ namespace POS_Server.Controllers
                             {
                                 int categoryId = (int)categoriesList[i].categoryId;
                                 var items = entity.items.Where(x => x.categoryId == categoryId).Select(b => new { b.itemId }).FirstOrDefault();
-                                var childCategoryL = entity.categories.Where(x => x.parentId == categoryId).Select(b => new { b.categoryId }).FirstOrDefault();
+                              //  var childCategoryL = entity.categories.Where(x => x.parentId == categoryId).Select(b => new { b.categoryId }).FirstOrDefault();
 
-                                if ((items is null) && (childCategoryL is null))
+                                if ((items is null))
                                     canDelete = true;
                             }
                             categoriesList[i].canDelete = canDelete;
@@ -152,7 +155,7 @@ var strP = TokenManager.GetPrincipal(token);
                 {
                     if (categoryId != 0)
                     {
-                        var categoriesList = (from p in entity.categories.Where(x => x.parentId == categoryId && x.isActive == 1)
+                        var categoriesList = (from p in entity.categories.Where(x => x.isActive == 1)
                                  join cu in entity.categoryuser on p.categoryId equals cu.categoryId
                                  where cu.userId == userId
                                  select new CategoryModel() {
@@ -164,19 +167,20 @@ var strP = TokenManager.GetPrincipal(token);
                                      details = p.details,
                                      image = p.image,
                                      notes = p.notes,
-                                     parentId = p.parentId,
+                                    // parentId = p.parentId,
                                      taxes = p.taxes,
                                      updateDate = p.updateDate,
                                      updateUserId = p.updateUserId,
                                      isActive = p.isActive,
                                      sequence = cu.sequence,
+                                     type = p.type,
                                  }).ToList().OrderBy(x => x.sequence).ToList();
 
                     return TokenManager.GenerateToken(categoriesList);
                     }
                     else
                     {
-                        var categoriesList = (from p in entity.categories.Where(x => x.parentId == 0 && x.isActive == 1)
+                        var categoriesList = (from p in entity.categories.Where(x =>  x.isActive == 1)
                                               join cu in entity.categoryuser on p.categoryId equals cu.categoryId
                                               where cu.userId == userId
                                               select new CategoryModel()
@@ -189,12 +193,13 @@ var strP = TokenManager.GetPrincipal(token);
                                                   details = p.details,
                                                   image = p.image,
                                                   notes = p.notes,
-                                                  parentId = p.parentId,
+                                                 // parentId = p.parentId,
                                                   taxes = p.taxes,
                                                   updateDate = p.updateDate,
                                                   updateUserId = p.updateUserId,
                                                   isActive = p.isActive,
                                                   sequence = cu.sequence,
+                                                  type = p.type,
                                               }).ToList().OrderBy(x => x.sequence).ToList();
 
                       
@@ -239,11 +244,13 @@ var strP = TokenManager.GetPrincipal(token);
                        p.details,
                        p.image,
                        p.notes,
-                       p.parentId,
+                     //  p.parentId,
                        p.taxes,
                        p.updateDate,
                        p.updateUserId,
-                   })
+                       p.type,
+                      p. isActive ,
+    })
                    .FirstOrDefault();
                     return TokenManager.GenerateToken(category);
                 }
@@ -287,10 +294,12 @@ var strP = TokenManager.GetPrincipal(token);
                                 p.details,
                                 p.image,
                                 p.notes,
-                                p.parentId,
+                               // p.parentId,
                                 p.taxes,
                                 p.updateDate,
                                 p.updateUserId,
+                              p.type,
+                                p.isActive,
                             }).FirstOrDefault();
 
 
@@ -303,13 +312,13 @@ var strP = TokenManager.GetPrincipal(token);
                         tempcate.details = category.details;
                         tempcate.image = category.image;
                         tempcate.notes = category.notes;
-                        tempcate.parentId = category.parentId;
+                     //   tempcate.parentId = category.parentId;
                         tempcate.taxes = category.taxes;
                         tempcate.updateDate = category.updateDate;
                         tempcate.updateUserId = category.updateUserId;
-                         
+                        tempcate.isActive = category.isActive;
 
-                        parentid = (int)tempcate.parentId;
+                       // parentid = (int)tempcate.parentId;
 
                         treecat.Add(tempcate);
 
@@ -365,17 +374,18 @@ var strP = TokenManager.GetPrincipal(token);
                                                   C.details,
                                                   C.image,
                                                   C.notes,
-                                                  C.parentId,
+                                                 // C.parentId,
                                                   C.taxes,
                                                   C.updateDate,
                                                   C.updateUserId,
                                                   C.isActive,
                                                   jSS.sequence,
                                                   jSS.userId,
+                                                 C.type,
                                               }
 
 
-                      ).Where(c => c.parentId == categoryId && c.isActive == 1 && c.userId == userId).OrderBy(c => c.sequence)
+                      ).Where(c => c.isActive == 1 && c.userId == userId).OrderBy(c => c.sequence)
 
                        .ToList();
                       
@@ -396,17 +406,19 @@ var strP = TokenManager.GetPrincipal(token);
                                                   C.details,
                                                   C.image,
                                                   C.notes,
-                                                  C.parentId,
+                                               //   C.parentId,
                                                   C.taxes,
                                                   C.updateDate,
                                                   C.updateUserId,
                                                   C.isActive,
                                                   jSS.sequence,
                                                   jSS.userId,
+                                              C.type,
+                                           
                                               }
 
 
-                      ).Where(c => c.parentId == 0 && c.isActive == 1 && c.userId == userId)
+                      ).Where(c =>  c.isActive == 1 && c.userId == userId)
                        .ToList();
                       
                     return TokenManager.GenerateToken(categoriesList);
@@ -496,15 +508,18 @@ var strP = TokenManager.GetPrincipal(token);
                             tmpCategory.details = newObject.details;
                             tmpCategory.name = newObject.name;
                             tmpCategory.notes = newObject.notes;
-                            tmpCategory.parentId = newObject.parentId;
+                           // tmpCategory.parentId = newObject.parentId;
                             tmpCategory.taxes = newObject.taxes;
                             tmpCategory.updateDate = DateTime.Now;
                             tmpCategory.updateUserId = newObject.updateUserId;
                             tmpCategory.isActive = newObject.isActive;
+                             
+                              tmpCategory.type = newObject.type;
                             entity.SaveChanges();
                             int categoryId = tmpCategory.categoryId;
                             byte isActivecat = tmpCategory.isActive;
                             int? updateuser = tmpCategory.updateUserId;
+
                             //update is active sons and items sons
                             // get all sub categories of categoryId
 
@@ -514,7 +529,7 @@ var strP = TokenManager.GetPrincipal(token);
                               {
                                   categoryId = p.categoryId,
                                   name = p.name,
-                                  parentId = p.parentId,
+                                //  parentId = p.parentId,
                               })
                              .ToList();
 
@@ -620,7 +635,7 @@ var strP = TokenManager.GetPrincipal(token);
                     {
                         using (incposdbEntities entity = new incposdbEntities())
                         {
-                            var childCategories = entity.categories.Where(u => u.parentId == categoryId && u.isActive == 1).FirstOrDefault();
+                            var childCategories = entity.categories.Where(u => u.isActive == 1).FirstOrDefault();
 
                             if (childCategories == null)
                             {
@@ -655,7 +670,7 @@ var strP = TokenManager.GetPrincipal(token);
                               {
                                   categoryId = p.categoryId,
                                   name = p.name,
-                                  parentId = p.parentId,
+                                  
                               })
                              .ToList();
 
@@ -877,8 +892,8 @@ var strP = TokenManager.GetPrincipal(token);
         public IEnumerable<categories> Recursive(List<categories> categoriesList, int toplevelid)
         {
             List<categories> inner = new List<categories>();
-
-            foreach (var t in categoriesList.Where(item => item.parentId == toplevelid))
+           // foreach (var t in categoriesList.Where(item => item.parentId == toplevelid))
+                foreach (var t in categoriesList)
             {
                 categoriesId.Add(t.categoryId);
                 inner.Add(t);

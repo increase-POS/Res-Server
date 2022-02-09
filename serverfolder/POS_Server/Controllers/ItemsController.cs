@@ -979,7 +979,7 @@ namespace POS_Server.Controllers
                       {
                           categoryId = p.categoryId,
                           name = p.name,
-                          parentId = p.parentId,
+                          //parentId = p.parentId,
                       })
                      .ToList();
 
@@ -1330,7 +1330,7 @@ namespace POS_Server.Controllers
                       {
                           categoryId = p.categoryId,
                           name = p.name,
-                          parentId = p.parentId,
+                          //parentId = p.parentId,
                       })
                      .ToList();
 
@@ -1593,7 +1593,7 @@ namespace POS_Server.Controllers
                                  {
                                      categoryId = p.categoryId,
                                      name = p.name,
-                                     parentId = p.parentId,
+                                     //parentId = p.parentId,
                                  })
                                 .ToList();
 
@@ -2248,7 +2248,7 @@ namespace POS_Server.Controllers
         {
             List<categories> inner = new List<categories>();
 
-            foreach (var t in categoriesList.Where(item => item.parentId == toplevelid))
+            foreach (var t in categoriesList)
             {
                 categoriesId.Add(t.categoryId);
                 inner.Add(t);
@@ -3155,7 +3155,7 @@ namespace POS_Server.Controllers
                       {
                           categoryId = p.categoryId,
                           name = p.name,
-                          parentId = p.parentId,
+                          //parentId = p.parentId,
                       })
                      .ToList();
 
@@ -3399,7 +3399,7 @@ namespace POS_Server.Controllers
                       {
                           categoryId = p.categoryId,
                           name = p.name,
-                          parentId = p.parentId,
+                         //parentId = p.parentId,
                       })
                      .ToList();
 

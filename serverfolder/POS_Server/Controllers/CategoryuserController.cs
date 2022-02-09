@@ -134,7 +134,7 @@ namespace POS_Server.Controllers
                                         c.details,
                                         c.image,
                                         c.notes,
-                                        c.parentId,
+                                        
                                         c.taxes,
 
                                         c.isActive,

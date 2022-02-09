@@ -23,9 +23,9 @@ namespace POS_Server
             this.invoiceOrder1 = new HashSet<invoiceOrder>();
             this.invoices1 = new HashSet<invoices>();
             this.invoiceStatus = new HashSet<invoiceStatus>();
+            this.invoiceTables = new HashSet<invoiceTables>();
             this.itemsLocations = new HashSet<itemsLocations>();
             this.itemsTransfer = new HashSet<itemsTransfer>();
-            this.invoiceTables = new HashSet<invoiceTables>();
         }
     
         public int invoiceId { get; set; }
@@ -93,14 +93,14 @@ namespace POS_Server
         public virtual users users3 { get; set; }
         public virtual users users4 { get; set; }
         public virtual users users5 { get; set; }
+        public virtual users users6 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<invoiceStatus> invoiceStatus { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<invoiceTables> invoiceTables { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemsLocations> itemsLocations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemsTransfer> itemsTransfer { get; set; }
-        public virtual users users6 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<invoiceTables> invoiceTables { get; set; }
     }
 }
