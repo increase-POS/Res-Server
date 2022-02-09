@@ -53,6 +53,8 @@
     <Property Name="maxDeserve" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="isLimited" Type="Boolean" Nullable="false" />
     <Property Name="payType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="canReserve" Type="Boolean" Nullable="false" />
+    <Property Name="disallowReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_agents" FromRole="agents" ToRole="agentMemberships" />
     <NavigationProperty Name="Points" Relationship="Self.FK_agents_Points" FromRole="agents" ToRole="Points" />
     <NavigationProperty Name="users" Relationship="Self.FK_agents_users" FromRole="agents" ToRole="users" />
@@ -61,8 +63,6 @@
     <NavigationProperty Name="invoices" Relationship="Self.FK_invoices_agents" FromRole="agents" ToRole="invoices" />
     <NavigationProperty Name="medalAgent" Relationship="Self.FK_medalAgent_agents" FromRole="agents" ToRole="medalAgent" />
     <NavigationProperty Name="Points1" Relationship="Self.FK_Points_agents" FromRole="agents" ToRole="Points" />
-    <Property Name="canReserve" Type="Boolean" Nullable="false" />
-    <Property Name="disallowReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="residentSecId" Type="Int32" />
     <Property Name="GPSAddress" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="residentialSectors" Relationship="PosModel.FK_agents_residentialSectors" FromRole="agents" ToRole="residentialSectors" />
@@ -139,7 +139,8 @@
     <NavigationProperty Name="pos" Relationship="Self.FK_pos_branches" FromRole="branches" ToRole="pos" />
     <NavigationProperty Name="sections" Relationship="Self.FK_sections_branches" FromRole="branches" ToRole="sections" />
     <NavigationProperty Name="sysEmails" Relationship="Self.FK_sysEmails_branches" FromRole="branches" ToRole="sysEmails" />
-    <NavigationProperty Name="tables" Relationship="PosModel.FK_tables_branches" FromRole="branches" ToRole="tables" />
+    <NavigationProperty Name="tables" Relationship="Self.FK_tables_branches" FromRole="branches" ToRole="tables" />
+    <NavigationProperty Name="menuSettings" Relationship="PosModel.FK_menuSettings_branches" FromRole="branches" ToRole="menuSettings" />
   </EntityType>
   <EntityType Name="branchesUsers">
     <Key>
@@ -249,7 +250,6 @@
     <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="isActive" Type="Byte" Nullable="false" />
     <Property Name="taxes" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
-    <Property Name="parentId" Type="Int32" />
     <Property Name="createDate" Type="DateTime" Precision="7" />
     <Property Name="updateDate" Type="DateTime" Precision="7" />
     <Property Name="createUserId" Type="Int32" />
@@ -321,11 +321,11 @@
     <Property Name="createUserId" Type="Int32" />
     <Property Name="updateUserId" Type="Int32" />
     <Property Name="barcode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="membershipId" Type="Int32" />
+    <NavigationProperty Name="memberships" Relationship="Self.FK_coupons_memberships" FromRole="coupons" ToRole="memberships" />
     <NavigationProperty Name="users" Relationship="Self.FK_coupons_users" FromRole="coupons" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_coupons_users1" FromRole="coupons" ToRole="users" />
     <NavigationProperty Name="couponsInvoices" Relationship="Self.FK_couponsInvoices_coupons" FromRole="coupons" ToRole="couponsInvoices" />
-    <Property Name="membershipId" Type="Int32" />
-    <NavigationProperty Name="memberships" Relationship="PosModel.FK_coupons_memberships" FromRole="coupons" ToRole="memberships" />
   </EntityType>
   <EntityType Name="couponsInvoices">
     <Key>
@@ -344,6 +344,23 @@
     <NavigationProperty Name="invoices" Relationship="Self.FK_couponsInvoices_invoices" FromRole="couponsInvoices" ToRole="invoices" />
     <NavigationProperty Name="users" Relationship="Self.FK_couponsInvoices_users" FromRole="couponsInvoices" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_couponsInvoices_users1" FromRole="couponsInvoices" ToRole="users" />
+  </EntityType>
+  <EntityType Name="dishIngredients">
+    <Key>
+      <PropertyRef Name="dishIngredId" />
+    </Key>
+    <Property Name="dishIngredId" Type="Int64" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="itemUnitId" Type="Int32" />
+    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="isActive" Type="Byte" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="7" />
+    <Property Name="updateDate" Type="DateTime" Precision="7" />
+    <Property Name="createUserId" Type="Int32" />
+    <Property Name="updateUserId" Type="Int32" />
+    <NavigationProperty Name="itemsUnits" Relationship="Self.FK_dishIngredients_itemsUnits" FromRole="dishIngredients" ToRole="itemsUnits" />
+    <NavigationProperty Name="users" Relationship="Self.FK_dishIngredients_users" FromRole="dishIngredients" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="Self.FK_dishIngredients_users1" FromRole="dishIngredients" ToRole="users" />
   </EntityType>
   <EntityType Name="docImages">
     <Key>
@@ -536,6 +553,7 @@
     <Property Name="cashReturn" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="printedcount" Type="Int32" Nullable="false" />
     <Property Name="isOrginal" Type="Boolean" Nullable="false" />
+    <Property Name="waiterId" Type="Int32" />
     <NavigationProperty Name="agents" Relationship="Self.FK_invoices_agents" FromRole="invoices" ToRole="agents" />
     <NavigationProperty Name="branches" Relationship="Self.FK_invoices_branches" FromRole="invoices" ToRole="branches" />
     <NavigationProperty Name="branches1" Relationship="Self.FK_invoices_branches1" FromRole="invoices" ToRole="branches" />
@@ -553,12 +571,11 @@
     <NavigationProperty Name="users3" Relationship="Self.FK_invoices_users3" FromRole="invoices" ToRole="users" />
     <NavigationProperty Name="users4" Relationship="Self.FK_invoices_users4" FromRole="invoices" ToRole="users" />
     <NavigationProperty Name="users5" Relationship="Self.FK_invoices_users5" FromRole="invoices" ToRole="users" />
+    <NavigationProperty Name="users6" Relationship="Self.FK_invoices_waiters" FromRole="invoices" ToRole="users" />
     <NavigationProperty Name="invoiceStatus" Relationship="Self.FK_invoiceStatus_invoices" FromRole="invoices" ToRole="invoiceStatus" />
+    <NavigationProperty Name="invoiceTables" Relationship="Self.FK_invoiceTables_invoices" FromRole="invoices" ToRole="invoiceTables" />
     <NavigationProperty Name="itemsLocations" Relationship="Self.FK_itemsLocations_invoices" FromRole="invoices" ToRole="itemsLocations" />
     <NavigationProperty Name="itemsTransfer" Relationship="Self.FK_itemsTransfer_invoices" FromRole="invoices" ToRole="itemsTransfer" />
-    <Property Name="waiterId" Type="Int32" />
-    <NavigationProperty Name="users6" Relationship="PosModel.FK_invoices_waiters" FromRole="invoices" ToRole="users" />
-    <NavigationProperty Name="invoiceTables" Relationship="PosModel.FK_invoiceTables_invoices" FromRole="invoices" ToRole="invoiceTables" />
     <Property Name="shippingCost" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
     <Property Name="realShippingCost" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
   </EntityType>
@@ -578,6 +595,22 @@
     <NavigationProperty Name="invoices" Relationship="Self.FK_invoiceStatus_invoices" FromRole="invoiceStatus" ToRole="invoices" />
     <NavigationProperty Name="users" Relationship="Self.FK_invoiceStatus_users" FromRole="invoiceStatus" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_invoiceStatus_users1" FromRole="invoiceStatus" ToRole="users" />
+  </EntityType>
+  <EntityType Name="invoiceTables">
+    <Key>
+      <PropertyRef Name="invTableId" />
+    </Key>
+    <Property Name="invTableId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="invoiceId" Type="Int32" Nullable="false" />
+    <Property Name="tableId" Type="Int32" Nullable="false" />
+    <Property Name="isActive" Type="Byte" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="7" />
+    <Property Name="updateDate" Type="DateTime" Precision="7" />
+    <Property Name="createUserId" Type="Int32" />
+    <Property Name="updateUserId" Type="Int32" />
+    <NavigationProperty Name="invoices" Relationship="Self.FK_invoiceTables_invoices" FromRole="invoiceTables" ToRole="invoices" />
+    <NavigationProperty Name="users" Relationship="Self.FK_invoiceTables_updateUsers" FromRole="invoiceTables" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="Self.FK_invoiceTables_users" FromRole="invoiceTables" ToRole="users" />
   </EntityType>
   <EntityType Name="items">
     <Key>
@@ -730,7 +763,9 @@
     <Property Name="defaultSale" Type="Int16" Nullable="false" />
     <Property Name="defaultPurchase" Type="Int16" Nullable="false" />
     <Property Name="price" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="priceWithService" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="barcode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="isCountable" Type="Boolean" Nullable="false" />
     <Property Name="createDate" Type="DateTime" Precision="7" />
     <Property Name="updateDate" Type="DateTime" Precision="7" />
     <Property Name="createUserId" Type="Int32" />
@@ -739,6 +774,7 @@
     <Property Name="purchasePrice" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="storageCostId" Type="Int32" />
     <Property Name="isActive" Type="Byte" Nullable="false" />
+    <NavigationProperty Name="dishIngredients" Relationship="Self.FK_dishIngredients_itemsUnits" FromRole="itemsUnits" ToRole="dishIngredients" />
     <NavigationProperty Name="items" Relationship="Self.FK_itemsUnits_items" FromRole="itemsUnits" ToRole="items" />
     <NavigationProperty Name="itemsLocations" Relationship="Self.FK_itemsLocations_itemsUnits" FromRole="itemsUnits" ToRole="itemsLocations" />
     <NavigationProperty Name="itemsOffers" Relationship="Self.FK_itemsOffers_itemsUnits" FromRole="itemsUnits" ToRole="itemsOffers" />
@@ -748,12 +784,9 @@
     <NavigationProperty Name="users" Relationship="Self.FK_itemsUnits_users" FromRole="itemsUnits" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_itemsUnits_users1" FromRole="itemsUnits" ToRole="users" />
     <NavigationProperty Name="itemUnitUser" Relationship="Self.FK_itemUnitUser_itemsUnits" FromRole="itemsUnits" ToRole="itemUnitUser" />
+    <NavigationProperty Name="menuSettings" Relationship="Self.FK_menuSettings_itemsUnits" FromRole="itemsUnits" ToRole="menuSettings" />
     <NavigationProperty Name="packages" Relationship="Self.FK_packages_itemsUnits" FromRole="itemsUnits" ToRole="packages" />
     <NavigationProperty Name="packages1" Relationship="Self.FK_packages_itemsUnits1" FromRole="itemsUnits" ToRole="packages" />
-    <Property Name="isCountable" Type="Boolean" Nullable="false" />
-    <Property Name="priceWithService" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
-    <NavigationProperty Name="dishIngredients" Relationship="PosModel.FK_dishIngredients_itemsUnits" FromRole="itemsUnits" ToRole="dishIngredients" />
-    <NavigationProperty Name="menuSettings" Relationship="PosModel.FK_menuSettings_itemsUnits" FromRole="itemsUnits" ToRole="menuSettings" />
   </EntityType>
   <EntityType Name="itemTransferOffer">
     <Key>
@@ -870,10 +903,34 @@
     <Property Name="updateUserId" Type="Int32" />
     <Property Name="isActive" Type="Byte" Nullable="false" />
     <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_memberships2" FromRole="memberships" ToRole="agentMemberships" />
+    <NavigationProperty Name="coupons" Relationship="Self.FK_coupons_memberships" FromRole="memberships" ToRole="coupons" />
     <NavigationProperty Name="users" Relationship="Self.FK_memberships_users" FromRole="memberships" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_memberships_users1" FromRole="memberships" ToRole="users" />
     <NavigationProperty Name="subscriptionFees" Relationship="Self.FK_subscriptionFees_memberships" FromRole="memberships" ToRole="subscriptionFees" />
-    <NavigationProperty Name="coupons" Relationship="PosModel.FK_coupons_memberships" FromRole="memberships" ToRole="coupons" />
+  </EntityType>
+  <EntityType Name="menuSettings">
+    <Key>
+      <PropertyRef Name="menuSettingId" />
+    </Key>
+    <Property Name="menuSettingId" Type="Int64" Nullable="false" />
+    <Property Name="itemUnitId" Type="Int32" Nullable="false" />
+    <Property Name="sat" Type="Boolean" Nullable="false" />
+    <Property Name="sun" Type="Boolean" Nullable="false" />
+    <Property Name="mon" Type="Boolean" Nullable="false" />
+    <Property Name="tues" Type="Boolean" Nullable="false" />
+    <Property Name="wed" Type="Boolean" Nullable="false" />
+    <Property Name="thur" Type="Boolean" Nullable="false" />
+    <Property Name="fri" Type="Boolean" Nullable="false" />
+    <Property Name="preparingTime" Type="Int32" />
+    <Property Name="isActive" Type="Byte" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="7" />
+    <Property Name="updateDate" Type="DateTime" Precision="7" />
+    <Property Name="updateUserId" Type="Int32" />
+    <Property Name="createUserId" Type="Int32" />
+    <NavigationProperty Name="itemsUnits" Relationship="Self.FK_menuSettings_itemsUnits" FromRole="menuSettings" ToRole="itemsUnits" />
+    <NavigationProperty Name="users" Relationship="Self.FK_menuSettings_users" FromRole="menuSettings" ToRole="users" />
+    <Property Name="branchId" Type="Int32" />
+    <NavigationProperty Name="branches" Relationship="PosModel.FK_menuSettings_branches" FromRole="menuSettings" ToRole="branches" />
   </EntityType>
   <EntityType Name="notification">
     <Key>
@@ -1029,6 +1086,8 @@
     <NavigationProperty Name="posSetting" Relationship="Self.FK_posSetting_pos" FromRole="pos" ToRole="posSetting" />
     <NavigationProperty Name="posUsers" Relationship="Self.FK_posUsers_pos" FromRole="pos" ToRole="posUsers" />
     <NavigationProperty Name="usersLogs" Relationship="Self.FK_usersLogs_pos" FromRole="pos" ToRole="usersLogs" />
+    <Property Name="boxState" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="isAdminClose" Type="Byte" Nullable="false" />
   </EntityType>
   <EntityType Name="posSerials">
     <Key>
@@ -1172,6 +1231,26 @@
     <NavigationProperty Name="users" Relationship="Self.FK_propertiesItems_users" FromRole="propertiesItems" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_propertiesItems_users1" FromRole="propertiesItems" ToRole="users" />
   </EntityType>
+  <EntityType Name="reservations">
+    <Key>
+      <PropertyRef Name="reservationId" />
+    </Key>
+    <Property Name="reservationId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="customerId" Type="Int32" />
+    <Property Name="reservationDate" Type="DateTime" Precision="0" />
+    <Property Name="reservationTime" Type="Time" Precision="7" />
+    <Property Name="personsCount" Type="Int32" />
+    <Property Name="status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="isActive" Type="Byte" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="7" />
+    <Property Name="updateDate" Type="DateTime" Precision="7" />
+    <Property Name="createUserId" Type="Int32" />
+    <Property Name="updateUserId" Type="Int32" />
+    <NavigationProperty Name="users" Relationship="Self.FK_reservations_updateUsers" FromRole="reservations" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="Self.FK_reservations_users" FromRole="reservations" ToRole="users" />
+  </EntityType>
   <EntityType Name="sections">
     <Key>
       <PropertyRef Name="sectionId" />
@@ -1185,12 +1264,12 @@
     <Property Name="branchId" Type="Int32" />
     <Property Name="isActive" Type="Byte" Nullable="false" />
     <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="isFreeZone" Type="Byte" Nullable="false" />
     <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="branches" Relationship="Self.FK_sections_branches" FromRole="sections" ToRole="branches" />
     <NavigationProperty Name="locations" Relationship="Self.FK_locations_sections" FromRole="sections" ToRole="locations" />
-    <Property Name="details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="tables" Relationship="PosModel.FK_tables_sections" FromRole="sections" ToRole="tables" />
+    <NavigationProperty Name="tables" Relationship="Self.FK_tables_sections" FromRole="sections" ToRole="tables" />
     <Property Name="isKitchen" Type="Byte" Nullable="false" />
   </EntityType>
   <EntityType Name="serials">
@@ -1288,6 +1367,16 @@
     <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_subscriptionFees" FromRole="subscriptionFees" ToRole="agentMemberships" />
     <NavigationProperty Name="memberships" Relationship="Self.FK_subscriptionFees_memberships" FromRole="subscriptionFees" ToRole="memberships" />
   </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
   <EntityType Name="sysEmails">
     <Key>
       <PropertyRef Name="emailId" />
@@ -1312,6 +1401,45 @@
     <NavigationProperty Name="users" Relationship="Self.FK_sysEmails_users" FromRole="sysEmails" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_sysEmails_users1" FromRole="sysEmails" ToRole="users" />
   </EntityType>
+  <EntityType Name="tables">
+    <Key>
+      <PropertyRef Name="tableId" />
+    </Key>
+    <Property Name="tableId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="sectionId" Type="Int32" />
+    <Property Name="branchId" Type="Int32" />
+    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="personsCount" Type="Int32" Nullable="false" />
+    <Property Name="isActive" Type="Byte" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="7" />
+    <Property Name="updateDate" Type="DateTime" Precision="7" />
+    <Property Name="createUserId" Type="Int32" />
+    <Property Name="updateUserId" Type="Int32" />
+    <NavigationProperty Name="branches" Relationship="Self.FK_tables_branches" FromRole="tables" ToRole="branches" />
+    <NavigationProperty Name="sections" Relationship="Self.FK_tables_sections" FromRole="tables" ToRole="sections" />
+    <NavigationProperty Name="users" Relationship="Self.FK_tables_updateUsers" FromRole="tables" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="Self.FK_tables_users" FromRole="tables" ToRole="users" />
+    <NavigationProperty Name="tablesReservations" Relationship="Self.FK_tablesReservations_tables" FromRole="tables" ToRole="tablesReservations" />
+  </EntityType>
+  <EntityType Name="tablesReservations">
+    <Key>
+      <PropertyRef Name="tableReservId" />
+    </Key>
+    <Property Name="tableReservId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="reservationId" Type="Int64" Nullable="false" />
+    <Property Name="tableId" Type="Int32" Nullable="false" />
+    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="isActive" Type="Byte" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Precision="7" />
+    <Property Name="updateDate" Type="DateTime" Precision="7" />
+    <Property Name="createUserId" Type="Int32" />
+    <Property Name="updateUserId" Type="Int32" />
+    <NavigationProperty Name="tables" Relationship="Self.FK_tablesReservations_tables" FromRole="tablesReservations" ToRole="tables" />
+    <NavigationProperty Name="users" Relationship="Self.FK_tablesReservations_updateUsers" FromRole="tablesReservations" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="Self.FK_tablesReservations_users" FromRole="tablesReservations" ToRole="users" />
+  </EntityType>
   <EntityType Name="tags">
     <Key>
       <PropertyRef Name="tagId" />
@@ -1326,9 +1454,8 @@
     <Property Name="updateDate" Type="DateTime" Precision="7" />
     <Property Name="isActive" Type="Byte" Nullable="false" />
     <NavigationProperty Name="items" Relationship="Self.FK_items_tags" FromRole="tags" ToRole="items" />
-    <NavigationProperty Name="users" Relationship="Self.FK_tags_users" FromRole="tags" ToRole="users" />
-    <NavigationProperty Name="users1" Relationship="Self.FK_tags_users1" FromRole="tags" ToRole="users" />
-    <NavigationProperty Name="users2" Relationship="Self.FK_tags_users2" FromRole="tags" ToRole="users" />
+    <NavigationProperty Name="users" Relationship="Self.FK_tags_users3" FromRole="tags" ToRole="users" />
+    <NavigationProperty Name="users1" Relationship="Self.FK_tags_users4" FromRole="tags" ToRole="users" />
   </EntityType>
   <EntityType Name="units">
     <Key>
@@ -1402,6 +1529,8 @@
     <NavigationProperty Name="coupons1" Relationship="Self.FK_coupons_users1" FromRole="users" ToRole="coupons" />
     <NavigationProperty Name="couponsInvoices" Relationship="Self.FK_couponsInvoices_users" FromRole="users" ToRole="couponsInvoices" />
     <NavigationProperty Name="couponsInvoices1" Relationship="Self.FK_couponsInvoices_users1" FromRole="users" ToRole="couponsInvoices" />
+    <NavigationProperty Name="dishIngredients" Relationship="Self.FK_dishIngredients_users" FromRole="users" ToRole="dishIngredients" />
+    <NavigationProperty Name="dishIngredients1" Relationship="Self.FK_dishIngredients_users1" FromRole="users" ToRole="dishIngredients" />
     <NavigationProperty Name="docImages" Relationship="Self.FK_docImages_users" FromRole="users" ToRole="docImages" />
     <NavigationProperty Name="docImages1" Relationship="Self.FK_docImages_users1" FromRole="users" ToRole="docImages" />
     <NavigationProperty Name="error" Relationship="Self.FK_error_users" FromRole="users" ToRole="error" />
@@ -1420,8 +1549,11 @@
     <NavigationProperty Name="invoices3" Relationship="Self.FK_invoices_users3" FromRole="users" ToRole="invoices" />
     <NavigationProperty Name="invoices4" Relationship="Self.FK_invoices_users4" FromRole="users" ToRole="invoices" />
     <NavigationProperty Name="invoices5" Relationship="Self.FK_invoices_users5" FromRole="users" ToRole="invoices" />
+    <NavigationProperty Name="invoices6" Relationship="Self.FK_invoices_waiters" FromRole="users" ToRole="invoices" />
     <NavigationProperty Name="invoiceStatus" Relationship="Self.FK_invoiceStatus_users" FromRole="users" ToRole="invoiceStatus" />
     <NavigationProperty Name="invoiceStatus1" Relationship="Self.FK_invoiceStatus_users1" FromRole="users" ToRole="invoiceStatus" />
+    <NavigationProperty Name="invoiceTables" Relationship="Self.FK_invoiceTables_updateUsers" FromRole="users" ToRole="invoiceTables" />
+    <NavigationProperty Name="invoiceTables1" Relationship="Self.FK_invoiceTables_users" FromRole="users" ToRole="invoiceTables" />
     <NavigationProperty Name="items" Relationship="Self.FK_items_users" FromRole="users" ToRole="items" />
     <NavigationProperty Name="items1" Relationship="Self.FK_items_users1" FromRole="users" ToRole="items" />
     <NavigationProperty Name="items2" Relationship="Self.FK_items_users2" FromRole="users" ToRole="items" />
@@ -1449,6 +1581,7 @@
     <NavigationProperty Name="medals1" Relationship="Self.FK_medals_users1" FromRole="users" ToRole="medals" />
     <NavigationProperty Name="memberships" Relationship="Self.FK_memberships_users" FromRole="users" ToRole="memberships" />
     <NavigationProperty Name="memberships1" Relationship="Self.FK_memberships_users1" FromRole="users" ToRole="memberships" />
+    <NavigationProperty Name="menuSettings" Relationship="Self.FK_menuSettings_users" FromRole="users" ToRole="menuSettings" />
     <NavigationProperty Name="notification" Relationship="Self.FK_notification_users" FromRole="users" ToRole="notification" />
     <NavigationProperty Name="notification1" Relationship="Self.FK_notification_users1" FromRole="users" ToRole="notification" />
     <NavigationProperty Name="notificationUser" Relationship="Self.FK_notificationUser_users" FromRole="users" ToRole="notificationUser" />
@@ -1471,29 +1604,22 @@
     <NavigationProperty Name="properties1" Relationship="Self.FK_properties_users1" FromRole="users" ToRole="properties" />
     <NavigationProperty Name="propertiesItems" Relationship="Self.FK_propertiesItems_users" FromRole="users" ToRole="propertiesItems" />
     <NavigationProperty Name="propertiesItems1" Relationship="Self.FK_propertiesItems_users1" FromRole="users" ToRole="propertiesItems" />
+    <NavigationProperty Name="reservations" Relationship="Self.FK_reservations_updateUsers" FromRole="users" ToRole="reservations" />
+    <NavigationProperty Name="reservations1" Relationship="Self.FK_reservations_users" FromRole="users" ToRole="reservations" />
     <NavigationProperty Name="serials" Relationship="Self.FK_serials_users" FromRole="users" ToRole="serials" />
     <NavigationProperty Name="serials1" Relationship="Self.FK_serials_users1" FromRole="users" ToRole="serials" />
     <NavigationProperty Name="sysEmails" Relationship="Self.FK_sysEmails_users" FromRole="users" ToRole="sysEmails" />
     <NavigationProperty Name="sysEmails1" Relationship="Self.FK_sysEmails_users1" FromRole="users" ToRole="sysEmails" />
-    <NavigationProperty Name="tags" Relationship="Self.FK_tags_users" FromRole="users" ToRole="tags" />
-    <NavigationProperty Name="tags1" Relationship="Self.FK_tags_users1" FromRole="users" ToRole="tags" />
-    <NavigationProperty Name="tags2" Relationship="Self.FK_tags_users2" FromRole="users" ToRole="tags" />
+    <NavigationProperty Name="tables" Relationship="Self.FK_tables_updateUsers" FromRole="users" ToRole="tables" />
+    <NavigationProperty Name="tables1" Relationship="Self.FK_tables_users" FromRole="users" ToRole="tables" />
+    <NavigationProperty Name="tablesReservations" Relationship="Self.FK_tablesReservations_updateUsers" FromRole="users" ToRole="tablesReservations" />
+    <NavigationProperty Name="tablesReservations1" Relationship="Self.FK_tablesReservations_users" FromRole="users" ToRole="tablesReservations" />
+    <NavigationProperty Name="tags" Relationship="Self.FK_tags_users3" FromRole="users" ToRole="tags" />
+    <NavigationProperty Name="tags1" Relationship="Self.FK_tags_users4" FromRole="users" ToRole="tags" />
     <NavigationProperty Name="userSetValues" Relationship="Self.FK_userSetValues_users" FromRole="users" ToRole="userSetValues" />
     <NavigationProperty Name="userSetValues1" Relationship="Self.FK_userSetValues_users1" FromRole="users" ToRole="userSetValues" />
     <NavigationProperty Name="userSetValues2" Relationship="Self.FK_userSetValues_users2" FromRole="users" ToRole="userSetValues" />
     <NavigationProperty Name="usersLogs" Relationship="Self.FK_usersLogs_users" FromRole="users" ToRole="usersLogs" />
-    <NavigationProperty Name="dishIngredients" Relationship="PosModel.FK_dishIngredients_users" FromRole="users" ToRole="dishIngredients" />
-    <NavigationProperty Name="dishIngredients1" Relationship="PosModel.FK_dishIngredients_users1" FromRole="users" ToRole="dishIngredients" />
-    <NavigationProperty Name="invoices6" Relationship="PosModel.FK_invoices_waiters" FromRole="users" ToRole="invoices" />
-    <NavigationProperty Name="invoiceTables" Relationship="PosModel.FK_invoiceTables_updateUsers" FromRole="users" ToRole="invoiceTables" />
-    <NavigationProperty Name="invoiceTables1" Relationship="PosModel.FK_invoiceTables_users" FromRole="users" ToRole="invoiceTables" />
-    <NavigationProperty Name="menuSettings" Relationship="PosModel.FK_menuSettings_users" FromRole="users" ToRole="menuSettings" />
-    <NavigationProperty Name="reservations" Relationship="PosModel.FK_reservations_updateUsers" FromRole="users" ToRole="reservations" />
-    <NavigationProperty Name="reservations1" Relationship="PosModel.FK_reservations_users" FromRole="users" ToRole="reservations" />
-    <NavigationProperty Name="tables" Relationship="PosModel.FK_tables_updateUsers" FromRole="users" ToRole="tables" />
-    <NavigationProperty Name="tables1" Relationship="PosModel.FK_tables_users" FromRole="users" ToRole="tables" />
-    <NavigationProperty Name="tablesReservations" Relationship="PosModel.FK_tablesReservations_updateUsers" FromRole="users" ToRole="tablesReservations" />
-    <NavigationProperty Name="tablesReservations1" Relationship="PosModel.FK_tablesReservations_users" FromRole="users" ToRole="tablesReservations" />
     <NavigationProperty Name="residentialSectors" Relationship="PosModel.FK_residentialSectors_users" FromRole="users" ToRole="residentialSectors" />
     <NavigationProperty Name="residentialSectors1" Relationship="PosModel.FK_residentialSectors_users1" FromRole="users" ToRole="residentialSectors" />
     <NavigationProperty Name="residentialSectorsUsers" Relationship="PosModel.FK_residentialSectorsUsers_users" FromRole="users" ToRole="residentialSectorsUsers" />
@@ -1913,6 +2039,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_tables_branches">
+    <End Role="branches" Type="Self.branches" Multiplicity="0..1" />
+    <End Role="tables" Type="Self.tables" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="branches">
+        <PropertyRef Name="branchId" />
+      </Principal>
+      <Dependent Role="tables">
+        <PropertyRef Name="branchId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_branchesUsers_users">
     <End Role="users" Type="Self.users" Multiplicity="0..1" />
     <End Role="branchesUsers" Type="Self.branchesUsers" Multiplicity="*" />
@@ -2177,6 +2315,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_coupons_memberships">
+    <End Role="memberships" Type="Self.memberships" Multiplicity="0..1" />
+    <End Role="coupons" Type="Self.coupons" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="memberships">
+        <PropertyRef Name="membershipId" />
+      </Principal>
+      <Dependent Role="coupons">
+        <PropertyRef Name="membershipId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_coupons_users">
     <End Role="users" Type="Self.users" Multiplicity="0..1" />
     <End Role="coupons" Type="Self.coupons" Multiplicity="*" />
@@ -2245,6 +2395,42 @@
         <PropertyRef Name="userId" />
       </Principal>
       <Dependent Role="couponsInvoices">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dishIngredients_itemsUnits">
+    <End Role="itemsUnits" Type="Self.itemsUnits" Multiplicity="0..1" />
+    <End Role="dishIngredients" Type="Self.dishIngredients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="itemsUnits">
+        <PropertyRef Name="itemUnitId" />
+      </Principal>
+      <Dependent Role="dishIngredients">
+        <PropertyRef Name="itemUnitId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dishIngredients_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="dishIngredients" Type="Self.dishIngredients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="dishIngredients">
+        <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dishIngredients_users1">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="dishIngredients" Type="Self.dishIngredients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="dishIngredients">
         <PropertyRef Name="updateUserId" />
       </Dependent>
     </ReferentialConstraint>
@@ -2609,6 +2795,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_invoices_waiters">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="invoices" Type="Self.invoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="invoices">
+        <PropertyRef Name="waiterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_invoiceStatus_invoices">
     <End Role="invoices" Type="Self.invoices" Multiplicity="0..1" />
     <End Role="invoiceStatus" Type="Self.invoiceStatus" Multiplicity="*" />
@@ -2617,6 +2815,18 @@
         <PropertyRef Name="invoiceId" />
       </Principal>
       <Dependent Role="invoiceStatus">
+        <PropertyRef Name="invoiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_invoiceTables_invoices">
+    <End Role="invoices" Type="Self.invoices" Multiplicity="1" />
+    <End Role="invoiceTables" Type="Self.invoiceTables" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="invoices">
+        <PropertyRef Name="invoiceId" />
+      </Principal>
+      <Dependent Role="invoiceTables">
         <PropertyRef Name="invoiceId" />
       </Dependent>
     </ReferentialConstraint>
@@ -2666,6 +2876,30 @@
       </Principal>
       <Dependent Role="invoiceStatus">
         <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_invoiceTables_updateUsers">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="invoiceTables" Type="Self.invoiceTables" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="invoiceTables">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_invoiceTables_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="invoiceTables" Type="Self.invoiceTables" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="invoiceTables">
+        <PropertyRef Name="createUserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3077,6 +3311,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_menuSettings_itemsUnits">
+    <End Role="itemsUnits" Type="Self.itemsUnits" Multiplicity="1" />
+    <End Role="menuSettings" Type="Self.menuSettings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="itemsUnits">
+        <PropertyRef Name="itemUnitId" />
+      </Principal>
+      <Dependent Role="menuSettings">
+        <PropertyRef Name="itemUnitId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_packages_itemsUnits">
     <End Role="itemsUnits" Type="Self.itemsUnits" Multiplicity="0..1" />
     <End Role="packages" Type="Self.packages" Multiplicity="*" />
@@ -3302,6 +3548,18 @@
       </Principal>
       <Dependent Role="subscriptionFees">
         <PropertyRef Name="membershipId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_menuSettings_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="menuSettings" Type="Self.menuSettings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="menuSettings">
+        <PropertyRef Name="updateUserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3701,6 +3959,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_reservations_updateUsers">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="reservations" Type="Self.reservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="reservations">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_reservations_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="reservations" Type="Self.reservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="reservations">
+        <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tables_sections">
+    <End Role="sections" Type="Self.sections" Multiplicity="0..1" />
+    <End Role="tables" Type="Self.tables" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="sections">
+        <PropertyRef Name="sectionId" />
+      </Principal>
+      <Dependent Role="tables">
+        <PropertyRef Name="sectionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_serials_users">
     <End Role="users" Type="Self.users" Multiplicity="0..1" />
     <End Role="serials" Type="Self.serials" Multiplicity="*" />
@@ -3773,7 +4067,67 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_tags_users">
+  <Association Name="FK_tables_updateUsers">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="tables" Type="Self.tables" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="tables">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tables_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="tables" Type="Self.tables" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="tables">
+        <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tablesReservations_tables">
+    <End Role="tables" Type="Self.tables" Multiplicity="1" />
+    <End Role="tablesReservations" Type="Self.tablesReservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tables">
+        <PropertyRef Name="tableId" />
+      </Principal>
+      <Dependent Role="tablesReservations">
+        <PropertyRef Name="tableId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tablesReservations_updateUsers">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="tablesReservations" Type="Self.tablesReservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="tablesReservations">
+        <PropertyRef Name="updateUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tablesReservations_users">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="tablesReservations" Type="Self.tablesReservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="tablesReservations">
+        <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tags_users3">
     <End Role="users" Type="Self.users" Multiplicity="0..1" />
     <End Role="tags" Type="Self.tags" Multiplicity="*" />
     <ReferentialConstraint>
@@ -3785,7 +4139,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_tags_users1">
+  <Association Name="FK_tags_users4">
     <End Role="users" Type="Self.users" Multiplicity="0..1" />
     <End Role="tags" Type="Self.tags" Multiplicity="*" />
     <ReferentialConstraint>
@@ -3794,18 +4148,6 @@
       </Principal>
       <Dependent Role="tags">
         <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tags_users2">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="tags" Type="Self.tags" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="tags">
-        <PropertyRef Name="categoryId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3873,6 +4215,7 @@
     <EntitySet Name="countriesCodes" EntityType="Self.countriesCodes" />
     <EntitySet Name="coupons" EntityType="Self.coupons" />
     <EntitySet Name="couponsInvoices" EntityType="Self.couponsInvoices" />
+    <EntitySet Name="dishIngredients" EntityType="Self.dishIngredients" />
     <EntitySet Name="docImages" EntityType="Self.docImages" />
     <EntitySet Name="error" EntityType="Self.error" />
     <EntitySet Name="Expenses" EntityType="Self.Expenses" />
@@ -3883,6 +4226,7 @@
     <EntitySet Name="invoiceOrder" EntityType="Self.invoiceOrder" />
     <EntitySet Name="invoices" EntityType="Self.invoices" />
     <EntitySet Name="invoiceStatus" EntityType="Self.invoiceStatus" />
+    <EntitySet Name="invoiceTables" EntityType="Self.invoiceTables" />
     <EntitySet Name="items" EntityType="Self.items" />
     <EntitySet Name="itemsLocations" EntityType="Self.itemsLocations" />
     <EntitySet Name="itemsMaterials" EntityType="Self.itemsMaterials" />
@@ -3896,6 +4240,7 @@
     <EntitySet Name="medalAgent" EntityType="Self.medalAgent" />
     <EntitySet Name="medals" EntityType="Self.medals" />
     <EntitySet Name="memberships" EntityType="Self.memberships" />
+    <EntitySet Name="menuSettings" EntityType="Self.menuSettings" />
     <EntitySet Name="notification" EntityType="Self.notification" />
     <EntitySet Name="notificationUser" EntityType="Self.notificationUser" />
     <EntitySet Name="objects" EntityType="Self.objects" />
@@ -3911,6 +4256,7 @@
     <EntitySet Name="ProgramDetails" EntityType="Self.ProgramDetails" />
     <EntitySet Name="properties" EntityType="Self.properties" />
     <EntitySet Name="propertiesItems" EntityType="Self.propertiesItems" />
+    <EntitySet Name="reservations" EntityType="Self.reservations" />
     <EntitySet Name="sections" EntityType="Self.sections" />
     <EntitySet Name="serials" EntityType="Self.serials" />
     <EntitySet Name="setting" EntityType="Self.setting" />
@@ -3918,7 +4264,10 @@
     <EntitySet Name="shippingCompanies" EntityType="Self.shippingCompanies" />
     <EntitySet Name="storageCost" EntityType="Self.storageCost" />
     <EntitySet Name="subscriptionFees" EntityType="Self.subscriptionFees" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
     <EntitySet Name="sysEmails" EntityType="Self.sysEmails" />
+    <EntitySet Name="tables" EntityType="Self.tables" />
+    <EntitySet Name="tablesReservations" EntityType="Self.tablesReservations" />
     <EntitySet Name="tags" EntityType="Self.tags" />
     <EntitySet Name="units" EntityType="Self.units" />
     <EntitySet Name="users" EntityType="Self.users" />
@@ -4052,6 +4401,10 @@
       <End Role="branches" EntitySet="branches" />
       <End Role="sysEmails" EntitySet="sysEmails" />
     </AssociationSet>
+    <AssociationSet Name="FK_tables_branches" Association="Self.FK_tables_branches">
+      <End Role="branches" EntitySet="branches" />
+      <End Role="tables" EntitySet="tables" />
+    </AssociationSet>
     <AssociationSet Name="FK_branchesUsers_users" Association="Self.FK_branchesUsers_users">
       <End Role="users" EntitySet="users" />
       <End Role="branchesUsers" EntitySet="branchesUsers" />
@@ -4140,6 +4493,10 @@
       <End Role="countriesCodes" EntitySet="countriesCodes" />
       <End Role="cities" EntitySet="cities" />
     </AssociationSet>
+    <AssociationSet Name="FK_coupons_memberships" Association="Self.FK_coupons_memberships">
+      <End Role="memberships" EntitySet="memberships" />
+      <End Role="coupons" EntitySet="coupons" />
+    </AssociationSet>
     <AssociationSet Name="FK_coupons_users" Association="Self.FK_coupons_users">
       <End Role="users" EntitySet="users" />
       <End Role="coupons" EntitySet="coupons" />
@@ -4163,6 +4520,18 @@
     <AssociationSet Name="FK_couponsInvoices_users1" Association="Self.FK_couponsInvoices_users1">
       <End Role="users" EntitySet="users" />
       <End Role="couponsInvoices" EntitySet="couponsInvoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dishIngredients_itemsUnits" Association="Self.FK_dishIngredients_itemsUnits">
+      <End Role="itemsUnits" EntitySet="itemsUnits" />
+      <End Role="dishIngredients" EntitySet="dishIngredients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dishIngredients_users" Association="Self.FK_dishIngredients_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="dishIngredients" EntitySet="dishIngredients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dishIngredients_users1" Association="Self.FK_dishIngredients_users1">
+      <End Role="users" EntitySet="users" />
+      <End Role="dishIngredients" EntitySet="dishIngredients" />
     </AssociationSet>
     <AssociationSet Name="FK_docImages_users" Association="Self.FK_docImages_users">
       <End Role="users" EntitySet="users" />
@@ -4284,9 +4653,17 @@
       <End Role="users" EntitySet="users" />
       <End Role="invoices" EntitySet="invoices" />
     </AssociationSet>
+    <AssociationSet Name="FK_invoices_waiters" Association="Self.FK_invoices_waiters">
+      <End Role="users" EntitySet="users" />
+      <End Role="invoices" EntitySet="invoices" />
+    </AssociationSet>
     <AssociationSet Name="FK_invoiceStatus_invoices" Association="Self.FK_invoiceStatus_invoices">
       <End Role="invoices" EntitySet="invoices" />
       <End Role="invoiceStatus" EntitySet="invoiceStatus" />
+    </AssociationSet>
+    <AssociationSet Name="FK_invoiceTables_invoices" Association="Self.FK_invoiceTables_invoices">
+      <End Role="invoices" EntitySet="invoices" />
+      <End Role="invoiceTables" EntitySet="invoiceTables" />
     </AssociationSet>
     <AssociationSet Name="FK_itemsLocations_invoices" Association="Self.FK_itemsLocations_invoices">
       <End Role="invoices" EntitySet="invoices" />
@@ -4303,6 +4680,14 @@
     <AssociationSet Name="FK_invoiceStatus_users1" Association="Self.FK_invoiceStatus_users1">
       <End Role="users" EntitySet="users" />
       <End Role="invoiceStatus" EntitySet="invoiceStatus" />
+    </AssociationSet>
+    <AssociationSet Name="FK_invoiceTables_updateUsers" Association="Self.FK_invoiceTables_updateUsers">
+      <End Role="users" EntitySet="users" />
+      <End Role="invoiceTables" EntitySet="invoiceTables" />
+    </AssociationSet>
+    <AssociationSet Name="FK_invoiceTables_users" Association="Self.FK_invoiceTables_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="invoiceTables" EntitySet="invoiceTables" />
     </AssociationSet>
     <AssociationSet Name="FK_items_tags" Association="Self.FK_items_tags">
       <End Role="tags" EntitySet="tags" />
@@ -4440,6 +4825,10 @@
       <End Role="itemsUnits" EntitySet="itemsUnits" />
       <End Role="itemUnitUser" EntitySet="itemUnitUser" />
     </AssociationSet>
+    <AssociationSet Name="FK_menuSettings_itemsUnits" Association="Self.FK_menuSettings_itemsUnits">
+      <End Role="itemsUnits" EntitySet="itemsUnits" />
+      <End Role="menuSettings" EntitySet="menuSettings" />
+    </AssociationSet>
     <AssociationSet Name="FK_packages_itemsUnits" Association="Self.FK_packages_itemsUnits">
       <End Role="itemsUnits" EntitySet="itemsUnits" />
       <End Role="packages" EntitySet="packages" />
@@ -4515,6 +4904,10 @@
     <AssociationSet Name="FK_subscriptionFees_memberships" Association="Self.FK_subscriptionFees_memberships">
       <End Role="memberships" EntitySet="memberships" />
       <End Role="subscriptionFees" EntitySet="subscriptionFees" />
+    </AssociationSet>
+    <AssociationSet Name="FK_menuSettings_users" Association="Self.FK_menuSettings_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="menuSettings" EntitySet="menuSettings" />
     </AssociationSet>
     <AssociationSet Name="FK_notification_users" Association="Self.FK_notification_users">
       <End Role="users" EntitySet="users" />
@@ -4648,6 +5041,18 @@
       <End Role="users" EntitySet="users" />
       <End Role="propertiesItems" EntitySet="propertiesItems" />
     </AssociationSet>
+    <AssociationSet Name="FK_reservations_updateUsers" Association="Self.FK_reservations_updateUsers">
+      <End Role="users" EntitySet="users" />
+      <End Role="reservations" EntitySet="reservations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_reservations_users" Association="Self.FK_reservations_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="reservations" EntitySet="reservations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tables_sections" Association="Self.FK_tables_sections">
+      <End Role="sections" EntitySet="sections" />
+      <End Role="tables" EntitySet="tables" />
+    </AssociationSet>
     <AssociationSet Name="FK_serials_users" Association="Self.FK_serials_users">
       <End Role="users" EntitySet="users" />
       <End Role="serials" EntitySet="serials" />
@@ -4672,15 +5077,31 @@
       <End Role="users" EntitySet="users" />
       <End Role="sysEmails" EntitySet="sysEmails" />
     </AssociationSet>
-    <AssociationSet Name="FK_tags_users" Association="Self.FK_tags_users">
+    <AssociationSet Name="FK_tables_updateUsers" Association="Self.FK_tables_updateUsers">
+      <End Role="users" EntitySet="users" />
+      <End Role="tables" EntitySet="tables" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tables_users" Association="Self.FK_tables_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="tables" EntitySet="tables" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tablesReservations_tables" Association="Self.FK_tablesReservations_tables">
+      <End Role="tables" EntitySet="tables" />
+      <End Role="tablesReservations" EntitySet="tablesReservations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tablesReservations_updateUsers" Association="Self.FK_tablesReservations_updateUsers">
+      <End Role="users" EntitySet="users" />
+      <End Role="tablesReservations" EntitySet="tablesReservations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tablesReservations_users" Association="Self.FK_tablesReservations_users">
+      <End Role="users" EntitySet="users" />
+      <End Role="tablesReservations" EntitySet="tablesReservations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tags_users3" Association="Self.FK_tags_users3">
       <End Role="users" EntitySet="users" />
       <End Role="tags" EntitySet="tags" />
     </AssociationSet>
-    <AssociationSet Name="FK_tags_users1" Association="Self.FK_tags_users1">
-      <End Role="users" EntitySet="users" />
-      <End Role="tags" EntitySet="tags" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tags_users2" Association="Self.FK_tags_users2">
+    <AssociationSet Name="FK_tags_users4" Association="Self.FK_tags_users4">
       <End Role="users" EntitySet="users" />
       <End Role="tags" EntitySet="tags" />
     </AssociationSet>
@@ -4699,88 +5120,6 @@
     <AssociationSet Name="FK_usersLogs_users" Association="Self.FK_usersLogs_users">
       <End Role="users" EntitySet="users" />
       <End Role="usersLogs" EntitySet="usersLogs" />
-    </AssociationSet>
-    <EntitySet Name="dishIngredients" EntityType="PosModel.dishIngredients" />
-    <EntitySet Name="invoiceTables" EntityType="PosModel.invoiceTables" />
-    <EntitySet Name="menuSettings" EntityType="PosModel.menuSettings" />
-    <EntitySet Name="reservations" EntityType="PosModel.reservations" />
-    <EntitySet Name="tables" EntityType="PosModel.tables" />
-    <EntitySet Name="tablesReservations" EntityType="PosModel.tablesReservations" />
-    <AssociationSet Name="FK_tables_branches" Association="PosModel.FK_tables_branches">
-      <End Role="branches" EntitySet="branches" />
-      <End Role="tables" EntitySet="tables" />
-    </AssociationSet>
-    <AssociationSet Name="FK_coupons_memberships" Association="PosModel.FK_coupons_memberships">
-      <End Role="memberships" EntitySet="memberships" />
-      <End Role="coupons" EntitySet="coupons" />
-    </AssociationSet>
-    <AssociationSet Name="FK_dishIngredients_itemsUnits" Association="PosModel.FK_dishIngredients_itemsUnits">
-      <End Role="itemsUnits" EntitySet="itemsUnits" />
-      <End Role="dishIngredients" EntitySet="dishIngredients" />
-    </AssociationSet>
-    <AssociationSet Name="FK_dishIngredients_users" Association="PosModel.FK_dishIngredients_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="dishIngredients" EntitySet="dishIngredients" />
-    </AssociationSet>
-    <AssociationSet Name="FK_dishIngredients_users1" Association="PosModel.FK_dishIngredients_users1">
-      <End Role="users" EntitySet="users" />
-      <End Role="dishIngredients" EntitySet="dishIngredients" />
-    </AssociationSet>
-    <AssociationSet Name="FK_invoices_waiters" Association="PosModel.FK_invoices_waiters">
-      <End Role="users" EntitySet="users" />
-      <End Role="invoices" EntitySet="invoices" />
-    </AssociationSet>
-    <AssociationSet Name="FK_invoiceTables_invoices" Association="PosModel.FK_invoiceTables_invoices">
-      <End Role="invoices" EntitySet="invoices" />
-      <End Role="invoiceTables" EntitySet="invoiceTables" />
-    </AssociationSet>
-    <AssociationSet Name="FK_invoiceTables_updateUsers" Association="PosModel.FK_invoiceTables_updateUsers">
-      <End Role="users" EntitySet="users" />
-      <End Role="invoiceTables" EntitySet="invoiceTables" />
-    </AssociationSet>
-    <AssociationSet Name="FK_invoiceTables_users" Association="PosModel.FK_invoiceTables_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="invoiceTables" EntitySet="invoiceTables" />
-    </AssociationSet>
-    <AssociationSet Name="FK_menuSettings_itemsUnits" Association="PosModel.FK_menuSettings_itemsUnits">
-      <End Role="itemsUnits" EntitySet="itemsUnits" />
-      <End Role="menuSettings" EntitySet="menuSettings" />
-    </AssociationSet>
-    <AssociationSet Name="FK_menuSettings_users" Association="PosModel.FK_menuSettings_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="menuSettings" EntitySet="menuSettings" />
-    </AssociationSet>
-    <AssociationSet Name="FK_reservations_updateUsers" Association="PosModel.FK_reservations_updateUsers">
-      <End Role="users" EntitySet="users" />
-      <End Role="reservations" EntitySet="reservations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_reservations_users" Association="PosModel.FK_reservations_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="reservations" EntitySet="reservations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tables_sections" Association="PosModel.FK_tables_sections">
-      <End Role="sections" EntitySet="sections" />
-      <End Role="tables" EntitySet="tables" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tables_updateUsers" Association="PosModel.FK_tables_updateUsers">
-      <End Role="users" EntitySet="users" />
-      <End Role="tables" EntitySet="tables" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tables_users" Association="PosModel.FK_tables_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="tables" EntitySet="tables" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tablesReservations_tables" Association="PosModel.FK_tablesReservations_tables">
-      <End Role="tables" EntitySet="tables" />
-      <End Role="tablesReservations" EntitySet="tablesReservations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tablesReservations_updateUsers" Association="PosModel.FK_tablesReservations_updateUsers">
-      <End Role="users" EntitySet="users" />
-      <End Role="tablesReservations" EntitySet="tablesReservations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_tablesReservations_users" Association="PosModel.FK_tablesReservations_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="tablesReservations" EntitySet="tablesReservations" />
     </AssociationSet>
     <EntitySet Name="residentialSectors" EntityType="PosModel.residentialSectors" />
     <EntitySet Name="residentialSectorsUsers" EntityType="PosModel.residentialSectorsUsers" />
@@ -4812,349 +5151,11 @@
       <End Role="users" EntitySet="users" />
       <End Role="residentialSectorsUsers" EntitySet="residentialSectorsUsers" />
     </AssociationSet>
+    <AssociationSet Name="FK_menuSettings_branches" Association="PosModel.FK_menuSettings_branches">
+      <End Role="branches" EntitySet="branches" />
+      <End Role="menuSettings" EntitySet="menuSettings" />
+    </AssociationSet>
   </EntityContainer>
-  <EntityType Name="dishIngredients">
-    <Key>
-      <PropertyRef Name="dishIngredId" />
-    </Key>
-    <Property Name="dishIngredId" Type="Int64" Nullable="false" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="itemUnitId" Type="Int32" />
-    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="isActive" Type="Byte" Nullable="false" />
-    <Property Name="createDate" Type="DateTime" Precision="7" />
-    <Property Name="updateDate" Type="DateTime" Precision="7" />
-    <Property Name="createUserId" Type="Int32" />
-    <Property Name="updateUserId" Type="Int32" />
-    <NavigationProperty Name="itemsUnits" Relationship="PosModel.FK_dishIngredients_itemsUnits" FromRole="dishIngredients" ToRole="itemsUnits" />
-    <NavigationProperty Name="users" Relationship="PosModel.FK_dishIngredients_users" FromRole="dishIngredients" ToRole="users" />
-    <NavigationProperty Name="users1" Relationship="PosModel.FK_dishIngredients_users1" FromRole="dishIngredients" ToRole="users" />
-  </EntityType>
-  <EntityType Name="invoiceTables">
-    <Key>
-      <PropertyRef Name="invTableId" />
-    </Key>
-    <Property Name="invTableId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="invoiceId" Type="Int32" Nullable="false" />
-    <Property Name="tableId" Type="Int32" Nullable="false" />
-    <Property Name="isActive" Type="Byte" Nullable="false" />
-    <Property Name="createDate" Type="DateTime" Precision="7" />
-    <Property Name="updateDate" Type="DateTime" Precision="7" />
-    <Property Name="createUserId" Type="Int32" />
-    <Property Name="updateUserId" Type="Int32" />
-    <NavigationProperty Name="invoices" Relationship="PosModel.FK_invoiceTables_invoices" FromRole="invoiceTables" ToRole="invoices" />
-    <NavigationProperty Name="users" Relationship="PosModel.FK_invoiceTables_updateUsers" FromRole="invoiceTables" ToRole="users" />
-    <NavigationProperty Name="users1" Relationship="PosModel.FK_invoiceTables_users" FromRole="invoiceTables" ToRole="users" />
-  </EntityType>
-  <EntityType Name="menuSettings">
-    <Key>
-      <PropertyRef Name="menuSettingId" />
-    </Key>
-    <Property Name="menuSettingId" Type="Int64" Nullable="false" />
-    <Property Name="itemUnitId" Type="Int32" Nullable="false" />
-    <Property Name="sat" Type="Boolean" Nullable="false" />
-    <Property Name="sun" Type="Boolean" Nullable="false" />
-    <Property Name="mon" Type="Boolean" Nullable="false" />
-    <Property Name="tues" Type="Boolean" Nullable="false" />
-    <Property Name="wed" Type="Boolean" Nullable="false" />
-    <Property Name="thur" Type="Boolean" Nullable="false" />
-    <Property Name="fri" Type="Boolean" Nullable="false" />
-    <Property Name="preparingTime" Type="Int32" />
-    <Property Name="isActive" Type="Boolean" Nullable="false" />
-    <Property Name="createDate" Type="DateTime" Precision="7" />
-    <Property Name="updateDate" Type="DateTime" Precision="7" />
-    <Property Name="updateUserId" Type="Int32" />
-    <Property Name="createUserId" Type="Int32" />
-    <NavigationProperty Name="itemsUnits" Relationship="PosModel.FK_menuSettings_itemsUnits" FromRole="menuSettings" ToRole="itemsUnits" />
-    <NavigationProperty Name="users" Relationship="PosModel.FK_menuSettings_users" FromRole="menuSettings" ToRole="users" />
-  </EntityType>
-  <EntityType Name="reservations">
-    <Key>
-      <PropertyRef Name="reservationId" />
-    </Key>
-    <Property Name="reservationId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="customerId" Type="Int32" />
-    <Property Name="reservationDate" Type="DateTime" Precision="0" />
-    <Property Name="reservationTime" Type="Time" Precision="7" />
-    <Property Name="personsCount" Type="Int32" />
-    <Property Name="status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="isActive" Type="Byte" Nullable="false" />
-    <Property Name="createDate" Type="DateTime" Precision="7" />
-    <Property Name="updateDate" Type="DateTime" Precision="7" />
-    <Property Name="createUserId" Type="Int32" />
-    <Property Name="updateUserId" Type="Int32" />
-    <NavigationProperty Name="users" Relationship="PosModel.FK_reservations_updateUsers" FromRole="reservations" ToRole="users" />
-    <NavigationProperty Name="users1" Relationship="PosModel.FK_reservations_users" FromRole="reservations" ToRole="users" />
-  </EntityType>
-  <EntityType Name="tables">
-    <Key>
-      <PropertyRef Name="tableId" />
-    </Key>
-    <Property Name="tableId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="sectionId" Type="Int32" />
-    <Property Name="branchId" Type="Int32" />
-    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="personsCount" Type="Int32" Nullable="false" />
-    <Property Name="isActive" Type="Byte" Nullable="false" />
-    <Property Name="createDate" Type="DateTime" Precision="7" />
-    <Property Name="updateDate" Type="DateTime" Precision="7" />
-    <Property Name="createUserId" Type="Int32" />
-    <Property Name="updateUserId" Type="Int32" />
-    <NavigationProperty Name="branches" Relationship="PosModel.FK_tables_branches" FromRole="tables" ToRole="branches" />
-    <NavigationProperty Name="sections" Relationship="PosModel.FK_tables_sections" FromRole="tables" ToRole="sections" />
-    <NavigationProperty Name="users" Relationship="PosModel.FK_tables_updateUsers" FromRole="tables" ToRole="users" />
-    <NavigationProperty Name="users1" Relationship="PosModel.FK_tables_users" FromRole="tables" ToRole="users" />
-    <NavigationProperty Name="tablesReservations" Relationship="PosModel.FK_tablesReservations_tables" FromRole="tables" ToRole="tablesReservations" />
-  </EntityType>
-  <EntityType Name="tablesReservations">
-    <Key>
-      <PropertyRef Name="tableReservId" />
-    </Key>
-    <Property Name="tableReservId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="reservationId" Type="Int64" Nullable="false" />
-    <Property Name="tableId" Type="Int32" Nullable="false" />
-    <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="isActive" Type="Byte" Nullable="false" />
-    <Property Name="createDate" Type="DateTime" Precision="7" />
-    <Property Name="updateDate" Type="DateTime" Precision="7" />
-    <Property Name="createUserId" Type="Int32" />
-    <Property Name="updateUserId" Type="Int32" />
-    <NavigationProperty Name="tables" Relationship="PosModel.FK_tablesReservations_tables" FromRole="tablesReservations" ToRole="tables" />
-    <NavigationProperty Name="users" Relationship="PosModel.FK_tablesReservations_updateUsers" FromRole="tablesReservations" ToRole="users" />
-    <NavigationProperty Name="users1" Relationship="PosModel.FK_tablesReservations_users" FromRole="tablesReservations" ToRole="users" />
-  </EntityType>
-  <Association Name="FK_tables_branches">
-    <End Type="PosModel.branches" Role="branches" Multiplicity="0..1" />
-    <End Type="PosModel.tables" Role="tables" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="branches">
-        <PropertyRef Name="branchId" />
-      </Principal>
-      <Dependent Role="tables">
-        <PropertyRef Name="branchId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_coupons_memberships">
-    <End Type="PosModel.memberships" Role="memberships" Multiplicity="0..1" />
-    <End Type="PosModel.coupons" Role="coupons" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="memberships">
-        <PropertyRef Name="membershipId" />
-      </Principal>
-      <Dependent Role="coupons">
-        <PropertyRef Name="membershipId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_dishIngredients_itemsUnits">
-    <End Type="PosModel.itemsUnits" Role="itemsUnits" Multiplicity="0..1" />
-    <End Type="PosModel.dishIngredients" Role="dishIngredients" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="itemsUnits">
-        <PropertyRef Name="itemUnitId" />
-      </Principal>
-      <Dependent Role="dishIngredients">
-        <PropertyRef Name="itemUnitId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_dishIngredients_users">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.dishIngredients" Role="dishIngredients" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="dishIngredients">
-        <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_dishIngredients_users1">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.dishIngredients" Role="dishIngredients" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="dishIngredients">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_invoices_waiters">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.invoices" Role="invoices" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="invoices">
-        <PropertyRef Name="waiterId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_invoiceTables_invoices">
-    <End Type="PosModel.invoices" Role="invoices" Multiplicity="1" />
-    <End Type="PosModel.invoiceTables" Role="invoiceTables" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="invoices">
-        <PropertyRef Name="invoiceId" />
-      </Principal>
-      <Dependent Role="invoiceTables">
-        <PropertyRef Name="invoiceId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_invoiceTables_updateUsers">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.invoiceTables" Role="invoiceTables" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="invoiceTables">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_invoiceTables_users">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.invoiceTables" Role="invoiceTables" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="invoiceTables">
-        <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_menuSettings_itemsUnits">
-    <End Type="PosModel.itemsUnits" Role="itemsUnits" Multiplicity="1" />
-    <End Type="PosModel.menuSettings" Role="menuSettings" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="itemsUnits">
-        <PropertyRef Name="itemUnitId" />
-      </Principal>
-      <Dependent Role="menuSettings">
-        <PropertyRef Name="itemUnitId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_menuSettings_users">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.menuSettings" Role="menuSettings" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="menuSettings">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_reservations_updateUsers">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.reservations" Role="reservations" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="reservations">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_reservations_users">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.reservations" Role="reservations" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="reservations">
-        <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tables_sections">
-    <End Type="PosModel.sections" Role="sections" Multiplicity="0..1" />
-    <End Type="PosModel.tables" Role="tables" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="sections">
-        <PropertyRef Name="sectionId" />
-      </Principal>
-      <Dependent Role="tables">
-        <PropertyRef Name="sectionId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tables_updateUsers">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.tables" Role="tables" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="tables">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tables_users">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.tables" Role="tables" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="tables">
-        <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tablesReservations_tables">
-    <End Type="PosModel.tables" Role="tables" Multiplicity="1" />
-    <End Type="PosModel.tablesReservations" Role="tablesReservations" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="tables">
-        <PropertyRef Name="tableId" />
-      </Principal>
-      <Dependent Role="tablesReservations">
-        <PropertyRef Name="tableId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tablesReservations_updateUsers">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.tablesReservations" Role="tablesReservations" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="tablesReservations">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_tablesReservations_users">
-    <End Type="PosModel.users" Role="users" Multiplicity="0..1" />
-    <End Type="PosModel.tablesReservations" Role="tablesReservations" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="tablesReservations">
-        <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="residentialSectors">
     <Key>
       <PropertyRef Name="residentSecId" />
@@ -5270,6 +5271,18 @@
       </Principal>
       <Dependent Role="residentialSectorsUsers">
         <PropertyRef Name="createUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_menuSettings_branches">
+    <End Type="PosModel.branches" Role="branches" Multiplicity="0..1" />
+    <End Type="PosModel.menuSettings" Role="menuSettings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="branches">
+        <PropertyRef Name="branchId" />
+      </Principal>
+      <Dependent Role="menuSettings">
+        <PropertyRef Name="branchId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

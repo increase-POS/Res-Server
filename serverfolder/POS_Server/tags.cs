@@ -34,6 +34,5 @@ namespace POS_Server
         public virtual ICollection<items> items { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }
-        public virtual users users2 { get; set; }
     }
 }

@@ -24,13 +24,15 @@ namespace POS_Server
         public bool thur { get; set; }
         public bool fri { get; set; }
         public Nullable<int> preparingTime { get; set; }
-        public bool isActive { get; set; }
+        public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public Nullable<int> createUserId { get; set; }
+        public Nullable<int> branchId { get; set; }
     
         public virtual itemsUnits itemsUnits { get; set; }
         public virtual users users { get; set; }
+        public virtual branches branches { get; set; }
     }
 }

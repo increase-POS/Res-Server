@@ -40,6 +40,8 @@ namespace POS_Server
         public byte isActive { get; set; }
         public string notes { get; set; }
         public decimal balanceAll { get; set; }
+        public string boxState { get; set; }
+        public byte isAdminClose { get; set; }
     
         public virtual branches branches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

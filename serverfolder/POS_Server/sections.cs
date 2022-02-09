@@ -30,9 +30,9 @@ namespace POS_Server
         public Nullable<int> branchId { get; set; }
         public byte isActive { get; set; }
         public string notes { get; set; }
+        public string details { get; set; }
         public byte isFreeZone { get; set; }
         public string type { get; set; }
-        public string details { get; set; }
         public byte isKitchen { get; set; }
     
         public virtual branches branches { get; set; }

@@ -189,7 +189,6 @@
     <Property Name="image" Type="ntext" />
     <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="taxes" Type="decimal" Precision="20" Scale="3" Nullable="false" />
-    <Property Name="parentId" Type="int" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
@@ -713,11 +712,12 @@
     <Property Name="thur" Type="bit" Nullable="false" />
     <Property Name="fri" Type="bit" Nullable="false" />
     <Property Name="preparingTime" Type="int" />
-    <Property Name="isActive" Type="bit" Nullable="false" />
+    <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="createDate" Type="datetime2" Precision="7" />
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="createUserId" Type="int" />
+    <Property Name="branchId" Type="int" />
   </EntityType>
   <EntityType Name="notification">
     <Key>
@@ -838,6 +838,8 @@
     <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="notes" Type="ntext" />
     <Property Name="balanceAll" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="boxState" Type="nvarchar" MaxLength="20" />
+    <Property Name="isAdminClose" Type="tinyint" Nullable="false" />
   </EntityType>
   <EntityType Name="posSerials">
     <Key>
@@ -1103,6 +1105,16 @@
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
     <Property Name="isActive" Type="tinyint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="sysEmails">
     <Key>
@@ -3025,6 +3037,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_menuSettings_branches">
+    <End Role="branches" Type="Self.branches" Multiplicity="0..1" />
+    <End Role="menuSettings" Type="Self.menuSettings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="branches">
+        <PropertyRef Name="branchId" />
+      </Principal>
+      <Dependent Role="menuSettings">
+        <PropertyRef Name="branchId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_menuSettings_itemsUnits">
     <End Role="itemsUnits" Type="Self.itemsUnits" Multiplicity="1" />
     <End Role="menuSettings" Type="Self.menuSettings" Multiplicity="*" />
@@ -3932,6 +3956,7 @@
     <EntitySet Name="shippingCompanies" EntityType="Self.shippingCompanies" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="storageCost" EntityType="Self.storageCost" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="subscriptionFees" EntityType="Self.subscriptionFees" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysEmails" EntityType="Self.sysEmails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tables" EntityType="Self.tables" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tablesReservations" EntityType="Self.tablesReservations" Schema="dbo" store:Type="Tables" />
@@ -4535,6 +4560,10 @@
     <AssociationSet Name="FK_memberships_users1" Association="Self.FK_memberships_users1">
       <End Role="users" EntitySet="users" />
       <End Role="memberships" EntitySet="memberships" />
+    </AssociationSet>
+    <AssociationSet Name="FK_menuSettings_branches" Association="Self.FK_menuSettings_branches">
+      <End Role="branches" EntitySet="branches" />
+      <End Role="menuSettings" EntitySet="menuSettings" />
     </AssociationSet>
     <AssociationSet Name="FK_menuSettings_itemsUnits" Association="Self.FK_menuSettings_itemsUnits">
       <End Role="itemsUnits" EntitySet="itemsUnits" />

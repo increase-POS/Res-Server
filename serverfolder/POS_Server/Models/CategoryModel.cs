@@ -25,5 +25,7 @@ namespace POS_Server.Models
         public Boolean canDelete { get; set; }
         public Nullable<int> sequence { get; set; }
         public Nullable<int> id { get; set; }
+        public string type { get; set; }
+      
     }
 }
