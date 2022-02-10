@@ -22,7 +22,7 @@ namespace POS_Server.Models
         public Nullable<int> createUserId { get; set; }
         public string notes { get; set; }
         public Nullable<int> posIdCreator { get; set; }
-        public byte isConfirm { get; set; }
+        public Nullable<byte> isConfirm { get; set; }
         public Nullable<int> cashTransIdSource { get; set; }
         public string side { get; set; }
         public string docName { get; set; }
@@ -43,7 +43,7 @@ namespace POS_Server.Models
         public string usersLName { get; set; }
         public string posName { get; set; }
         public string posCreatorName { get; set; }
-        public byte isConfirm2 { get; set; }
+        public Nullable<byte> isConfirm2 { get; set; }
         public int cashTrans2Id { get; set; }
         public Nullable<int> pos2Id { get; set; }
 
@@ -58,7 +58,7 @@ namespace POS_Server.Models
         public string updateUserLName { get; set; }
         public string cardName { get; set; }
         public Nullable<System.DateTime> bondDeserveDate { get; set; }
-        public byte bondIsRecieved { get; set; }
+        public Nullable<byte>  bondIsRecieved { get; set; }
         public string agentCompany { get; set; }
  
         public string shippingCompanyName { get; set; }

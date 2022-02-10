@@ -33,8 +33,8 @@ namespace POS_Server.Controllers
         {
             //string type, string side
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -126,9 +126,9 @@ namespace POS_Server.Controllers
                                                                 bondDeserveDate = jbbo.deserveDate,
                                                                 bondIsRecieved = jbbo.isRecieved,
                                                                 shippingCompanyId = C.shippingCompanyId,
-                                                                shippingCompanyName = jssh.name
-
-                                                            }).Where(C => ((type == "all") ? true : C.transType == type ) && (C.processType != "balance")
+                                                                shippingCompanyName = jssh.name,
+                                                                isConfirm2=0,
+                                                            }).Where(C => ((type == "all") ? true : C.transType == type) && (C.processType != "balance")
                 && ((side == "all") ? true : C.side == side) && !(C.agentId == null && C.userId == null && C.shippingCompanyId == null)).ToList();
 
                         if (cachlist.Count > 0 && side == "p")
@@ -436,8 +436,8 @@ namespace POS_Server.Controllers
                                                                 bondDeserveDate = jbbo.deserveDate,
                                                                 bondIsRecieved = jbbo.isRecieved,
                                                                 shippingCompanyId = C.shippingCompanyId,
-                                                                shippingCompanyName = jssh.name
-
+                                                                shippingCompanyName = jssh.name,
+                                                                isConfirm2=0,
                                                             }).Where(C => ((type == "all") ? true : C.transType == type) && ((side == "all") ? true : C.side == side)).ToList();
 
 
@@ -518,7 +518,8 @@ namespace POS_Server.Controllers
                                      }).Where(C => C.invId == invId && (C.processType == "card" || C.processType == "cash")).ToList();
 
                         int i = 0;
-                        var cachtranslist = cachtrans.GroupBy(x => x.cardId).Select(x => new {
+                        var cachtranslist = cachtrans.GroupBy(x => x.cardId).Select(x => new
+                        {
                             processType = x.FirstOrDefault().processType,
 
                             cash = x.Sum(c => c.cash),
@@ -549,8 +550,8 @@ namespace POS_Server.Controllers
         {
             //string type, string side
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -581,7 +582,7 @@ namespace POS_Server.Controllers
 
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        List<CashTransferModel> cachlist = (from C in entity.cashTransfer
+                        IEnumerable<CashTransferModel> cachlist = (from C in entity.cashTransfer
                                                             join b in entity.banks on C.bankId equals b.bankId into jb
                                                             join a in entity.agents on C.agentId equals a.agentId into ja
                                                             join p in entity.pos on C.posId equals p.posId into jp
@@ -598,7 +599,7 @@ namespace POS_Server.Controllers
                                                             from jpcc in jpcr.DefaultIfEmpty()
                                                             from jucc in juc.DefaultIfEmpty()
                                                             from jcrd in jcr.DefaultIfEmpty()
-                                                            from jbbo in jbo.DefaultIfEmpty()
+                                                            from jbbo in jbo.DefaultIfEmpty() 
                                                             from jssh in jsh.DefaultIfEmpty()
                                                             select new CashTransferModel()
                                                             {
@@ -616,7 +617,7 @@ namespace POS_Server.Controllers
                                                                 createUserId = C.createUserId,
                                                                 notes = C.notes,
                                                                 posIdCreator = C.posIdCreator,
-                                                                isConfirm = C.isConfirm,
+                                                                isConfirm = C.isConfirm ,
                                                                 cashTransIdSource = C.cashTransIdSource,
                                                                 side = C.side,
 
@@ -639,14 +640,17 @@ namespace POS_Server.Controllers
                                                                 createUserJob = jucc.job,
                                                                 cardName = jcrd.name,
                                                                 bondDeserveDate = jbbo.deserveDate,
-                                                                bondIsRecieved = jbbo.isRecieved,
+                                                                bondIsRecieved =  jbbo.isRecieved,
                                                                 shippingCompanyId = C.shippingCompanyId,
-                                                                shippingCompanyName = jssh.name
+                                                                shippingCompanyName = jssh.name,
+                                                          
+                                                                isConfirm2 = 0,
+
 
                                                             }).Where(C => ((type == "all") ? true : C.transType == type) && (C.processType != "balance")
-                && ((side == "all") ? true : C.side == side)).ToList();
+                                                                        && ((side == "all") ? true : C.side == side)).ToList();
 
-                        if (cachlist.Count > 0 && side == "p")
+                        if (cachlist.Count() > 0 && side == "p")
                         {
                             CashTransferModel tempitem = null;
                             foreach (CashTransferModel cashtItem in cachlist)
@@ -657,7 +661,7 @@ namespace POS_Server.Controllers
                                 cashtItem.pos2Id = tempitem.posId;
                                 cashtItem.pos2Name = tempitem.posName;
                                 cashtItem.isConfirm2 = tempitem.isConfirm;
-
+                                cashtItem.bondIsRecieved = cashtItem.bondIsRecieved == null ? Convert.ToByte(0) : cashtItem.bondIsRecieved;
                             }
 
                         }
@@ -668,124 +672,15 @@ namespace POS_Server.Controllers
 
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return TokenManager.GenerateToken("0");
+                    //return TokenManager.GenerateToken("0");
+                    return TokenManager.GenerateToken(ex.ToString());
                 }
 
             }
 
-            //var re = Request;
-            //var headers = re.Headers;
-            //string token = "";
 
-            //if (headers.Contains("APIKey"))
-            //{
-            //    token = headers.GetValues("APIKey").First();
-            //}
-
-
-
-            //Validation validation = new Validation();
-            //bool valid = validation.CheckApiKey(token);
-
-            //if (valid)
-            //{
-            //    using (incposdbEntities entity = new incposdbEntities())
-            //    {
-            //        List<CashTransferModel> cachlist = (from C in entity.cashTransfer
-            //                                            join b in entity.banks on C.bankId equals b.bankId into jb
-            //                                            join a in entity.agents on C.agentId equals a.agentId into ja
-            //                                            join p in entity.pos on C.posId equals p.posId into jp
-            //                                            join pc in entity.pos on C.posIdCreator equals pc.posId into jpcr
-            //                                            join u in entity.users on C.userId equals u.userId into ju
-            //                                            join uc in entity.users on C.createUserId equals uc.userId into juc
-            //                                            join cr in entity.cards on C.cardId equals cr.cardId into jcr
-            //                                            join bo in entity.bondes on C.bondId equals bo.bondId into jbo
-            //                                            join sh in entity.shippingCompanies on C.shippingCompanyId equals sh.shippingCompanyId into jsh
-            //                                            from jbb in jb.DefaultIfEmpty()
-            //                                            from jaa in ja.DefaultIfEmpty()
-            //                                            from jpp in jp.DefaultIfEmpty()
-            //                                            from juu in ju.DefaultIfEmpty()
-            //                                            from jpcc in jpcr.DefaultIfEmpty()
-            //                                            from jucc in juc.DefaultIfEmpty()
-            //                                            from jcrd in jcr.DefaultIfEmpty()
-            //                                            from jbbo in jbo.DefaultIfEmpty()
-            //                                            from jssh in jsh.DefaultIfEmpty()
-            //                                            select new CashTransferModel()
-            //                                            {
-            //                                                cashTransId = C.cashTransId,
-            //                                                transType = C.transType,
-            //                                                posId = C.posId,
-            //                                                userId = C.userId,
-            //                                                agentId = C.agentId,
-            //                                                invId = C.invId,
-            //                                                transNum = C.transNum,
-            //                                                createDate = C.createDate,
-            //                                                updateDate = C.updateDate,
-            //                                                cash = C.cash,
-            //                                                updateUserId = C.updateUserId,
-            //                                                createUserId = C.createUserId,
-            //                                                notes = C.notes,
-            //                                                posIdCreator = C.posIdCreator,
-            //                                                isConfirm = C.isConfirm,
-            //                                                cashTransIdSource = C.cashTransIdSource,
-            //                                                side = C.side,
-
-            //                                                docName = C.docName,
-            //                                                docNum = C.docNum,
-            //                                                docImage = C.docImage,
-            //                                                bankId = C.bankId,
-            //                                                bankName = jbb.name,
-            //                                                agentName = jaa.name,
-            //                                                usersName = juu.name,// side =u
-
-            //                                                posName = jpp.name,
-            //                                                posCreatorName = jpcc.name,
-            //                                                processType = C.processType,
-            //                                                cardId = C.cardId,
-            //                                                bondId = C.bondId,
-            //                                                usersLName = juu.lastname,// side =u
-            //                                                createUserName = jucc.name,
-            //                                                createUserLName = jucc.lastname,
-            //                                                createUserJob = jucc.job,
-            //                                                cardName = jcrd.name,
-            //                                                bondDeserveDate = jbbo.deserveDate,
-            //                                                bondIsRecieved = jbbo.isRecieved,
-            //                                                shippingCompanyId = C.shippingCompanyId,
-            //                                                shippingCompanyName = jssh.name
-
-            //                                            }).Where(C => ((type == "all") ? true : C.transType == type)
-            //&& ((side == "all") ? true : C.side == side)).ToList();
-
-            //        if (cachlist.Count > 0 && side == "p")
-            //        {
-            //            CashTransferModel tempitem = null;
-            //            foreach (CashTransferModel cashtItem in cachlist)
-            //            {
-            //                tempitem = this.Getpostransmodel(cashtItem.cashTransId)
-            //                    .Where(C => C.cashTransId != cashtItem.cashTransId).FirstOrDefault();
-            //                cashtItem.cashTrans2Id = tempitem.cashTransId;
-            //                cashtItem.pos2Id = tempitem.posId;
-            //                cashtItem.pos2Name = tempitem.posName;
-            //                cashtItem.isConfirm2 = tempitem.isConfirm;
-
-            //            }
-
-            //        }
-
-
-
-
-            //        if (cachlist == null)
-            //            return NotFound();
-            //        else
-            //            return Ok(cachlist);
-
-            //    }
-            //}
-            //else
-            //    return NotFound();
         }
 
         // get by bondId
@@ -795,8 +690,8 @@ namespace POS_Server.Controllers
         {
             //int bondId string token
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -949,8 +844,8 @@ namespace POS_Server.Controllers
         {
             //string type, string side string token
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1099,8 +994,8 @@ namespace POS_Server.Controllers
         {
             //string type, string side string token
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1254,8 +1149,8 @@ namespace POS_Server.Controllers
 
 
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1505,8 +1400,8 @@ namespace POS_Server.Controllers
 
             //string type, string side string token
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1809,8 +1704,8 @@ namespace POS_Server.Controllers
 
 
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1859,7 +1754,7 @@ namespace POS_Server.Controllers
                                     entity.cashTransfer.Remove(cashobject);
 
                                 }
-                              int res = entity.SaveChanges();
+                                int res = entity.SaveChanges();
                                 if (res > 0)
                                 {
                                     message = "1";
@@ -1868,7 +1763,7 @@ namespace POS_Server.Controllers
                             }
 
                         }
-                       
+
                         return TokenManager.GenerateToken(message);
 
                     }
@@ -1956,8 +1851,8 @@ namespace POS_Server.Controllers
 
 
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -2313,8 +2208,8 @@ namespace POS_Server.Controllers
 
         {
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -2498,8 +2393,8 @@ namespace POS_Server.Controllers
         {
             //  string token
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -2680,7 +2575,7 @@ namespace POS_Server.Controllers
         [Route("GetCountByInvId")]
         public string GetCountByInvId(string token)
         {
-            token = TokenManager.readToken(HttpContext.Current.Request); 
+            token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
@@ -2718,7 +2613,7 @@ namespace POS_Server.Controllers
         {
             //int agentId, decimal amount, string payType, string cashTransfer 
             string message = "";
-            token = TokenManager.readToken(HttpContext.Current.Request); 
+            token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
@@ -3060,9 +2955,9 @@ namespace POS_Server.Controllers
                                                 agent.balance += amount;
                                             }
 
-                                       entity.SaveChanges();
-                                           // return TokenManager.GenerateToken(message);
-                                          break;
+                                            entity.SaveChanges();
+                                            // return TokenManager.GenerateToken(message);
+                                            break;
                                     }
                                 }
                                 return TokenManager.GenerateToken("-1");
@@ -3422,8 +3317,8 @@ namespace POS_Server.Controllers
 
 
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -3896,8 +3791,8 @@ namespace POS_Server.Controllers
 
 
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -4088,7 +3983,7 @@ namespace POS_Server.Controllers
                                         break;
                                         #endregion
                                 }
-                              //  return Ok(cashIds);//
+                                //  return Ok(cashIds);//
                                 TokenManager.GenerateToken(cashIds.ToString());
                             }
                             else
@@ -4128,14 +4023,14 @@ namespace POS_Server.Controllers
                                             break;
                                     }
                                 }
-                              //  return Ok("-1");
+                                //  return Ok("-1");
                                 TokenManager.GenerateToken("-1");
                             }
                         }
-                 
-                    
-                       // return Ok("false");
-                }
+
+
+                        // return Ok("false");
+                    }
                     catch
                     {
                         return TokenManager.GenerateToken("0");
@@ -4370,15 +4265,15 @@ namespace POS_Server.Controllers
             string message = "";
 
 
-          
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
             }
-                else
-                {
+            else
+            {
                 string cashIds = "";
                 string Object = "";
                 string listObject = "";
@@ -4389,41 +4284,41 @@ namespace POS_Server.Controllers
                 int agentId = 0;
 
                 string payType = "";
-                    cashTransfer cashTr = new cashTransfer();
-                    foreach (Claim c in claims)
+                cashTransfer cashTr = new cashTransfer();
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoices")
                     {
-                        if (c.Type == "invoices")
-                        {
                         listObject = c.Value.Replace("\\", string.Empty);
                         listObject = listObject.Trim('"');
                         invoiceList = JsonConvert.DeserializeObject<List<invoices>>(listObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
 
-                        }
-                 else if (c.Type == "cashTransfer")
+                    }
+                    else if (c.Type == "cashTransfer")
                     {
                         Object = c.Value.Replace("\\", string.Empty);
                         Object = Object.Trim('"');
                         cashTr = JsonConvert.DeserializeObject<cashTransfer>(Object, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
 
                     }
-            
+
                     else if (c.Type == "agentId")
-                        {
-                        agentId = int.Parse(c.Value);
-                        }
-                      
-                        else if (c.Type == "payType")
-                        {
-                            payType = c.Value;
-                        }
-
-                    }
-                    if (cashTr != null)
                     {
+                        agentId = int.Parse(c.Value);
+                    }
+
+                    else if (c.Type == "payType")
+                    {
+                        payType = c.Value;
+                    }
+
+                }
+                if (cashTr != null)
+                {
 
 
-                        try
-                        {
+                    try
+                    {
 
                         using (incposdbEntities entity = new incposdbEntities())
                         {
@@ -4510,14 +4405,14 @@ namespace POS_Server.Controllers
                                     entity.SaveChanges();
                                     break;
                             }
-                           // return Ok(cashIds);
+                            // return Ok(cashIds);
                             return TokenManager.GenerateToken("1");
 
 
                         }
-                 
 
-                }
+
+                    }
                     catch
                     {
                         return TokenManager.GenerateToken("-2");
@@ -4527,7 +4422,7 @@ namespace POS_Server.Controllers
                 {
                     return TokenManager.GenerateToken("0");
                 }
-              //  return TokenManager.GenerateToken("0");
+                //  return TokenManager.GenerateToken("0");
             }
 
 
@@ -4666,59 +4561,59 @@ namespace POS_Server.Controllers
 
 
 
-              token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
             }
-                else
+            else
+            {
+                string cashIds = "";
+                string Object = "";
+                string listObject = "";
+                List<invoices> invoiceList = new List<invoices>();
+                // bondes newObject = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+
+                int userId = 0;
+
+                string payType = "";
+                cashTransfer cashTr = new cashTransfer();
+                foreach (Claim c in claims)
                 {
-                    string cashIds = "";
-                    string Object = "";
-                    string listObject = "";
-                    List<invoices> invoiceList = new List<invoices>();
-                    // bondes newObject = null;
-                    IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
-
-                    int userId = 0;
-
-                    string payType = "";
-                    cashTransfer cashTr = new cashTransfer();
-                    foreach (Claim c in claims)
+                    if (c.Type == "invoices")
                     {
-                        if (c.Type == "invoices")
-                        {
-                            listObject = c.Value.Replace("\\", string.Empty);
-                            listObject = listObject.Trim('"');
-                            invoiceList = JsonConvert.DeserializeObject<List<invoices>>(listObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
-
-                        }
-                        else if (c.Type == "cashTransfer")
-                        {
-                            Object = c.Value.Replace("\\", string.Empty);
-                            Object = Object.Trim('"');
-                            cashTr = JsonConvert.DeserializeObject<cashTransfer>(Object, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
-
-                        }
-
-                        else if (c.Type == "userId")
-                        {
-                        userId = int.Parse(c.Value);
-                        }
-
-                        else if (c.Type == "payType")
-                        {
-                            payType = c.Value;
-                        }
+                        listObject = c.Value.Replace("\\", string.Empty);
+                        listObject = listObject.Trim('"');
+                        invoiceList = JsonConvert.DeserializeObject<List<invoices>>(listObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
 
                     }
-                    if (cashTr != null)
+                    else if (c.Type == "cashTransfer")
                     {
+                        Object = c.Value.Replace("\\", string.Empty);
+                        Object = Object.Trim('"');
+                        cashTr = JsonConvert.DeserializeObject<cashTransfer>(Object, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+
+                    }
+
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+
+                    else if (c.Type == "payType")
+                    {
+                        payType = c.Value;
+                    }
+
+                }
+                if (cashTr != null)
+                {
 
 
-                        try
-                        {
+                    try
+                    {
 
                         using (incposdbEntities entity = new incposdbEntities())
                         {
@@ -4775,90 +4670,90 @@ namespace POS_Server.Controllers
 
                     }
                     catch
-                        {
-                            return TokenManager.GenerateToken("-2");
-                        }
-                    }
-                    else
                     {
-                        return TokenManager.GenerateToken("0");
+                        return TokenManager.GenerateToken("-2");
                     }
-                    //  return TokenManager.GenerateToken("0");
                 }
-
-
-                //var re = Request;
-                //var headers = re.Headers;
-                //string token = "";
-                //string cashIds = "";
-                //if (headers.Contains("APIKey"))
-                //{
-                //    token = headers.GetValues("APIKey").First();
-                //}
-                //Validation validation = new Validation();
-                //bool valid = validation.CheckApiKey(token);
-
-                //if (valid)
-                //{
-                //    invoices = invoices.Replace("\\", string.Empty);
-                //    invoices = invoices.Trim('"');
-
-                //    List<invoices> invoiceList = JsonConvert.DeserializeObject<List<invoices>>(invoices, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
-                //    cashTransfer cashTr = JsonConvert.DeserializeObject<cashTransfer>(cashTransfer, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
-
-                //    using (incposdbEntities entity = new incposdbEntities())
-                //    {
-                //        users user = entity.users.Find(userId);
-
-                //        switch (payType)
-                //        {
-                //            case "feed": //get s, pb
-                //                foreach (invoices inv in invoiceList)
-                //                {
-                //                    decimal paid = 0;
-                //                    cashTransfer ct;
-                //                    var invObj = entity.invoices.Find(inv.invoiceId);
-                //                    cashTr.invId = inv.invoiceId;
-
-                //                    paid = (decimal)inv.deserved;
-                //                    invObj.paid = invObj.paid + inv.deserved;
-                //                    invObj.deserved = 0;
-
-                //                    cashTr.cash = paid;
-                //                    cashTr.createDate = DateTime.Now;
-                //                    cashTr.updateDate = DateTime.Now;
-                //                    cashTr.updateUserId = cashTr.createUserId;
-                //                    ct = entity.cashTransfer.Add(cashTr);
-                //                    cashIds += ct.cashTransId + ",";
-                //                    // decrease user balance
-                //                    if (user.balanceType == 0)
-                //                    {
-                //                        if (paid <= (decimal)user.balance)
-                //                        {
-                //                            user.balance = user.balance - paid;
-                //                        }
-                //                        else
-                //                        {
-                //                            user.balance = paid - user.balance;
-                //                            user.balanceType = 1;
-                //                        }
-                //                    }
-                //                    else if (user.balanceType == 1)
-                //                    {
-                //                        user.balance += paid;
-                //                    }
-                //                    entity.SaveChanges();
-                //                }
-                //                entity.SaveChanges();
-                //                break;
-                //        }
-                //        return Ok(cashIds);
-                //    }
-                //}
-                //else
-                //    return Ok("false");
-
+                else
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+                //  return TokenManager.GenerateToken("0");
             }
+
+
+            //var re = Request;
+            //var headers = re.Headers;
+            //string token = "";
+            //string cashIds = "";
+            //if (headers.Contains("APIKey"))
+            //{
+            //    token = headers.GetValues("APIKey").First();
+            //}
+            //Validation validation = new Validation();
+            //bool valid = validation.CheckApiKey(token);
+
+            //if (valid)
+            //{
+            //    invoices = invoices.Replace("\\", string.Empty);
+            //    invoices = invoices.Trim('"');
+
+            //    List<invoices> invoiceList = JsonConvert.DeserializeObject<List<invoices>>(invoices, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+            //    cashTransfer cashTr = JsonConvert.DeserializeObject<cashTransfer>(cashTransfer, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+
+            //    using (incposdbEntities entity = new incposdbEntities())
+            //    {
+            //        users user = entity.users.Find(userId);
+
+            //        switch (payType)
+            //        {
+            //            case "feed": //get s, pb
+            //                foreach (invoices inv in invoiceList)
+            //                {
+            //                    decimal paid = 0;
+            //                    cashTransfer ct;
+            //                    var invObj = entity.invoices.Find(inv.invoiceId);
+            //                    cashTr.invId = inv.invoiceId;
+
+            //                    paid = (decimal)inv.deserved;
+            //                    invObj.paid = invObj.paid + inv.deserved;
+            //                    invObj.deserved = 0;
+
+            //                    cashTr.cash = paid;
+            //                    cashTr.createDate = DateTime.Now;
+            //                    cashTr.updateDate = DateTime.Now;
+            //                    cashTr.updateUserId = cashTr.createUserId;
+            //                    ct = entity.cashTransfer.Add(cashTr);
+            //                    cashIds += ct.cashTransId + ",";
+            //                    // decrease user balance
+            //                    if (user.balanceType == 0)
+            //                    {
+            //                        if (paid <= (decimal)user.balance)
+            //                        {
+            //                            user.balance = user.balance - paid;
+            //                        }
+            //                        else
+            //                        {
+            //                            user.balance = paid - user.balance;
+            //                            user.balanceType = 1;
+            //                        }
+            //                    }
+            //                    else if (user.balanceType == 1)
+            //                    {
+            //                        user.balance += paid;
+            //                    }
+            //                    entity.SaveChanges();
+            //                }
+            //                entity.SaveChanges();
+            //                break;
+            //        }
+            //        return Ok(cashIds);
+            //    }
+            //}
+            //else
+            //    return Ok("false");
+
+        }
 
         /// <summary>
         /// //////////////
@@ -4882,8 +4777,8 @@ namespace POS_Server.Controllers
 
 
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -4982,11 +4877,11 @@ namespace POS_Server.Controllers
                                     entity.SaveChanges();
                                     break;
                             }
-                        //    return Ok(cashIds);
+                            //    return Ok(cashIds);
                             return TokenManager.GenerateToken("1");
 
                         }
-                   
+
 
 
 
@@ -5193,17 +5088,17 @@ namespace POS_Server.Controllers
 
 
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
             }
             else
             {
-              //  string cashIds = "";
+                //  string cashIds = "";
                 string Object = "";
-               // string listObject = "";
+                // string listObject = "";
                 List<invoices> invoiceList = new List<invoices>();
                 // bondes newObject = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -5211,12 +5106,12 @@ namespace POS_Server.Controllers
                 int invoiceId = 0;
                 int invStatusId = 0;
                 string payType = "";
-                decimal amount=0;
+                decimal amount = 0;
                 cashTransfer cashTr = new cashTransfer();
                 foreach (Claim c in claims)
                 {
-                
-                  if (c.Type == "cashTransfer")
+
+                    if (c.Type == "cashTransfer")
                     {
                         Object = c.Value.Replace("\\", string.Empty);
                         Object = Object.Trim('"');
@@ -5336,7 +5231,7 @@ namespace POS_Server.Controllers
                                     }
                                     break;
                             }
-                         message=   entity.SaveChanges().ToString();
+                            message = entity.SaveChanges().ToString();
                             return TokenManager.GenerateToken(message);
 
                             // return Ok("true");
@@ -5482,8 +5377,8 @@ namespace POS_Server.Controllers
 
 
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -5491,28 +5386,28 @@ namespace POS_Server.Controllers
             else
             {
                 string cashCode = "";
-                
+
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
 
-            
-            
+
+
                 foreach (Claim c in claims)
                 {
 
-             
+
 
                     if (c.Type == "cashCode")
                     {
                         cashCode = c.Value;
                     }
-                
+
 
                 }
-               
 
 
-                    try
-                    {
+
+                try
+                {
 
                     List<string> numberList;
                     int lastNum = 0;
@@ -5532,14 +5427,14 @@ namespace POS_Server.Controllers
                             lastNum = int.Parse(numberList[numberList.Count - 1]);
                         }
                     }
-                  //  return Ok(lastNum);
+                    //  return Ok(lastNum);
                     return TokenManager.GenerateToken(lastNum.ToString());
                 }
                 catch
-                    {
-                        return TokenManager.GenerateToken("0");
-                    }
-             
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+
                 //  return TokenManager.GenerateToken("0");
             }
 
@@ -5591,8 +5486,8 @@ namespace POS_Server.Controllers
 
 
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -5641,7 +5536,7 @@ namespace POS_Server.Controllers
                             lastNum = int.Parse(numberList[numberList.Count - 1]);
                         }
                     }
-                  //  return Ok(lastNum);
+                    //  return Ok(lastNum);
                     return TokenManager.GenerateToken(lastNum.ToString());
                 }
                 catch
