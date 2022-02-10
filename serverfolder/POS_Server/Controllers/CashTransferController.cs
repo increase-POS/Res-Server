@@ -124,7 +124,7 @@ namespace POS_Server.Controllers
                                                                 createUserJob = jucc.job,
                                                                 cardName = jcrd.name,
                                                                 bondDeserveDate = jbbo.deserveDate,
-                                                                bondIsRecieved = jbbo.isRecieved,
+                                                              //  bondIsRecieved = jbbo.isRecieved,
                                                                 shippingCompanyId = C.shippingCompanyId,
                                                                 shippingCompanyName = jssh.name,
                                                                 isConfirm2=0,
@@ -434,7 +434,7 @@ namespace POS_Server.Controllers
                                                                 createUserJob = jucc.job,
                                                                 cardName = jcrd.name,
                                                                 bondDeserveDate = jbbo.deserveDate,
-                                                                bondIsRecieved = jbbo.isRecieved,
+                                                              //  bondIsRecieved = jbbo.isRecieved,
                                                                 shippingCompanyId = C.shippingCompanyId,
                                                                 shippingCompanyName = jssh.name,
                                                                 isConfirm2=0,
@@ -583,24 +583,24 @@ namespace POS_Server.Controllers
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         IEnumerable<CashTransferModel> cachlist = (from C in entity.cashTransfer
-                                                            join b in entity.banks on C.bankId equals b.bankId into jb
-                                                            join a in entity.agents on C.agentId equals a.agentId into ja
+                                                          //  join b in entity.banks on C.bankId equals b.bankId into jb
+                                                          //  join a in entity.agents on C.agentId equals a.agentId into ja
                                                             join p in entity.pos on C.posId equals p.posId into jp
                                                             join pc in entity.pos on C.posIdCreator equals pc.posId into jpcr
                                                             join u in entity.users on C.userId equals u.userId into ju
                                                             join uc in entity.users on C.createUserId equals uc.userId into juc
-                                                            join cr in entity.cards on C.cardId equals cr.cardId into jcr
-                                                            join bo in entity.bondes on C.bondId equals bo.bondId into jbo
-                                                            join sh in entity.shippingCompanies on C.shippingCompanyId equals sh.shippingCompanyId into jsh
-                                                            from jbb in jb.DefaultIfEmpty()
-                                                            from jaa in ja.DefaultIfEmpty()
+                                                          //  join cr in entity.cards on C.cardId equals cr.cardId into jcr
+                                                          //  join bo in entity.bondes on C.bondId equals bo.bondId into jbo
+                                                          //  join sh in entity.shippingCompanies on C.shippingCompanyId equals sh.shippingCompanyId into jsh
+                                                           // from jbb in jb.DefaultIfEmpty()
+                                                           // from jaa in ja.DefaultIfEmpty()
                                                             from jpp in jp.DefaultIfEmpty()
                                                             from juu in ju.DefaultIfEmpty()
                                                             from jpcc in jpcr.DefaultIfEmpty()
                                                             from jucc in juc.DefaultIfEmpty()
-                                                            from jcrd in jcr.DefaultIfEmpty()
-                                                            from jbbo in jbo.DefaultIfEmpty() 
-                                                            from jssh in jsh.DefaultIfEmpty()
+                                                          //  from jcrd in jcr.DefaultIfEmpty()
+                                                           // from jbbo in jbo.DefaultIfEmpty() 
+                                                           // from jssh in jsh.DefaultIfEmpty()
                                                             select new CashTransferModel()
                                                             {
                                                                 cashTransId = C.cashTransId,
@@ -625,24 +625,24 @@ namespace POS_Server.Controllers
                                                                 docNum = C.docNum,
                                                                 docImage = C.docImage,
                                                                 bankId = C.bankId,
-                                                                bankName = jbb.name,
-                                                                agentName = jaa.name,
+                                                               // bankName = jbb.name,
+                                                               // agentName = jaa.name,
                                                                 usersName = juu.name,// side =u
 
                                                                 posName = jpp.name,
                                                                 posCreatorName = jpcc.name,
                                                                 processType = C.processType,
                                                                 cardId = C.cardId,
-                                                                bondId = C.bondId,
+                                                             //   bondId = C.bondId,
                                                                 usersLName = juu.lastname,// side =u
                                                                 createUserName = jucc.name,
                                                                 createUserLName = jucc.lastname,
                                                                 createUserJob = jucc.job,
-                                                                cardName = jcrd.name,
-                                                                bondDeserveDate = jbbo.deserveDate,
-                                                                bondIsRecieved =  jbbo.isRecieved,
-                                                                shippingCompanyId = C.shippingCompanyId,
-                                                                shippingCompanyName = jssh.name,
+                                                                //cardName = jcrd.name,
+                                                               // bondDeserveDate = jbbo.deserveDate,
+                                                                //bondIsRecieved =  jbbo.isRecieved,
+                                                             //   shippingCompanyId = C.shippingCompanyId,
+                                                             //   shippingCompanyName = jssh.name,
                                                           
                                                                 isConfirm2 = 0,
 
@@ -652,7 +652,7 @@ namespace POS_Server.Controllers
 
                         if (cachlist.Count() > 0 && side == "p")
                         {
-                            CashTransferModel tempitem = null;
+                            CashTransferModel tempitem =new CashTransferModel();
                             foreach (CashTransferModel cashtItem in cachlist)
                             {
                                 tempitem = this.Getpostransmodel(cashtItem.cashTransId)
@@ -661,7 +661,7 @@ namespace POS_Server.Controllers
                                 cashtItem.pos2Id = tempitem.posId;
                                 cashtItem.pos2Name = tempitem.posName;
                                 cashtItem.isConfirm2 = tempitem.isConfirm;
-                                cashtItem.bondIsRecieved = cashtItem.bondIsRecieved == null ? Convert.ToByte(0) : cashtItem.bondIsRecieved;
+                              //  cashtItem.bondIsRecieved = cashtItem.bondIsRecieved == null ? Convert.ToByte(0) : cashtItem.bondIsRecieved;
                             }
 
                         }
@@ -674,8 +674,8 @@ namespace POS_Server.Controllers
                 }
                 catch (Exception ex)
                 {
-                    //return TokenManager.GenerateToken("0");
-                    return TokenManager.GenerateToken(ex.ToString());
+                    return TokenManager.GenerateToken("0");
+                   // return TokenManager.GenerateToken(ex.ToString());
                 }
 
             }

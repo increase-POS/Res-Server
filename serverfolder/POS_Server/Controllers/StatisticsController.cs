@@ -6909,7 +6909,7 @@ else
                                                                 createUserJob = jucc.job,
                                                                 cardName = jcrd.name,
                                                                 bondDeserveDate = jbbo.deserveDate,
-                                                                bondIsRecieved = jbbo.isRecieved,
+                                                              //  bondIsRecieved = jbbo.isRecieved,
                                                                 agentCompany = jaa.company,
                                                                 shippingCompanyId = C.shippingCompanyId,
                                                                 shippingCompanyName = C.shippingCompanies.name,
