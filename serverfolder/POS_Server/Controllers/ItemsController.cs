@@ -587,8 +587,11 @@ namespace POS_Server.Controllers
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                         var searchPredicate = PredicateBuilder.New<items>();
+                    searchPredicate = searchPredicate.And(x => true);
                     if (type != "")
                         searchPredicate = searchPredicate.And(x => x.type == type);
+                    else
+                        searchPredicate = searchPredicate.And(x => salesTypes.Contains(x.type));
                         var itemsList = (from I in entity.items.Where(searchPredicate)
                                      join u in entity.itemsUnits on I.itemId equals u.itemId
                                      join c in entity.categories on I.categoryId equals c.categoryId into lj
