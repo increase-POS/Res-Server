@@ -1475,6 +1475,7 @@ namespace POS_Server.Controllers
                                             cardId = C.cardId,
                                             bondId = C.bondId,
                                             shippingCompanyId = C.shippingCompanyId,
+                                            isConfirm2=0,
                                         }).Where(C => ((type == "all") ? true : C.transType == type)
                                     && ((side == "all") ? true : C.side == side) && (C.cashTransId == sourceId || C.cashTransIdSource == sourceId)).ToList();
 
@@ -1526,6 +1527,7 @@ namespace POS_Server.Controllers
                                                processType = C.processType,
                                                cardId = C.cardId,
                                                bondId = C.bondId,
+                                               isConfirm2 = 0,
                                            }).Where(C => ((type == "all") ? true : C.transType == type)
                    && ((side == "all") ? true : C.side == side) && (C.cashTransId == pullposcashtransid)).ToList();
 
