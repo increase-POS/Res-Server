@@ -93,6 +93,7 @@ namespace POS_Server.Controllers
                         else
                         {
                             tmpObject = entity.menuSettings.Find(Object.menuSettingId);
+                            tmpObject.preparingTime = Object.preparingTime;
                             tmpObject.sat = Object.sat;
                             tmpObject.sun = Object.sun;
                             tmpObject.tues = Object.tues;
@@ -100,7 +101,7 @@ namespace POS_Server.Controllers
                             tmpObject.thur = Object.thur;
                             tmpObject.fri = Object.fri;
                             tmpObject.isActive = Object.isActive;
-                            tmpObject.updateUserId = Object.createUserId;
+                            tmpObject.updateUserId = Object.updateUserId;
                             tmpObject.updateDate = DateTime.Now;
                         }
                         message = entity.SaveChanges().ToString();
