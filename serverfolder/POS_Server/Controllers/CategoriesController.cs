@@ -13,6 +13,7 @@ using POS_Server.Models.VM;
 using System.Security.Claims;
 using Newtonsoft.Json.Converters;
 using System.Web;
+using LinqKit;
 
 namespace POS_Server.Controllers
 {
@@ -34,25 +35,57 @@ namespace POS_Server.Controllers
             }
             else
             {
+                Boolean canDelete = false;
+                string type = "";
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "type")
+                    {
+                        type = c.Value;
+                    }
+                }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var category = entity.categories.Select(p => new {
-                       p.categoryId,
-                       p.name,
-                       p.categoryCode,
-                       p.createDate,
-                       p.createUserId,
-                       p.details,
-                       p.image,
-                       p.notes,
-                     
-                       p.taxes,
-                       p.updateDate,
-                       p.updateUserId,
-                       p.type,
-                       p.isActive,
-                   }).ToList();
-                    return TokenManager.GenerateToken(category);
+                    var searchPredicate = PredicateBuilder.New<categories>();
+                    if (type == "")
+                        searchPredicate = searchPredicate.And(x => true);
+                    else
+                        searchPredicate = searchPredicate.And(x => x.type == type);
+                    var categoriesList = entity.categories.Where(searchPredicate).Select(p => new CategoryModel() {
+                        categoryId = p.categoryId,
+                        name = p.name,
+                        categoryCode = p.categoryCode,
+                        createDate = p.createDate,
+                        createUserId = p.createUserId,
+                        details = p.details,
+                        image = p.image,
+                        notes = p.notes,
+                        taxes = p.taxes,
+                        updateDate = p.updateDate,
+                        updateUserId = p.updateUserId,
+                        isActive = p.isActive,
+                        type = p.type,
+                    }).ToList();
+
+                    if (categoriesList.Count > 0)
+                    {
+                        for (int i = 0; i < categoriesList.Count; i++)
+                        {
+                            canDelete = false;
+                            if (categoriesList[i].isActive == 1)
+                            {
+                                int categoryId = (int)categoriesList[i].categoryId;
+                                var items = entity.items.Where(x => x.categoryId == categoryId).Select(b => new { b.itemId }).FirstOrDefault();
+                                //  var childCategoryL = entity.categories.Where(x => x.parentId == categoryId).Select(b => new { b.categoryId }).FirstOrDefault();
+
+                                if ((items is null))
+                                    canDelete = true;
+                            }
+                            categoriesList[i].canDelete = canDelete;
+                        }
+                    }
+                    return TokenManager.GenerateToken(categoriesList);
                 }
             }
         }
@@ -431,9 +464,9 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("Save")]
         public string Save(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "";
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -477,101 +510,27 @@ var strP = TokenManager.GetPrincipal(token);
                             newObject.updateUserId = newObject.createUserId;
 
                             tmpCategory = categoryEntity.Add(newObject);
-
-                            // get all users
-                            var users = entity.users.Where(x => x.isActive == 1).Select(x => x.userId).ToList();
-                            for (int i = 0; i < users.Count; i++)
-                            {
-                                int userId = users[i];
-                                var sequence = entity.categoryuser.Where(x => x.userId == userId).Select(x => x.sequence).Max();
-                                if (sequence == null)
-                                    sequence = 0;
-                                sequence++;
-                                categoryuser cu = new categoryuser()
-                                {
-                                    categoryId = tmpCategory.categoryId,
-                                    userId = userId,
-                                    sequence = sequence,
-                                    createDate = DateTime.Now,
-                                    updateDate = DateTime.Now,
-                                    createUserId = newObject.createUserId,
-                                    updateUserId = newObject.updateUserId,
-                                };
-                                catEntity.Add(cu);
-                            }
                             entity.SaveChanges();
                         }
                         else
                         {
-                            tmpCategory = entity.categories.Where(p => p.categoryId == newObject.categoryId).First();
+                            tmpCategory = entity.categories.Find(newObject.categoryId);
                             tmpCategory.categoryCode = newObject.categoryCode;
                             tmpCategory.details = newObject.details;
                             tmpCategory.name = newObject.name;
                             tmpCategory.notes = newObject.notes;
-                           // tmpCategory.parentId = newObject.parentId;
                             tmpCategory.taxes = newObject.taxes;
                             tmpCategory.updateDate = DateTime.Now;
                             tmpCategory.updateUserId = newObject.updateUserId;
                             tmpCategory.isActive = newObject.isActive;
-                             
-                              tmpCategory.type = newObject.type;
+                            tmpCategory.type = newObject.type;
                             entity.SaveChanges();
                             int categoryId = tmpCategory.categoryId;
                             byte isActivecat = tmpCategory.isActive;
                             int? updateuser = tmpCategory.updateUserId;
 
-                            //update is active sons and items sons
-                            // get all sub categories of categoryId
-
-                            List<categories> categoriesList = entity.categories
-                             .ToList()
-                              .Select(p => new categories
-                              {
-                                  categoryId = p.categoryId,
-                                  name = p.name,
-                                //  parentId = p.parentId,
-                              })
-                             .ToList();
-
-                            categoriesId = new List<int>();
-                            List<int> catIdlist = new List<int>();
-                            categoriesId.Add(categoryId);
-                            ItemsController icls = new ItemsController();
-
-                            var result = Recursive(categoriesList, categoryId).ToList();
-
-
-                            foreach (var r in result)
-                            {
-                                catIdlist.Add(r.categoryId);
-
-                            }
-
-                            // end sub cat
-                            // disactive selected category
-                       
-                            // disactive subs categories
-
-                            List<categories> sonList = entity.categories.Where(U => catIdlist.Contains(U.categoryId)).ToList();
-
-                            if (sonList.Count > 0)
-                            {
-                                for (int i = 0; i < sonList.Count; i++)
-                                {
-
-                                    sonList[i].isActive = isActivecat;
-                                    sonList[i].updateUserId = updateuser;
-                                    sonList[i].updateDate = DateTime.Now;
-
-
-                                    entity.categories.AddOrUpdate(sonList[i]);
-
-                                }
-                                entity.SaveChanges();
-                            }
                             // disactive items related to selected category and subs
-                            catIdlist.Add(categoryId);
-                            var catitems = entity.items.Where(U => catIdlist.Contains((int)U.categoryId)).ToList();
+                            var catitems = entity.items.Where(U => U.categoryId == categoryId).ToList();
                             if (catitems.Count > 0)
                             {
                                 for (int i = 0; i < catitems.Count; i++)
@@ -601,9 +560,9 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("Delete")]
         public string Delete(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "0";
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -635,20 +594,10 @@ var strP = TokenManager.GetPrincipal(token);
                     {
                         using (incposdbEntities entity = new incposdbEntities())
                         {
-                            var childCategories = entity.categories.Where(u => u.isActive == 1).FirstOrDefault();
+                            var tmpCategory = entity.categories.Find(categoryId);
+                            entity.categories.Remove(tmpCategory);
 
-                            if (childCategories == null)
-                            {
-                                entity.categoryuser.RemoveRange(entity.categoryuser.Where(x => x.categoryId == categoryId));
-
-                                var tmpCategory = entity.categories.Where(p => p.categoryId == categoryId).First();
-                                entity.categories.Remove(tmpCategory);
-
-                                message = entity.SaveChanges().ToString();
-                                return TokenManager.GenerateToken(message);
-                            }
-                            else
-                                message = "0";
+                            message = entity.SaveChanges().ToString();
                             return TokenManager.GenerateToken(message);
                         }
                     }
@@ -663,78 +612,29 @@ var strP = TokenManager.GetPrincipal(token);
                     try
                     {
                         using (incposdbEntities entity = new incposdbEntities())
-                        {  // get all sub categories of categoryId
-                            List<categories> categoriesList = entity.categories
-                             .ToList()
-                              .Select(p => new categories
-                              {
-                                  categoryId = p.categoryId,
-                                  name = p.name,
-                                  
-                              })
-                             .ToList();
-
-                            categoriesId = new List<int>();
-                            List<int>  catIdlist = new List<int>();
-                            categoriesId.Add(categoryId);
-                            ItemsController icls = new ItemsController();
-                           
-                            var result =Recursive(categoriesList, categoryId).ToList();
-                           
-                            
-                            foreach (var r in result)
-                            {
-                                catIdlist.Add(r.categoryId);
-                             
-                            }
-                            
-                            // end sub cat
-                            // disactive selected category
-                            var tmpCategory = entity.categories.Where(p => p.categoryId == categoryId).First();
+                        {  
+                            var tmpCategory = entity.categories.Find(categoryId);
                             tmpCategory.isActive = 0;
                             tmpCategory.updateDate = DateTime.Now;
                             tmpCategory.updateUserId = userId;
                             entity.categories.AddOrUpdate(tmpCategory);
                             entity.SaveChanges();
 
-                       // disactive subs categories
-
-                           List<categories> sonList = entity.categories.Where(U => catIdlist.Contains(U.categoryId)).ToList();
-
-                            if (sonList.Count > 0)
+                           var catitems = entity.items.Where(U => U.categoryId == categoryId).ToList();
+                            if (catitems.Count > 0)
                             {
-                                for (int i = 0; i < sonList.Count; i++)
+                                for (int i = 0; i < catitems.Count; i++)
                                 {
-                                    sonList[i].isActive = 0;
-                                    sonList[i].updateDate = DateTime.Now;
-                                    sonList[i].updateUserId = userId;
-                                    entity.categories.AddOrUpdate(sonList[i]);
-
+                                catitems[i].isActive = 0;
+                                catitems[i].updateDate = DateTime.Now;
+                                catitems[i].updateUserId = userId;
+                                entity.items.AddOrUpdate(catitems[i]);
+                                   
                                 }
                                 entity.SaveChanges();
                             }
-                            // disactive items related to selected category and subs
-                            catIdlist.Add(categoryId);
-                              var catitems = entity.items.Where(U => catIdlist.Contains((int)U.categoryId)).ToList();
-                                if (catitems.Count > 0)
-                                {
-                                    for (int i = 0; i < catitems.Count; i++)
-                                    {
-                                    catitems[i].isActive = 0;
-                                    catitems[i].updateDate = DateTime.Now;
-                                    catitems[i].updateUserId = userId;
-                                    entity.items.AddOrUpdate(catitems[i]);
-                                   
-                                    }
-                                   entity.SaveChanges();
-
-                                }
-
-
-
                             message = "1";
                             return TokenManager.GenerateToken(message);
-
                         }
                     }
                     catch
@@ -835,6 +735,8 @@ var strP = TokenManager.GetPrincipal(token);
                         }
                         else
                         {
+                            if (!Directory.Exists(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\category")))
+                                Directory.CreateDirectory(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\category"));
                             //  check if image exist
                             var pathCheck = Path.Combine(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\category"), imageWithNoExt);
                             var files = Directory.GetFiles(System.Web.Hosting.HostingEnvironment.MapPath("~\\images\\category"), imageWithNoExt + ".*");

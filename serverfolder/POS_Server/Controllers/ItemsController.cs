@@ -504,13 +504,13 @@ namespace POS_Server.Controllers
                                              menuSettingId = ms.menuSettingId,
                                              isActive =  ms.isActive == null ? (byte)0: ms.isActive,
                                              preparingTime = ms.preparingTime,
-                                             sat = ms.sat,
-                                             sun = ms.sun,
-                                             mon = ms.mon,
-                                             tues = ms.tues,
-                                             wed = ms.wed,
-                                             thur = ms.thur,
-                                             fri = ms.fri,
+                                             sat = ms.sat == null ? false : ms.sat,
+                                             sun = ms.sun == null ? false : ms.sun,
+                                             mon = ms.mon == null ? false : ms.mon,
+                                             tues = ms.tues == null ? false : ms.tues,
+                                             wed = ms.wed == null ? false : ms.wed,
+                                             thur = ms.thur == null ? false : ms.thur,
+                                             fri = ms.fri == null ? false : ms.fri,
                                              branchId = ms.branchId,
                                              itemId = I.itemId,
                                              name = I.name,
@@ -527,7 +527,6 @@ namespace POS_Server.Controllers
                                              itemUnitId = iu.itemUnitId,
                                              price = iu.price,
                                              priceWithService = iu.priceWithService,
-
                                          })
                                        .ToList();
 
@@ -2417,7 +2416,7 @@ namespace POS_Server.Controllers
                         itemModel.min = itemObj.min;
                         itemModel.minUnitId = itemObj.minUnitId;
                         itemModel.name = itemObj.name;
-
+                        itemModel.tagId = itemObj.tagId;
                         itemModel.taxes = itemObj.taxes;
                         itemModel.type = itemObj.type;
                         itemModel.updateDate = DateTime.Now;
