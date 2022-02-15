@@ -17,6 +17,7 @@ namespace POS_Server.Controllers
     [RoutePrefix("api/Tables")]
     public class TablesController : ApiController
     {
+        List<string> reservationCancle = new List<string>() { "confirm","cancle"};
         [HttpPost]
         [Route("GetAll")]
         public string GetAll(string token)
@@ -84,6 +85,91 @@ namespace POS_Server.Controllers
                             }
                             item.canDelete = canDelete;
                         }
+                    }
+                    return TokenManager.GenerateToken(tablesList);
+                }
+            }
+        }
+        [HttpPost]
+        [Route("GetTablesStatusInfo")]
+        public string GetTablesStatusInfo(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            Boolean canDelete = false;
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int branchId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                   var tablesList =(from t in entity.tables.Where(x => x.isActive == 1 && x.branchId == branchId)
+                                    select new TableModel(){
+                                       tableId = t.tableId,
+                                       name = t.name,
+                                       sectionId = t.sectionId,
+                                       branchId = t.branchId,
+                                       personsCount = t.personsCount,
+                                       notes = t.notes,                                      
+                                       createUserId = t.createUserId,
+                                       updateUserId = t.updateUserId,
+                                       createDate = t.createDate,
+                                       updateDate = t.updateDate,
+                                       isActive = t.isActive,
+                                       status = "empty",
+                                   }).ToList();
+
+                    foreach (TableModel table in tablesList)
+                    {
+                        #region check reservation status
+                        DateTime dateNow = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
+                        TimeSpan timeNow = TimeSpan.Parse(DateTime.Now.ToString().Split(' ')[1]);
+                        int tableId = table.tableId;
+                        bool isOpen = false;
+                        var reservation = (from tr in entity.tablesReservations.Where(x => x.tableId == tableId)
+                                           join rs in entity.reservations.Where(x => x.reservationDate >= dateNow && !reservationCancle.Contains(x.status)) on tr.reservationId equals rs.reservationId into rj
+                                           from r in rj.DefaultIfEmpty()
+                                           select new reservations()
+                                           {
+                                               reservationId = tr.reservationId,
+                                               code = r.code,
+                                               customerId = r.customerId,
+                                               reservationDate = r.reservationDate,
+                                               reservationTime = r.reservationTime,
+                                               personsCount = r.personsCount,
+                                               notes = r.notes,
+                                               createUserId = r.createUserId,
+                                               updateUserId = r.updateUserId,
+                                               createDate = r.createDate,
+                                               updateDate = r.updateDate,
+                                               isActive = r.isActive,
+                                           }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime);
+
+                        foreach (reservations reserv in reservation)
+                        {
+                            if (timeNow >= reserv.reservationTime && timeNow <= reserv.endTime)
+                            {
+                                table.status = "reserved";
+                            }
+                            // check if table is open
+                            var invoice = entity.invoices.Where(x => x.reservationId == reserv.reservationId).FirstOrDefault();
+                            if (invoice != null)
+                                isOpen = true;
+                        }
+                        if (isOpen && reservation.Count() > 1)
+                            table.status = "opened + reserved";
+                        #endregion
                     }
                     return TokenManager.GenerateToken(tablesList);
                 }
