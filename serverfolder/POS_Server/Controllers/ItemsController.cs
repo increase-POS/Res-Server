@@ -527,7 +527,6 @@ namespace POS_Server.Controllers
                                              itemUnitId = iu.itemUnitId,
                                              price = iu.price,
                                              priceWithService = iu.priceWithService,
-
                                          })
                                        .ToList();
 
@@ -2417,7 +2416,7 @@ namespace POS_Server.Controllers
                         itemModel.min = itemObj.min;
                         itemModel.minUnitId = itemObj.minUnitId;
                         itemModel.name = itemObj.name;
-
+                        itemModel.tagId = itemObj.tagId;
                         itemModel.taxes = itemObj.taxes;
                         itemModel.type = itemObj.type;
                         itemModel.updateDate = DateTime.Now;
