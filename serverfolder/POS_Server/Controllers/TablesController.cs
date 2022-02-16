@@ -17,7 +17,7 @@ namespace POS_Server.Controllers
     [RoutePrefix("api/Tables")]
     public class TablesController : ApiController
     {
-        List<string> reservationCancle = new List<string>() { "confirm","cancle"};
+        List<string> reservationClose = new List<string>() { "close","cancle"};
         [HttpPost]
         [Route("GetAll")]
         public string GetAll(string token)
@@ -95,13 +95,12 @@ namespace POS_Server.Controllers
         public string GetTablesStatusInfo(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
-            Boolean canDelete = false;
             var strP = TokenManager.GetPrincipal(token);
-            if (strP != "0") //invalid authorization
-            {
-                return TokenManager.GenerateToken(strP);
-            }
-            else
+            //if (strP != "0") //invalid authorization
+            //{
+            //    return TokenManager.GenerateToken(strP);
+            //}
+            //else
             {
                 int branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -114,7 +113,21 @@ namespace POS_Server.Controllers
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                   var tablesList =(from t in entity.tables.Where(x => x.isActive == 1 && x.branchId == branchId)
+                    #region get time staying
+                    var timeStayingSet = entity.setValues.Where(x => x.setting.name == "time_staying").Select(x => x.value).SingleOrDefault();
+                    double decTimeStaying = 0;
+                    try
+                    {
+                        decTimeStaying = double.Parse(timeStayingSet);
+                    }
+                    catch { }
+                    TimeSpan timeStaying = TimeSpan.FromHours(decTimeStaying);
+                    #endregion
+
+                    DateTime dateNow = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
+                    TimeSpan timeNow = TimeSpan.Parse(DateTime.Now.ToString().Split(' ')[1]);
+
+                    var tablesList =(from t in entity.tables.Where(x => x.isActive == 1 && x.branchId == branchId)
                                     select new TableModel(){
                                        tableId = t.tableId,
                                        name = t.name,
@@ -132,15 +145,13 @@ namespace POS_Server.Controllers
 
                     foreach (TableModel table in tablesList)
                     {
-                        #region check reservation status
-                        DateTime dateNow = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
-                        TimeSpan timeNow = TimeSpan.Parse(DateTime.Now.ToString().Split(' ')[1]);
+                        #region check reservation status                      
                         int tableId = table.tableId;
                         bool isOpen = false;
                         var reservation = (from tr in entity.tablesReservations.Where(x => x.tableId == tableId)
-                                           join rs in entity.reservations.Where(x => x.reservationDate >= dateNow && !reservationCancle.Contains(x.status)) on tr.reservationId equals rs.reservationId into rj
+                                           join rs in entity.reservations.Where(x => x.reservationDate >= dateNow && !reservationClose.Contains(x.status)) on tr.reservationId equals rs.reservationId into rj
                                            from r in rj.DefaultIfEmpty()
-                                           select new reservations()
+                                           select new ReservationModel()
                                            {
                                                reservationId = tr.reservationId,
                                                code = r.code,
@@ -155,8 +166,8 @@ namespace POS_Server.Controllers
                                                updateDate = r.updateDate,
                                                isActive = r.isActive,
                                            }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime);
-
-                        foreach (reservations reserv in reservation)
+                      
+                        foreach (ReservationModel reserv in reservation)
                         {
                             if (timeNow >= reserv.reservationTime && timeNow <= reserv.endTime)
                             {
@@ -167,8 +178,25 @@ namespace POS_Server.Controllers
                             if (invoice != null)
                                 isOpen = true;
                         }
-                        if (isOpen && reservation.Count() > 1)
+                        if (isOpen && reservation.Count() > 0)
                             table.status = "opened + reserved";
+                       
+                        #endregion
+                        #region check opened tables without reservation
+                        var invoiceTables = entity.invoiceTables.Where(x => x.tableId == tableId && x.createDate >= DateTime.Now && x.invoices.invType == "sd").ToList();
+                                             
+                        foreach(invoiceTables invTable in invoiceTables)
+                        {
+                            var invoice = entity.invoices.Find(invTable.invoiceId);
+                            TimeSpan invTime = TimeSpan.Parse(invoice.invDate.ToString().Split(' ')[1]);
+                            if (invTime.Add(timeStaying) < timeNow)
+                            {
+                                if (table.status == "empty")
+                                    table.status = "opened";
+                                else if (table.status == "reserved")
+                                    table.status = "opened + reserved";
+                            }
+                        }
                         #endregion
                     }
                     return TokenManager.GenerateToken(tablesList);
