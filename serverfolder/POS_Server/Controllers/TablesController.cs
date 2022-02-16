@@ -194,7 +194,7 @@ namespace POS_Server.Controllers
                                 if (table.status == "empty")
                                     table.status = "opened";
                                 else if (table.status == "reserved")
-                                    table.status = "opened + reserved";
+                                    table.status = "openedReserved";
                             }
                         }
                         #endregion
