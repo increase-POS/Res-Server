@@ -435,6 +435,7 @@
     <Compile Include="Models\BranchStoreModel.cs" />
     <Compile Include="Models\MenuSettingModel.cs" />
     <Compile Include="Models\ProgramDetailsModel.cs" />
+    <Compile Include="Models\ReservationModel.cs" />
     <Compile Include="Models\ResidentialSectorsModel.cs" />
     <Compile Include="Models\TableModel.cs" />
     <Compile Include="Models\TagsModel.cs" />
