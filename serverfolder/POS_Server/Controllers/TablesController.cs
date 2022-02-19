@@ -97,11 +97,11 @@ namespace POS_Server.Controllers
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
-            //if (strP != "0") //invalid authorization
-            //{
-            //    return TokenManager.GenerateToken(strP);
-            //}
-            //else
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
             {
                 int branchId = 0;
                 DateTime dateSearch = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
@@ -221,9 +221,9 @@ namespace POS_Server.Controllers
                                     table.status = "reserved";
                                 }
                             }
-                            else if (searchForEndTime)
+                            else if (searchForEndTime )
                             {
-                                if (endTimeSearch <= reserv.endTime)
+                                if (endTimeSearch <= reserv.endTime && DateTime.Parse(reserv.endTime.ToString().Split(' ')[0]) == dateSearch)
                                 {
                                     table.status = "reserved";
                                 }
@@ -294,6 +294,7 @@ namespace POS_Server.Controllers
             else
             {
                 int tableId = 0;
+                int branchId = 0;
                 DateTime dateSearch = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
                 DateTime startDate = DateTime.Now;
                 DateTime endDate = DateTime.Now;
@@ -303,6 +304,10 @@ namespace POS_Server.Controllers
                     if (c.Type == "tableId")
                     {
                         tableId = int.Parse(c.Value);
+                    }
+                    if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
                     }
                     else if (c.Type == "reservationDate")
                     {
@@ -339,21 +344,25 @@ namespace POS_Server.Controllers
                     }
                     catch { }
                     TimeSpan timeStaying = TimeSpan.FromHours(decTimeStaying);
+                   
                     #endregion
                     #region check reservation status                      
                     var reservPredicate = PredicateBuilder.New<reservations>();
-                    reservPredicate = reservPredicate.And(x => DbFunctions.TruncateTime(x.reservationDate) == dateSearch && !reservationClose.Contains(x.status));
+                    reservPredicate = reservPredicate.And(x => DbFunctions.TruncateTime(x.reservationDate) == dateSearch && x.branchId == branchId
+                                                            && !reservationClose.Contains(x.status));
 
-                    var reservation = (from tr in entity.tablesReservations.Where(x => x.tableId == tableId)
-                                       join rs in entity.reservations.Where(reservPredicate) on tr.reservationId equals rs.reservationId into rj
-                                       from r in rj.DefaultIfEmpty()
+                    var reservation = (from r in entity.reservations.Where(reservPredicate)
+                                       join tr in entity.tablesReservations.Where(x => x.tableId == tableId)
+                                        on r.reservationId equals tr.reservationId into rj
+                                       from tr in rj.DefaultIfEmpty()
                                        select new ReservationModel()
                                        {
-                                           reservationId = tr.reservationId,
+                                           reservationId = r.reservationId,
                                            code = r.code,
                                            customerId = r.customerId,
                                            reservationDate = r.reservationDate,
                                            reservationTime = r.reservationTime,
+                                           endTime = r.endTime,
                                            personsCount = r.personsCount,
                                            notes = r.notes,
                                            createUserId = r.createUserId,
@@ -361,10 +370,11 @@ namespace POS_Server.Controllers
                                            createDate = r.createDate,
                                            updateDate = r.updateDate,
                                            isActive = r.isActive,
-                                       }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime);
-
+                                       }).ToList();
+                 
                     foreach (ReservationModel reserv in reservation)
                     {
+                      //  return "start date: " + startDate + "end date: " + endDate.ToString() + "start time: " + reserv.reservationTime + "end time: " + reserv.endTime;
                         if ((startDate >= reserv.reservationTime && startDate <= reserv.endTime)|| (endDate >= reserv.reservationTime && endDate <= reserv.endTime))
                         {
                             return TokenManager.GenerateToken("0");
@@ -394,7 +404,57 @@ namespace POS_Server.Controllers
                 }
             }
         }
+        [HttpPost]
+        [Route("GetReservations")]
+        public string GetReservations(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int branchId = 0;
 
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                   
+                }
+                // return startTimeSearch.ToString();
+                using (incposdbEntities entity = new incposdbEntities())
+                {                   
+                    var reservations = (from rs in entity.reservations.Where(x => x.branchId == branchId)
+                                        join tr in entity.tablesReservations on rs.reservationId equals tr.reservationId
+                                        select new ReservationModel()
+                                        {
+                                            reservationId = rs.reservationId,
+                                            code = rs.code,
+                                            customerId = rs.customerId,
+                                            branchId = rs.branchId,
+                                            reservationDate = rs.reservationDate,
+                                            reservationTime = rs.reservationTime,
+                                            endTime = rs.endTime,
+                                            personsCount = rs.personsCount,
+                                            notes = rs.notes,
+                                            createUserId = rs.createUserId,
+                                            updateUserId = rs.updateUserId,
+                                            createDate = rs.createDate,
+                                            updateDate = rs.updateDate,
+                                            isActive = rs.isActive,
+                                        }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime);
+
+                                            
+                    return TokenManager.GenerateToken(reservations);
+                }
+            }
+        }
         [HttpPost]
         [Route("GetActive")]
         public string GetActive(string token)
@@ -759,6 +819,52 @@ namespace POS_Server.Controllers
             message = "1";
             return TokenManager.GenerateToken(message);
         }
+        [HttpPost]
+        [Route("GetLastNumOfReserv")]
+        public string GetLastNumOfReserv(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string reservCode = "";
+                int branchId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "reservCode")
+                    {
+                        reservCode = c.Value;
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                }
+                List<string> numberList;
+                int lastNum = 0;
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    numberList = entity.reservations.Where(b => b.code.Contains(reservCode + "-") && b.branchId == branchId).Select(b => b.code).ToList();
 
+                    for (int i = 0; i < numberList.Count; i++)
+                    {
+                        string code = numberList[i];
+                        string s = code.Substring(code.LastIndexOf("-") + 1);
+                        numberList[i] = s;
+                    }
+                    if (numberList.Count > 0)
+                    {
+                        numberList.Sort();
+                        lastNum = int.Parse(numberList[numberList.Count - 1]);
+                    }
+                }
+                return TokenManager.GenerateToken(lastNum);
+            }
+        }
     }
 }

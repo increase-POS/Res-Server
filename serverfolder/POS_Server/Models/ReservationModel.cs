@@ -10,6 +10,7 @@ namespace POS_Server.Models
         public long reservationId { get; set; }
         public string code { get; set; }
         public Nullable<int> customerId { get; set; }
+        public Nullable<int> branchId { get; set; }
         public Nullable<System.DateTime> reservationDate { get; set; }
         public Nullable<System.DateTime> reservationTime { get; set; }
         public Nullable<int> personsCount { get; set; }
