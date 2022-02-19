@@ -26,6 +26,8 @@ namespace POS_Server
         public Nullable<int> parentObjectId { get; set; }
         public string objectType { get; set; }
         public string translate { get; set; }
+        public string translateHint { get; set; }
+        public string icon { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<groupObject> groupObject { get; set; }

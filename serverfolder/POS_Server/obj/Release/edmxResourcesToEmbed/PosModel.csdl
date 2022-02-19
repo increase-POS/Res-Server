@@ -141,6 +141,7 @@
     <NavigationProperty Name="sysEmails" Relationship="Self.FK_sysEmails_branches" FromRole="branches" ToRole="sysEmails" />
     <NavigationProperty Name="tables" Relationship="Self.FK_tables_branches" FromRole="branches" ToRole="tables" />
     <NavigationProperty Name="menuSettings" Relationship="PosModel.FK_menuSettings_branches" FromRole="branches" ToRole="menuSettings" />
+    <NavigationProperty Name="reservations" Relationship="PosModel.FK_reservations_branches" FromRole="branches" ToRole="reservations" />
   </EntityType>
   <EntityType Name="branchesUsers">
     <Key>
@@ -578,6 +579,8 @@
     <NavigationProperty Name="itemsTransfer" Relationship="Self.FK_itemsTransfer_invoices" FromRole="invoices" ToRole="itemsTransfer" />
     <Property Name="shippingCost" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
     <Property Name="realShippingCost" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
+    <Property Name="reservationId" Type="Int64" />
+    <NavigationProperty Name="reservations" Relationship="PosModel.FK_invoices_reservations" FromRole="invoices" ToRole="reservations" />
   </EntityType>
   <EntityType Name="invoiceStatus">
     <Key>
@@ -982,6 +985,8 @@
     <NavigationProperty Name="groupObject" Relationship="Self.FK_groupObject_objects" FromRole="objects" ToRole="groupObject" />
     <NavigationProperty Name="objects1" Relationship="Self.FK_objects_objects" FromRole="objects" ToRole="objects1" />
     <NavigationProperty Name="objects2" Relationship="Self.FK_objects_objects" FromRole="objects1" ToRole="objects" />
+    <Property Name="translateHint" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="icon" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="offers">
     <Key>
@@ -1239,7 +1244,7 @@
     <Property Name="code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="customerId" Type="Int32" />
     <Property Name="reservationDate" Type="DateTime" Precision="0" />
-    <Property Name="reservationTime" Type="Time" Precision="7" />
+    <Property Name="reservationTime" Type="DateTime" />
     <Property Name="personsCount" Type="Int32" />
     <Property Name="status" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
     <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1250,6 +1255,10 @@
     <Property Name="updateUserId" Type="Int32" />
     <NavigationProperty Name="users" Relationship="Self.FK_reservations_updateUsers" FromRole="reservations" ToRole="users" />
     <NavigationProperty Name="users1" Relationship="Self.FK_reservations_users" FromRole="reservations" ToRole="users" />
+    <Property Name="endTime" Type="DateTime" />
+    <NavigationProperty Name="invoices" Relationship="PosModel.FK_invoices_reservations" FromRole="reservations" ToRole="invoices" />
+    <Property Name="branchId" Type="Int32" />
+    <NavigationProperty Name="branches" Relationship="PosModel.FK_reservations_branches" FromRole="reservations" ToRole="branches" />
   </EntityType>
   <EntityType Name="sections">
     <Key>
@@ -5155,6 +5164,14 @@
       <End Role="branches" EntitySet="branches" />
       <End Role="menuSettings" EntitySet="menuSettings" />
     </AssociationSet>
+    <AssociationSet Name="FK_invoices_reservations" Association="PosModel.FK_invoices_reservations">
+      <End Role="reservations" EntitySet="reservations" />
+      <End Role="invoices" EntitySet="invoices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_reservations_branches" Association="PosModel.FK_reservations_branches">
+      <End Role="branches" EntitySet="branches" />
+      <End Role="reservations" EntitySet="reservations" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="residentialSectors">
     <Key>
@@ -5282,6 +5299,30 @@
         <PropertyRef Name="branchId" />
       </Principal>
       <Dependent Role="menuSettings">
+        <PropertyRef Name="branchId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_invoices_reservations">
+    <End Type="PosModel.reservations" Role="reservations" Multiplicity="0..1" />
+    <End Type="PosModel.invoices" Role="invoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="reservations">
+        <PropertyRef Name="reservationId" />
+      </Principal>
+      <Dependent Role="invoices">
+        <PropertyRef Name="reservationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_reservations_branches">
+    <End Type="PosModel.branches" Role="branches" Multiplicity="0..1" />
+    <End Type="PosModel.reservations" Role="reservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="branches">
+        <PropertyRef Name="branchId" />
+      </Principal>
+      <Dependent Role="reservations">
         <PropertyRef Name="branchId" />
       </Dependent>
     </ReferentialConstraint>

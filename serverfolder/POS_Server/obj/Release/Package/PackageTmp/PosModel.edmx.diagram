@@ -300,6 +300,8 @@
         <AssociationConnector Association="PosModel.FK_residentialSectorsUsers_users1" />
         <AssociationConnector Association="PosModel.FK_residentialSectorsUsers_users2" />
         <AssociationConnector Association="PosModel.FK_menuSettings_branches" />
+        <AssociationConnector Association="PosModel.FK_invoices_reservations" />
+        <AssociationConnector Association="PosModel.FK_reservations_branches" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

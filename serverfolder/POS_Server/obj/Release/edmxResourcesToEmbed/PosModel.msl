@@ -432,6 +432,7 @@
     <EntitySetMapping Name="invoices">
       <EntityTypeMapping TypeName="PosModel.invoices">
         <MappingFragment StoreEntitySet="invoices">
+          <ScalarProperty Name="reservationId" ColumnName="reservationId" />
           <ScalarProperty Name="realShippingCost" ColumnName="realShippingCost" />
           <ScalarProperty Name="shippingCost" ColumnName="shippingCost" />
           <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
@@ -796,6 +797,8 @@
     <EntitySetMapping Name="objects">
       <EntityTypeMapping TypeName="PosModel.objects">
         <MappingFragment StoreEntitySet="objects">
+          <ScalarProperty Name="icon" ColumnName="icon" />
+          <ScalarProperty Name="translateHint" ColumnName="translateHint" />
           <ScalarProperty Name="objectId" ColumnName="objectId" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="parentObjectId" ColumnName="parentObjectId" />
@@ -1020,6 +1023,8 @@
     <EntitySetMapping Name="reservations">
       <EntityTypeMapping TypeName="PosModel.reservations">
         <MappingFragment StoreEntitySet="reservations">
+          <ScalarProperty Name="branchId" ColumnName="branchId" />
+          <ScalarProperty Name="endTime" ColumnName="endTime" />
           <ScalarProperty Name="reservationId" ColumnName="reservationId" />
           <ScalarProperty Name="code" ColumnName="code" />
           <ScalarProperty Name="customerId" ColumnName="customerId" />

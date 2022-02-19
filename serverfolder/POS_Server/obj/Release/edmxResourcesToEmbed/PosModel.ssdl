@@ -450,6 +450,7 @@
     <Property Name="waiterId" Type="int" />
     <Property Name="shippingCost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="realShippingCost" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+    <Property Name="reservationId" Type="bigint" />
   </EntityType>
   <EntityType Name="invoiceStatus">
     <Key>
@@ -702,7 +703,7 @@
     <Key>
       <PropertyRef Name="menuSettingId" />
     </Key>
-    <Property Name="menuSettingId" Type="bigint" Nullable="false" />
+    <Property Name="menuSettingId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="itemUnitId" Type="int" Nullable="false" />
     <Property Name="sat" Type="bit" Nullable="false" />
     <Property Name="sun" Type="bit" Nullable="false" />
@@ -758,6 +759,8 @@
     <Property Name="parentObjectId" Type="int" />
     <Property Name="objectType" Type="nvarchar" MaxLength="10" />
     <Property Name="translate" Type="nvarchar" MaxLength="500" />
+    <Property Name="translateHint" Type="nvarchar" MaxLength="500" />
+    <Property Name="icon" Type="nvarchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="offers">
     <Key>
@@ -968,7 +971,7 @@
     <Property Name="code" Type="nvarchar" MaxLength="100" />
     <Property Name="customerId" Type="int" />
     <Property Name="reservationDate" Type="date" />
-    <Property Name="reservationTime" Type="time" Precision="7" />
+    <Property Name="reservationTime" Type="datetime2" Precision="7" />
     <Property Name="personsCount" Type="int" />
     <Property Name="status" Type="nvarchar" MaxLength="15" />
     <Property Name="notes" Type="ntext" />
@@ -977,6 +980,8 @@
     <Property Name="updateDate" Type="datetime2" Precision="7" />
     <Property Name="createUserId" Type="int" />
     <Property Name="updateUserId" Type="int" />
+    <Property Name="endTime" Type="datetime2" Precision="7" />
+    <Property Name="branchId" Type="int" />
   </EntityType>
   <EntityType Name="residentialSectors">
     <Key>
@@ -2206,6 +2211,18 @@
       </Principal>
       <Dependent Role="invoices">
         <PropertyRef Name="posId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_invoices_reservations">
+    <End Role="reservations" Type="Self.reservations" Multiplicity="0..1" />
+    <End Role="invoices" Type="Self.invoices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="reservations">
+        <PropertyRef Name="reservationId" />
+      </Principal>
+      <Dependent Role="invoices">
+        <PropertyRef Name="reservationId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3505,6 +3522,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_reservations_branches">
+    <End Role="branches" Type="Self.branches" Multiplicity="0..1" />
+    <End Role="reservations" Type="Self.reservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="branches">
+        <PropertyRef Name="branchId" />
+      </Principal>
+      <Dependent Role="reservations">
+        <PropertyRef Name="branchId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_reservations_updateUsers">
     <End Role="users" Type="Self.users" Multiplicity="0..1" />
     <End Role="reservations" Type="Self.reservations" Multiplicity="*" />
@@ -4285,6 +4314,10 @@
       <End Role="pos" EntitySet="pos" />
       <End Role="invoices" EntitySet="invoices" />
     </AssociationSet>
+    <AssociationSet Name="FK_invoices_reservations" Association="Self.FK_invoices_reservations">
+      <End Role="reservations" EntitySet="reservations" />
+      <End Role="invoices" EntitySet="invoices" />
+    </AssociationSet>
     <AssociationSet Name="FK_invoices_shippingCompanies" Association="Self.FK_invoices_shippingCompanies">
       <End Role="shippingCompanies" EntitySet="shippingCompanies" />
       <End Role="invoices" EntitySet="invoices" />
@@ -4716,6 +4749,10 @@
     <AssociationSet Name="FK_propertiesItems_users1" Association="Self.FK_propertiesItems_users1">
       <End Role="users" EntitySet="users" />
       <End Role="propertiesItems" EntitySet="propertiesItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_reservations_branches" Association="Self.FK_reservations_branches">
+      <End Role="branches" EntitySet="branches" />
+      <End Role="reservations" EntitySet="reservations" />
     </AssociationSet>
     <AssociationSet Name="FK_reservations_updateUsers" Association="Self.FK_reservations_updateUsers">
       <End Role="users" EntitySet="users" />

@@ -23,9 +23,7 @@ namespace POS_Server.Controllers
         public string Get(string token)
         {
 
-            //public string Get(string token)
-            //{
-            //  public string Get(string token)
+          
 
 
 
@@ -38,24 +36,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                // bool canDelete = false;
-
-                //int mainBranchId = 0;
-                //int userId = 0;
-
-                //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
-                //foreach (Claim c in claims)
-                //{
-                //    if (c.Type == "mainBranchId")
-                //    {
-                //        mainBranchId = int.Parse(c.Value);
-                //    }
-                //    else if (c.Type == "userId")
-                //    {
-                //        userId = int.Parse(c.Value);
-                //    }
-
-                //}
+                 
 
                 bool canDelete = false;
                 try
@@ -73,6 +54,7 @@ namespace POS_Server.Controllers
                                        parentObjectId = c.parentObjectId,
                                        objectType = c.objectType,
                                        translate = c.translate,
+                                       icon= c.icon,
                                    })
                                    .ToList();
                         if (List.Count > 0)
@@ -102,81 +84,7 @@ namespace POS_Server.Controllers
                 }
             }
 
-            //         var re = Request;
-            //         var headers = re.Headers;
-            //         string token = "";
-            //         bool canDelete = false;
-            //         if (headers.Contains("APIKey"))
-            //         {
-            //             token = headers.GetValues("APIKey").First();
-            //         }
-            //         Validation validation = new Validation();
-            //         bool valid = validation.CheckApiKey(token);
-
-            //         if (valid) // APIKey is valid
-            //         {
-            //             using (incposdbEntities entity = new incposdbEntities())
-            //             {
-            //                 var List = entity.objects
-
-            //                .Select(c => new ObjectsModel {
-            //                    objectId = c.objectId,
-            //                    name = c.name,
-            //                    note = c.note,
-            //                    createDate = c.createDate,
-            //                    updateDate = c.updateDate,
-            //                    createUserId = c.createUserId,
-            //                    updateUserId = c.updateUserId,
-            //                    parentObjectId=c.parentObjectId,
-            //                    objectType=c.objectType,
-            //                })
-            //                .ToList();
-            //                 if (List.Count > 0)
-            //                 {
-            //                     for (int i = 0; i < List.Count; i++)
-            //                     {
-            //                         canDelete = false;
-            //                         if (List[i].isActive == 1)
-            //                         {
-            //                             int objectId = (int)List[i].objectId;
-            //                             var operationsL = entity.groupObject.Where(x => x.objectId == objectId).Select(b => new { b.id }).FirstOrDefault();
-
-            //                             if (operationsL is null)
-            //                                 canDelete = true;
-            //                         }
-            //                         List[i].canDelete = canDelete;
-            //                     }
-            //                 }
-            //                 /*
-            //                  * 
-            //public int objectId { get; set; }
-            //     public string name { get; set; }
-            //     public string note { get; set; }
-            //     public Nullable<System.DateTime> createDate { get; set; }
-            //     public Nullable<System.DateTime> updateDate { get; set; }
-            //     public Nullable<int> createUserId { get; set; }
-            //     public Nullable<int> updateUserId { get; set; }
-
-            //                      objectId
-            //                      name
-            //                      note
-            //                      createDate
-            //                      updateDate
-            //                      createUserId
-            //                      updateUserId
-
-
-
-            //                  * */
-
-            //                 if (List == null)
-            //                     return NotFound();
-            //                 else
-            //                     return Ok(List);
-            //             }
-            //         }
-            //         //else
-            //             return NotFound();
+         
         }
 
 
@@ -208,7 +116,7 @@ namespace POS_Server.Controllers
 
                 }
 
-                // DateTime cmpdate = DateTime.Now.AddDays(newdays);
+              
                 try
                 {
 
@@ -224,6 +132,7 @@ namespace POS_Server.Controllers
                            c.parentObjectId,
                            c.objectType,
                            c.translate,
+                            c.icon,
                        })
                        .FirstOrDefault();
 
@@ -237,48 +146,7 @@ namespace POS_Server.Controllers
                 }
             }
 
-            //var re = Request;
-            //var headers = re.Headers;
-            //string token = "";
-            //int cId = 0;
-            //if (headers.Contains("APIKey"))
-            //{
-            //    token = headers.GetValues("APIKey").First();
-            //}
-            //if (headers.Contains("Id"))
-            //{
-            //    cId = Convert.ToInt32(headers.GetValues("Id").First());
-            //}
-            //Validation validation = new Validation();
-            //bool valid = validation.CheckApiKey(token);
-
-            //if (valid)
-            //{
-            //    using (incposdbEntities entity = new incposdbEntities())
-            //    {
-            //        var list = entity.objects
-            //       .Where(c => c.objectId == cId)
-            //       .Select(c => new {
-            //           c.objectId,
-            //           c.name,
-            //           c.note,
-            //           c.createDate,
-            //           c.updateDate,
-            //           c.createUserId,
-            //           c.updateUserId,
-            //    c.parentObjectId,
-            //    c.objectType,
-            //       })
-            //       .FirstOrDefault();
-
-            //        if (list == null)
-            //            return NotFound();
-            //        else
-            //            return Ok(list);
-            //    }
-            //}
-            //else
-            //    return NotFound();
+           
         }
 
 
@@ -347,6 +215,7 @@ namespace POS_Server.Controllers
                                     tmps.parentObjectId = newObject.parentObjectId;
                                     tmps.objectType = newObject.objectType;
                                     tmps.translate = newObject.translate;
+                                tmps.icon = newObject.icon;
                                 
                                     entity.SaveChanges();
                                     message = tmps.objectId.ToString();

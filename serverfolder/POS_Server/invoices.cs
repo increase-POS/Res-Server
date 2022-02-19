@@ -70,6 +70,7 @@ namespace POS_Server
         public Nullable<int> waiterId { get; set; }
         public decimal shippingCost { get; set; }
         public decimal realShippingCost { get; set; }
+        public Nullable<long> reservationId { get; set; }
     
         public virtual agents agents { get; set; }
         public virtual branches branches { get; set; }
@@ -102,5 +103,6 @@ namespace POS_Server
         public virtual ICollection<itemsLocations> itemsLocations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemsTransfer> itemsTransfer { get; set; }
+        public virtual reservations reservations { get; set; }
     }
 }
