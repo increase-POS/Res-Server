@@ -5,6 +5,7 @@ using POS_Server.Models;
 using POS_Server.Models.VM;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -103,6 +104,14 @@ namespace POS_Server.Controllers
             //else
             {
                 int branchId = 0;
+                DateTime dateSearch = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
+                DateTime startTimeSearch = DateTime.Now;
+                DateTime endTimeSearch = new DateTime();
+                DateTime startDate = DateTime.Now;
+                DateTime endDate = DateTime.Now;
+                Boolean searchForStartTime = false;
+                Boolean searchForEndTime = false;
+                Boolean searchForDate = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -110,7 +119,39 @@ namespace POS_Server.Controllers
                     {
                         branchId = int.Parse(c.Value);
                     }
+                    else if (c.Type == "dateSearch")
+                    {
+                        
+                        if (c.Value != "")
+                        {
+                            searchForDate = true;
+                            dateSearch = DateTime.Parse(c.Value);
+                            if (dateSearch == null)
+                                dateSearch = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
+                        }
+                    }
+                    else if (c.Type == "startTimeSearch")
+                    {
+                        if (c.Value != "")
+                        {
+                            searchForStartTime = true;
+                            startDate = DateTime.Parse(c.Value);
+                            startTimeSearch = startDate;
+
+                        }
+                    }
+                    else if (c.Type == "endTimeSearch")
+                    {
+                        if (c.Value != "")
+                        {
+                            searchForEndTime = true;
+                            endDate = DateTime.Parse(c.Value);
+                            if (endDate != null)
+                                endTimeSearch = endDate;
+                        }
+                    }
                 }
+               // return startTimeSearch.ToString();
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     #region get time staying
@@ -122,10 +163,7 @@ namespace POS_Server.Controllers
                     }
                     catch { }
                     TimeSpan timeStaying = TimeSpan.FromHours(decTimeStaying);
-                    #endregion
-
-                    DateTime dateNow = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
-                    TimeSpan timeNow = TimeSpan.Parse(DateTime.Now.ToString().Split(' ')[1]);
+                    #endregion                   
 
                     var tablesList =(from t in entity.tables.Where(x => x.isActive == 1 && x.branchId == branchId)
                                     select new TableModel(){
@@ -148,31 +186,55 @@ namespace POS_Server.Controllers
                         #region check reservation status                      
                         int tableId = table.tableId;
                         bool isOpen = false;
-                        var reservation = (from tr in entity.tablesReservations.Where(x => x.tableId == tableId)
-                                           join rs in entity.reservations.Where(x => x.reservationDate >= dateNow && !reservationClose.Contains(x.status)) on tr.reservationId equals rs.reservationId into rj
-                                           from r in rj.DefaultIfEmpty()
+                        var reservPredicate = PredicateBuilder.New<reservations>();
+
+                        if (searchForDate)
+                            reservPredicate = reservPredicate.And(x => x.reservationDate == dateSearch && !reservationClose.Contains(x.status));
+                        else
+                            reservPredicate = reservPredicate.And(x => x.reservationDate >= dateSearch && !reservationClose.Contains(x.status));
+                        
+                        var reservation = (from rs in entity.reservations.Where(reservPredicate)
+                                           join tr in entity.tablesReservations.Where(x => x.tableId == tableId) on rs.reservationId equals tr.reservationId 
                                            select new ReservationModel()
                                            {
-                                               reservationId = tr.reservationId,
-                                               code = r.code,
-                                               customerId = r.customerId,
-                                               reservationDate = r.reservationDate,
-                                               reservationTime = r.reservationTime,
-                                               personsCount = r.personsCount,
-                                               notes = r.notes,
-                                               createUserId = r.createUserId,
-                                               updateUserId = r.updateUserId,
-                                               createDate = r.createDate,
-                                               updateDate = r.updateDate,
-                                               isActive = r.isActive,
+                                               reservationId = rs.reservationId,
+                                               code = rs.code,
+                                               customerId = rs.customerId,
+                                               reservationDate = rs.reservationDate,
+                                               reservationTime = rs.reservationTime,
+                                               endTime = rs.endTime,
+                                               personsCount = rs.personsCount,
+                                               notes = rs.notes,
+                                               createUserId = rs.createUserId,
+                                               updateUserId = rs.updateUserId,
+                                               createDate = rs.createDate,
+                                               updateDate = rs.updateDate,
+                                               isActive = rs.isActive,
                                            }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime);
                       
                         foreach (ReservationModel reserv in reservation)
                         {
-                            if (timeNow >= reserv.reservationTime && timeNow <= reserv.endTime)
+                            if (searchForEndTime && searchForStartTime)
+                            {
+                                if (startTimeSearch >= reserv.reservationTime && endTimeSearch <= reserv.endTime)
+                                {
+                                    table.status = "reserved";
+                                }
+                            }
+                            else if (searchForEndTime)
+                            {
+                                if (endTimeSearch <= reserv.endTime)
+                                {
+                                    table.status = "reserved";
+                                }
+                            }
+                            else
+                            if (startTimeSearch >= reserv.reservationTime)
                             {
                                 table.status = "reserved";
                             }
+                            //if (tableId == 7)
+                            //    return startTimeSearch.ToString() +"aaa"+ reserv.reservationTime.ToString() + "aaa"+reserv.endTime.ToString();
                             // check if table is open
                             var invoice = entity.invoices.Where(x => x.reservationId == reserv.reservationId).FirstOrDefault();
                             if (invoice != null)
@@ -180,16 +242,32 @@ namespace POS_Server.Controllers
                         }
                         if (isOpen && reservation.Count() > 0)
                             table.status = "opened + reserved";
-                       
+
                         #endregion
                         #region check opened tables without reservation
-                        var invoiceTables = entity.invoiceTables.Where(x => x.tableId == tableId && x.createDate >= DateTime.Now && x.invoices.invType == "sd").ToList();
+                        var searchPredicate = PredicateBuilder.New<invoiceTables>();
+                        if (searchForDate)
+                            searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.createDate == dateSearch && x.invoices.invType == "sd");
+                        else
+                            searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.createDate >= dateSearch && x.invoices.invType == "sd");
+
+                        var invoiceTables = entity.invoiceTables.Where(searchPredicate).ToList();
                                              
                         foreach(invoiceTables invTable in invoiceTables)
                         {
                             var invoice = entity.invoices.Find(invTable.invoiceId);
-                            TimeSpan invTime = TimeSpan.Parse(invoice.invDate.ToString().Split(' ')[1]);
-                            if (invTime.Add(timeStaying) < timeNow)
+                            DateTime invTime = (DateTime)invoice.invDate;
+                            if(searchForEndTime)
+                            {
+                                if (invTime.Add(timeStaying) <= endTimeSearch)
+                                {
+                                    if (table.status == "empty")
+                                        table.status = "opened";
+                                    else if (table.status == "reserved")
+                                        table.status = "openedReserved";
+                                }
+                            }
+                            else if (invTime >= startTimeSearch)
                             {
                                 if (table.status == "empty")
                                     table.status = "opened";
@@ -200,6 +278,119 @@ namespace POS_Server.Controllers
                         #endregion
                     }
                     return TokenManager.GenerateToken(tablesList);
+                }
+            }
+        }
+        [HttpPost]
+        [Route("checkTableAvailabiltiy")]
+        public string checkTableAvailabiltiy(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int tableId = 0;
+                DateTime dateSearch = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
+                DateTime startDate = DateTime.Now;
+                DateTime endDate = DateTime.Now;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "tableId")
+                    {
+                        tableId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "reservationDate")
+                    {
+                        if (c.Value != "")
+                        {
+                            dateSearch = DateTime.Parse(c.Value);
+                            dateSearch = DateTime.Parse(dateSearch.ToString().Split(' ')[0]);
+                        }
+                    }
+                    else if (c.Type == "startTime")
+                    {
+                        if (c.Value != "")
+                        {
+                            startDate = DateTime.Parse(c.Value);
+                        }
+                    }
+                    else if (c.Type == "endTime")
+                    {
+                        if (c.Value != "")
+                        {
+                            endDate = DateTime.Parse(c.Value);
+                        }
+                    }
+                }
+                //return dateSearch.ToString() + "dddd" + startDate.ToString() + "dddd" + endDate.ToString();
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    #region get time staying
+                    var timeStayingSet = entity.setValues.Where(x => x.setting.name == "time_staying").Select(x => x.value).SingleOrDefault();
+                    double decTimeStaying = 0;
+                    try
+                    {
+                        decTimeStaying = double.Parse(timeStayingSet);
+                    }
+                    catch { }
+                    TimeSpan timeStaying = TimeSpan.FromHours(decTimeStaying);
+                    #endregion
+                    #region check reservation status                      
+                    var reservPredicate = PredicateBuilder.New<reservations>();
+                    reservPredicate = reservPredicate.And(x => DbFunctions.TruncateTime(x.reservationDate) == dateSearch && !reservationClose.Contains(x.status));
+
+                    var reservation = (from tr in entity.tablesReservations.Where(x => x.tableId == tableId)
+                                       join rs in entity.reservations.Where(reservPredicate) on tr.reservationId equals rs.reservationId into rj
+                                       from r in rj.DefaultIfEmpty()
+                                       select new ReservationModel()
+                                       {
+                                           reservationId = tr.reservationId,
+                                           code = r.code,
+                                           customerId = r.customerId,
+                                           reservationDate = r.reservationDate,
+                                           reservationTime = r.reservationTime,
+                                           personsCount = r.personsCount,
+                                           notes = r.notes,
+                                           createUserId = r.createUserId,
+                                           updateUserId = r.updateUserId,
+                                           createDate = r.createDate,
+                                           updateDate = r.updateDate,
+                                           isActive = r.isActive,
+                                       }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime);
+
+                    foreach (ReservationModel reserv in reservation)
+                    {
+                        if ((startDate >= reserv.reservationTime && startDate <= reserv.endTime)|| (endDate >= reserv.reservationTime && endDate <= reserv.endTime))
+                        {
+                            return TokenManager.GenerateToken("0");
+                        }                        
+                    }
+                    #endregion
+                    #region check opened tables without reservation
+                    var searchPredicate = PredicateBuilder.New<invoiceTables>();
+                   searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.createDate >= dateSearch && x.invoices.invType == "sd");
+
+                    var invoiceTables = entity.invoiceTables.Where(searchPredicate).ToList();
+
+                    foreach (invoiceTables invTable in invoiceTables)
+                    {
+                        var invoice = entity.invoices.Find(invTable.invoiceId);
+                        DateTime invTime = (DateTime)invoice.invDate;
+
+                        if ((startDate <= invTime.Add(timeStaying) && startDate >= invTime )|| (invTime.Add(timeStaying) <= endDate && endDate >= invTime))
+                        {
+                            return TokenManager.GenerateToken("0");
+
+                        }
+                    }
+                    #endregion
+                   return TokenManager.GenerateToken("1");
+
                 }
             }
         }
@@ -308,6 +499,73 @@ namespace POS_Server.Controllers
                             tmpObject.updateDate = DateTime.Now;
                         }
                         message = entity.SaveChanges().ToString();
+                    }
+                    return TokenManager.GenerateToken(message);
+                }
+                catch { return TokenManager.GenerateToken("0"); }
+            }
+        }
+        [HttpPost]
+        [Route("addReservation")]
+        public string addReservation(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string itemObject = "";
+                reservations Object = null;
+                List<tables> lstTables = new List<tables>(); ;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemObject")
+                    {
+                        itemObject = c.Value.Replace("\\", string.Empty);
+                        itemObject = itemObject.Trim('"');
+                        Object = JsonConvert.DeserializeObject<reservations>(itemObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                    }
+                    else if (c.Type == "tables")
+                    {
+                        itemObject = c.Value.Replace("\\", string.Empty);
+                        itemObject = itemObject.Trim('"');
+                        lstTables = JsonConvert.DeserializeObject<List<tables>>(itemObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                    }
+                }
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        Object.createDate = DateTime.Now;
+                        Object.updateDate = DateTime.Now;
+                        Object.updateUserId = Object.createUserId;
+                        entity.reservations.Add(Object);
+                        entity.SaveChanges();
+                        long reservationId = Object.reservationId;
+                        #region add tables to reservation
+                        if (reservationId > 0)
+                        {
+                            foreach(tables tbl in lstTables)
+                            {
+                                tablesReservations tableR = new tablesReservations();
+                                tableR.tableId = tbl.tableId;
+                                tableR.reservationId = reservationId;
+                                tableR.createUserId = Object.createUserId;
+                                tableR.updateUserId = Object.createUserId;
+                                tableR.createDate = tableR.updateDate = DateTime.Now;
+                                tableR.isActive = 1;
+
+                                entity.tablesReservations.Add(tableR);
+                            }
+                            entity.SaveChanges();
+                        }
+                        #endregion
+                        message = reservationId.ToString();
                     }
                     return TokenManager.GenerateToken(message);
                 }
