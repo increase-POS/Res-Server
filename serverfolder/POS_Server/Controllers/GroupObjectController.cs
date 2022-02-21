@@ -26,9 +26,6 @@ namespace POS_Server.Controllers
             //{
                 //  public string Get(string token)
 
-
-
-
               token = TokenManager.readToken(HttpContext.Current.Request); 
  var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
@@ -74,9 +71,6 @@ namespace POS_Server.Controllers
                                         updateOb = c.updateOb,
                                         deleteOb = c.deleteOb,
                                         showOb = c.showOb,
-
-                                       
-
                                         createDate = c.createDate,
                                         updateDate = c.updateDate,
                                         createUserId = c.createUserId,
@@ -87,9 +81,9 @@ namespace POS_Server.Controllers
                                         parentObjectId = o.parentObjectId,
                                         objectName = o.name,
                                         parentObjectName = p.name,
-
-                                    })
-                                           .ToList();
+                                          o.objectType,
+                                        
+                                    }).ToList();
 
 
 
