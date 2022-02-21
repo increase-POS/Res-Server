@@ -10,6 +10,8 @@ namespace POS_Server.Models
         public long reservationId { get; set; }
         public string code { get; set; }
         public Nullable<int> customerId { get; set; }
+        public string customerName { get; set; }
+
         public Nullable<int> branchId { get; set; }
         public Nullable<System.DateTime> reservationDate { get; set; }
         public Nullable<System.DateTime> reservationTime { get; set; }
@@ -22,6 +24,8 @@ namespace POS_Server.Models
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public Nullable<System.DateTime> endTime { get; set; }
+        public IEnumerable<TableModel> tables { get; set; }
+
 
     }
 }

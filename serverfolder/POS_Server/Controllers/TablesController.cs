@@ -295,6 +295,7 @@ namespace POS_Server.Controllers
             {
                 int tableId = 0;
                 int branchId = 0;
+                int reservationId = 0;
                 DateTime dateSearch = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
                 DateTime startDate = DateTime.Now;
                 DateTime endDate = DateTime.Now;
@@ -308,6 +309,10 @@ namespace POS_Server.Controllers
                     if (c.Type == "branchId")
                     {
                         branchId = int.Parse(c.Value);
+                    }
+                    if (c.Type == "reservationId")
+                    {
+                        reservationId = int.Parse(c.Value);
                     }
                     else if (c.Type == "reservationDate")
                     {
@@ -350,6 +355,8 @@ namespace POS_Server.Controllers
                     var reservPredicate = PredicateBuilder.New<reservations>();
                     reservPredicate = reservPredicate.And(x => DbFunctions.TruncateTime(x.reservationDate) == dateSearch && x.branchId == branchId
                                                             && !reservationClose.Contains(x.status));
+                    if (reservationId != 0)
+                        reservPredicate = reservPredicate.And(x => x.reservationId != reservationId);
 
                     var reservation = (from r in entity.reservations.Where(reservPredicate)
                                        join tr in entity.tablesReservations.Where(x => x.tableId == tableId)
@@ -427,16 +434,18 @@ namespace POS_Server.Controllers
                     }
                    
                 }
-                // return startTimeSearch.ToString();
+
                 using (incposdbEntities entity = new incposdbEntities())
                 {                   
-                    var reservations = (from rs in entity.reservations.Where(x => x.branchId == branchId)
-                                        join tr in entity.tablesReservations on rs.reservationId equals tr.reservationId
+                    var reservations = (from rs in entity.reservations.Where(x => x.branchId == branchId && !reservationClose.Contains(x.status))
+                                        join cu in entity.agents on rs.customerId equals cu.agentId into cuj
+                                        from c in cuj.DefaultIfEmpty()
                                         select new ReservationModel()
                                         {
                                             reservationId = rs.reservationId,
                                             code = rs.code,
                                             customerId = rs.customerId,
+                                            customerName = c.name,
                                             branchId = rs.branchId,
                                             reservationDate = rs.reservationDate,
                                             reservationTime = rs.reservationTime,
@@ -448,6 +457,14 @@ namespace POS_Server.Controllers
                                             createDate = rs.createDate,
                                             updateDate = rs.updateDate,
                                             isActive = rs.isActive,
+                                            tables = (from tr in rs.tablesReservations.Where(x => x.reservationId == rs.reservationId)
+                                                      join ts in entity.tables on tr.tableId equals ts.tableId
+                                                      select new TableModel() {
+                                                      tableId = ts.tableId,
+                                                      name = ts.name,
+                                                      
+                                                      canDelete = false,
+                                                      isActive = ts.isActive}).ToList(),
                                         }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime);
 
                                             
@@ -625,6 +642,133 @@ namespace POS_Server.Controllers
                             entity.SaveChanges();
                         }
                         #endregion
+                        message = reservationId.ToString();
+                    }
+                    return TokenManager.GenerateToken(message);
+                }
+                catch { return TokenManager.GenerateToken("0"); }
+            }
+        }
+        [HttpPost]
+        [Route("updateReservation")]
+        public string updateReservation(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string itemObject = "";
+                reservations Object = null;
+                List<tables> lstTables = new List<tables>(); ;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemObject")
+                    {
+                        itemObject = c.Value.Replace("\\", string.Empty);
+                        itemObject = itemObject.Trim('"');
+                        Object = JsonConvert.DeserializeObject<reservations>(itemObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                    }
+                    else if (c.Type == "tables")
+                    {
+                        itemObject = c.Value.Replace("\\", string.Empty);
+                        itemObject = itemObject.Trim('"');
+                        lstTables = JsonConvert.DeserializeObject<List<tables>>(itemObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                    }
+                }
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var reservation = entity.reservations.Find(Object.reservationId);
+                        reservation.updateDate = DateTime.Now;
+                        reservation.updateUserId = Object.createUserId;
+                        reservation.customerId = Object.customerId;
+                        reservation.reservationDate = Object.reservationDate;
+                        reservation.reservationTime = Object.reservationTime;
+                        reservation.endTime = Object.endTime;
+                        reservation.personsCount = Object.personsCount;
+                        reservation.notes = Object.notes;
+                        entity.SaveChanges();
+                        long reservationId = Object.reservationId;
+                        #region delete tables in old reservation
+                        var reservationTables = entity.tablesReservations.Where(x => x.reservationId == reservationId).ToList();
+                        entity.tablesReservations.RemoveRange(reservationTables);
+                        entity.SaveChanges();
+                        #endregion
+                        #region add tables to reservation
+                        if (reservationId > 0)
+                        {
+                            foreach(tables tbl in lstTables)
+                            {
+                                tablesReservations tableR = new tablesReservations();
+                                tableR.tableId = tbl.tableId;
+                                tableR.reservationId = reservationId;
+                                tableR.createUserId = Object.createUserId;
+                                tableR.updateUserId = Object.createUserId;
+                                tableR.createDate = tableR.updateDate = DateTime.Now;
+                                tableR.isActive = 1;
+
+                                entity.tablesReservations.Add(tableR);
+                            }
+                            entity.SaveChanges();
+                        }
+                        #endregion
+                        message = reservationId.ToString();
+                    }
+                    return TokenManager.GenerateToken(message);
+                }
+                catch { return TokenManager.GenerateToken("0"); }
+            }
+        }
+        [HttpPost]
+        [Route("updateReservationStatus")]
+        public string updateReservationStatus(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                long reservationId = 0;
+                int userId = 0;
+                string status = "";
+                List<tables> lstTables = new List<tables>(); ;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "reservationId")
+                    {
+                        reservationId = long.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "status")
+                    {
+                        status = c.Value;
+                    }
+                }
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var reservation = entity.reservations.Find(reservationId);
+                        reservation.status = status;
+                        reservation.updateDate = DateTime.Now;
+                        reservation.updateUserId = userId;
+                        
+                        entity.SaveChanges();                       
                         message = reservationId.ToString();
                     }
                     return TokenManager.GenerateToken(message);
