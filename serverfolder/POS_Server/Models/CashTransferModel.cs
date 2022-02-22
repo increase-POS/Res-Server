@@ -57,11 +57,22 @@ namespace POS_Server.Models
         public string createUserLName { get; set; }
         public string updateUserLName { get; set; }
         public string cardName { get; set; }
+
         public Nullable<System.DateTime> bondDeserveDate { get; set; }
     //    public Nullable<byte>  bondIsRecieved { get; set; }
         public string agentCompany { get; set; }
  
         public string shippingCompanyName { get; set; }
         public string userAcc { get; set; }
+        public Nullable<int> branchCreatorId { get; set; }
+        public string branchCreatorname { get; set; }
+        public Nullable<int> branchId { get; set; }
+        public string branchName { get; set; }
+        public Nullable<int> branch2Id { get; set; }
+        public string branch2Name { get; set; }
+
+
+
+
     }
 }
