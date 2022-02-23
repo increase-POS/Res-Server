@@ -637,7 +637,7 @@ namespace POS_Server.Controllers
                                     if (row.discountType == "1") // value
                                     {
 
-                                        totaldis = totaldis + row.discountValue;
+                                        totaldis = totaldis + (decimal)row.discountValue;
                                     }
                                     else if (row.discountType == "2") // percent
                                     {
@@ -809,7 +809,7 @@ namespace POS_Server.Controllers
                                     iunlist.discountValue = itofflist.discountValue;
                                     if (iunlist.discountType == "1") // value
                                     {
-                                        totaldis = totaldis + iunlist.discountValue;
+                                        totaldis = totaldis + (decimal)iunlist.discountValue;
                                     }
                                     else if (iunlist.discountType == "2") // percent
                                     {
