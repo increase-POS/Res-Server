@@ -28,6 +28,8 @@ namespace POS_Server.Models
         public Nullable<int> maxUnitId { get; set; }
         public int itemCount { get; set; }
         public Boolean canDelete { get; set; }
+        public Nullable<int> tagId { get; set; }
+        public decimal avgPurchasePrice { get; set; }
 
         public string notes { get; set; }
         public string categoryString { get; set; }
@@ -44,13 +46,13 @@ namespace POS_Server.Models
         public string unitName { get; set; }
         public string offerName { get; set; }
         public Nullable<int> offerId { get; set; }
+        public string discountType { get; set; }
+        public Nullable<decimal> discountValue { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
         public byte isActiveOffer { get; set; }
         public Nullable<int> itemUnitId { get; set; }
         public short defaultSale { get; set; }
-        public string discountType { get; set; }
-        public decimal discountValue { get; set; }
         public decimal priceTax { get; set; }
         public short defaultPurchase { get; set; }
         public  int used { get; set; }

@@ -469,6 +469,179 @@ namespace POS_Server.Controllers
             }
         }
         [HttpPost]
+        [Route("GetAllSalesItemsInv")]
+        public string GetAllSalesItemsInv(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string day = "";
+                DateTime cmpdate = DateTime.Now.AddDays(newdays);
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "day")
+                    {
+                        day = c.Value;
+                    }
+                }
+                #region get day column in db
+                var searchPredicate = PredicateBuilder.New<menuSettings>();
+                searchPredicate = searchPredicate.And(x => x.isActive == 1);
+                switch (day)
+                {
+                    case "saturday":
+                        searchPredicate = searchPredicate.And(x => x.sat == true);
+                        break;
+                    case "sunday":
+                        searchPredicate = searchPredicate.And(x => x.sun == true);
+                        break;
+                    case "monday":
+                        searchPredicate = searchPredicate.And(x => x.mon == true);
+                        break;
+                    case "tuesday":
+                        searchPredicate = searchPredicate.And(x => x.tues == true);
+                        break;
+                    case "wednsday":
+                        searchPredicate = searchPredicate.And(x => x.wed == true);
+                        break;
+                    case "thursday":
+                        searchPredicate = searchPredicate.And(x => x.thur == true);
+                        break;
+                    case "friday":
+                        searchPredicate = searchPredicate.And(x => x.fri == true);
+                        break;
+                }
+                #endregion
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var itemsList = (from I in entity.items.Where(x => salesTypes.Contains(x.type) && x.isActive == 1)
+                                     join IU in entity.itemsUnits on I.itemId equals IU.itemId
+                                     join ms in entity.menuSettings.Where(searchPredicate) on IU.itemUnitId equals ms.itemUnitId
+                                     select new ItemSalePurModel()
+                                     {
+                                         itemId = I.itemId,
+                                         name = I.name,
+                                         code = I.code,
+                                         categoryId = I.categoryId,
+                                         max = I.max,
+                                         maxUnitId = I.maxUnitId,
+                                         minUnitId = I.minUnitId,
+                                         min = I.min,
+                                         tagId = I.tagId,
+                                         parentId = I.parentId,
+                                         isActive = I.isActive,
+                                         image = I.image,
+                                         type = I.type,
+                                         details = I.details,
+                                         taxes = I.taxes,
+                                         createDate = I.createDate,
+                                         updateDate = I.updateDate,
+                                         createUserId = I.createUserId,
+                                         updateUserId = I.updateUserId,
+                                         isNew = 0,
+                                         parentName = entity.items.Where(m => m.itemId == I.parentId).FirstOrDefault().name,
+                                         minUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
+                                         maxUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
+                                         avgPurchasePrice = I.avgPurchasePrice,
+                                         notes = I.notes,
+                                         categoryString = I.categoryString,
+                                         itemUnitId = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().itemUnitId,
+                                         price = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().price   ,
+                                         priceWithService = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().priceWithService ,
+                                     })
+                                   .ToList();
+                    #region offers
+                    var itemsofferslist = (from off in entity.offers
+
+                                           join itof in entity.itemsOffers on off.offerId equals itof.offerId // itemsOffers and offers 
+
+                                           //  join iu in entity.itemsUnits on itof.iuId  equals  iu.itemUnitId //itemsUnits and itemsOffers
+                                           join iu in entity.itemsUnits on itof.iuId equals iu.itemUnitId
+                                           //from un in entity.units
+                                           select new ItemSalePurModel()
+                                           {
+                                               itemId = iu.itemId,
+                                               itemUnitId = itof.iuId,
+                                               offerName = off.name,
+                                               offerId = off.offerId,
+                                               discountValue = off.discountValue,
+                                               isNew = 0,
+                                               isOffer = 1,
+                                               isActiveOffer = off.isActive,
+                                               startDate = off.startDate,
+                                               endDate = off.endDate,
+                                               unitId = iu.unitId,
+                                               itemCount = itof.quantity,
+                                               price = iu.price,
+                                               discountType = off.discountType,
+                                               desPrice = iu.price,
+                                               defaultSale = iu.defaultSale,
+                                               used = itof.used,
+
+                                           }).Where(IO => IO.isActiveOffer == 1 && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0 && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1 && IO.itemCount > IO.used).Distinct().ToList();
+                    #endregion
+                    for (int i = 0; i < itemsList.Count; i++)
+                    {
+                        itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].priceTax) / 100;
+                        // is new
+                        int res = DateTime.Compare((DateTime)itemsList[i].createDate, cmpdate);
+                        if (res >= 0)
+                        {
+                            itemsList[i].isNew = 1;
+                        }
+
+                        foreach (var itofflist in itemsofferslist)
+                        {
+
+
+                            if (itemsList[i].itemId == itofflist.itemId)
+                            {
+
+                                // get unit name of item that has the offer
+                                using (incposdbEntities entitydb = new incposdbEntities())
+                                { // put it in item
+                                    var un = entitydb.units
+                                        .Where(a => a.unitId == itofflist.unitId)
+                                        .Select(u => new
+                                        {
+                                            u.name
+                                        ,
+                                            u.unitId
+                                        }).FirstOrDefault();
+                                    itemsList[i].unitName = un.name;
+                                }
+
+                                itemsList[i].offerName = itemsList[i].offerName + "- " + itofflist.offerName;
+                                itemsList[i].isOffer = 1;
+                                itemsList[i].startDate = itofflist.startDate;
+                                itemsList[i].endDate = itofflist.endDate;
+                                itemsList[i].itemUnitId = itofflist.itemUnitId;
+                                itemsList[i].offerId = itofflist.offerId;
+                                itemsList[i].isActiveOffer = itofflist.isActiveOffer;
+
+                                itemsList[i].price = itofflist.price;
+                                itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].taxes / 100);
+
+                                itemsList[i].avgPurchasePrice = itemsList[i].avgPurchasePrice;
+                                itemsList[i].discountType = itofflist.discountType;
+                                itemsList[i].discountValue = itofflist.discountValue;
+                            }
+                        }
+
+                    }
+
+
+                    return TokenManager.GenerateToken(itemsList);
+                }
+            }
+        }
+        [HttpPost]
         [Route("GetItemsMenuSetting")]
         public string GetItemsMenuSetting(string token)
         {
@@ -1858,6 +2031,7 @@ namespace POS_Server.Controllers
                                                  name = I.name,
                                                  code = I.code,
                                                  categoryId = I.categoryId,
+                                                 tagId = I.tagId,
                                                  categoryName = I.categories.name,
                                                  max = I.max,
                                                  maxUnitId = I.maxUnitId,
@@ -2020,7 +2194,7 @@ namespace POS_Server.Controllers
                                         if (iunlist.discountType == "1") // value
                                         {
 
-                                            totaldis = totaldis + iunlist.discountValue;
+                                            totaldis = totaldis + (decimal)iunlist.discountValue;
                                         }
                                         else if (iunlist.discountType == "2") // percent
                                         {
@@ -2118,7 +2292,7 @@ namespace POS_Server.Controllers
                                         if (iunlist.discountType == "1") // value
                                         {
 
-                                            totaldis = totaldis + iunlist.discountValue;
+                                            totaldis = totaldis +(decimal) iunlist.discountValue;
                                         }
                                         else if (iunlist.discountType == "2") // percent
                                         {
