@@ -553,6 +553,7 @@ namespace POS_Server.Controllers
                                          categoryString = I.categoryString,
                                          itemUnitId = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().itemUnitId,
                                          price = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().price   ,
+                                         basicPrice = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().price   ,
                                          priceWithService = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().priceWithService ,
                                      })
                                    .ToList();
