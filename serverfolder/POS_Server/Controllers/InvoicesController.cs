@@ -2499,7 +2499,197 @@ var strP = TokenManager.GetPrincipal(token);
             }
         }
 
-        
+         [HttpPost]
+        [Route("saveInvoiceWithItemsAndTables")]
+        public string saveInvoiceWithItemsAndTables(string token)
+        {
+            ItemsTransferController tc = new ItemsTransferController();
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string invoiceObject = "";
+                string itemsObject = "";
+                string tablesObject = "";
+                invoices newObject = null;
+                List<itemsTransfer> items = null;
+                List<tables> tables = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceObject")
+                    {
+                        invoiceObject = c.Value.Replace("\\", string.Empty);
+                        invoiceObject = invoiceObject.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<invoices>(invoiceObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                    else if (c.Type == "itemsObject")
+                    {
+                        itemsObject = c.Value.Replace("\\", string.Empty);
+                        itemsObject = itemsObject.Trim('"');
+                        items = JsonConvert.DeserializeObject<List<itemsTransfer>>(itemsObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                    else if (c.Type == "tablesObject")
+                    {
+                        tablesObject = c.Value.Replace("\\", string.Empty);
+                        tablesObject = tablesObject.Trim('"');
+                        tables = JsonConvert.DeserializeObject<List<tables>>(tablesObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
+
+                try
+                {
+                    invoices tmpInvoice = new invoices() ;
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var invoiceEntity = entity.Set<invoices>();
+                        if (newObject.invoiceId == 0)
+                        {
+                            if (newObject.invType == "s")
+                            {
+                                ProgramDetailsController pc = new ProgramDetailsController();
+                                ProgramInfo programInfo = new ProgramInfo();
+                                int invMaxCount = programInfo.getSaleinvCount();
+                                int salesInvCount = pc.getSalesInvCountInMonth();
+                                if (salesInvCount >= invMaxCount && invMaxCount != -1)
+                                {
+                                    message = "-1";
+                                }
+                                else
+                                {
+                                    if (newObject.cashReturn == null)
+                                        newObject.cashReturn = 0;
+                                    newObject.invDate = DateTime.Now;
+                                    newObject.invTime = DateTime.Now.TimeOfDay;
+                                    newObject.updateDate = DateTime.Now;
+                                    newObject.updateUserId = newObject.createUserId;
+                                    newObject.isActive = true;
+                                    newObject.isOrginal = true;
+                                    tmpInvoice = invoiceEntity.Add(newObject);
+                                    entity.SaveChanges();
+                                    message = tmpInvoice.invoiceId.ToString();
+                                }
+                            }
+                            else
+                            {
+                                if (newObject.cashReturn == null)
+                                    newObject.cashReturn = 0;
+                                newObject.invDate = DateTime.Now;
+                                newObject.invTime = DateTime.Now.TimeOfDay;
+                                newObject.updateDate = DateTime.Now;
+                                newObject.updateUserId = newObject.createUserId;
+                                newObject.isActive = true;
+                                newObject.isOrginal = true;
+                                tmpInvoice = invoiceEntity.Add(newObject);
+                                entity.SaveChanges();
+                                message = tmpInvoice.invoiceId.ToString();
+                            }
+
+                        }
+                        else
+                        {
+                            tmpInvoice = entity.invoices.Where(p => p.invoiceId == newObject.invoiceId).FirstOrDefault();
+                            tmpInvoice.invNumber = newObject.invNumber;
+                            tmpInvoice.agentId = newObject.agentId;
+                            tmpInvoice.invType = newObject.invType;
+                            tmpInvoice.total = newObject.total;
+                            tmpInvoice.totalNet = newObject.totalNet;
+                            tmpInvoice.paid = newObject.paid;
+                            tmpInvoice.deserved = newObject.deserved;
+                            tmpInvoice.deservedDate = newObject.deservedDate;
+                            tmpInvoice.invoiceMainId = newObject.invoiceMainId;
+                            tmpInvoice.invCase = newObject.invCase;
+                            tmpInvoice.notes = newObject.notes;
+                            tmpInvoice.vendorInvNum = newObject.vendorInvNum;
+                            tmpInvoice.vendorInvDate = newObject.vendorInvDate;
+                            tmpInvoice.updateDate = DateTime.Now;
+                            tmpInvoice.updateUserId = newObject.updateUserId;
+                            tmpInvoice.branchId = newObject.branchId;
+                            tmpInvoice.discountType = newObject.discountType;
+                            tmpInvoice.discountValue = newObject.discountValue;
+                            tmpInvoice.tax = newObject.tax;
+                            tmpInvoice.taxtype = newObject.taxtype;
+                            tmpInvoice.name = newObject.name;
+                            tmpInvoice.isApproved = newObject.isApproved;
+                            tmpInvoice.branchCreatorId = newObject.branchCreatorId;
+                            tmpInvoice.shippingCompanyId = newObject.shippingCompanyId;
+                            tmpInvoice.shipUserId = newObject.shipUserId;
+                            tmpInvoice.userId = newObject.userId;
+                            tmpInvoice.manualDiscountType = newObject.manualDiscountType;
+                            tmpInvoice.manualDiscountValue = newObject.manualDiscountValue;
+                            tmpInvoice.cashReturn = newObject.cashReturn;
+                            entity.SaveChanges();
+                            message = tmpInvoice.invoiceId.ToString();
+                            //return TokenManager.GenerateToken(message);
+                        }
+                        string res = tc.saveInvoiceItems(items, tmpInvoice.invoiceId);
+                        if (res == "0")
+                            message = "0";
+                        else
+                        {
+                            res = saveInvoiceTables(tables,tmpInvoice.invoiceId);
+                            if (res == "0")
+                                message = "0";
+                        }
+
+                        return TokenManager.GenerateToken(message);
+                    }
+                }
+                catch
+                {
+                    message = "0";
+                    return TokenManager.GenerateToken(message);
+                }
+            }
+        }
+        public string saveInvoiceTables(List<tables> newObject, int invoiceId)
+        {
+            string message = "";
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    List<invoiceTables> iol = entity.invoiceTables.Where(x => x.invoiceId == invoiceId).ToList();
+                    entity.invoiceTables.RemoveRange(iol);
+                    entity.SaveChanges();
+
+                    var invoice = entity.invoices.Find(invoiceId);
+                    for (int i = 0; i < newObject.Count; i++)
+                    {
+                        invoiceTables tr = new invoiceTables();
+                        if (newObject[i].createUserId == 0 || newObject[i].createUserId == null)
+                        {
+                            Nullable<int> id = null;
+                            newObject[i].createUserId = id;
+                        }
+
+                        var tableEntity = entity.Set<tablesReservations>();
+
+                        tr.invoiceId = invoiceId;
+                        tr.tableId = newObject[i].tableId;
+                        tr.createDate = DateTime.Now;
+                        tr.updateDate = DateTime.Now;
+                        tr.isActive = 1;
+                        tr.updateUserId = newObject[i].createUserId;
+                        tr.createUserId = newObject[i].createUserId;
+
+                        tr = entity.invoiceTables.Add(tr);
+                        entity.SaveChanges();
+                    
+                    }
+                    entity.SaveChanges();
+                    message = "1";
+                }
+            }
+            catch { message = "0"; }
+            return message;
+        }
+
         [HttpPost]
         [Route("updateprintstat")]
         public string updateprintstat(string token)
