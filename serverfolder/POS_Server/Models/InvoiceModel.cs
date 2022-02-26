@@ -67,5 +67,6 @@ namespace POS_Server.Models
         public Nullable<byte> discountType { get; set; }
 
         public string couponCode { get; set; }
+        public string name { get; set; }
     }
 }

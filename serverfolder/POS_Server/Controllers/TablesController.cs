@@ -462,13 +462,58 @@ namespace POS_Server.Controllers
                                                       select new TableModel() {
                                                       tableId = ts.tableId,
                                                       name = ts.name,
-                                                      
+                                                      personsCount = ts.personsCount,
                                                       canDelete = false,
                                                       isActive = ts.isActive}).ToList(),
                                         }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime);
 
                                             
                     return TokenManager.GenerateToken(reservations);
+                }
+            }
+        }
+        [HttpPost]
+        [Route("GetTableInvoice")]
+        public string GetTableInvoice(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int tableId = 0;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "tableId")
+                    {
+                        tableId = int.Parse(c.Value);
+                    }
+                   
+                }
+
+                using (incposdbEntities entity = new incposdbEntities())
+                {                   
+                    var tableInvoice = (from rs in entity.invoices.Where(x => x.invType == "sd")
+                                        join rt in entity.invoiceTables.Where(x => x.tableId == tableId) on rs.invoiceId equals rt.invoiceId
+                                        join cu in entity.agents on rs.agentId equals cu.agentId into cuj
+                                        from c in cuj.DefaultIfEmpty()
+                                        select new InvoiceModel()
+                                        {
+                                            invNumber = rs.invNumber,
+                                            invDate = rs.invDate,
+                                            agentId = rs.agentId,
+                                            agentName = c.name,
+                                            branchId = rs.branchId,
+                                           totalNet = rs.totalNet
+                                        }).ToList();
+
+                                            
+                    return TokenManager.GenerateToken(tableInvoice);
                 }
             }
         }
