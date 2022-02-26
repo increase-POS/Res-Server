@@ -239,6 +239,7 @@ namespace POS_Server.Controllers
                                              priceWithService = IU.priceWithService,
                                              subUnitId = IU.subUnitId,
                                              smallUnit = v1.name,
+                                             countSmallUnit = IU.unitValue+ " " + v1.name,
                                              unitValue = IU.unitValue,
                                              barcode = IU.barcode,
                                              updateDate = IU.updateDate,

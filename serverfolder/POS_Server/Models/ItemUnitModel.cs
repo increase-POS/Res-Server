@@ -28,6 +28,7 @@ namespace POS_Server.Models
       
         public string mainUnit { get; set; }
         public string smallUnit { get; set; }
+        public string countSmallUnit { get; set; }
       
         public string itemName { get; set; }
         public string itemCode { get; set; }
