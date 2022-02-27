@@ -518,6 +518,45 @@ namespace POS_Server.Controllers
             }
         }
         [HttpPost]
+        [Route("getInvoiceTables")]
+        public string getInvoiceTables(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int invoiceId = 0;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceId")
+                    {
+                        invoiceId = int.Parse(c.Value);
+                    }                   
+                }
+
+                using (incposdbEntities entity = new incposdbEntities())
+                {                   
+                    var invoiceTables = (from rt in entity.invoiceTables.Where(x => x.invoiceId == invoiceId)
+                                        join t in entity.tables on rt.tableId equals t.tableId
+                                        select new TableModel()
+                                        {
+                                            tableId = t.tableId,
+                                            name = t.name,
+                                            personsCount = t.personsCount,
+                                        }).ToList();
+
+                                            
+                    return TokenManager.GenerateToken(invoiceTables);
+                }
+            }
+        }
+        [HttpPost]
         [Route("GetActive")]
         public string GetActive(string token)
         {
