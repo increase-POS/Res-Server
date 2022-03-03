@@ -45,6 +45,7 @@ namespace POS_Server
         public decimal purchasePrice { get; set; }
         public Nullable<int> storageCostId { get; set; }
         public byte isActive { get; set; }
+        public Nullable<decimal> cost { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<dishIngredients> dishIngredients { get; set; }

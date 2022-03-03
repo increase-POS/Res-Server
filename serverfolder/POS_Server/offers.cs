@@ -20,6 +20,7 @@ namespace POS_Server
             this.itemsOffers = new HashSet<itemsOffers>();
             this.itemsTransfer = new HashSet<itemsTransfer>();
             this.itemTransferOffer = new HashSet<itemTransferOffer>();
+            this.membershipsOffers = new HashSet<membershipsOffers>();
         }
     
         public int offerId { get; set; }
@@ -35,6 +36,7 @@ namespace POS_Server
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public string notes { get; set; }
+        public string forAgents { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemsOffers> itemsOffers { get; set; }
@@ -42,5 +44,7 @@ namespace POS_Server
         public virtual ICollection<itemsTransfer> itemsTransfer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemTransferOffer> itemTransferOffer { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<membershipsOffers> membershipsOffers { get; set; }
     }
 }

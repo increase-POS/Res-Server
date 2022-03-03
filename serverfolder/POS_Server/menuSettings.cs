@@ -31,8 +31,8 @@ namespace POS_Server
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> branchId { get; set; }
     
+        public virtual branches branches { get; set; }
         public virtual itemsUnits itemsUnits { get; set; }
         public virtual users users { get; set; }
-        public virtual branches branches { get; set; }
     }
 }

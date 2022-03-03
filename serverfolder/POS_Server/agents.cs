@@ -56,6 +56,7 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agentMemberships> agentMemberships { get; set; }
         public virtual Points Points { get; set; }
+        public virtual residentialSectors residentialSectors { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -66,6 +67,5 @@ namespace POS_Server
         public virtual ICollection<medalAgent> medalAgent { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Points> Points1 { get; set; }
-        public virtual residentialSectors residentialSectors { get; set; }
     }
 }

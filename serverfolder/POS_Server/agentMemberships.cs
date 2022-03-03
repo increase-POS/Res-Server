@@ -37,6 +37,7 @@ namespace POS_Server
         public virtual agents agents { get; set; }
         public virtual cashTransfer cashTransfer { get; set; }
         public virtual memberships memberships { get; set; }
+        public virtual memberships memberships1 { get; set; }
         public virtual subscriptionFees subscriptionFees { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }

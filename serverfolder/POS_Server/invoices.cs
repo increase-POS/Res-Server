@@ -87,6 +87,7 @@ namespace POS_Server
         public virtual ICollection<invoices> invoices1 { get; set; }
         public virtual invoices invoices2 { get; set; }
         public virtual pos pos { get; set; }
+        public virtual reservations reservations { get; set; }
         public virtual shippingCompanies shippingCompanies { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }
@@ -103,6 +104,5 @@ namespace POS_Server
         public virtual ICollection<itemsLocations> itemsLocations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemsTransfer> itemsTransfer { get; set; }
-        public virtual reservations reservations { get; set; }
     }
 }

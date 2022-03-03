@@ -34,9 +34,12 @@ namespace POS_Server
         public Nullable<int> updateUserId { get; set; }
     
         public virtual branches branches { get; set; }
+        public virtual branches branches1 { get; set; }
         public virtual sections sections { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }
+        public virtual users users2 { get; set; }
+        public virtual users users3 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tablesReservations> tablesReservations { get; set; }
     }

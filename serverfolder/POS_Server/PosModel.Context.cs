@@ -40,16 +40,20 @@ namespace POS_Server
         public virtual DbSet<countriesCodes> countriesCodes { get; set; }
         public virtual DbSet<coupons> coupons { get; set; }
         public virtual DbSet<couponsInvoices> couponsInvoices { get; set; }
+        public virtual DbSet<couponsMemberships> couponsMemberships { get; set; }
         public virtual DbSet<dishIngredients> dishIngredients { get; set; }
         public virtual DbSet<docImages> docImages { get; set; }
         public virtual DbSet<error> error { get; set; }
         public virtual DbSet<Expenses> Expenses { get; set; }
         public virtual DbSet<groupObject> groupObject { get; set; }
         public virtual DbSet<groups> groups { get; set; }
+        public virtual DbSet<hallSections> hallSections { get; set; }
         public virtual DbSet<Inventory> Inventory { get; set; }
         public virtual DbSet<inventoryItemLocation> inventoryItemLocation { get; set; }
         public virtual DbSet<invoiceOrder> invoiceOrder { get; set; }
         public virtual DbSet<invoices> invoices { get; set; }
+        public virtual DbSet<invoicesClass> invoicesClass { get; set; }
+        public virtual DbSet<invoicesClassMemberships> invoicesClassMemberships { get; set; }
         public virtual DbSet<invoiceStatus> invoiceStatus { get; set; }
         public virtual DbSet<invoiceTables> invoiceTables { get; set; }
         public virtual DbSet<items> items { get; set; }
@@ -65,6 +69,7 @@ namespace POS_Server
         public virtual DbSet<medalAgent> medalAgent { get; set; }
         public virtual DbSet<medals> medals { get; set; }
         public virtual DbSet<memberships> memberships { get; set; }
+        public virtual DbSet<membershipsOffers> membershipsOffers { get; set; }
         public virtual DbSet<menuSettings> menuSettings { get; set; }
         public virtual DbSet<notification> notification { get; set; }
         public virtual DbSet<notificationUser> notificationUser { get; set; }
@@ -82,6 +87,8 @@ namespace POS_Server
         public virtual DbSet<properties> properties { get; set; }
         public virtual DbSet<propertiesItems> propertiesItems { get; set; }
         public virtual DbSet<reservations> reservations { get; set; }
+        public virtual DbSet<residentialSectors> residentialSectors { get; set; }
+        public virtual DbSet<residentialSectorsUsers> residentialSectorsUsers { get; set; }
         public virtual DbSet<sections> sections { get; set; }
         public virtual DbSet<serials> serials { get; set; }
         public virtual DbSet<setting> setting { get; set; }
@@ -98,7 +105,5 @@ namespace POS_Server
         public virtual DbSet<users> users { get; set; }
         public virtual DbSet<userSetValues> userSetValues { get; set; }
         public virtual DbSet<usersLogs> usersLogs { get; set; }
-        public virtual DbSet<residentialSectors> residentialSectors { get; set; }
-        public virtual DbSet<residentialSectorsUsers> residentialSectorsUsers { get; set; }
     }
 }

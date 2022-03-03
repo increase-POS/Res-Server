@@ -25,12 +25,13 @@ namespace POS_Server
             this.invoices = new HashSet<invoices>();
             this.invoices1 = new HashSet<invoices>();
             this.locations = new HashSet<locations>();
+            this.menuSettings = new HashSet<menuSettings>();
             this.pos = new HashSet<pos>();
+            this.reservations = new HashSet<reservations>();
             this.sections = new HashSet<sections>();
             this.sysEmails = new HashSet<sysEmails>();
             this.tables = new HashSet<tables>();
-            this.menuSettings = new HashSet<menuSettings>();
-            this.reservations = new HashSet<reservations>();
+            this.tables1 = new HashSet<tables>();
         }
     
         public int branchId { get; set; }
@@ -68,7 +69,11 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<locations> locations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<menuSettings> menuSettings { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<pos> pos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<reservations> reservations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<sections> sections { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -76,8 +81,6 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tables> tables { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<menuSettings> menuSettings { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<reservations> reservations { get; set; }
+        public virtual ICollection<tables> tables1 { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace POS_Server
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
     
+        public virtual reservations reservations { get; set; }
         public virtual tables tables { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }

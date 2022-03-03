@@ -132,13 +132,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/03/2021 21:14:03</publishTime>
     </File>
     <File Include="bin/POS_Server.dll">
-      <publishTime>02/19/2022 17:19:33</publishTime>
+      <publishTime>03/03/2022 17:53:33</publishTime>
     </File>
     <File Include="bin/POS_Server.pdb">
-      <publishTime>02/19/2022 17:19:33</publishTime>
+      <publishTime>03/03/2022 17:53:33</publishTime>
     </File>
     <File Include="bin/POS_Server.xml">
-      <publishTime>02/19/2022 17:19:32</publishTime>
+      <publishTime>03/03/2022 17:53:32</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>06/03/2021 22:37:35</publishTime>
@@ -390,7 +390,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/03/2021 22:37:30</publishTime>
     </File>
     <File Include="PosModel.edmx.diagram">
-      <publishTime>02/19/2022 16:50:46</publishTime>
+      <publishTime>03/03/2022 17:52:22</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>06/03/2021 22:37:30</publishTime>
@@ -438,7 +438,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/03/2021 22:37:30</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>02/19/2022 17:11:21</publishTime>
+      <publishTime>03/03/2022 17:53:56</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -18,6 +18,7 @@ namespace POS_Server
         public reservations()
         {
             this.invoices = new HashSet<invoices>();
+            this.tablesReservations = new HashSet<tablesReservations>();
         }
     
         public long reservationId { get; set; }
@@ -36,10 +37,12 @@ namespace POS_Server
         public Nullable<System.DateTime> endTime { get; set; }
         public Nullable<int> branchId { get; set; }
     
+        public virtual branches branches { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<invoices> invoices { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<invoices> invoices { get; set; }
-        public virtual branches branches { get; set; }
+        public virtual ICollection<tablesReservations> tablesReservations { get; set; }
     }
 }

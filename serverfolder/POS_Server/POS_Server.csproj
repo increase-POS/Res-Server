@@ -346,6 +346,9 @@
     <Compile Include="couponsInvoices.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="couponsMemberships.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="dishIngredients.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
@@ -364,6 +367,9 @@
     <Compile Include="groups.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="hallSections.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Inventory.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
@@ -374,6 +380,12 @@
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="invoices.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="invoicesClass.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="invoicesClassMemberships.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="invoiceStatus.cs">
@@ -419,6 +431,9 @@
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="memberships.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="membershipsOffers.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="menuSettings.cs">
