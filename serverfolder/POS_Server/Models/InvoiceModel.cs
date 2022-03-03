@@ -14,11 +14,11 @@ namespace POS_Server.Models
         public Nullable<int> createUserId { get; set; }
         public string invType { get; set; }
         public string discountType { get; set; }
-        public Nullable<decimal> discountValue { get; set; }
-        public Nullable<decimal> total { get; set; }
-        public Nullable<decimal> totalNet { get; set; }
-        public Nullable<decimal> paid { get; set; }
-        public Nullable<decimal> deserved { get; set; }
+        public decimal discountValue { get; set; }
+        public decimal total { get; set; }
+        public decimal totalNet { get; set; }
+        public decimal paid { get; set; }
+        public decimal deserved { get; set; }
         public Nullable<System.DateTime> deservedDate { get; set; }
         public Nullable<System.DateTime> invDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
@@ -34,10 +34,10 @@ namespace POS_Server.Models
         public Nullable<System.DateTime> vendorInvDate { get; set; }
         public Nullable<int> branchId { get; set; }
         public Nullable<int> posId { get; set; }
-        public Nullable<int> itemsCount { get; set; }
-        public Nullable<decimal> tax { get; set; }
-        public Nullable<int> taxtype { get; set; }
-        public Nullable<byte> isApproved { get; set; }
+        public int itemsCount { get; set; }
+        public decimal tax { get; set; }
+        public int taxtype { get; set; }
+        public int isApproved { get; set; }
         public Nullable<int> branchCreatorId { get; set; }
         public Nullable<int> shippingCompanyId { get; set; }
         public Nullable<int> shipUserId { get; set; }
