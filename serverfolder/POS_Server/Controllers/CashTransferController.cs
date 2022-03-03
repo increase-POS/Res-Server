@@ -1399,10 +1399,13 @@ namespace POS_Server.Controllers
                         return TokenManager.GenerateToken(message);
 
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        message = "0";
-                        return TokenManager.GenerateToken(message);
+
+                        //message = "0";
+                        //return TokenManager.GenerateToken(message);
+                     
+                        return TokenManager.GenerateToken(ex.ToString());
                     }
 
 

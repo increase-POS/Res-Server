@@ -529,7 +529,7 @@ namespace POS_Server.Controllers
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var userEntity = entity.Set<users>();
-                        var catEntity = entity.Set<categoryuser>();
+                     //   var catEntity = entity.Set<categoryuser>();
                         if (newObject.userId == 0)
                         {
                             newObject.isAdmin = false;
@@ -551,24 +551,24 @@ namespace POS_Server.Controllers
                                 newObject.balanceType = 0;
                                 userObj = userEntity.Add(newObject);
                                 // get all categories
-                                var categories = entity.categories.Where(x => x.isActive == 1).Select(x => x.categoryId).ToList();
-                                int sequence = 0;
-                                for (int i = 0; i < categories.Count; i++)
-                                {
-                                    sequence++;
-                                    int categoryId = categories[i];
-                                    categoryuser cu = new categoryuser()
-                                    {
-                                        categoryId = categoryId,
-                                        userId = userObj.userId,
-                                        sequence = sequence,
-                                        createDate = DateTime.Now,
-                                        updateDate = DateTime.Now,
-                                        createUserId = newObject.createUserId,
-                                        updateUserId = newObject.updateUserId,
-                                    };
-                                    catEntity.Add(cu);
-                                }
+                                //var categories = entity.categories.Where(x => x.isActive == 1).Select(x => x.categoryId).ToList();
+                                //int sequence = 0;
+                                //for (int i = 0; i < categories.Count; i++)
+                                //{
+                                //    sequence++;
+                                //    int categoryId = categories[i];
+                                //    categoryuser cu = new categoryuser()
+                                //    {
+                                //        categoryId = categoryId,
+                                //        userId = userObj.userId,
+                                //        sequence = sequence,
+                                //        createDate = DateTime.Now,
+                                //        updateDate = DateTime.Now,
+                                //        createUserId = newObject.createUserId,
+                                //        updateUserId = newObject.updateUserId,
+                                //    };
+                                //    catEntity.Add(cu);
+                                //}
                                 entity.SaveChanges().ToString();
                                 message = userObj.userId.ToString();
                                 return TokenManager.GenerateToken(message);

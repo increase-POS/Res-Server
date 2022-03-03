@@ -196,19 +196,6 @@
     <Property Name="notes" Type="ntext" />
     <Property Name="type" Type="nvarchar" MaxLength="50" />
   </EntityType>
-  <EntityType Name="categoryuser">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="categoryId" Type="int" />
-    <Property Name="userId" Type="int" />
-    <Property Name="sequence" Type="int" Nullable="false" />
-    <Property Name="createDate" Type="datetime2" Precision="7" />
-    <Property Name="updateDate" Type="datetime2" Precision="7" />
-    <Property Name="createUserId" Type="int" />
-    <Property Name="updateUserId" Type="int" />
-  </EntityType>
   <EntityType Name="cities">
     <Key>
       <PropertyRef Name="cityId" />
@@ -1796,54 +1783,6 @@
         <PropertyRef Name="userId" />
       </Principal>
       <Dependent Role="categories">
-        <PropertyRef Name="updateUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_categoryuser_categories">
-    <End Role="categories" Type="Self.categories" Multiplicity="0..1" />
-    <End Role="categoryuser" Type="Self.categoryuser" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="categories">
-        <PropertyRef Name="categoryId" />
-      </Principal>
-      <Dependent Role="categoryuser">
-        <PropertyRef Name="categoryId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_categoryuser_users">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="categoryuser" Type="Self.categoryuser" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="categoryuser">
-        <PropertyRef Name="userId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_categoryuser_users1">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="categoryuser" Type="Self.categoryuser" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="categoryuser">
-        <PropertyRef Name="createUserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_categoryuser_users2">
-    <End Role="users" Type="Self.users" Multiplicity="0..1" />
-    <End Role="categoryuser" Type="Self.categoryuser" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="users">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="categoryuser">
         <PropertyRef Name="updateUserId" />
       </Dependent>
     </ReferentialConstraint>
@@ -4199,7 +4138,6 @@
     <EntitySet Name="cards" EntityType="Self.cards" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="cashTransfer" EntityType="Self.cashTransfer" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="categories" EntityType="Self.categories" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="categoryuser" EntityType="Self.categoryuser" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="cities" EntityType="Self.cities" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="countriesCodes" EntityType="Self.countriesCodes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="coupons" EntityType="Self.coupons" Schema="dbo" store:Type="Tables" />
@@ -4424,22 +4362,6 @@
     <AssociationSet Name="FK_categories_users1" Association="Self.FK_categories_users1">
       <End Role="users" EntitySet="users" />
       <End Role="categories" EntitySet="categories" />
-    </AssociationSet>
-    <AssociationSet Name="FK_categoryuser_categories" Association="Self.FK_categoryuser_categories">
-      <End Role="categories" EntitySet="categories" />
-      <End Role="categoryuser" EntitySet="categoryuser" />
-    </AssociationSet>
-    <AssociationSet Name="FK_categoryuser_users" Association="Self.FK_categoryuser_users">
-      <End Role="users" EntitySet="users" />
-      <End Role="categoryuser" EntitySet="categoryuser" />
-    </AssociationSet>
-    <AssociationSet Name="FK_categoryuser_users1" Association="Self.FK_categoryuser_users1">
-      <End Role="users" EntitySet="users" />
-      <End Role="categoryuser" EntitySet="categoryuser" />
-    </AssociationSet>
-    <AssociationSet Name="FK_categoryuser_users2" Association="Self.FK_categoryuser_users2">
-      <End Role="users" EntitySet="users" />
-      <End Role="categoryuser" EntitySet="categoryuser" />
     </AssociationSet>
     <AssociationSet Name="FK_cities_countriesCodes" Association="Self.FK_cities_countriesCodes">
       <End Role="countriesCodes" EntitySet="countriesCodes" />

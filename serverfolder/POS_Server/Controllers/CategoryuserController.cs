@@ -284,171 +284,171 @@ namespace POS_Server.Controllers
 
 
         #region
-        [HttpPost]
-        [Route("UpdateCatUserList")]
+ //       [HttpPost]
+ //       [Route("UpdateCatUserList")]
 
-        public string UpdateCatUserList(string token)
-        {
+ //       public string UpdateCatUserList(string token)
+ //       {
 
-            // string token newlist
-
-
+ //           // string token newlist
 
 
-          token = TokenManager.readToken(HttpContext.Current.Request); 
- var strP = TokenManager.GetPrincipal(token);
-            if (strP != "0") //invalid authorization
-            {
-                return TokenManager.GenerateToken(strP);
-            }
-            else
-            {
-                List<categoryuser> newCatlist = new List<categoryuser>();
-                string newlist = "";
-                List<itemsUnits> newiuObj = new List<itemsUnits>();
-                int userId = 0;
 
-                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
-                foreach (Claim c in claims)
-                {
-                    if (c.Type == "newlist")
-                    {
-                        newlist = c.Value.Replace("\\", string.Empty);
-                        newlist = newlist.Trim('"');
-                        newCatlist = JsonConvert.DeserializeObject<List<categoryuser>>(newlist, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+
+ //         token = TokenManager.readToken(HttpContext.Current.Request); 
+ //var strP = TokenManager.GetPrincipal(token);
+ //           if (strP != "0") //invalid authorization
+ //           {
+ //               return TokenManager.GenerateToken(strP);
+ //           }
+ //           else
+ //           {
+ //             List<categoryuser> newCatlist = new List<categoryuser>();
+ //               string newlist = "";
+ //               List<itemsUnits> newiuObj = new List<itemsUnits>();
+ //               int userId = 0;
+
+ //               IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+ //               foreach (Claim c in claims)
+ //               {
+ //                   if (c.Type == "newlist")
+ //                   {
+ //                       newlist = c.Value.Replace("\\", string.Empty);
+ //                       newlist = newlist.Trim('"');
+ //                       newCatlist = JsonConvert.DeserializeObject<List<categoryuser>>(newlist, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
                       
-                    }
-                   else if (c.Type == "userId")
-                    {
-                        userId = int.Parse(c.Value);
-                    }
+ //                   }
+ //                  else if (c.Type == "userId")
+ //                   {
+ //                       userId = int.Parse(c.Value);
+ //                   }
 
 
-                }
+ //               }
 
-                // DateTime cmpdate = DateTime.Now.AddDays(newdays);
-                try
-                {
-                    int res = 0;
-                    using (incposdbEntities entity = new incposdbEntities())
-                    {
+ //               // DateTime cmpdate = DateTime.Now.AddDays(newdays);
+ //               try
+ //               {
+ //                   int res = 0;
+ //                   using (incposdbEntities entity = new incposdbEntities())
+ //                   {
 
-                        if (newCatlist.Count() > 0)
-                        {
-                            categoryuser oldrow = new categoryuser();
+ //                       if (newCatlist.Count() > 0)
+ //                       {
+ //                           categoryuser oldrow = new categoryuser();
 
-                            foreach (categoryuser newcatRow in newCatlist)
-                            {
-                                oldrow = entity.categoryuser.ToList()
-                                    .Where(X => X.id == newcatRow.id).FirstOrDefault();
-                                //if(newcatRow.id>0)
-                                oldrow.userId = userId;
-                                oldrow.categoryId = newcatRow.categoryId;
-                                oldrow.sequence = newcatRow.sequence;
+ //                           foreach (categoryuser newcatRow in newCatlist)
+ //                           {
+ //                               oldrow = entity.categoryuser.ToList()
+ //                                   .Where(X => X.id == newcatRow.id).FirstOrDefault();
+ //                               //if(newcatRow.id>0)
+ //                               oldrow.userId = userId;
+ //                               oldrow.categoryId = newcatRow.categoryId;
+ //                               oldrow.sequence = newcatRow.sequence;
 
-                                if (oldrow.createDate == null)
-                                {
-                                    oldrow.createDate = DateTime.Now;
-                                    oldrow.updateDate = DateTime.Now;
-                                    oldrow.updateUserId = newcatRow.createUserId;
-                                }
-                                else
-                                {
-                                    oldrow.updateDate = DateTime.Now;
+ //                               if (oldrow.createDate == null)
+ //                               {
+ //                                   oldrow.createDate = DateTime.Now;
+ //                                   oldrow.updateDate = DateTime.Now;
+ //                                   oldrow.updateUserId = newcatRow.createUserId;
+ //                               }
+ //                               else
+ //                               {
+ //                                   oldrow.updateDate = DateTime.Now;
 
-                                }
+ //                               }
 
-                                entity.categoryuser.AddOrUpdate(oldrow);
-                                res = entity.SaveChanges();
-                            }
+ //                               entity.categoryuser.AddOrUpdate(oldrow);
+ //                               res = entity.SaveChanges();
+ //                           }
 
-                        }
+ //                       }
 
-                        return TokenManager.GenerateToken(res.ToString());
-                      //  return res.ToString();
-
-
-                    }
+ //                       return TokenManager.GenerateToken(res.ToString());
+ //                     //  return res.ToString();
 
 
-                }
-                catch
-                {
-                    return TokenManager.GenerateToken("0");
-                }
+ //                   }
 
 
-            }
+ //               }
+ //               catch
+ //               {
+ //                   return TokenManager.GenerateToken("0");
+ //               }
+
+
+ //           }
 
 
 
-            //int userId = 0;
-            //var re = Request;
-            //var headers = re.Headers;
-            //int res = 0;
-            //string token = "";
-            //if (headers.Contains("APIKey"))
-            //{
-            //    token = headers.GetValues("APIKey").First();
-            //}
-            //if (headers.Contains("userId"))
-            //{
-            //    userId = Convert.ToInt32(headers.GetValues("userId").First());
-            //}
-            //Validation validation = new Validation();
-            //bool valid = validation.CheckApiKey(token);
-            //newlist = newlist.Replace("\\", string.Empty);
-            //newlist = newlist.Trim('"');
-            //List<categoryuser> newCatlist = JsonConvert.DeserializeObject<List<categoryuser>>(newlist, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
-            //if (valid)
-            //{
-            //    using (incposdbEntities entity = new incposdbEntities())
-            //    {
+ //           //int userId = 0;
+ //           //var re = Request;
+ //           //var headers = re.Headers;
+ //           //int res = 0;
+ //           //string token = "";
+ //           //if (headers.Contains("APIKey"))
+ //           //{
+ //           //    token = headers.GetValues("APIKey").First();
+ //           //}
+ //           //if (headers.Contains("userId"))
+ //           //{
+ //           //    userId = Convert.ToInt32(headers.GetValues("userId").First());
+ //           //}
+ //           //Validation validation = new Validation();
+ //           //bool valid = validation.CheckApiKey(token);
+ //           //newlist = newlist.Replace("\\", string.Empty);
+ //           //newlist = newlist.Trim('"');
+ //           //List<categoryuser> newCatlist = JsonConvert.DeserializeObject<List<categoryuser>>(newlist, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+ //           //if (valid)
+ //           //{
+ //           //    using (incposdbEntities entity = new incposdbEntities())
+ //           //    {
 
-            //        if (newCatlist.Count() > 0)
-            //        {
-            //            categoryuser oldrow = new categoryuser();
+ //           //        if (newCatlist.Count() > 0)
+ //           //        {
+ //           //            categoryuser oldrow = new categoryuser();
 
-            //            foreach (categoryuser newcatRow in newCatlist)
-            //            {
-            //                oldrow = entity.categoryuser.ToList()
-            //                    .Where(X => X.id == newcatRow.id).FirstOrDefault();
-            //                //if(newcatRow.id>0)
-            //                oldrow.userId = userId;
-            //                oldrow.categoryId = newcatRow.categoryId;
-            //                oldrow.sequence = newcatRow.sequence;
+ //           //            foreach (categoryuser newcatRow in newCatlist)
+ //           //            {
+ //           //                oldrow = entity.categoryuser.ToList()
+ //           //                    .Where(X => X.id == newcatRow.id).FirstOrDefault();
+ //           //                //if(newcatRow.id>0)
+ //           //                oldrow.userId = userId;
+ //           //                oldrow.categoryId = newcatRow.categoryId;
+ //           //                oldrow.sequence = newcatRow.sequence;
 
-            //                if (oldrow.createDate == null)
-            //                {
-            //                    oldrow.createDate = DateTime.Now;
-            //                    oldrow.updateDate = DateTime.Now;
-            //                    oldrow.updateUserId = newcatRow.createUserId;
-            //                }
-            //                else
-            //                {
-            //                    oldrow.updateDate = DateTime.Now;
+ //           //                if (oldrow.createDate == null)
+ //           //                {
+ //           //                    oldrow.createDate = DateTime.Now;
+ //           //                    oldrow.updateDate = DateTime.Now;
+ //           //                    oldrow.updateUserId = newcatRow.createUserId;
+ //           //                }
+ //           //                else
+ //           //                {
+ //           //                    oldrow.updateDate = DateTime.Now;
 
-            //                }
+ //           //                }
 
-            //                entity.categoryuser.AddOrUpdate(oldrow);
-            //                res = entity.SaveChanges();
-            //            }
+ //           //                entity.categoryuser.AddOrUpdate(oldrow);
+ //           //                res = entity.SaveChanges();
+ //           //            }
 
-            //        }
-
-
-            //        return res.ToString();
+ //           //        }
 
 
-            //    }
+ //           //        return res.ToString();
 
-            //}
-            //else
-            //{
-            //    return "-1";
-            //}
 
-        }
+ //           //    }
+
+ //           //}
+ //           //else
+ //           //{
+ //           //    return "-1";
+ //           //}
+
+ //       }
         #endregion
 
 

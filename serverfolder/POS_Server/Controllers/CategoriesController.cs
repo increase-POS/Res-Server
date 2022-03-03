@@ -502,7 +502,7 @@ var strP = TokenManager.GetPrincipal(token);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var categoryEntity = entity.Set<categories>();
-                        var catEntity = entity.Set<categoryuser>();
+                      //  var catEntity = entity.Set<categoryuser>();
                         if (newObject.categoryId == 0)
                         {
                             newObject.createDate = DateTime.Now;

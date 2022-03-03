@@ -207,20 +207,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="categoryuser">
-      <EntityTypeMapping TypeName="PosModel.categoryuser">
-        <MappingFragment StoreEntitySet="categoryuser">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="sequence" ColumnName="sequence" />
-          <ScalarProperty Name="createDate" ColumnName="createDate" />
-          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
-          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
-          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="cities">
       <EntityTypeMapping TypeName="PosModel.cities">
         <MappingFragment StoreEntitySet="cities">
