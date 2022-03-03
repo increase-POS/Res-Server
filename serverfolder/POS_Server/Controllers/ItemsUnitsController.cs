@@ -99,6 +99,8 @@ namespace POS_Server.Controllers
                                              join u in entity.units on IU.unitId equals u.unitId into lj
                                              from v in lj.DefaultIfEmpty()
                                              join I in entity.items.Where(x => x.isActive == 1) on IU.itemId equals I.itemId
+                                             join u1 in entity.units on IU.subUnitId equals u1.unitId into tj
+                                             from v1 in tj.DefaultIfEmpty()
                                              select new ItemUnitModel()
                                              {
                                                  itemUnitId = IU.itemUnitId,
@@ -122,6 +124,8 @@ namespace POS_Server.Controllers
                                                  isActive = IU.isActive,
                                                  type = I.type,
                                                  categoryId = I.categoryId,
+                                                 smallUnit = v1.name,
+                                                 countSmallUnit = IU.unitValue + " " + v1.name,
                                              }).OrderBy(x => x.itemName).ToList();
                         return TokenManager.GenerateToken(itemUnitsList);
                     }
@@ -221,9 +225,9 @@ namespace POS_Server.Controllers
                     using (incposdbEntities entity = new incposdbEntities())
                 {
                     var itemUnitsList = (from IU in entity.itemsUnits
-                                         where (IU.itemId == itemId)
                                          join u in entity.units on IU.unitId equals u.unitId into lj
                                          from v in lj.DefaultIfEmpty()
+                                         join I in entity.items.Where(x => x.isActive == 1) on IU.itemId equals I.itemId
                                          join u1 in entity.units on IU.subUnitId equals u1.unitId into tj
                                          from v1 in tj.DefaultIfEmpty()
                                          select new ItemUnitModel()
