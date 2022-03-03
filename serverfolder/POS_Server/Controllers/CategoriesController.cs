@@ -115,7 +115,7 @@ namespace POS_Server.Controllers
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var categoriesList = (from p in entity.categories 
-                             join cu in entity.categoryuser on p.categoryId equals cu.categoryId where cu.userId == userId
+                          //   join cu in entity.categoryuser on p.categoryId equals cu.categoryId where cu.userId == userId
                              select new CategoryModel()
                              {
                                  categoryId = p.categoryId,
@@ -131,7 +131,7 @@ namespace POS_Server.Controllers
                                  updateDate = p.updateDate,
                                  updateUserId = p.updateUserId,
                                  isActive = p.isActive,
-                                 sequence = cu.sequence,
+                               //  sequence = cu.sequence,
                                  type=p.type,
                               
                              }).ToList().OrderBy(x => x.sequence).ToList();
@@ -189,8 +189,8 @@ var strP = TokenManager.GetPrincipal(token);
                     if (categoryId != 0)
                     {
                         var categoriesList = (from p in entity.categories.Where(x => x.isActive == 1)
-                                 join cu in entity.categoryuser on p.categoryId equals cu.categoryId
-                                 where cu.userId == userId
+                                 //join cu in entity.categoryuser on p.categoryId equals cu.categoryId
+                               //  where cu.userId == userId
                                  select new CategoryModel() {
                                      categoryId = p.categoryId,
                                      name = p.name,
@@ -205,7 +205,7 @@ var strP = TokenManager.GetPrincipal(token);
                                      updateDate = p.updateDate,
                                      updateUserId = p.updateUserId,
                                      isActive = p.isActive,
-                                     sequence = cu.sequence,
+                                    // sequence = cu.sequence,
                                      type = p.type,
                                  }).ToList().OrderBy(x => x.sequence).ToList();
 
@@ -214,8 +214,8 @@ var strP = TokenManager.GetPrincipal(token);
                     else
                     {
                         var categoriesList = (from p in entity.categories.Where(x =>  x.isActive == 1)
-                                              join cu in entity.categoryuser on p.categoryId equals cu.categoryId
-                                              where cu.userId == userId
+                                            //  join cu in entity.categoryuser on p.categoryId equals cu.categoryId
+                                             // where cu.userId == userId
                                               select new CategoryModel()
                                               {
                                                   categoryId = p.categoryId,
@@ -231,7 +231,7 @@ var strP = TokenManager.GetPrincipal(token);
                                                   updateDate = p.updateDate,
                                                   updateUserId = p.updateUserId,
                                                   isActive = p.isActive,
-                                                  sequence = cu.sequence,
+                                                //  sequence = cu.sequence,
                                                   type = p.type,
                                               }).ToList().OrderBy(x => x.sequence).ToList();
 
@@ -395,8 +395,8 @@ var strP = TokenManager.GetPrincipal(token);
                     if (categoryId != 0)
                     {
                         var categoriesList = (from C in entity.categories
-                                              join S in entity.categoryuser on C.categoryId equals S.categoryId into jS
-                                              from jSS in jS.DefaultIfEmpty()
+                                             // join S in entity.categoryuser on C.categoryId equals S.categoryId into jS
+                                           //   from jSS in jS.DefaultIfEmpty()
                                               select new
                                               {
                                                   C.categoryId,
@@ -412,13 +412,13 @@ var strP = TokenManager.GetPrincipal(token);
                                                   C.updateDate,
                                                   C.updateUserId,
                                                   C.isActive,
-                                                  jSS.sequence,
-                                                  jSS.userId,
+                                                  //jSS.sequence,
+                                                //  jSS.userId,
                                                  C.type,
                                               }
 
 
-                      ).Where(c => c.isActive == 1 && c.userId == userId).OrderBy(c => c.sequence)
+                      ).Where(c => c.isActive == 1)
 
                        .ToList();
                       
@@ -427,8 +427,8 @@ var strP = TokenManager.GetPrincipal(token);
                     else
                     {
                         var categoriesList = (from C in entity.categories
-                                              join S in entity.categoryuser on C.categoryId equals S.categoryId into jS
-                                              from jSS in jS.DefaultIfEmpty()
+                                             // join S in entity.categoryuser on C.categoryId equals S.categoryId into jS
+                                           //   from jSS in jS.DefaultIfEmpty()
                                               select new
                                               {
                                                   C.categoryId,
@@ -444,14 +444,14 @@ var strP = TokenManager.GetPrincipal(token);
                                                   C.updateDate,
                                                   C.updateUserId,
                                                   C.isActive,
-                                                  jSS.sequence,
-                                                  jSS.userId,
+                                                 // jSS.sequence,
+                                                 // jSS.userId,
                                               C.type,
                                            
                                               }
 
 
-                      ).Where(c =>  c.isActive == 1 && c.userId == userId)
+                      ).Where(c =>  c.isActive == 1 )
                        .ToList();
                       
                     return TokenManager.GenerateToken(categoriesList);

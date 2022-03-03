@@ -1317,6 +1317,7 @@ D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.csproj.CoreC
 D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.csproj.CopyComplete
 D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.dll
 D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.pdb
+D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.csprojAssemblyReference.cache
 D:\Project\Res-Server\POS_Server\bin\POS_Server.dll.config
 D:\Project\Res-Server\POS_Server\bin\POS_Server.xml
 D:\Project\Res-Server\POS_Server\bin\POS_Server.dll
@@ -1832,4 +1833,4 @@ D:\servers\Restaurant-Server\POS_Server\obj\Release\POS_Server.pdb
 \\DESKTOP-NS2EFD4\servers\Restaurant-Server\POS_Server\obj\Release\POS_Server.csproj.CopyComplete
 \\DESKTOP-NS2EFD4\servers\Restaurant-Server\POS_Server\obj\Release\POS_Server.dll
 \\DESKTOP-NS2EFD4\servers\Restaurant-Server\POS_Server\obj\Release\POS_Server.pdb
-D:\myproj\Res-Server\serverfolder\POS_Server\obj\Release\POS_Server.csprojAssemblyReference.cache
+D:\servers\Restaurant-Server\POS_Server\obj\Release\POS_Server.csprojAssemblyReference.cache

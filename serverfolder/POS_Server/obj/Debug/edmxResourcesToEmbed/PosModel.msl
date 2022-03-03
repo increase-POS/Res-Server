@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="incposdbModelStoreContainer" CdmEntityContainer="incposdbEntities">
+  <EntityContainerMapping StorageEntityContainer="PosModelStoreContainer" CdmEntityContainer="incposdbEntities">
     <EntitySetMapping Name="agentMemberships">
-      <EntityTypeMapping TypeName="incposdbModel.agentMemberships">
+      <EntityTypeMapping TypeName="PosModel.agentMemberships">
         <MappingFragment StoreEntitySet="agentMemberships">
           <ScalarProperty Name="agentMembershipsId" ColumnName="agentMembershipsId" />
           <ScalarProperty Name="subscriptionFeesId" ColumnName="subscriptionFeesId" />
@@ -21,7 +21,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="agents">
-      <EntityTypeMapping TypeName="incposdbModel.agents">
+      <EntityTypeMapping TypeName="PosModel.agents">
         <MappingFragment StoreEntitySet="agents">
           <ScalarProperty Name="agentId" ColumnName="agentId" />
           <ScalarProperty Name="pointId" ColumnName="pointId" />
@@ -47,11 +47,15 @@
           <ScalarProperty Name="maxDeserve" ColumnName="maxDeserve" />
           <ScalarProperty Name="isLimited" ColumnName="isLimited" />
           <ScalarProperty Name="payType" ColumnName="payType" />
+          <ScalarProperty Name="canReserve" ColumnName="canReserve" />
+          <ScalarProperty Name="disallowReason" ColumnName="disallowReason" />
+          <ScalarProperty Name="residentSecId" ColumnName="residentSecId" />
+          <ScalarProperty Name="GPSAddress" ColumnName="GPSAddress" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="banks">
-      <EntityTypeMapping TypeName="incposdbModel.banks">
+      <EntityTypeMapping TypeName="PosModel.banks">
         <MappingFragment StoreEntitySet="banks">
           <ScalarProperty Name="bankId" ColumnName="bankId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -69,7 +73,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="bondes">
-      <EntityTypeMapping TypeName="incposdbModel.bondes">
+      <EntityTypeMapping TypeName="PosModel.bondes">
         <MappingFragment StoreEntitySet="bondes">
           <ScalarProperty Name="bondId" ColumnName="bondId" />
           <ScalarProperty Name="number" ColumnName="number" />
@@ -88,7 +92,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="branches">
-      <EntityTypeMapping TypeName="incposdbModel.branches">
+      <EntityTypeMapping TypeName="PosModel.branches">
         <MappingFragment StoreEntitySet="branches">
           <ScalarProperty Name="branchId" ColumnName="branchId" />
           <ScalarProperty Name="code" ColumnName="code" />
@@ -109,7 +113,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="branchesUsers">
-      <EntityTypeMapping TypeName="incposdbModel.branchesUsers">
+      <EntityTypeMapping TypeName="PosModel.branchesUsers">
         <MappingFragment StoreEntitySet="branchesUsers">
           <ScalarProperty Name="branchsUsersId" ColumnName="branchsUsersId" />
           <ScalarProperty Name="branchId" ColumnName="branchId" />
@@ -122,12 +126,12 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="branchStore">
-      <EntityTypeMapping TypeName="incposdbModel.branchStore">
+      <EntityTypeMapping TypeName="PosModel.branchStore">
         <MappingFragment StoreEntitySet="branchStore">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="branchId" ColumnName="branchId" />
           <ScalarProperty Name="storeId" ColumnName="storeId" />
-          <ScalarProperty Name="note" ColumnName="note" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
@@ -137,7 +141,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="cards">
-      <EntityTypeMapping TypeName="incposdbModel.cards">
+      <EntityTypeMapping TypeName="PosModel.cards">
         <MappingFragment StoreEntitySet="cards">
           <ScalarProperty Name="cardId" ColumnName="cardId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -153,7 +157,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="cashTransfer">
-      <EntityTypeMapping TypeName="incposdbModel.cashTransfer">
+      <EntityTypeMapping TypeName="PosModel.cashTransfer">
         <MappingFragment StoreEntitySet="cashTransfer">
           <ScalarProperty Name="cashTransId" ColumnName="cashTransId" />
           <ScalarProperty Name="agentMembershipsId" ColumnName="agentMembershipsId" />
@@ -185,7 +189,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="categories">
-      <EntityTypeMapping TypeName="incposdbModel.categories">
+      <EntityTypeMapping TypeName="PosModel.categories">
         <MappingFragment StoreEntitySet="categories">
           <ScalarProperty Name="categoryId" ColumnName="categoryId" />
           <ScalarProperty Name="categoryCode" ColumnName="categoryCode" />
@@ -194,31 +198,17 @@
           <ScalarProperty Name="image" ColumnName="image" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
           <ScalarProperty Name="taxes" ColumnName="taxes" />
-          <ScalarProperty Name="parentId" ColumnName="parentId" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
           <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
           <ScalarProperty Name="notes" ColumnName="notes" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="categoryuser">
-      <EntityTypeMapping TypeName="incposdbModel.categoryuser">
-        <MappingFragment StoreEntitySet="categoryuser">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="sequence" ColumnName="sequence" />
-          <ScalarProperty Name="createDate" ColumnName="createDate" />
-          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
-          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
-          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+          <ScalarProperty Name="type" ColumnName="type" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="cities">
-      <EntityTypeMapping TypeName="incposdbModel.cities">
+      <EntityTypeMapping TypeName="PosModel.cities">
         <MappingFragment StoreEntitySet="cities">
           <ScalarProperty Name="cityId" ColumnName="cityId" />
           <ScalarProperty Name="cityCode" ColumnName="cityCode" />
@@ -227,7 +217,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="countriesCodes">
-      <EntityTypeMapping TypeName="incposdbModel.countriesCodes">
+      <EntityTypeMapping TypeName="PosModel.countriesCodes">
         <MappingFragment StoreEntitySet="countriesCodes">
           <ScalarProperty Name="countryId" ColumnName="countryId" />
           <ScalarProperty Name="code" ColumnName="code" />
@@ -239,7 +229,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="coupons">
-      <EntityTypeMapping TypeName="incposdbModel.coupons">
+      <EntityTypeMapping TypeName="PosModel.coupons">
         <MappingFragment StoreEntitySet="coupons">
           <ScalarProperty Name="cId" ColumnName="cId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -259,11 +249,12 @@
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
           <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
           <ScalarProperty Name="barcode" ColumnName="barcode" />
+          <ScalarProperty Name="forAgents" ColumnName="forAgents" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="couponsInvoices">
-      <EntityTypeMapping TypeName="incposdbModel.couponsInvoices">
+      <EntityTypeMapping TypeName="PosModel.couponsInvoices">
         <MappingFragment StoreEntitySet="couponsInvoices">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="couponId" ColumnName="couponId" />
@@ -277,15 +268,44 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="couponsMemberships">
+      <EntityTypeMapping TypeName="PosModel.couponsMemberships">
+        <MappingFragment StoreEntitySet="couponsMemberships">
+          <ScalarProperty Name="couponMembershipId" ColumnName="couponMembershipId" />
+          <ScalarProperty Name="cId" ColumnName="cId" />
+          <ScalarProperty Name="membershipId" ColumnName="membershipId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dishIngredients">
+      <EntityTypeMapping TypeName="PosModel.dishIngredients">
+        <MappingFragment StoreEntitySet="dishIngredients">
+          <ScalarProperty Name="dishIngredId" ColumnName="dishIngredId" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="itemUnitId" ColumnName="itemUnitId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="docImages">
-      <EntityTypeMapping TypeName="incposdbModel.docImages">
+      <EntityTypeMapping TypeName="PosModel.docImages">
         <MappingFragment StoreEntitySet="docImages">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="docName" ColumnName="docName" />
           <ScalarProperty Name="docnum" ColumnName="docnum" />
           <ScalarProperty Name="image" ColumnName="image" />
           <ScalarProperty Name="tableName" ColumnName="tableName" />
-          <ScalarProperty Name="note" ColumnName="note" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
@@ -295,7 +315,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="error">
-      <EntityTypeMapping TypeName="incposdbModel.error">
+      <EntityTypeMapping TypeName="PosModel.error">
         <MappingFragment StoreEntitySet="error">
           <ScalarProperty Name="errorId" ColumnName="errorId" />
           <ScalarProperty Name="num" ColumnName="num" />
@@ -310,11 +330,11 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Expenses">
-      <EntityTypeMapping TypeName="incposdbModel.Expenses">
+      <EntityTypeMapping TypeName="PosModel.Expenses">
         <MappingFragment StoreEntitySet="Expenses">
           <ScalarProperty Name="exId" ColumnName="exId" />
           <ScalarProperty Name="expense" ColumnName="expense" />
-          <ScalarProperty Name="note" ColumnName="note" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
@@ -324,7 +344,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="groupObject">
-      <EntityTypeMapping TypeName="incposdbModel.groupObject">
+      <EntityTypeMapping TypeName="PosModel.groupObject">
         <MappingFragment StoreEntitySet="groupObject">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="groupId" ColumnName="groupId" />
@@ -345,7 +365,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="groups">
-      <EntityTypeMapping TypeName="incposdbModel.groups">
+      <EntityTypeMapping TypeName="PosModel.groups">
         <MappingFragment StoreEntitySet="groups">
           <ScalarProperty Name="groupId" ColumnName="groupId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -358,8 +378,26 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="hallSections">
+      <EntityTypeMapping TypeName="PosModel.hallSections">
+        <MappingFragment StoreEntitySet="hallSections">
+          <ScalarProperty Name="sectionId" ColumnName="sectionId" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+          <ScalarProperty Name="branchId" ColumnName="branchId" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="details" ColumnName="details" />
+          <ScalarProperty Name="isFreeZone" ColumnName="isFreeZone" />
+          <ScalarProperty Name="type" ColumnName="type" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Inventory">
-      <EntityTypeMapping TypeName="incposdbModel.Inventory">
+      <EntityTypeMapping TypeName="PosModel.Inventory">
         <MappingFragment StoreEntitySet="Inventory">
           <ScalarProperty Name="inventoryId" ColumnName="inventoryId" />
           <ScalarProperty Name="num" ColumnName="num" />
@@ -377,7 +415,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="inventoryItemLocation">
-      <EntityTypeMapping TypeName="incposdbModel.inventoryItemLocation">
+      <EntityTypeMapping TypeName="PosModel.inventoryItemLocation">
         <MappingFragment StoreEntitySet="inventoryItemLocation">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="isDestroyed" ColumnName="isDestroyed" />
@@ -399,7 +437,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="invoiceOrder">
-      <EntityTypeMapping TypeName="incposdbModel.invoiceOrder">
+      <EntityTypeMapping TypeName="PosModel.invoiceOrder">
         <MappingFragment StoreEntitySet="invoiceOrder">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
@@ -410,7 +448,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="invoices">
-      <EntityTypeMapping TypeName="incposdbModel.invoices">
+      <EntityTypeMapping TypeName="PosModel.invoices">
         <MappingFragment StoreEntitySet="invoices">
           <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
           <ScalarProperty Name="invNumber" ColumnName="invNumber" />
@@ -451,11 +489,46 @@
           <ScalarProperty Name="cashReturn" ColumnName="cashReturn" />
           <ScalarProperty Name="printedcount" ColumnName="printedcount" />
           <ScalarProperty Name="isOrginal" ColumnName="isOrginal" />
+          <ScalarProperty Name="waiterId" ColumnName="waiterId" />
+          <ScalarProperty Name="shippingCost" ColumnName="shippingCost" />
+          <ScalarProperty Name="realShippingCost" ColumnName="realShippingCost" />
+          <ScalarProperty Name="reservationId" ColumnName="reservationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="invoicesClass">
+      <EntityTypeMapping TypeName="PosModel.invoicesClass">
+        <MappingFragment StoreEntitySet="invoicesClass">
+          <ScalarProperty Name="invClassId" ColumnName="invClassId" />
+          <ScalarProperty Name="minInvoiceValue" ColumnName="minInvoiceValue" />
+          <ScalarProperty Name="MaxInvoiceValue" ColumnName="MaxInvoiceValue" />
+          <ScalarProperty Name="discountValue" ColumnName="discountValue" />
+          <ScalarProperty Name="discountType" ColumnName="discountType" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="invoicesClassMemberships">
+      <EntityTypeMapping TypeName="PosModel.invoicesClassMemberships">
+        <MappingFragment StoreEntitySet="invoicesClassMemberships">
+          <ScalarProperty Name="invClassMemberId" ColumnName="invClassMemberId" />
+          <ScalarProperty Name="membershipId" ColumnName="membershipId" />
+          <ScalarProperty Name="invClassId" ColumnName="invClassId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="invoiceStatus">
-      <EntityTypeMapping TypeName="incposdbModel.invoiceStatus">
+      <EntityTypeMapping TypeName="PosModel.invoiceStatus">
         <MappingFragment StoreEntitySet="invoiceStatus">
           <ScalarProperty Name="invStatusId" ColumnName="invStatusId" />
           <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
@@ -469,8 +542,22 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="invoiceTables">
+      <EntityTypeMapping TypeName="PosModel.invoiceTables">
+        <MappingFragment StoreEntitySet="invoiceTables">
+          <ScalarProperty Name="invTableId" ColumnName="invTableId" />
+          <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
+          <ScalarProperty Name="tableId" ColumnName="tableId" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="items">
-      <EntityTypeMapping TypeName="incposdbModel.items">
+      <EntityTypeMapping TypeName="PosModel.items">
         <MappingFragment StoreEntitySet="items">
           <ScalarProperty Name="itemId" ColumnName="itemId" />
           <ScalarProperty Name="code" ColumnName="code" />
@@ -491,11 +578,14 @@
           <ScalarProperty Name="minUnitId" ColumnName="minUnitId" />
           <ScalarProperty Name="maxUnitId" ColumnName="maxUnitId" />
           <ScalarProperty Name="avgPurchasePrice" ColumnName="avgPurchasePrice" />
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="categoryString" ColumnName="categoryString" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="itemsLocations">
-      <EntityTypeMapping TypeName="incposdbModel.itemsLocations">
+      <EntityTypeMapping TypeName="PosModel.itemsLocations">
         <MappingFragment StoreEntitySet="itemsLocations">
           <ScalarProperty Name="itemsLocId" ColumnName="itemsLocId" />
           <ScalarProperty Name="locationId" ColumnName="locationId" />
@@ -507,13 +597,13 @@
           <ScalarProperty Name="startDate" ColumnName="startDate" />
           <ScalarProperty Name="endDate" ColumnName="endDate" />
           <ScalarProperty Name="itemUnitId" ColumnName="itemUnitId" />
-          <ScalarProperty Name="note" ColumnName="note" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="itemsMaterials">
-      <EntityTypeMapping TypeName="incposdbModel.itemsMaterials">
+      <EntityTypeMapping TypeName="PosModel.itemsMaterials">
         <MappingFragment StoreEntitySet="itemsMaterials">
           <ScalarProperty Name="itemMatId" ColumnName="itemMatId" />
           <ScalarProperty Name="itemId" ColumnName="itemId" />
@@ -525,7 +615,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="itemsOffers">
-      <EntityTypeMapping TypeName="incposdbModel.itemsOffers">
+      <EntityTypeMapping TypeName="PosModel.itemsOffers">
         <MappingFragment StoreEntitySet="itemsOffers">
           <ScalarProperty Name="ioId" ColumnName="ioId" />
           <ScalarProperty Name="iuId" ColumnName="iuId" />
@@ -540,7 +630,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="itemsProp">
-      <EntityTypeMapping TypeName="incposdbModel.itemsProp">
+      <EntityTypeMapping TypeName="PosModel.itemsProp">
         <MappingFragment StoreEntitySet="itemsProp">
           <ScalarProperty Name="itemPropId" ColumnName="itemPropId" />
           <ScalarProperty Name="propertyItemId" ColumnName="propertyItemId" />
@@ -553,13 +643,11 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="itemsTransfer">
-      <EntityTypeMapping TypeName="incposdbModel.itemsTransfer">
+      <EntityTypeMapping TypeName="PosModel.itemsTransfer">
         <MappingFragment StoreEntitySet="itemsTransfer">
           <ScalarProperty Name="itemsTransId" ColumnName="itemsTransId" />
           <ScalarProperty Name="quantity" ColumnName="quantity" />
           <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
-          <ScalarProperty Name="locationIdNew" ColumnName="locationIdNew" />
-          <ScalarProperty Name="locationIdOld" ColumnName="locationIdOld" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
@@ -573,11 +661,15 @@
           <ScalarProperty Name="profit" ColumnName="profit" />
           <ScalarProperty Name="purchasePrice" ColumnName="purchasePrice" />
           <ScalarProperty Name="cause" ColumnName="cause" />
+          <ScalarProperty Name="itemTax" ColumnName="itemTax" />
+          <ScalarProperty Name="itemUnitPrice" ColumnName="itemUnitPrice" />
+          <ScalarProperty Name="offerValue" ColumnName="offerValue" />
+          <ScalarProperty Name="offerType" ColumnName="offerType" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="itemsUnits">
-      <EntityTypeMapping TypeName="incposdbModel.itemsUnits">
+      <EntityTypeMapping TypeName="PosModel.itemsUnits">
         <MappingFragment StoreEntitySet="itemsUnits">
           <ScalarProperty Name="itemUnitId" ColumnName="itemUnitId" />
           <ScalarProperty Name="itemId" ColumnName="itemId" />
@@ -586,7 +678,9 @@
           <ScalarProperty Name="defaultSale" ColumnName="defaultSale" />
           <ScalarProperty Name="defaultPurchase" ColumnName="defaultPurchase" />
           <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="priceWithService" ColumnName="priceWithService" />
           <ScalarProperty Name="barcode" ColumnName="barcode" />
+          <ScalarProperty Name="isCountable" ColumnName="isCountable" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
@@ -595,11 +689,12 @@
           <ScalarProperty Name="purchasePrice" ColumnName="purchasePrice" />
           <ScalarProperty Name="storageCostId" ColumnName="storageCostId" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="cost" ColumnName="cost" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="itemTransferOffer">
-      <EntityTypeMapping TypeName="incposdbModel.itemTransferOffer">
+      <EntityTypeMapping TypeName="PosModel.itemTransferOffer">
         <MappingFragment StoreEntitySet="itemTransferOffer">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="itemTransId" ColumnName="itemTransId" />
@@ -615,7 +710,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="itemUnitUser">
-      <EntityTypeMapping TypeName="incposdbModel.itemUnitUser">
+      <EntityTypeMapping TypeName="PosModel.itemUnitUser">
         <MappingFragment StoreEntitySet="itemUnitUser">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="itemUnitId" ColumnName="itemUnitId" />
@@ -630,7 +725,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="locations">
-      <EntityTypeMapping TypeName="incposdbModel.locations">
+      <EntityTypeMapping TypeName="PosModel.locations">
         <MappingFragment StoreEntitySet="locations">
           <ScalarProperty Name="locationId" ColumnName="locationId" />
           <ScalarProperty Name="x" ColumnName="x" />
@@ -642,14 +737,15 @@
           <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
           <ScalarProperty Name="sectionId" ColumnName="sectionId" />
-          <ScalarProperty Name="note" ColumnName="note" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="branchId" ColumnName="branchId" />
           <ScalarProperty Name="isFreeZone" ColumnName="isFreeZone" />
+          <ScalarProperty Name="isKitchen" ColumnName="isKitchen" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="medalAgent">
-      <EntityTypeMapping TypeName="incposdbModel.medalAgent">
+      <EntityTypeMapping TypeName="PosModel.medalAgent">
         <MappingFragment StoreEntitySet="medalAgent">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="medalId" ColumnName="medalId" />
@@ -664,7 +760,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="medals">
-      <EntityTypeMapping TypeName="incposdbModel.medals">
+      <EntityTypeMapping TypeName="PosModel.medals">
         <MappingFragment StoreEntitySet="medals">
           <ScalarProperty Name="medalId" ColumnName="medalId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -681,7 +777,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="memberships">
-      <EntityTypeMapping TypeName="incposdbModel.memberships">
+      <EntityTypeMapping TypeName="PosModel.memberships">
         <MappingFragment StoreEntitySet="memberships">
           <ScalarProperty Name="membershipId" ColumnName="membershipId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -698,8 +794,44 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="membershipsOffers">
+      <EntityTypeMapping TypeName="PosModel.membershipsOffers">
+        <MappingFragment StoreEntitySet="membershipsOffers">
+          <ScalarProperty Name="membershipOfferId" ColumnName="membershipOfferId" />
+          <ScalarProperty Name="membershipId" ColumnName="membershipId" />
+          <ScalarProperty Name="offerId" ColumnName="offerId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="menuSettings">
+      <EntityTypeMapping TypeName="PosModel.menuSettings">
+        <MappingFragment StoreEntitySet="menuSettings">
+          <ScalarProperty Name="menuSettingId" ColumnName="menuSettingId" />
+          <ScalarProperty Name="itemUnitId" ColumnName="itemUnitId" />
+          <ScalarProperty Name="sat" ColumnName="sat" />
+          <ScalarProperty Name="sun" ColumnName="sun" />
+          <ScalarProperty Name="mon" ColumnName="mon" />
+          <ScalarProperty Name="tues" ColumnName="tues" />
+          <ScalarProperty Name="wed" ColumnName="wed" />
+          <ScalarProperty Name="thur" ColumnName="thur" />
+          <ScalarProperty Name="fri" ColumnName="fri" />
+          <ScalarProperty Name="preparingTime" ColumnName="preparingTime" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="branchId" ColumnName="branchId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="notification">
-      <EntityTypeMapping TypeName="incposdbModel.notification">
+      <EntityTypeMapping TypeName="PosModel.notification">
         <MappingFragment StoreEntitySet="notification">
           <ScalarProperty Name="notId" ColumnName="notId" />
           <ScalarProperty Name="title" ColumnName="title" />
@@ -716,7 +848,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="notificationUser">
-      <EntityTypeMapping TypeName="incposdbModel.notificationUser">
+      <EntityTypeMapping TypeName="PosModel.notificationUser">
         <MappingFragment StoreEntitySet="notificationUser">
           <ScalarProperty Name="notUserId" ColumnName="notUserId" />
           <ScalarProperty Name="notId" ColumnName="notId" />
@@ -731,23 +863,20 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="objects">
-      <EntityTypeMapping TypeName="incposdbModel.objects">
+      <EntityTypeMapping TypeName="PosModel.objects">
         <MappingFragment StoreEntitySet="objects">
           <ScalarProperty Name="objectId" ColumnName="objectId" />
           <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="note" ColumnName="note" />
-          <ScalarProperty Name="createDate" ColumnName="createDate" />
-          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
-          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
-          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
-          <ScalarProperty Name="isActive" ColumnName="isActive" />
           <ScalarProperty Name="parentObjectId" ColumnName="parentObjectId" />
           <ScalarProperty Name="objectType" ColumnName="objectType" />
+          <ScalarProperty Name="translate" ColumnName="translate" />
+          <ScalarProperty Name="translateHint" ColumnName="translateHint" />
+          <ScalarProperty Name="icon" ColumnName="icon" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="offers">
-      <EntityTypeMapping TypeName="incposdbModel.offers">
+      <EntityTypeMapping TypeName="PosModel.offers">
         <MappingFragment StoreEntitySet="offers">
           <ScalarProperty Name="offerId" ColumnName="offerId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -762,11 +891,12 @@
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
           <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
           <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="forAgents" ColumnName="forAgents" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="packages">
-      <EntityTypeMapping TypeName="incposdbModel.packages">
+      <EntityTypeMapping TypeName="PosModel.packages">
         <MappingFragment StoreEntitySet="packages">
           <ScalarProperty Name="packageId" ColumnName="packageId" />
           <ScalarProperty Name="parentIUId" ColumnName="parentIUId" />
@@ -782,7 +912,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="paperSize">
-      <EntityTypeMapping TypeName="incposdbModel.paperSize">
+      <EntityTypeMapping TypeName="PosModel.paperSize">
         <MappingFragment StoreEntitySet="paperSize">
           <ScalarProperty Name="sizeId" ColumnName="sizeId" />
           <ScalarProperty Name="paperSize1" ColumnName="paperSize" />
@@ -792,7 +922,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Points">
-      <EntityTypeMapping TypeName="incposdbModel.Points">
+      <EntityTypeMapping TypeName="PosModel.Points">
         <MappingFragment StoreEntitySet="Points">
           <ScalarProperty Name="pointId" ColumnName="pointId" />
           <ScalarProperty Name="Cash" ColumnName="Cash" />
@@ -814,7 +944,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="pos">
-      <EntityTypeMapping TypeName="incposdbModel.pos">
+      <EntityTypeMapping TypeName="PosModel.pos">
         <MappingFragment StoreEntitySet="pos">
           <ScalarProperty Name="posId" ColumnName="posId" />
           <ScalarProperty Name="code" ColumnName="code" />
@@ -826,22 +956,25 @@
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
           <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
-          <ScalarProperty Name="note" ColumnName="note" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="balanceAll" ColumnName="balanceAll" />
+          <ScalarProperty Name="boxState" ColumnName="boxState" />
+          <ScalarProperty Name="isAdminClose" ColumnName="isAdminClose" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="posSerials">
-      <EntityTypeMapping TypeName="incposdbModel.posSerials">
+      <EntityTypeMapping TypeName="PosModel.posSerials">
         <MappingFragment StoreEntitySet="posSerials">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="posSerial" ColumnName="posSerial" />
           <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="posSetting">
-      <EntityTypeMapping TypeName="incposdbModel.posSetting">
+      <EntityTypeMapping TypeName="PosModel.posSetting">
         <MappingFragment StoreEntitySet="posSetting">
           <ScalarProperty Name="posSettingId" ColumnName="posSettingId" />
           <ScalarProperty Name="posId" ColumnName="posId" />
@@ -860,7 +993,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="posUsers">
-      <EntityTypeMapping TypeName="incposdbModel.posUsers">
+      <EntityTypeMapping TypeName="PosModel.posUsers">
         <MappingFragment StoreEntitySet="posUsers">
           <ScalarProperty Name="posUserId" ColumnName="posUserId" />
           <ScalarProperty Name="userId" ColumnName="userId" />
@@ -873,7 +1006,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="printers">
-      <EntityTypeMapping TypeName="incposdbModel.printers">
+      <EntityTypeMapping TypeName="PosModel.printers">
         <MappingFragment StoreEntitySet="printers">
           <ScalarProperty Name="printerId" ColumnName="printerId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -886,7 +1019,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ProgramDetails">
-      <EntityTypeMapping TypeName="incposdbModel.ProgramDetails">
+      <EntityTypeMapping TypeName="PosModel.ProgramDetails">
         <MappingFragment StoreEntitySet="ProgramDetails">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="programName" ColumnName="programName" />
@@ -907,11 +1040,29 @@
           <ScalarProperty Name="isOnlineServer" ColumnName="isOnlineServer" />
           <ScalarProperty Name="packageNumber" ColumnName="packageNumber" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="isLimitDate" ColumnName="isLimitDate" />
+          <ScalarProperty Name="isLimitCount" ColumnName="isLimitCount" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="packageName" ColumnName="packageName" />
+          <ScalarProperty Name="bookDate" ColumnName="bookDate" />
+          <ScalarProperty Name="pId" ColumnName="pId" />
+          <ScalarProperty Name="pcdId" ColumnName="pcdId" />
+          <ScalarProperty Name="customerName" ColumnName="customerName" />
+          <ScalarProperty Name="customerLastName" ColumnName="customerLastName" />
+          <ScalarProperty Name="agentName" ColumnName="agentName" />
+          <ScalarProperty Name="agentLastName" ColumnName="agentLastName" />
+          <ScalarProperty Name="agentAccountName" ColumnName="agentAccountName" />
+          <ScalarProperty Name="isServerActivated" ColumnName="isServerActivated" />
+          <ScalarProperty Name="activatedate" ColumnName="activatedate" />
+          <ScalarProperty Name="pocrDate" ColumnName="pocrDate" />
+          <ScalarProperty Name="poId" ColumnName="poId" />
+          <ScalarProperty Name="upnum" ColumnName="upnum" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="properties">
-      <EntityTypeMapping TypeName="incposdbModel.properties">
+      <EntityTypeMapping TypeName="PosModel.properties">
         <MappingFragment StoreEntitySet="properties">
           <ScalarProperty Name="propertyId" ColumnName="propertyId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -924,7 +1075,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="propertiesItems">
-      <EntityTypeMapping TypeName="incposdbModel.propertiesItems">
+      <EntityTypeMapping TypeName="PosModel.propertiesItems">
         <MappingFragment StoreEntitySet="propertiesItems">
           <ScalarProperty Name="propertyItemId" ColumnName="propertyItemId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -938,8 +1089,57 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="reservations">
+      <EntityTypeMapping TypeName="PosModel.reservations">
+        <MappingFragment StoreEntitySet="reservations">
+          <ScalarProperty Name="reservationId" ColumnName="reservationId" />
+          <ScalarProperty Name="code" ColumnName="code" />
+          <ScalarProperty Name="customerId" ColumnName="customerId" />
+          <ScalarProperty Name="reservationDate" ColumnName="reservationDate" />
+          <ScalarProperty Name="reservationTime" ColumnName="reservationTime" />
+          <ScalarProperty Name="personsCount" ColumnName="personsCount" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+          <ScalarProperty Name="endTime" ColumnName="endTime" />
+          <ScalarProperty Name="branchId" ColumnName="branchId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="residentialSectors">
+      <EntityTypeMapping TypeName="PosModel.residentialSectors">
+        <MappingFragment StoreEntitySet="residentialSectors">
+          <ScalarProperty Name="residentSecId" ColumnName="residentSecId" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="residentialSectorsUsers">
+      <EntityTypeMapping TypeName="PosModel.residentialSectorsUsers">
+        <MappingFragment StoreEntitySet="residentialSectorsUsers">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="residentSecId" ColumnName="residentSecId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="sections">
-      <EntityTypeMapping TypeName="incposdbModel.sections">
+      <EntityTypeMapping TypeName="PosModel.sections">
         <MappingFragment StoreEntitySet="sections">
           <ScalarProperty Name="sectionId" ColumnName="sectionId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -949,13 +1149,16 @@
           <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
           <ScalarProperty Name="branchId" ColumnName="branchId" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
-          <ScalarProperty Name="note" ColumnName="note" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="details" ColumnName="details" />
           <ScalarProperty Name="isFreeZone" ColumnName="isFreeZone" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="isKitchen" ColumnName="isKitchen" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="serials">
-      <EntityTypeMapping TypeName="incposdbModel.serials">
+      <EntityTypeMapping TypeName="PosModel.serials">
         <MappingFragment StoreEntitySet="serials">
           <ScalarProperty Name="serialId" ColumnName="serialId" />
           <ScalarProperty Name="itemId" ColumnName="itemId" />
@@ -968,22 +1171,8 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="servicesCosts">
-      <EntityTypeMapping TypeName="incposdbModel.servicesCosts">
-        <MappingFragment StoreEntitySet="servicesCosts">
-          <ScalarProperty Name="costId" ColumnName="costId" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="costVal" ColumnName="costVal" />
-          <ScalarProperty Name="itemId" ColumnName="itemId" />
-          <ScalarProperty Name="createDate" ColumnName="createDate" />
-          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
-          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
-          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="setting">
-      <EntityTypeMapping TypeName="incposdbModel.setting">
+      <EntityTypeMapping TypeName="PosModel.setting">
         <MappingFragment StoreEntitySet="setting">
           <ScalarProperty Name="settingId" ColumnName="settingId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -992,7 +1181,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="setValues">
-      <EntityTypeMapping TypeName="incposdbModel.setValues">
+      <EntityTypeMapping TypeName="PosModel.setValues">
         <MappingFragment StoreEntitySet="setValues">
           <ScalarProperty Name="valId" ColumnName="valId" />
           <ScalarProperty Name="value" ColumnName="value" />
@@ -1004,11 +1193,11 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="shippingCompanies">
-      <EntityTypeMapping TypeName="incposdbModel.shippingCompanies">
+      <EntityTypeMapping TypeName="PosModel.shippingCompanies">
         <MappingFragment StoreEntitySet="shippingCompanies">
           <ScalarProperty Name="shippingCompanyId" ColumnName="shippingCompanyId" />
           <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="RealDeliveryCost" ColumnName="RealDeliveryCost" />
+          <ScalarProperty Name="realDeliveryCost" ColumnName="realDeliveryCost" />
           <ScalarProperty Name="deliveryCost" ColumnName="deliveryCost" />
           <ScalarProperty Name="deliveryType" ColumnName="deliveryType" />
           <ScalarProperty Name="notes" ColumnName="notes" />
@@ -1028,12 +1217,12 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="storageCost">
-      <EntityTypeMapping TypeName="incposdbModel.storageCost">
+      <EntityTypeMapping TypeName="PosModel.storageCost">
         <MappingFragment StoreEntitySet="storageCost">
           <ScalarProperty Name="storageCostId" ColumnName="storageCostId" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="cost" ColumnName="cost" />
-          <ScalarProperty Name="note" ColumnName="note" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
           <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
@@ -1043,7 +1232,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="subscriptionFees">
-      <EntityTypeMapping TypeName="incposdbModel.subscriptionFees">
+      <EntityTypeMapping TypeName="PosModel.subscriptionFees">
         <MappingFragment StoreEntitySet="subscriptionFees">
           <ScalarProperty Name="subscriptionFeesId" ColumnName="subscriptionFeesId" />
           <ScalarProperty Name="membershipId" ColumnName="membershipId" />
@@ -1059,7 +1248,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="sysdiagrams">
-      <EntityTypeMapping TypeName="incposdbModel.sysdiagrams">
+      <EntityTypeMapping TypeName="PosModel.sysdiagrams">
         <MappingFragment StoreEntitySet="sysdiagrams">
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="principal_id" ColumnName="principal_id" />
@@ -1070,7 +1259,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="sysEmails">
-      <EntityTypeMapping TypeName="incposdbModel.sysEmails">
+      <EntityTypeMapping TypeName="PosModel.sysEmails">
         <MappingFragment StoreEntitySet="sysEmails">
           <ScalarProperty Name="emailId" ColumnName="emailId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -1091,8 +1280,56 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tables">
+      <EntityTypeMapping TypeName="PosModel.tables">
+        <MappingFragment StoreEntitySet="tables">
+          <ScalarProperty Name="tableId" ColumnName="tableId" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="sectionId" ColumnName="sectionId" />
+          <ScalarProperty Name="branchId" ColumnName="branchId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="personsCount" ColumnName="personsCount" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tablesReservations">
+      <EntityTypeMapping TypeName="PosModel.tablesReservations">
+        <MappingFragment StoreEntitySet="tablesReservations">
+          <ScalarProperty Name="tableReservId" ColumnName="tableReservId" />
+          <ScalarProperty Name="reservationId" ColumnName="reservationId" />
+          <ScalarProperty Name="tableId" ColumnName="tableId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tags">
+      <EntityTypeMapping TypeName="PosModel.tags">
+        <MappingFragment StoreEntitySet="tags">
+          <ScalarProperty Name="tagId" ColumnName="tagId" />
+          <ScalarProperty Name="tagName" ColumnName="tagName" />
+          <ScalarProperty Name="categoryId" ColumnName="categoryId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="units">
-      <EntityTypeMapping TypeName="incposdbModel.units">
+      <EntityTypeMapping TypeName="PosModel.units">
         <MappingFragment StoreEntitySet="units">
           <ScalarProperty Name="unitId" ColumnName="unitId" />
           <ScalarProperty Name="name" ColumnName="name" />
@@ -1109,7 +1346,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="users">
-      <EntityTypeMapping TypeName="incposdbModel.users">
+      <EntityTypeMapping TypeName="PosModel.users">
         <MappingFragment StoreEntitySet="users">
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="username" ColumnName="username" />
@@ -1129,7 +1366,6 @@
           <ScalarProperty Name="isActive" ColumnName="isActive" />
           <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="isOnline" ColumnName="isOnline" />
-          <ScalarProperty Name="role" ColumnName="role" />
           <ScalarProperty Name="image" ColumnName="image" />
           <ScalarProperty Name="groupId" ColumnName="groupId" />
           <ScalarProperty Name="balance" ColumnName="balance" />
@@ -1139,12 +1375,12 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="userSetValues">
-      <EntityTypeMapping TypeName="incposdbModel.userSetValues">
+      <EntityTypeMapping TypeName="PosModel.userSetValues">
         <MappingFragment StoreEntitySet="userSetValues">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="valId" ColumnName="valId" />
-          <ScalarProperty Name="note" ColumnName="note" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
@@ -1153,7 +1389,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="usersLogs">
-      <EntityTypeMapping TypeName="incposdbModel.usersLogs">
+      <EntityTypeMapping TypeName="PosModel.usersLogs">
         <MappingFragment StoreEntitySet="usersLogs">
           <ScalarProperty Name="logId" ColumnName="logId" />
           <ScalarProperty Name="sInDate" ColumnName="sInDate" />

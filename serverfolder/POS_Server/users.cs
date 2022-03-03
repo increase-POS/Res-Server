@@ -35,9 +35,6 @@ namespace POS_Server
             this.cashTransfer2 = new HashSet<cashTransfer>();
             this.categories = new HashSet<categories>();
             this.categories1 = new HashSet<categories>();
-            this.categoryuser = new HashSet<categoryuser>();
-            this.categoryuser1 = new HashSet<categoryuser>();
-            this.categoryuser2 = new HashSet<categoryuser>();
             this.coupons = new HashSet<coupons>();
             this.coupons1 = new HashSet<coupons>();
             this.couponsInvoices = new HashSet<couponsInvoices>();
@@ -208,12 +205,6 @@ namespace POS_Server
         public virtual ICollection<categories> categories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<categories> categories1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<categoryuser> categoryuser { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<categoryuser> categoryuser1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<categoryuser> categoryuser2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<coupons> coupons { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

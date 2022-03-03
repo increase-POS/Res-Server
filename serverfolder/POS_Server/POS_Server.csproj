@@ -260,9 +260,6 @@
     <Compile Include="categories.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="categoryuser.cs">
-      <DependentUpon>PosModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="cities.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
@@ -323,7 +320,6 @@
     <Compile Include="Controllers\StorageCostController.cs" />
     <Compile Include="Controllers\SysEmailsController.cs" />
     <Compile Include="Controllers\userSetValuesController.cs" />
-    <Compile Include="Controllers\CategoryuserController.cs" />
     <Compile Include="Controllers\setValuesController.cs" />
     <Compile Include="Controllers\SettingController.cs" />
     <Compile Include="Controllers\MedalController.cs" />

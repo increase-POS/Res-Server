@@ -650,7 +650,7 @@ namespace POS_Server.Controllers
                     {
                         using (incposdbEntities entity = new incposdbEntities())
                         {
-                            entity.categoryuser.RemoveRange(entity.categoryuser.Where(x => x.userId == delUserId));
+                           // entity.categoryuser.RemoveRange(entity.categoryuser.Where(x => x.userId == delUserId));
 
                             users usersDelete = entity.users.Find(delUserId);
                             entity.users.Remove(usersDelete);

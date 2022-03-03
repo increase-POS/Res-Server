@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="agentMemberships">
           <Key>
             <PropertyRef Name="agentMembershipsId" />
@@ -5149,7 +5149,8 @@
             <End Role="usersLogs" EntitySet="usersLogs" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -5414,25 +5415,7 @@
           <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="users" Relationship="Self.FK_categories_users" FromRole="categories" ToRole="users" />
           <NavigationProperty Name="users1" Relationship="Self.FK_categories_users1" FromRole="categories" ToRole="users" />
-          <NavigationProperty Name="categoryuser" Relationship="Self.FK_categoryuser_categories" FromRole="categories" ToRole="categoryuser" />
           <NavigationProperty Name="items" Relationship="Self.FK_items_categories" FromRole="categories" ToRole="items" />
-        </EntityType>
-        <EntityType Name="categoryuser">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="categoryId" Type="Int32" />
-          <Property Name="userId" Type="Int32" />
-          <Property Name="sequence" Type="Int32" Nullable="false" />
-          <Property Name="createDate" Type="DateTime" Precision="7" />
-          <Property Name="updateDate" Type="DateTime" Precision="7" />
-          <Property Name="createUserId" Type="Int32" />
-          <Property Name="updateUserId" Type="Int32" />
-          <NavigationProperty Name="categories" Relationship="Self.FK_categoryuser_categories" FromRole="categoryuser" ToRole="categories" />
-          <NavigationProperty Name="users" Relationship="Self.FK_categoryuser_users" FromRole="categoryuser" ToRole="users" />
-          <NavigationProperty Name="users1" Relationship="Self.FK_categoryuser_users1" FromRole="categoryuser" ToRole="users" />
-          <NavigationProperty Name="users2" Relationship="Self.FK_categoryuser_users2" FromRole="categoryuser" ToRole="users" />
         </EntityType>
         <EntityType Name="cities">
           <Key>
@@ -6820,9 +6803,6 @@
           <NavigationProperty Name="cashTransfer2" Relationship="Self.FK_cashTransfer_users2" FromRole="users" ToRole="cashTransfer" />
           <NavigationProperty Name="categories" Relationship="Self.FK_categories_users" FromRole="users" ToRole="categories" />
           <NavigationProperty Name="categories1" Relationship="Self.FK_categories_users1" FromRole="users" ToRole="categories" />
-          <NavigationProperty Name="categoryuser" Relationship="Self.FK_categoryuser_users" FromRole="users" ToRole="categoryuser" />
-          <NavigationProperty Name="categoryuser1" Relationship="Self.FK_categoryuser_users1" FromRole="users" ToRole="categoryuser" />
-          <NavigationProperty Name="categoryuser2" Relationship="Self.FK_categoryuser_users2" FromRole="users" ToRole="categoryuser" />
           <NavigationProperty Name="coupons" Relationship="Self.FK_coupons_users" FromRole="users" ToRole="coupons" />
           <NavigationProperty Name="coupons1" Relationship="Self.FK_coupons_users1" FromRole="users" ToRole="coupons" />
           <NavigationProperty Name="couponsInvoices" Relationship="Self.FK_couponsInvoices_users" FromRole="users" ToRole="couponsInvoices" />
@@ -7609,18 +7589,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_categoryuser_categories">
-          <End Role="categories" Type="Self.categories" Multiplicity="0..1" />
-          <End Role="categoryuser" Type="Self.categoryuser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="categories">
-              <PropertyRef Name="categoryId" />
-            </Principal>
-            <Dependent Role="categoryuser">
-              <PropertyRef Name="categoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_items_categories">
           <End Role="categories" Type="Self.categories" Multiplicity="0..1" />
           <End Role="items" Type="Self.items" Multiplicity="*" />
@@ -7630,42 +7598,6 @@
             </Principal>
             <Dependent Role="items">
               <PropertyRef Name="categoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_categoryuser_users">
-          <End Role="users" Type="Self.users" Multiplicity="0..1" />
-          <End Role="categoryuser" Type="Self.categoryuser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="categoryuser">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_categoryuser_users1">
-          <End Role="users" Type="Self.users" Multiplicity="0..1" />
-          <End Role="categoryuser" Type="Self.categoryuser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="categoryuser">
-              <PropertyRef Name="createUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_categoryuser_users2">
-          <End Role="users" Type="Self.users" Multiplicity="0..1" />
-          <End Role="categoryuser" Type="Self.categoryuser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="users">
-              <PropertyRef Name="userId" />
-            </Principal>
-            <Dependent Role="categoryuser">
-              <PropertyRef Name="updateUserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9828,7 +9760,6 @@
           <EntitySet Name="cards" EntityType="Self.cards" />
           <EntitySet Name="cashTransfer" EntityType="Self.cashTransfer" />
           <EntitySet Name="categories" EntityType="Self.categories" />
-          <EntitySet Name="categoryuser" EntityType="Self.categoryuser" />
           <EntitySet Name="cities" EntityType="Self.cities" />
           <EntitySet Name="countriesCodes" EntityType="Self.countriesCodes" />
           <EntitySet Name="coupons" EntityType="Self.coupons" />
@@ -10114,25 +10045,9 @@
             <End Role="users" EntitySet="users" />
             <End Role="categories" EntitySet="categories" />
           </AssociationSet>
-          <AssociationSet Name="FK_categoryuser_categories" Association="Self.FK_categoryuser_categories">
-            <End Role="categories" EntitySet="categories" />
-            <End Role="categoryuser" EntitySet="categoryuser" />
-          </AssociationSet>
           <AssociationSet Name="FK_items_categories" Association="Self.FK_items_categories">
             <End Role="categories" EntitySet="categories" />
             <End Role="items" EntitySet="items" />
-          </AssociationSet>
-          <AssociationSet Name="FK_categoryuser_users" Association="Self.FK_categoryuser_users">
-            <End Role="users" EntitySet="users" />
-            <End Role="categoryuser" EntitySet="categoryuser" />
-          </AssociationSet>
-          <AssociationSet Name="FK_categoryuser_users1" Association="Self.FK_categoryuser_users1">
-            <End Role="users" EntitySet="users" />
-            <End Role="categoryuser" EntitySet="categoryuser" />
-          </AssociationSet>
-          <AssociationSet Name="FK_categoryuser_users2" Association="Self.FK_categoryuser_users2">
-            <End Role="users" EntitySet="users" />
-            <End Role="categoryuser" EntitySet="categoryuser" />
           </AssociationSet>
           <AssociationSet Name="FK_cities_countriesCodes" Association="Self.FK_cities_countriesCodes">
             <End Role="countriesCodes" EntitySet="countriesCodes" />

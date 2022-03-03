@@ -35,7 +35,6 @@ namespace POS_Server
         public virtual DbSet<cards> cards { get; set; }
         public virtual DbSet<cashTransfer> cashTransfer { get; set; }
         public virtual DbSet<categories> categories { get; set; }
-        public virtual DbSet<categoryuser> categoryuser { get; set; }
         public virtual DbSet<cities> cities { get; set; }
         public virtual DbSet<countriesCodes> countriesCodes { get; set; }
         public virtual DbSet<coupons> coupons { get; set; }
