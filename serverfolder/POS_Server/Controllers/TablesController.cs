@@ -267,7 +267,7 @@ namespace POS_Server.Controllers
                                         table.status = "openedReserved";
                                 }
                             }
-                            else if (invTime >= startTimeSearch)
+                            else if (invTime <= startTimeSearch && startTimeSearch <= invTime.Add(timeStaying))
                             {
                                 if (table.status == "empty")
                                     table.status = "opened";

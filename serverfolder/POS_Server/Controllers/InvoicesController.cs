@@ -24,8 +24,8 @@ namespace POS_Server.Controllers
         [Route("Get")]
         public string Get(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -136,8 +136,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetByInvoiceId")]
         public string GetByInvoiceId(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -200,8 +200,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("getgeneratedInvoice")]
         public string getgeneratedInvoice(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -261,7 +261,7 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("getById")]
         public string GetById(string token   )
         {
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -322,8 +322,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetByInvNum")]
         public string GetByInvNum(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -2269,98 +2269,104 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 try
                 {
-                    invoices tmpInvoice;
-                    ProgramDetailsController pc = new ProgramDetailsController();
-                    using (incposdbEntities entity = new incposdbEntities())
-                    {
-                        var invoiceEntity = entity.Set<invoices>();
-                        if (newObject.invoiceId == 0)
-                        {
-                            if (newObject.invType == "s")
-                            {
-                                ProgramInfo programInfo = new ProgramInfo();
-                                int invMaxCount = programInfo.getSaleinvCount();
-                                int salesInvCount = pc.getSalesInvCountInMonth();
-                                if (salesInvCount >= invMaxCount && invMaxCount != -1)
-                                {
-                                    message = "-1";
-                                }
-                                else
-                                {
-                                    if (newObject.cashReturn == null)
-                                        newObject.cashReturn = 0;
-                                    newObject.invDate = DateTime.Now;
-                                    newObject.invTime = DateTime.Now.TimeOfDay;
-                                    newObject.updateDate = DateTime.Now;
-                                    newObject.updateUserId = newObject.createUserId;
-                                    newObject.isActive = true;
-                                    newObject.isOrginal = true;
-                                    tmpInvoice = invoiceEntity.Add(newObject);
-                                    entity.SaveChanges();
-                                    message = tmpInvoice.invoiceId.ToString();
-                                }
-                            }
-                            else
-                            {
-                                if (newObject.cashReturn == null)
-                                    newObject.cashReturn = 0;
-                                newObject.invDate = DateTime.Now;
-                                newObject.invTime = DateTime.Now.TimeOfDay;
-                                newObject.updateDate = DateTime.Now;
-                                newObject.updateUserId = newObject.createUserId;
-                                newObject.isActive = true;
-                                newObject.isOrginal = true;
-                                tmpInvoice = invoiceEntity.Add(newObject);
-                                entity.SaveChanges();
-                                message = tmpInvoice.invoiceId.ToString();
-                            }
-                            return TokenManager.GenerateToken(message);
-                        }
-                        else
-                        {
-                            tmpInvoice = entity.invoices.Where(p => p.invoiceId == newObject.invoiceId).FirstOrDefault();
-                            tmpInvoice.invNumber = newObject.invNumber;
-                            tmpInvoice.agentId = newObject.agentId;
-                            tmpInvoice.invType = newObject.invType;
-                            tmpInvoice.total = newObject.total;
-                            tmpInvoice.totalNet = newObject.totalNet;
-                            tmpInvoice.paid = newObject.paid;
-                            tmpInvoice.deserved = newObject.deserved;
-                            tmpInvoice.deservedDate = newObject.deservedDate;
-                            tmpInvoice.invoiceMainId = newObject.invoiceMainId;
-                            tmpInvoice.invCase = newObject.invCase;
-                            tmpInvoice.notes = newObject.notes;
-                            tmpInvoice.vendorInvNum = newObject.vendorInvNum;
-                            tmpInvoice.vendorInvDate = newObject.vendorInvDate;
-                            tmpInvoice.updateDate = DateTime.Now;
-                            tmpInvoice.updateUserId = newObject.updateUserId;
-                            tmpInvoice.branchId = newObject.branchId;
-                            tmpInvoice.discountType = newObject.discountType;
-                            tmpInvoice.discountValue = newObject.discountValue;
-                            tmpInvoice.tax = newObject.tax;
-                            tmpInvoice.taxtype = newObject.taxtype;
-                            tmpInvoice.name = newObject.name;
-                            tmpInvoice.isApproved = newObject.isApproved;
-                            tmpInvoice.branchCreatorId = newObject.branchCreatorId;
-                            tmpInvoice.shippingCompanyId = newObject.shippingCompanyId;
-                            tmpInvoice.shipUserId = newObject.shipUserId;
-                            tmpInvoice.userId = newObject.userId;
-                            tmpInvoice.manualDiscountType = newObject.manualDiscountType;
-                            tmpInvoice.manualDiscountValue = newObject.manualDiscountValue;
-                            tmpInvoice.cashReturn = newObject.cashReturn;
-                            tmpInvoice.shippingCost = newObject.shippingCost;
-                            tmpInvoice.realShippingCost = newObject.realShippingCost;
-                            entity.SaveChanges();
-                            message = tmpInvoice.invoiceId.ToString();
-                            return TokenManager.GenerateToken(message);
-                        }
-                    }
+                    message = saveInvoice(newObject).ToString();
                 }
 
                 catch
                 {
                     message = "0";
-                    return TokenManager.GenerateToken(message);
+                }
+                    
+                return TokenManager.GenerateToken(message);
+            }
+        }
+        private int saveInvoice(invoices newObject)
+        {
+            int res = 0;
+            invoices tmpInvoice;
+            ProgramDetailsController pc = new ProgramDetailsController();
+            using (incposdbEntities entity = new incposdbEntities())
+            {
+                var invoiceEntity = entity.Set<invoices>();
+                if (newObject.invoiceId == 0)
+                {
+                    if (newObject.invType == "s")
+                    {
+                        ProgramInfo programInfo = new ProgramInfo();
+                        int invMaxCount = programInfo.getSaleinvCount();
+                        int salesInvCount = pc.getSalesInvCountInMonth();
+                        if (salesInvCount >= invMaxCount && invMaxCount != -1)
+                        {
+                            res = -1;
+                        }
+                        else
+                        {
+                            if (newObject.cashReturn == null)
+                                newObject.cashReturn = 0;
+                            newObject.invDate = DateTime.Now;
+                            newObject.invTime = DateTime.Now.TimeOfDay;
+                            newObject.updateDate = DateTime.Now;
+                            newObject.updateUserId = newObject.createUserId;
+                            newObject.isActive = true;
+                            newObject.isOrginal = true;
+                            tmpInvoice = invoiceEntity.Add(newObject);
+                            entity.SaveChanges();
+                            res = tmpInvoice.invoiceId;
+                        }
+                    }
+                    else
+                    {
+                        if (newObject.cashReturn == null)
+                            newObject.cashReturn = 0;
+                        newObject.invDate = DateTime.Now;
+                        newObject.invTime = DateTime.Now.TimeOfDay;
+                        newObject.updateDate = DateTime.Now;
+                        newObject.updateUserId = newObject.createUserId;
+                        newObject.isActive = true;
+                        newObject.isOrginal = true;
+                        tmpInvoice = invoiceEntity.Add(newObject);
+                        entity.SaveChanges();
+                        res = tmpInvoice.invoiceId;
+                    }
+                    return res;
+                }
+                else
+                {
+                    tmpInvoice = entity.invoices.Where(p => p.invoiceId == newObject.invoiceId).FirstOrDefault();
+                    tmpInvoice.invNumber = newObject.invNumber;
+                    tmpInvoice.agentId = newObject.agentId;
+                    tmpInvoice.invType = newObject.invType;
+                    tmpInvoice.total = newObject.total;
+                    tmpInvoice.totalNet = newObject.totalNet;
+                    tmpInvoice.paid = newObject.paid;
+                    tmpInvoice.deserved = newObject.deserved;
+                    tmpInvoice.deservedDate = newObject.deservedDate;
+                    tmpInvoice.invoiceMainId = newObject.invoiceMainId;
+                    tmpInvoice.invCase = newObject.invCase;
+                    tmpInvoice.notes = newObject.notes;
+                    tmpInvoice.vendorInvNum = newObject.vendorInvNum;
+                    tmpInvoice.vendorInvDate = newObject.vendorInvDate;
+                    tmpInvoice.updateDate = DateTime.Now;
+                    tmpInvoice.updateUserId = newObject.updateUserId;
+                    tmpInvoice.branchId = newObject.branchId;
+                    tmpInvoice.discountType = newObject.discountType;
+                    tmpInvoice.discountValue = newObject.discountValue;
+                    tmpInvoice.tax = newObject.tax;
+                    tmpInvoice.taxtype = newObject.taxtype;
+                    tmpInvoice.name = newObject.name;
+                    tmpInvoice.isApproved = newObject.isApproved;
+                    tmpInvoice.branchCreatorId = newObject.branchCreatorId;
+                    tmpInvoice.shippingCompanyId = newObject.shippingCompanyId;
+                    tmpInvoice.shipUserId = newObject.shipUserId;
+                    tmpInvoice.userId = newObject.userId;
+                    tmpInvoice.manualDiscountType = newObject.manualDiscountType;
+                    tmpInvoice.manualDiscountValue = newObject.manualDiscountValue;
+                    tmpInvoice.cashReturn = newObject.cashReturn;
+                    tmpInvoice.shippingCost = newObject.shippingCost;
+                    tmpInvoice.realShippingCost = newObject.realShippingCost;
+                    entity.SaveChanges();
+                    res = tmpInvoice.invoiceId;
+                    return res;
                 }
             }
         }
@@ -2401,95 +2407,16 @@ var strP = TokenManager.GetPrincipal(token);
 
                 try
                 {
-                    invoices tmpInvoice = new invoices() ;
-                    using (incposdbEntities entity = new incposdbEntities())
+                    int invoiceId = saveInvoice(newObject);
+                    if (invoiceId > 0)
                     {
-                        var invoiceEntity = entity.Set<invoices>();
-                        if (newObject.invoiceId == 0)
-                        {
-                            if (newObject.invType == "s")
-                            {
-                                ProgramDetailsController pc = new ProgramDetailsController();
-                                ProgramInfo programInfo = new ProgramInfo();
-                                int invMaxCount = programInfo.getSaleinvCount();
-                                int salesInvCount = pc.getSalesInvCountInMonth();
-                                if (salesInvCount >= invMaxCount && invMaxCount != -1)
-                                {
-                                    message = "-1";
-                                }
-                                else
-                                {
-                                    if (newObject.cashReturn == null)
-                                        newObject.cashReturn = 0;
-                                    newObject.invDate = DateTime.Now;
-                                    newObject.invTime = DateTime.Now.TimeOfDay;
-                                    newObject.updateDate = DateTime.Now;
-                                    newObject.updateUserId = newObject.createUserId;
-                                    newObject.isActive = true;
-                                    newObject.isOrginal = true;
-                                    tmpInvoice = invoiceEntity.Add(newObject);
-                                    entity.SaveChanges();
-                                    message = tmpInvoice.invoiceId.ToString();
-                                }
-                            }
-                            else
-                            {
-                                if (newObject.cashReturn == null)
-                                    newObject.cashReturn = 0;
-                                newObject.invDate = DateTime.Now;
-                                newObject.invTime = DateTime.Now.TimeOfDay;
-                                newObject.updateDate = DateTime.Now;
-                                newObject.updateUserId = newObject.createUserId;
-                                newObject.isActive = true;
-                                newObject.isOrginal = true;
-                                tmpInvoice = invoiceEntity.Add(newObject);
-                                entity.SaveChanges();
-                                message = tmpInvoice.invoiceId.ToString();
-                            }
-
-                        }
-                        else
-                        {
-                            tmpInvoice = entity.invoices.Where(p => p.invoiceId == newObject.invoiceId).FirstOrDefault();
-                            tmpInvoice.invNumber = newObject.invNumber;
-                            tmpInvoice.agentId = newObject.agentId;
-                            tmpInvoice.invType = newObject.invType;
-                            tmpInvoice.total = newObject.total;
-                            tmpInvoice.totalNet = newObject.totalNet;
-                            tmpInvoice.paid = newObject.paid;
-                            tmpInvoice.deserved = newObject.deserved;
-                            tmpInvoice.deservedDate = newObject.deservedDate;
-                            tmpInvoice.invoiceMainId = newObject.invoiceMainId;
-                            tmpInvoice.invCase = newObject.invCase;
-                            tmpInvoice.notes = newObject.notes;
-                            tmpInvoice.vendorInvNum = newObject.vendorInvNum;
-                            tmpInvoice.vendorInvDate = newObject.vendorInvDate;
-                            tmpInvoice.updateDate = DateTime.Now;
-                            tmpInvoice.updateUserId = newObject.updateUserId;
-                            tmpInvoice.branchId = newObject.branchId;
-                            tmpInvoice.discountType = newObject.discountType;
-                            tmpInvoice.discountValue = newObject.discountValue;
-                            tmpInvoice.tax = newObject.tax;
-                            tmpInvoice.taxtype = newObject.taxtype;
-                            tmpInvoice.name = newObject.name;
-                            tmpInvoice.isApproved = newObject.isApproved;
-                            tmpInvoice.branchCreatorId = newObject.branchCreatorId;
-                            tmpInvoice.shippingCompanyId = newObject.shippingCompanyId;
-                            tmpInvoice.shipUserId = newObject.shipUserId;
-                            tmpInvoice.userId = newObject.userId;
-                            tmpInvoice.manualDiscountType = newObject.manualDiscountType;
-                            tmpInvoice.manualDiscountValue = newObject.manualDiscountValue;
-                            tmpInvoice.cashReturn = newObject.cashReturn;
-                            entity.SaveChanges();
-                            message = tmpInvoice.invoiceId.ToString();
-                            //return TokenManager.GenerateToken(message);
-                        }
-                        string res = tc.saveInvoiceItems(items, tmpInvoice.invoiceId);
+                        string res = tc.saveInvoiceItems(items, invoiceId);
                         if (res == "0")
                             message = "0";
-
-                        return TokenManager.GenerateToken(message);
                     }
+                    else
+                        message = invoiceId.ToString();
+                    return TokenManager.GenerateToken(message);
                 }
                 catch
                 {
@@ -2499,7 +2426,7 @@ var strP = TokenManager.GetPrincipal(token);
             }
         }
 
-         [HttpPost]
+        [HttpPost]
         [Route("saveInvoiceWithItemsAndTables")]
         public string saveInvoiceWithItemsAndTables(string token)
         {
@@ -2544,107 +2471,77 @@ var strP = TokenManager.GetPrincipal(token);
 
                 try
                 {
-                    invoices tmpInvoice = new invoices() ;
-                    using (incposdbEntities entity = new incposdbEntities())
+                    int invoiceId = saveInvoice(newObject);
+                    if (invoiceId > 0)
                     {
-                        var invoiceEntity = entity.Set<invoices>();
-                        if (newObject.invoiceId == 0)
-                        {
-                            if (newObject.invType == "s")
-                            {
-                                ProgramDetailsController pc = new ProgramDetailsController();
-                                ProgramInfo programInfo = new ProgramInfo();
-                                int invMaxCount = programInfo.getSaleinvCount();
-                                int salesInvCount = pc.getSalesInvCountInMonth();
-                                if (salesInvCount >= invMaxCount && invMaxCount != -1)
-                                {
-                                    message = "-1";
-                                }
-                                else
-                                {
-                                    if (newObject.cashReturn == null)
-                                        newObject.cashReturn = 0;
-                                    newObject.invDate = DateTime.Now;
-                                    newObject.invTime = DateTime.Now.TimeOfDay;
-                                    newObject.updateDate = DateTime.Now;
-                                    newObject.updateUserId = newObject.createUserId;
-                                    newObject.isActive = true;
-                                    newObject.isOrginal = true;
-                                    tmpInvoice = invoiceEntity.Add(newObject);
-                                    entity.SaveChanges();
-                                    message = tmpInvoice.invoiceId.ToString();
-                                }
-                            }
-                            else
-                            {
-                                if (newObject.cashReturn == null)
-                                    newObject.cashReturn = 0;
-                                newObject.invDate = DateTime.Now;
-                                newObject.invTime = DateTime.Now.TimeOfDay;
-                                newObject.updateDate = DateTime.Now;
-                                newObject.updateUserId = newObject.createUserId;
-                                newObject.isActive = true;
-                                newObject.isOrginal = true;
-                                tmpInvoice = invoiceEntity.Add(newObject);
-                                entity.SaveChanges();
-                                message = tmpInvoice.invoiceId.ToString();
-                            }
-
-                        }
-                        else
-                        {
-                            tmpInvoice = entity.invoices.Where(p => p.invoiceId == newObject.invoiceId).FirstOrDefault();
-                            tmpInvoice.invNumber = newObject.invNumber;
-                            tmpInvoice.agentId = newObject.agentId;
-                            tmpInvoice.invType = newObject.invType;
-                            tmpInvoice.total = newObject.total;
-                            tmpInvoice.totalNet = newObject.totalNet;
-                            tmpInvoice.paid = newObject.paid;
-                            tmpInvoice.deserved = newObject.deserved;
-                            tmpInvoice.deservedDate = newObject.deservedDate;
-                            tmpInvoice.invoiceMainId = newObject.invoiceMainId;
-                            tmpInvoice.invCase = newObject.invCase;
-                            tmpInvoice.notes = newObject.notes;
-                            tmpInvoice.vendorInvNum = newObject.vendorInvNum;
-                            tmpInvoice.vendorInvDate = newObject.vendorInvDate;
-                            tmpInvoice.updateDate = DateTime.Now;
-                            tmpInvoice.updateUserId = newObject.updateUserId;
-                            tmpInvoice.branchId = newObject.branchId;
-                            tmpInvoice.discountType = newObject.discountType;
-                            tmpInvoice.discountValue = newObject.discountValue;
-                            tmpInvoice.tax = newObject.tax;
-                            tmpInvoice.taxtype = newObject.taxtype;
-                            tmpInvoice.name = newObject.name;
-                            tmpInvoice.isApproved = newObject.isApproved;
-                            tmpInvoice.branchCreatorId = newObject.branchCreatorId;
-                            tmpInvoice.shippingCompanyId = newObject.shippingCompanyId;
-                            tmpInvoice.shipUserId = newObject.shipUserId;
-                            tmpInvoice.userId = newObject.userId;
-                            tmpInvoice.manualDiscountType = newObject.manualDiscountType;
-                            tmpInvoice.manualDiscountValue = newObject.manualDiscountValue;
-                            tmpInvoice.cashReturn = newObject.cashReturn;
-                            entity.SaveChanges();
-                            message = tmpInvoice.invoiceId.ToString();
-                            //return TokenManager.GenerateToken(message);
-                        }
-                        string res = tc.saveInvoiceItems(items, tmpInvoice.invoiceId);
+                        string res = tc.saveInvoiceItems(items, invoiceId);
                         if (res == "0")
                             message = "0";
                         else
                         {
-                            res = saveInvoiceTables(tables,tmpInvoice.invoiceId);
+                            res = saveInvoiceTables(tables, invoiceId);
                             if (res == "0")
                                 message = "0";
-                        }
-
-                        return TokenManager.GenerateToken(message);
+                        }                      
                     }
                 }
                 catch
                 {
                     message = "0";
-                    return TokenManager.GenerateToken(message);
                 }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+        [HttpPost]
+        [Route("saveInvoiceWithTables")]
+        public string saveInvoiceWithTables(string token)
+        {
+            ItemsTransferController tc = new ItemsTransferController();
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            //if (strP != "0") //invalid authorization
+            //{
+            //    return TokenManager.GenerateToken(strP);
+            //}
+            //else
+            {
+                string invoiceObject = "";
+                string tablesObject = "";
+                invoices newObject = null;
+                List<tables> tables = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceObject")
+                    {
+                        invoiceObject = c.Value.Replace("\\", string.Empty);
+                        invoiceObject = invoiceObject.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<invoices>(invoiceObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                    else if (c.Type == "tablesObject")
+                    {
+                        tablesObject = c.Value.Replace("\\", string.Empty);
+                        tablesObject = tablesObject.Trim('"');
+                        tables = JsonConvert.DeserializeObject<List<tables>>(tablesObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
+
+                //try
+                {
+                    int invoiceId = saveInvoice(newObject);
+                    if (invoiceId > 0)
+                    {
+                       string res = saveInvoiceTables(tables, invoiceId);
+                        if (res == "0")
+                            message = "0";                    
+                    }
+                }
+                //catch
+                //{
+                //    message = "0";
+                //}
+                return TokenManager.GenerateToken(message);
             }
         }
         public string saveInvoiceTables(List<tables> newObject, int invoiceId)
