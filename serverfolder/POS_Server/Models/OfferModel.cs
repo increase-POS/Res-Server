@@ -21,6 +21,9 @@ namespace POS_Server.Models
         public Nullable<int> updateUserId { get; set; }
         public string notes { get; set; }
 
+        public int membershipOfferId { get; set; }
+        public Nullable<int> membershipId { get; set; }
+       
 
         public Boolean canDelete { get; set; }
     }

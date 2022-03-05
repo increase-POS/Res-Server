@@ -268,5 +268,66 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
+
+        [HttpPost]
+        [Route("GetOffersByMembershipId")]
+        public string GetOffersByMembershipId(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+
+                int membershipId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemId")
+                    {
+                        membershipId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var List = (from S in entity.membershipsOffers
+                                join B in entity.offers on S.offerId equals B.offerId into JB
+                                join U in entity.memberships on S.membershipId equals U.membershipId into JU
+                                from JBB in JB.DefaultIfEmpty()
+                                from JUU in JU.DefaultIfEmpty()
+                                where S.membershipId == membershipId
+                                select new OfferModel()
+                                {
+                                    offerId = JBB.offerId,
+                                    name = JBB.name,
+                                    code = JBB.code,
+                                    isActive = JBB.isActive,
+                                    discountType = JBB.discountType,
+                                    discountValue = JBB.discountValue,
+                                    startDate = JBB.startDate,
+                                    endDate = JBB.endDate,
+                                    createDate = JBB.createDate,
+                                    updateDate = JBB.updateDate,
+                                    createUserId = JBB.createUserId,
+                                    updateUserId = JBB.updateUserId,
+                                    notes = JBB.notes,
+
+                                    membershipOfferId = S.membershipOfferId,
+
+                                    membershipId = S.membershipId,
+                                    
+
+    }).ToList();
+                    return TokenManager.GenerateToken(List);
+
+
+                }
+            }
+        }
+
     }
 }

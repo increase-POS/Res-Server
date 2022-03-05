@@ -275,6 +275,11 @@
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\BranchStoreController.cs" />
     <Compile Include="Controllers\dishIngredientsController.cs" />
+    <Compile Include="Controllers\couponsMembershipsController.cs" />
+    <Compile Include="Controllers\membershipsOffersController.cs" />
+    <Compile Include="Controllers\invoicesClassMembershipsController.cs" />
+    <Compile Include="Controllers\subscriptionFeesController.cs" />
+    <Compile Include="Controllers\invoicesClassController.cs" />
     <Compile Include="Controllers\menuSettingsController.cs" />
     <Compile Include="Controllers\ProgramDetailsController.cs" />
     <Compile Include="Controllers\ResidentialSectorsController.cs" />
@@ -444,6 +449,8 @@
     <Compile Include="Models\BondsModel.cs" />
     <Compile Include="Models\BranchModel.cs" />
     <Compile Include="Models\BranchStoreModel.cs" />
+    <Compile Include="Models\subscriptionFeesModel.cs" />
+    <Compile Include="Models\invoicesClassModel.cs" />
     <Compile Include="Models\MenuSettingModel.cs" />
     <Compile Include="Models\ProgramDetailsModel.cs" />
     <Compile Include="Models\ReservationModel.cs" />
