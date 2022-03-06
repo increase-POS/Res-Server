@@ -37,7 +37,15 @@ namespace POS_Server.Models
         public Nullable<int> residentSecId { get; set; }
         public string GPSAddress { get; set; }
         public Boolean canDelete { get; set; }
-      
+
+        public int agentMembershipsId { get; set; }
+        public Nullable<int> subscriptionFeesId { get; set; }
+        public Nullable<int> cashTransId { get; set; }
+        public Nullable<int> membershipId { get; set; }
+  
+        public Nullable<System.DateTime> startDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+
 
 
     }

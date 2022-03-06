@@ -10,12 +10,12 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 using System.Web;
+
 namespace POS_Server.Controllers
 {
-    [RoutePrefix("api/memberships")]
-    public class MembershipsController : ApiController
+    [RoutePrefix("api/subscriptionFees")]
+    public class subscriptionFeesController : ApiController
     {
-
         [HttpPost]
         [Route("GetAll")]
         public string GetAll(string token)
@@ -31,19 +31,20 @@ namespace POS_Server.Controllers
             {
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var List = entity.memberships.Select(S => new MembershipsModel
+                    var List = entity.subscriptionFees.Select(S => new subscriptionFeesModel
                     {
+                        subscriptionFeesId = S.subscriptionFeesId,
                         membershipId = S.membershipId,
-                        name = S.name,
-
+                        monthsCount = S.monthsCount,
+                        Amount = S.Amount,
                         notes = S.notes,
                         createDate = S.createDate,
                         updateDate = S.updateDate,
                         createUserId = S.createUserId,
                         updateUserId = S.updateUserId,
                         isActive = S.isActive,
-                        subscriptionType = S.subscriptionType,
-                        code = S.code,
+
+
 
 
                     })
@@ -56,14 +57,10 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (List[i].isActive == 1)
                             {
-                                int membershipId = (int)List[i].membershipId;
-                                var itemsI = entity.agentMemberships.Where(x => x.membershipId == membershipId).Select(b => new { b.agentMembershipsId }).FirstOrDefault();
-                                var items2 = entity.subscriptionFees.Where(x => x.membershipId == membershipId).Select(b => new { b.subscriptionFeesId }).FirstOrDefault();
-                                var items3 = entity.couponsMemberships.Where(x => x.membershipId == membershipId).Select(b => new { b.couponMembershipId }).FirstOrDefault();
-                                var items4 = entity.membershipsOffers.Where(x => x.membershipId == membershipId).Select(b => new { b.membershipOfferId }).FirstOrDefault();
-                                var items5 = entity.invoicesClassMemberships.Where(x => x.membershipId == membershipId).Select(b => new { b.invClassMemberId }).FirstOrDefault();
+                                int subscriptionFeesId = (int)List[i].subscriptionFeesId;
+                                var items5 = entity.agentMemberships.Where(x => x.subscriptionFeesId == subscriptionFeesId).Select(b => new { b.agentMembershipsId }).FirstOrDefault();
 
-                                if ((itemsI is null && items2 is null && items3 is null && items4 is null && items5 is null))
+                                if (  items5 is null)
                                     canDelete = true;
 
                             }
@@ -76,7 +73,16 @@ namespace POS_Server.Controllers
             }
         }
         /*
- 
+   public int subscriptionFeesId { get; set; }
+        public Nullable<int> subscriptionFeesId { get; set; }
+        public int monthsCount { get; set; }
+        public decimal Amount { get; set; }
+        public string notes { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> updateDate { get; set; }
+        public Nullable<int> createUserId { get; set; }
+        public Nullable<int> updateUserId { get; set; }
+        public byte isActive { get; set; }
          * */
         [HttpPost]
         [Route("GetById")]
@@ -90,32 +96,33 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int membershipId = 0;
+                int subscriptionFeesId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        subscriptionFeesId = int.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var bank = entity.memberships
-                   .Where(S => S.membershipId == membershipId)
+                    var bank = entity.subscriptionFees
+                   .Where(S => S.subscriptionFeesId == subscriptionFeesId)
                    .Select(S => new
                    {
+                       S.subscriptionFeesId,
                        S.membershipId,
-                       S.name,
-
+                       S.monthsCount,
+                       S.Amount,
                        S.notes,
                        S.createDate,
                        S.updateDate,
                        S.createUserId,
                        S.updateUserId,
                        S.isActive,
-                       S.subscriptionType,
-                       S.code,
+
+
                    })
                    .FirstOrDefault();
                     return TokenManager.GenerateToken(bank);
@@ -137,16 +144,16 @@ namespace POS_Server.Controllers
             }
             else
             {
-                string membershipId = "";
-                memberships newObject = null;
+                string subscriptionFeesId = "";
+                subscriptionFees newObject = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemObject")
                     {
-                        membershipId = c.Value.Replace("\\", string.Empty);
-                        membershipId = membershipId.Trim('"');
-                        newObject = JsonConvert.DeserializeObject<memberships>(membershipId, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                        subscriptionFeesId = c.Value.Replace("\\", string.Empty);
+                        subscriptionFeesId = subscriptionFeesId.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<subscriptionFees>(subscriptionFeesId, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
                         break;
                     }
                 }
@@ -164,38 +171,39 @@ namespace POS_Server.Controllers
                 {
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        memberships tmpObject = new memberships();
-                        var bankEntity = entity.Set<memberships>();
-                        if (newObject.membershipId == 0)
+                        subscriptionFees tmpObject = new subscriptionFees();
+                        var bankEntity = entity.Set<subscriptionFees>();
+                        if (newObject.subscriptionFeesId == 0)
                         {
                             newObject.createDate = DateTime.Now;
                             newObject.updateDate = DateTime.Now;
                             newObject.updateUserId = newObject.createUserId;
                             tmpObject = bankEntity.Add(newObject);
                             entity.SaveChanges();
-                            message = tmpObject.membershipId.ToString(); ;
+                            message = tmpObject.subscriptionFeesId.ToString(); ;
                         }
                         else
                         {
-                            tmpObject = entity.memberships.Where(p => p.membershipId == newObject.membershipId).FirstOrDefault();
+                            tmpObject = entity.subscriptionFees.Where(p => p.subscriptionFeesId == newObject.subscriptionFeesId).FirstOrDefault();
 
                             tmpObject.updateDate = DateTime.Now;
 
+                            tmpObject.subscriptionFeesId = newObject.subscriptionFeesId;
                             tmpObject.membershipId = newObject.membershipId;
-                            tmpObject.name = newObject.name;
-
+                            tmpObject.monthsCount = newObject.monthsCount;
+                            tmpObject.Amount = newObject.Amount;
                             tmpObject.notes = newObject.notes;
                             tmpObject.createDate = newObject.createDate;
-
+                          
                             tmpObject.createUserId = newObject.createUserId;
                             tmpObject.updateUserId = newObject.updateUserId;
                             tmpObject.isActive = newObject.isActive;
 
-                            tmpObject.subscriptionType = newObject.subscriptionType;
-                            tmpObject.code = newObject.code;
+
+
 
                             entity.SaveChanges();
-                            message = tmpObject.membershipId.ToString();
+                            message = tmpObject.subscriptionFeesId.ToString();
 
                         }
                         return TokenManager.GenerateToken(message);
@@ -223,7 +231,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int membershipId = 0;
+                int subscriptionFeesId = 0;
                 int userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -231,7 +239,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "itemId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        subscriptionFeesId = int.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
@@ -249,8 +257,8 @@ namespace POS_Server.Controllers
                         using (incposdbEntities entity = new incposdbEntities())
                         {
 
-                            memberships objDelete = entity.memberships.Find(membershipId);
-                            entity.memberships.Remove(objDelete);
+                            subscriptionFees objDelete = entity.subscriptionFees.Find(subscriptionFeesId);
+                            entity.subscriptionFees.Remove(objDelete);
                             message = entity.SaveChanges().ToString();
                             return TokenManager.GenerateToken(message);
                         }
@@ -267,7 +275,7 @@ namespace POS_Server.Controllers
                         using (incposdbEntities entity = new incposdbEntities())
                         {
 
-                            memberships objDelete = entity.memberships.Find(membershipId);
+                            subscriptionFees objDelete = entity.subscriptionFees.Find(subscriptionFeesId);
                             objDelete.isActive = 0;
                             objDelete.updateUserId = userId;
                             objDelete.updateDate = DateTime.Now;
@@ -282,6 +290,8 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+
 
     }
 }

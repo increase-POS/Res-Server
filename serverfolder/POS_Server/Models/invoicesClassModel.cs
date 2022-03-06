@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace POS_Server.Models
+{
+    public class invoicesClassModel
+    {
+        public int invClassId { get; set; }
+        public decimal minInvoiceValue { get; set; }
+        public decimal MaxInvoiceValue { get; set; }
+        public decimal discountValue { get; set; }
+        public byte discountType { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> updateDate { get; set; }
+        public Nullable<int> updateUserId { get; set; }
+        public Nullable<int> createUserId { get; set; }
+        public string notes { get; set; }
+        public byte isActive { get; set; }
+     
+        public bool canDelete { get; set; }
+
+        public int invClassMemberId { get; set; }
+        public Nullable<int> membershipId { get; set; }
+  
+    }
+}

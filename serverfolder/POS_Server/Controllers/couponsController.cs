@@ -530,5 +530,71 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [Route("GetCouponsByMembershipId")]
+        public string GetCouponsByMembershipId(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+
+                int membershipId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemId")
+                    {
+                        membershipId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var List = (from S in entity.couponsMemberships
+                                join B in entity.coupons on S.cId equals B.cId into JB
+                                join U in entity.memberships on S.membershipId equals U.membershipId into JU
+                                from JBB in JB.DefaultIfEmpty()
+                                from JUU in JU.DefaultIfEmpty()
+                                where S.membershipId == membershipId
+                                select new CouponModel()
+                                {
+                                    cId = JBB.cId,
+                                    name = JBB.name,
+                                    code = JBB.code,
+                                    isActive = JBB.isActive,
+                                    discountType = JBB.discountType,
+                                    discountValue = JBB.discountValue,
+                                    startDate = JBB.startDate,
+                                    endDate = JBB.endDate,
+                                    notes = JBB.notes,
+                                    quantity = JBB.quantity,
+                                    remainQ = JBB.remainQ,
+                                    invMin = JBB.invMin,
+                                    invMax = JBB.invMax,
+                                    createDate = JBB.createDate,
+                                    updateDate = JBB.updateDate,
+                                    createUserId = JBB.createUserId,
+                                    updateUserId = JBB.updateUserId,
+                                    barcode = JBB.barcode,
+
+                                    couponMembershipId = S.couponMembershipId,
+
+                                    membershipId = S.membershipId,
+
+
+                                }).ToList();
+                    return TokenManager.GenerateToken(List);
+
+
+                }
+            }
+        }
+
+
     }
 }
