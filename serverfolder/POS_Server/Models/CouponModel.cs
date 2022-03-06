@@ -30,6 +30,7 @@ namespace POS_Server.Models
         public int couponMembershipId { get; set; }
        
         public Nullable<int> membershipId { get; set; }
+        public string forAgents { get; set; }
 
 
 

@@ -19,7 +19,7 @@ namespace POS_Server.Models
         public string subscriptionType { get; set; }
         public string code { get; set; }
 
-
+        public Nullable<decimal> subscriptionFee { get; set; }
         public bool canDelete { get; set; }
     }
 }

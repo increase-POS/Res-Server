@@ -54,6 +54,7 @@ namespace POS_Server.Controllers
                        createUserId = c.createUserId,
                        updateUserId = c.updateUserId,
                        barcode = c.barcode,
+                       forAgents=c.forAgents,
                    })
                    .ToList();
 
@@ -117,6 +118,7 @@ namespace POS_Server.Controllers
                        createUserId = c.createUserId,
                        updateUserId = c.updateUserId,
                        barcode = c.barcode,
+                       forAgents = c.forAgents,
                    })
                    .ToList();
 
@@ -170,6 +172,7 @@ namespace POS_Server.Controllers
                        c.createUserId,
                        c.updateUserId,
                        c.barcode,
+                      c.forAgents,
                    })
                    .FirstOrDefault();
 
@@ -223,6 +226,7 @@ namespace POS_Server.Controllers
                        c.createUserId,
                        c.updateUserId,
                        c.barcode,
+                        c.forAgents,
                    })
                    .FirstOrDefault();
 
@@ -276,6 +280,7 @@ namespace POS_Server.Controllers
                        c.createUserId,
                        c.updateUserId,
                        c.barcode,
+                    c.forAgents,
                    })
                    .FirstOrDefault();
 
@@ -316,6 +321,7 @@ namespace POS_Server.Controllers
                        c.code,
 
                        c.barcode,
+                       c.forAgents,
                    })
                    .FirstOrDefault();
 
@@ -368,6 +374,7 @@ namespace POS_Server.Controllers
                        c.updateDate,
                        c.createUserId,
                        c.updateUserId,
+                  c.forAgents,
                    })
                    .ToList();
 
@@ -442,6 +449,7 @@ namespace POS_Server.Controllers
 
                             tmpcoupon.updateUserId = Object.updateUserId;
                             tmpcoupon.barcode = Object.barcode;
+                            tmpcoupon.forAgents = Object.forAgents;
                             entity.SaveChanges();
                             message = tmpcoupon.cId.ToString();
                             return TokenManager.GenerateToken(message);
@@ -585,7 +593,7 @@ namespace POS_Server.Controllers
                                     couponMembershipId = S.couponMembershipId,
 
                                     membershipId = S.membershipId,
-
+                                    forAgents=JBB.forAgents,
 
                                 }).ToList();
                     return TokenManager.GenerateToken(List);

@@ -34,19 +34,20 @@ var strP = TokenManager.GetPrincipal(token);
                     var offersList = entity.offers
                     .Select(L => new OfferModel
                     {
-                       offerId= L.offerId,
+                        offerId = L.offerId,
                         name = L.name,
                         code = L.code,
-                        isActive=L.isActive,
-                        discountType= L.discountType,
-                        discountValue= L.discountValue,
-                        startDate=L.startDate,
-                        endDate= L.endDate,
-                        createDate=L.createDate,
-                        updateDate=L.updateDate,
-                        createUserId=  L.createUserId,
-                        updateUserId= L.updateUserId,
-                        notes=L.notes,
+                        isActive = L.isActive,
+                        discountType = L.discountType,
+                        discountValue = L.discountValue,
+                        startDate = L.startDate,
+                        endDate = L.endDate,
+                        createDate = L.createDate,
+                        updateDate = L.updateDate,
+                        createUserId = L.createUserId,
+                        updateUserId = L.updateUserId,
+                        notes = L.notes,
+                        forAgents = L.forAgents,
                     })
                     .ToList();
 
@@ -110,6 +111,7 @@ var strP = TokenManager.GetPrincipal(token);
                        L.createUserId,
                        L.updateUserId,
                        L.notes,
+                      L.forAgents,
                    })
                    .FirstOrDefault();
                     return TokenManager.GenerateToken(offer);
@@ -181,6 +183,7 @@ var strP = TokenManager.GetPrincipal(token);
                             oldObject.updateUserId = newObject.updateUserId;
                             oldObject.notes = newObject.notes;
                             oldObject.isActive = newObject.isActive;
+                            oldObject.forAgents = newObject.forAgents;
                             entity.SaveChanges();
                             message = oldObject.offerId.ToString();
                             return TokenManager.GenerateToken(message);
@@ -319,9 +322,9 @@ var strP = TokenManager.GetPrincipal(token);
                                     membershipOfferId = S.membershipOfferId,
 
                                     membershipId = S.membershipId,
-                                    
+                                    forAgents = JBB.forAgents,
 
-    }).ToList();
+                                }).ToList();
                     return TokenManager.GenerateToken(List);
 
 

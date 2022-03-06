@@ -283,5 +283,325 @@ namespace POS_Server.Controllers
             }
         }
 
+
+        public int Save(memberships newObject)
+        {
+            int message = 0;
+
+
+
+            if (newObject.updateUserId == 0 || newObject.updateUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.updateUserId = id;
+            }
+            if (newObject.createUserId == 0 || newObject.createUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.createUserId = id;
+            }
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    memberships tmpObject = new memberships();
+                    var Entity = entity.Set<memberships>();
+                    if (newObject.membershipId == 0)
+                    {
+                        newObject.createDate = DateTime.Now;
+                        newObject.updateDate = DateTime.Now;
+                        newObject.updateUserId = newObject.createUserId;
+                        tmpObject = Entity.Add(newObject);
+                        entity.SaveChanges();
+                        message = tmpObject.membershipId;
+                    }
+                    else
+                    {
+                        tmpObject = entity.memberships.Where(p => p.membershipId == newObject.membershipId).FirstOrDefault();
+
+                        tmpObject.updateDate = DateTime.Now;
+
+                        tmpObject.membershipId = newObject.membershipId;
+                        tmpObject.name = newObject.name;
+
+                        tmpObject.notes = newObject.notes;
+                        tmpObject.createDate = newObject.createDate;
+
+                        tmpObject.createUserId = newObject.createUserId;
+                        tmpObject.updateUserId = newObject.updateUserId;
+                        tmpObject.isActive = newObject.isActive;
+
+                        tmpObject.subscriptionType = newObject.subscriptionType;
+                        tmpObject.code = newObject.code;
+
+                        entity.SaveChanges();
+                        message = tmpObject.membershipId;
+
+                    }
+                    return message;
+                }
+            }
+
+            catch
+            {
+                message = 0;
+                return message;
+            }
+
+        }
+
+        [HttpPost]
+        [Route("SaveMemberAndSub")]
+        public string SaveMemberAndSub(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int res = 0;
+                int subres = 0;
+                string membershipId = "";
+                MembershipsModel newObjectModel = null;
+
+                subscriptionFees newsubscrOb = new subscriptionFees();
+                subscriptionFeesController subscCntrller = new subscriptionFeesController();
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemObject")
+                    {
+                        membershipId = c.Value.Replace("\\", string.Empty);
+                        membershipId = membershipId.Trim('"');
+                        newObjectModel = JsonConvert.DeserializeObject<MembershipsModel>(membershipId, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                        break;
+                    }
+                }
+
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        memberships tmpObject = new memberships();
+
+                        tmpObject.membershipId = newObjectModel.membershipId;
+
+                        tmpObject.membershipId = newObjectModel.membershipId;
+                        tmpObject.name = newObjectModel.name;
+
+                        tmpObject.notes = newObjectModel.notes;
+                        tmpObject.createDate = newObjectModel.createDate;
+
+                        tmpObject.createUserId = newObjectModel.createUserId;
+                        tmpObject.updateUserId = newObjectModel.updateUserId;
+                        tmpObject.isActive = newObjectModel.isActive;
+
+                        tmpObject.subscriptionType = newObjectModel.subscriptionType;
+                        tmpObject.code = newObjectModel.code;
+
+                        if (newObjectModel.membershipId == 0)
+                        {
+                            //new add membership
+                            res = Save(tmpObject);
+                            if (res > 0)
+                            {
+                                //new add subscriptionFees row
+
+                                //   newsubscrOb.updateDate = DateTime.Now;
+                                // newsubscrOb.subscriptionFeesId = newObject.subscriptionFeesId;
+                                newsubscrOb.membershipId = res;
+
+                                if (newObjectModel.subscriptionType == "o")
+                                {
+                                    newsubscrOb.monthsCount = 1;
+                                    newsubscrOb.Amount = (decimal)newObjectModel.subscriptionFee;
+                                    newsubscrOb.createUserId = newObjectModel.createUserId;
+                                    newsubscrOb.updateUserId = newObjectModel.updateUserId;
+                                    newsubscrOb.notes = newObjectModel.notes;
+                                    newsubscrOb.isActive = newObjectModel.isActive;
+                                    subres = subscCntrller.Save(newsubscrOb);
+                                    if (subres > 0)
+                                    {
+                                        return TokenManager.GenerateToken(res.ToString());
+                                    }
+                                    else
+                                    {
+                                        return TokenManager.GenerateToken("-1");
+                                    }
+                                }
+                                else if (newObjectModel.subscriptionType == "f")
+                                {
+                                    newsubscrOb.monthsCount = 1;
+                                    newsubscrOb.Amount = 0;
+                                    newsubscrOb.createUserId = newObjectModel.createUserId;
+                                    newsubscrOb.updateUserId = newObjectModel.updateUserId;
+                                    newsubscrOb.notes = newObjectModel.notes;
+                                    newsubscrOb.isActive = newObjectModel.isActive;
+                                    subres = subscCntrller.Save(newsubscrOb);
+                                    if (subres > 0)
+                                    {
+                                        return TokenManager.GenerateToken(res.ToString());
+                                    }
+                                    else
+                                    {
+                                        return TokenManager.GenerateToken("-1");
+                                    }
+
+                                }
+                                else
+                                {
+                                    return TokenManager.GenerateToken(res.ToString());
+                                }
+
+
+                            }
+                            else
+                            {
+                                return TokenManager.GenerateToken("-1");
+                            }
+
+                        }
+                        else
+                        {
+                            //update
+
+                            memberships tmpObjectdb = new memberships();
+                            List<subscriptionFees> tmpsubListdb = new List<subscriptionFees>();
+                            subscriptionFees tmpSubObjdb = new subscriptionFees();
+
+                            tmpObjectdb = entity.memberships.Where(p => p.membershipId == newObjectModel.membershipId).FirstOrDefault();
+                            tmpsubListdb = entity.subscriptionFees.Where(p => p.membershipId == newObjectModel.membershipId).ToList();
+                            tmpSubObjdb = tmpsubListdb.OrderBy(S => S.updateDate).LastOrDefault();
+                            res = Save(tmpObject);
+                            if (res > 0)
+                            {
+                                if (tmpObjectdb.subscriptionType == newObjectModel.subscriptionType)
+                                {
+
+                                    if (tmpObjectdb.subscriptionType == "o")
+                                    {
+
+
+                                        if (tmpSubObjdb.Amount != newObjectModel.subscriptionFee)
+                                        {
+                                            //the price changed so we have to save the change
+
+                                            tmpSubObjdb.Amount = (decimal)newObjectModel.subscriptionFee;
+
+                                            subres = subscCntrller.Save(tmpSubObjdb);
+                                            if (subres > 0)
+                                            {
+                                                return TokenManager.GenerateToken(res.ToString());
+                                            }
+                                            else
+                                            {
+                                                return TokenManager.GenerateToken("-1");
+                                            }
+
+                                        }
+
+
+                                    }
+                                    else
+                                    {
+                                        //no change on subscrb table
+                                        return TokenManager.GenerateToken(res.ToString());
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    int delres = 0;
+                                    delres= subscCntrller.DeleteByMembershipId(newObjectModel.membershipId);
+
+                                    //the old not like new
+                                    if (tmpObjectdb.subscriptionType == "o")
+                                    {
+                                        newsubscrOb.monthsCount = 1;
+                                        newsubscrOb.Amount = (decimal)newObjectModel.subscriptionFee;
+                                        newsubscrOb.createUserId = newObjectModel.createUserId;
+                                        newsubscrOb.updateUserId = newObjectModel.updateUserId;
+                                        newsubscrOb.notes = newObjectModel.notes;
+                                        newsubscrOb.isActive = newObjectModel.isActive;
+                                        subres = subscCntrller.Save(newsubscrOb);
+                                        if (subres > 0)
+                                        {
+                                            return TokenManager.GenerateToken(res.ToString());
+                                        }
+                                        else
+                                        {
+                                            return TokenManager.GenerateToken("-1");
+                                        }
+                                    }else if (tmpObjectdb.subscriptionType == "f")
+                                    {
+                                        newsubscrOb.monthsCount = 1;
+                                        newsubscrOb.Amount = 0;
+                                        newsubscrOb.createUserId = newObjectModel.createUserId;
+                                        newsubscrOb.updateUserId = newObjectModel.updateUserId;
+                                        newsubscrOb.notes = newObjectModel.notes;
+                                        newsubscrOb.isActive = newObjectModel.isActive;
+                                        subres = subscCntrller.Save(newsubscrOb);
+                                        if (subres > 0)
+                                        {
+                                            return TokenManager.GenerateToken(res.ToString());
+                                        }
+                                        else
+                                        {
+                                            return TokenManager.GenerateToken("-1");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // "m"
+                                        return TokenManager.GenerateToken(res.ToString());
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                return TokenManager.GenerateToken("-1");
+                            }
+
+
+
+                            //tmpObject.updateDate = DateTime.Now;
+
+                            //tmpObject.membershipId = newObject.membershipId;
+                            //tmpObject.name = newObject.name;
+
+                            //tmpObject.notes = newObject.notes;
+                            //tmpObject.createDate = newObject.createDate;
+
+                            //tmpObject.createUserId = newObject.createUserId;
+                            //tmpObject.updateUserId = newObject.updateUserId;
+                            //tmpObject.isActive = newObject.isActive;
+
+                            //tmpObject.subscriptionType = newObject.subscriptionType;
+                            //tmpObject.code = newObject.code;
+
+
+                            message = tmpObject.membershipId.ToString();
+
+                        }
+                        return TokenManager.GenerateToken(message);
+                    }
+                }
+
+                catch
+                {
+                    message = "0";
+                    return TokenManager.GenerateToken(message);
+                }
+            }
+        }
+
+
     }
 }

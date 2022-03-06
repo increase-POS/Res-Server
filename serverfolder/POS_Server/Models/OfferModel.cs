@@ -26,5 +26,6 @@ namespace POS_Server.Models
        
 
         public Boolean canDelete { get; set; }
+        public string forAgents { get; set; }
     }
 }
