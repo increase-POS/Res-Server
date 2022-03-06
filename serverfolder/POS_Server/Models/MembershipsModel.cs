@@ -16,10 +16,10 @@ namespace POS_Server.Models
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public byte isActive { get; set; }
+        public string subscriptionType { get; set; }
+        public string code { get; set; }
 
-      
-       
-   
+
         public bool canDelete { get; set; }
     }
 }

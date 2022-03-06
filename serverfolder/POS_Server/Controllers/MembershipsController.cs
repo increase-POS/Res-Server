@@ -15,7 +15,7 @@ namespace POS_Server.Controllers
     [RoutePrefix("api/memberships")]
     public class MembershipsController : ApiController
     {
-      
+
         [HttpPost]
         [Route("GetAll")]
         public string GetAll(string token)
@@ -35,13 +35,15 @@ namespace POS_Server.Controllers
                     {
                         membershipId = S.membershipId,
                         name = S.name,
-                      
+
                         notes = S.notes,
                         createDate = S.createDate,
                         updateDate = S.updateDate,
                         createUserId = S.createUserId,
                         updateUserId = S.updateUserId,
                         isActive = S.isActive,
+                        subscriptionType = S.subscriptionType,
+                        code = S.code,
 
 
                     })
@@ -105,14 +107,15 @@ namespace POS_Server.Controllers
                    {
                        S.membershipId,
                        S.name,
-                     
+
                        S.notes,
                        S.createDate,
                        S.updateDate,
                        S.createUserId,
                        S.updateUserId,
                        S.isActive,
-
+                       S.subscriptionType,
+                       S.code,
                    })
                    .FirstOrDefault();
                     return TokenManager.GenerateToken(bank);
@@ -120,7 +123,7 @@ namespace POS_Server.Controllers
                 }
             }
         }
- 
+
         [HttpPost]
         [Route("Save")]
         public string Save(string token)
@@ -180,16 +183,17 @@ namespace POS_Server.Controllers
 
                             tmpObject.membershipId = newObject.membershipId;
                             tmpObject.name = newObject.name;
-                         
+
                             tmpObject.notes = newObject.notes;
                             tmpObject.createDate = newObject.createDate;
-                           
+
                             tmpObject.createUserId = newObject.createUserId;
                             tmpObject.updateUserId = newObject.updateUserId;
                             tmpObject.isActive = newObject.isActive;
 
-                         
-                         
+                            tmpObject.subscriptionType = newObject.subscriptionType;
+                            tmpObject.code = newObject.code;
+
                             entity.SaveChanges();
                             message = tmpObject.membershipId.ToString();
 
