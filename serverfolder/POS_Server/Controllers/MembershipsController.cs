@@ -35,10 +35,7 @@ namespace POS_Server.Controllers
                     {
                         membershipId = S.membershipId,
                         name = S.name,
-                        deliveryDiscount = S.deliveryDiscount,
-                        deliveryDiscountType = S.deliveryDiscountType,
-                        invoiceDiscount = S.invoiceDiscount,
-                        invoiceDiscountType = S.invoiceDiscountType,
+                      
                         notes = S.notes,
                         createDate = S.createDate,
                         updateDate = S.updateDate,
@@ -108,10 +105,7 @@ namespace POS_Server.Controllers
                    {
                        S.membershipId,
                        S.name,
-                       S.deliveryDiscount,
-                       S.deliveryDiscountType,
-                       S.invoiceDiscount,
-                       S.invoiceDiscountType,
+                     
                        S.notes,
                        S.createDate,
                        S.updateDate,
@@ -186,10 +180,7 @@ namespace POS_Server.Controllers
 
                             tmpObject.membershipId = newObject.membershipId;
                             tmpObject.name = newObject.name;
-                            tmpObject.deliveryDiscount = newObject.deliveryDiscount;
-                            tmpObject.deliveryDiscountType = newObject.deliveryDiscountType;
-                            tmpObject.invoiceDiscount = newObject.invoiceDiscount;
-                            tmpObject.invoiceDiscountType = newObject.invoiceDiscountType;
+                         
                             tmpObject.notes = newObject.notes;
                             tmpObject.createDate = newObject.createDate;
                            

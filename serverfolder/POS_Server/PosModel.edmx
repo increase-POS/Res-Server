@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="agentMemberships">
           <Key>
             <PropertyRef Name="agentMembershipsId" />
@@ -744,16 +744,13 @@
           </Key>
           <Property Name="membershipId" Type="int" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="100" />
-          <Property Name="deliveryDiscount" Type="decimal" Precision="20" Scale="3" Nullable="false" />
-          <Property Name="deliveryDiscountType" Type="nvarchar" MaxLength="100" />
-          <Property Name="invoiceDiscount" Type="decimal" Precision="20" Scale="3" Nullable="false" />
-          <Property Name="invoiceDiscountType" Type="nvarchar" MaxLength="100" />
           <Property Name="notes" Type="ntext" />
           <Property Name="createDate" Type="datetime2" Precision="7" />
           <Property Name="updateDate" Type="datetime2" Precision="7" />
           <Property Name="createUserId" Type="int" />
           <Property Name="updateUserId" Type="int" />
           <Property Name="isActive" Type="tinyint" Nullable="false" />
+          <Property Name="code" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="membershipsOffers">
           <Key>
@@ -5149,8 +5146,7 @@
             <End Role="usersLogs" EntitySet="usersLogs" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -6106,10 +6102,6 @@
           </Key>
           <Property Name="membershipId" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="deliveryDiscount" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
-          <Property Name="deliveryDiscountType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="invoiceDiscount" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
-          <Property Name="invoiceDiscountType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="createDate" Type="DateTime" Precision="7" />
           <Property Name="updateDate" Type="DateTime" Precision="7" />
@@ -6124,6 +6116,7 @@
           <NavigationProperty Name="users1" Relationship="Self.FK_memberships_users1" FromRole="memberships" ToRole="users" />
           <NavigationProperty Name="membershipsOffers" Relationship="Self.FK_membershipsOffers_memberships" FromRole="memberships" ToRole="membershipsOffers" />
           <NavigationProperty Name="subscriptionFees" Relationship="Self.FK_subscriptionFees_memberships" FromRole="memberships" ToRole="subscriptionFees" />
+          <Property Name="code" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="membershipsOffers">
           <Key>
@@ -11550,12 +11543,9 @@
           <EntitySetMapping Name="memberships">
             <EntityTypeMapping TypeName="PosModel.memberships">
               <MappingFragment StoreEntitySet="memberships">
+                <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="membershipId" ColumnName="membershipId" />
                 <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="deliveryDiscount" ColumnName="deliveryDiscount" />
-                <ScalarProperty Name="deliveryDiscountType" ColumnName="deliveryDiscountType" />
-                <ScalarProperty Name="invoiceDiscount" ColumnName="invoiceDiscount" />
-                <ScalarProperty Name="invoiceDiscountType" ColumnName="invoiceDiscountType" />
                 <ScalarProperty Name="notes" ColumnName="notes" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="updateDate" ColumnName="updateDate" />

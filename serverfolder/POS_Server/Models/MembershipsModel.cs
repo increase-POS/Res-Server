@@ -9,10 +9,7 @@ namespace POS_Server.Models
     {
         public int membershipId { get; set; }
         public string name { get; set; }
-        public decimal deliveryDiscount { get; set; }
-        public string deliveryDiscountType { get; set; }
-        public decimal invoiceDiscount { get; set; }
-        public string invoiceDiscountType { get; set; }
+       
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
@@ -21,7 +18,7 @@ namespace POS_Server.Models
         public byte isActive { get; set; }
 
       
-        public Nullable<decimal> subscriptionFee { get; set; }
+       
    
         public bool canDelete { get; set; }
     }
