@@ -2500,11 +2500,11 @@ var strP = TokenManager.GetPrincipal(token);
             token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "1";
             var strP = TokenManager.GetPrincipal(token);
-            //if (strP != "0") //invalid authorization
-            //{
-            //    return TokenManager.GenerateToken(strP);
-            //}
-            //else
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
             {
                 string invoiceObject = "";
                 string tablesObject = "";
@@ -2527,7 +2527,7 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                 }
 
-                //try
+                try
                 {
                     int invoiceId = saveInvoice(newObject);
                     if (invoiceId > 0)
@@ -2537,10 +2537,60 @@ var strP = TokenManager.GetPrincipal(token);
                             message = "0";                    
                     }
                 }
-                //catch
-                //{
-                //    message = "0";
-                //}
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+        [HttpPost]
+        [Route("updateInvoiceTables")]
+        public string updateInvoiceTables(string token)
+        {
+            ItemsTransferController tc = new ItemsTransferController();
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int invoiceId = 0;
+                string tablesObject = "";
+                List<tables> tables = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceId")
+                    {
+                        invoiceId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "tablesObject")
+                    {
+                        tablesObject = c.Value.Replace("\\", string.Empty);
+                        tablesObject = tablesObject.Trim('"');
+                        tables = JsonConvert.DeserializeObject<List<tables>>(tablesObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
+
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var invTables = entity.invoiceTables.Where(x => x.invoiceId == invoiceId).ToList();
+                        entity.invoiceTables.RemoveRange(invTables);
+                        entity.SaveChanges();
+                    }
+
+                    message = saveInvoiceTables(tables, invoiceId);
+                }
+                catch
+                {
+                    message = "0";
+                }
                 return TokenManager.GenerateToken(message);
             }
         }
