@@ -193,7 +193,7 @@ namespace POS_Server.Controllers
                             tmpObject.monthsCount = newObject.monthsCount;
                             tmpObject.Amount = newObject.Amount;
                             tmpObject.notes = newObject.notes;
-                            tmpObject.createDate = newObject.createDate;
+                          //  tmpObject.createDate = newObject.createDate;
 
                             tmpObject.createUserId = newObject.createUserId;
                             tmpObject.updateUserId = newObject.updateUserId;
@@ -307,6 +307,11 @@ namespace POS_Server.Controllers
                 Nullable<int> id = null;
                 newObject.createUserId = id;
             }
+            if (newObject.membershipId == 0 || newObject.membershipId == null)
+            {
+                Nullable<int> id = null;
+                newObject.membershipId = id;
+            }
             try
             {
                 using (incposdbEntities entity = new incposdbEntities())
@@ -333,7 +338,7 @@ namespace POS_Server.Controllers
                         tmpObject.monthsCount = newObject.monthsCount;
                         tmpObject.Amount = newObject.Amount;
                         tmpObject.notes = newObject.notes;
-                        tmpObject.createDate = newObject.createDate;
+                      //  tmpObject.createDate = newObject.createDate;
 
                         tmpObject.createUserId = newObject.createUserId;
                         tmpObject.updateUserId = newObject.updateUserId;

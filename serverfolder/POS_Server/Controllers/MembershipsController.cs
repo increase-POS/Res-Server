@@ -185,7 +185,7 @@ namespace POS_Server.Controllers
                             tmpObject.name = newObject.name;
 
                             tmpObject.notes = newObject.notes;
-                            tmpObject.createDate = newObject.createDate;
+                          //  tmpObject.createDate = newObject.createDate;
 
                             tmpObject.createUserId = newObject.createUserId;
                             tmpObject.updateUserId = newObject.updateUserId;
@@ -325,7 +325,7 @@ namespace POS_Server.Controllers
                         tmpObject.name = newObject.name;
 
                         tmpObject.notes = newObject.notes;
-                        tmpObject.createDate = newObject.createDate;
+                      //  tmpObject.createDate = newObject.createDate;
 
                         tmpObject.createUserId = newObject.createUserId;
                         tmpObject.updateUserId = newObject.updateUserId;
@@ -413,7 +413,7 @@ namespace POS_Server.Controllers
                                 //new add subscriptionFees row
 
                                 //   newsubscrOb.updateDate = DateTime.Now;
-                                // newsubscrOb.subscriptionFeesId = newObject.subscriptionFeesId;
+                                newsubscrOb.subscriptionFeesId =0;
                                 newsubscrOb.membershipId = res;
 
                                 if (newObjectModel.subscriptionType == "o")
@@ -477,6 +477,7 @@ namespace POS_Server.Controllers
                             tmpObjectdb = entity.memberships.Where(p => p.membershipId == newObjectModel.membershipId).FirstOrDefault();
                             tmpsubListdb = entity.subscriptionFees.Where(p => p.membershipId == newObjectModel.membershipId).ToList();
                             tmpSubObjdb = tmpsubListdb.OrderBy(S => S.updateDate).LastOrDefault();
+                         //   string oldtype = tmpObjectdb.subscriptionType;
                             res = Save(tmpObject);
                             if (res > 0)
                             {
@@ -521,8 +522,10 @@ namespace POS_Server.Controllers
                                     delres= subscCntrller.DeleteByMembershipId(newObjectModel.membershipId);
 
                                     //the old not like new
-                                    if (tmpObjectdb.subscriptionType == "o")
+                                    if (newObjectModel.subscriptionType == "o")
                                     {
+                                        //the new is "o"
+                                        newsubscrOb.membershipId = newObjectModel.membershipId;
                                         newsubscrOb.monthsCount = 1;
                                         newsubscrOb.Amount = (decimal)newObjectModel.subscriptionFee;
                                         newsubscrOb.createUserId = newObjectModel.createUserId;
@@ -538,8 +541,9 @@ namespace POS_Server.Controllers
                                         {
                                             return TokenManager.GenerateToken("-1");
                                         }
-                                    }else if (tmpObjectdb.subscriptionType == "f")
+                                    }else if (newObjectModel.subscriptionType == "f")
                                     {
+                                        newsubscrOb.membershipId = newObjectModel.membershipId;
                                         newsubscrOb.monthsCount = 1;
                                         newsubscrOb.Amount = 0;
                                         newsubscrOb.createUserId = newObjectModel.createUserId;
@@ -596,7 +600,7 @@ namespace POS_Server.Controllers
 
                 catch
                 {
-                    message = "0";
+                    message = "-1";
                     return TokenManager.GenerateToken(message);
                 }
             }
