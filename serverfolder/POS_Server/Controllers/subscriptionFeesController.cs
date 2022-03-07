@@ -60,7 +60,7 @@ namespace POS_Server.Controllers
                                 int subscriptionFeesId = (int)List[i].subscriptionFeesId;
                                 var items5 = entity.agentMemberships.Where(x => x.subscriptionFeesId == subscriptionFeesId).Select(b => new { b.agentMembershipsId }).FirstOrDefault();
 
-                                if (  items5 is null)
+                                if (items5 is null)
                                     canDelete = true;
 
                             }
@@ -193,8 +193,8 @@ namespace POS_Server.Controllers
                             tmpObject.monthsCount = newObject.monthsCount;
                             tmpObject.Amount = newObject.Amount;
                             tmpObject.notes = newObject.notes;
-                            tmpObject.createDate = newObject.createDate;
-                          
+                          //  tmpObject.createDate = newObject.createDate;
+
                             tmpObject.createUserId = newObject.createUserId;
                             tmpObject.updateUserId = newObject.updateUserId;
                             tmpObject.isActive = newObject.isActive;
@@ -292,6 +292,103 @@ namespace POS_Server.Controllers
         }
 
 
+        public int Save(subscriptionFees newObject)
+        {
 
+            int message = 0;
+
+            if (newObject.updateUserId == 0 || newObject.updateUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.updateUserId = id;
+            }
+            if (newObject.createUserId == 0 || newObject.createUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.createUserId = id;
+            }
+            if (newObject.membershipId == 0 || newObject.membershipId == null)
+            {
+                Nullable<int> id = null;
+                newObject.membershipId = id;
+            }
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    subscriptionFees tmpObject = new subscriptionFees();
+                    var bankEntity = entity.Set<subscriptionFees>();
+                    if (newObject.subscriptionFeesId == 0)
+                    {
+                        newObject.createDate = DateTime.Now;
+                        newObject.updateDate = DateTime.Now;
+                        newObject.updateUserId = newObject.createUserId;
+                        tmpObject = bankEntity.Add(newObject);
+                        entity.SaveChanges();
+                        message = tmpObject.subscriptionFeesId;
+                    }
+                    else
+                    {
+                        tmpObject = entity.subscriptionFees.Where(p => p.subscriptionFeesId == newObject.subscriptionFeesId).FirstOrDefault();
+
+                        tmpObject.updateDate = DateTime.Now;
+
+                        tmpObject.subscriptionFeesId = newObject.subscriptionFeesId;
+                        tmpObject.membershipId = newObject.membershipId;
+                        tmpObject.monthsCount = newObject.monthsCount;
+                        tmpObject.Amount = newObject.Amount;
+                        tmpObject.notes = newObject.notes;
+                      //  tmpObject.createDate = newObject.createDate;
+
+                        tmpObject.createUserId = newObject.createUserId;
+                        tmpObject.updateUserId = newObject.updateUserId;
+                        tmpObject.isActive = newObject.isActive;
+
+
+
+
+                        entity.SaveChanges();
+                        message = tmpObject.subscriptionFeesId;
+
+                    }
+                    return message;
+                }
+            }
+
+            catch
+            {
+                message = 0;
+                return message;
+            }
+
+        }
+
+        public int DeleteByMembershipId(int membershipId)
+        {
+            int message = 0;
+            List<subscriptionFees> items = null;
+            // delete old invoice items
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+            {
+                items = entity.subscriptionFees.Where(x => x.membershipId == membershipId).ToList();
+                if (items != null)
+                {
+                    entity.subscriptionFees.RemoveRange(items);
+                 
+                        message = entity.SaveChanges();
+                }
+
+            }
+                return message;
+            }
+            catch (Exception ex)
+            {
+                message = -2;
+                return message;
+            }
+
+        }
     }
 }

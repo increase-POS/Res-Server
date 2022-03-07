@@ -751,6 +751,7 @@
           <Property Name="updateUserId" Type="int" />
           <Property Name="isActive" Type="tinyint" Nullable="false" />
           <Property Name="code" Type="nvarchar" MaxLength="500" />
+          <Property Name="subscriptionType" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="membershipsOffers">
           <Key>
@@ -6117,6 +6118,7 @@
           <NavigationProperty Name="membershipsOffers" Relationship="Self.FK_membershipsOffers_memberships" FromRole="memberships" ToRole="membershipsOffers" />
           <NavigationProperty Name="subscriptionFees" Relationship="Self.FK_subscriptionFees_memberships" FromRole="memberships" ToRole="subscriptionFees" />
           <Property Name="code" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="subscriptionType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="membershipsOffers">
           <Key>
@@ -11543,6 +11545,7 @@
           <EntitySetMapping Name="memberships">
             <EntityTypeMapping TypeName="PosModel.memberships">
               <MappingFragment StoreEntitySet="memberships">
+                <ScalarProperty Name="subscriptionType" ColumnName="subscriptionType" />
                 <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="membershipId" ColumnName="membershipId" />
                 <ScalarProperty Name="name" ColumnName="name" />

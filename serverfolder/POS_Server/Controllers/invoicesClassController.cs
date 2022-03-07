@@ -35,7 +35,7 @@ namespace POS_Server.Controllers
                     {
                         invClassId = S.invClassId,
                         minInvoiceValue = S.minInvoiceValue,
-                        MaxInvoiceValue = S.MaxInvoiceValue,
+                        maxInvoiceValue = S.maxInvoiceValue,
                         discountValue = S.discountValue,
                         discountType = S.discountType,
                         createDate = S.createDate,
@@ -104,7 +104,7 @@ namespace POS_Server.Controllers
                    {
                        S.invClassId,
                        S.minInvoiceValue,
-                       S.MaxInvoiceValue,
+                       S.maxInvoiceValue,
                        S.discountValue,
                        S.discountType,
                        S.createDate,
@@ -182,7 +182,7 @@ namespace POS_Server.Controllers
 
                             tmpObject.invClassId = newObject.invClassId;
                             tmpObject.minInvoiceValue = newObject.minInvoiceValue;
-                            tmpObject.MaxInvoiceValue = newObject.MaxInvoiceValue;
+                            tmpObject.maxInvoiceValue = newObject.maxInvoiceValue;
                             tmpObject.discountValue = newObject.discountValue;
                             tmpObject.discountType = newObject.discountType;
                             tmpObject.createDate = newObject.createDate;
@@ -319,7 +319,7 @@ namespace POS_Server.Controllers
                                 {
                                     invClassId = JBB.invClassId,
                                     minInvoiceValue = JBB.minInvoiceValue,
-                                    MaxInvoiceValue = JBB.MaxInvoiceValue,
+                                    maxInvoiceValue = JBB.maxInvoiceValue,
                                     discountValue = JBB.discountValue,
                                     discountType = JBB.discountType,
                                     createDate = JBB.createDate,

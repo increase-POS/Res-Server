@@ -34,6 +34,7 @@ namespace POS_Server
         public Nullable<int> updateUserId { get; set; }
         public byte isActive { get; set; }
         public string code { get; set; }
+        public string subscriptionType { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agentMemberships> agentMemberships { get; set; }
