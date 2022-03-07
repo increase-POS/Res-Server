@@ -246,11 +246,12 @@ namespace POS_Server.Controllers
 
                         #endregion
                         #region check opened tables without reservation
+                     
                         var searchPredicate = PredicateBuilder.New<invoiceTables>();
                         if (searchForDate)
-                            searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.createDate == dateSearch && x.invoices.invType == "sd");
+                            searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.invoices.invDate == dateSearch && x.invoices.invType == "sd");
                         else
-                            searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.createDate >= dateSearch  && x.invoices.invType == "sd");
+                            searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.invoices.invDate >= dateSearch  && x.invoices.invType == "sd");
 
                         var invoiceTables = entity.invoiceTables.Where(searchPredicate).ToList();
                         
@@ -259,7 +260,7 @@ namespace POS_Server.Controllers
                             
                             var invoice = entity.invoices.Find(invTable.invoiceId);
                             DateTime invTime = (DateTime)invoice.invDate;
-                            //return startTimeSearch.ToString() + "  " + invTime.ToString() + "   " + invTime.Add(timeStaying).ToString();
+                          // return startTimeSearch.ToString() + "  " + invTime.ToString() + "   " + invTime.Add(timeStaying).ToString();
 
                             if (searchForEndTime)
                             {
