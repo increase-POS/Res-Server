@@ -313,12 +313,15 @@ namespace POS_Server.Controllers
                     else if (c.Type == "dateSearch")
                     {
                          dateSearch = DateTime.Parse(c.Value);
+                        startTime = dateSearch;
+                        dateSearch = DateTime.Parse(dateSearch.ToString().Split(' ')[0]);
                     }
-                    else if (c.Type == "startTimeSearch")
-                    {
-                        startTime = DateTime.Parse(c.Value);
-                    }                   
+                    //else if (c.Type == "startTimeSearch")
+                    //{
+                    //    startTime = DateTime.Parse(c.Value);
+                    //}                   
                 }
+                //startTime = DateTime.Parse( dateSearch + " " + startTime);
                 #endregion
                 // return startTimeSearch.ToString();
                 using (incposdbEntities entity = new incposdbEntities())
@@ -349,14 +352,14 @@ namespace POS_Server.Controllers
                                        isActive = t.isActive,
                                        status = "empty",
                                    }).ToList();
-
+             
                     foreach (TableModel table in tablesList)
                     {
                         #region check reservation status                      
                         int tableId = table.tableId;
                         bool isOpen = false;
                         var reservPredicate = PredicateBuilder.New<reservations>();
-
+                       
                         reservPredicate = reservPredicate.And(x => x.reservationDate >= dateSearch && !reservationClose.Contains(x.status));
                         
                         var reservation = (from rs in entity.reservations.Where(reservPredicate)
@@ -380,7 +383,7 @@ namespace POS_Server.Controllers
                       
                         foreach (ReservationModel reserv in reservation)
                         {
-                           if (startTime >= reserv.reservationTime && startTime <= reserv.endTime)
+                            if (startTime >= reserv.reservationTime && startTime <= reserv.endTime)
                             {
                                 table.status = "reserved";
                             }
