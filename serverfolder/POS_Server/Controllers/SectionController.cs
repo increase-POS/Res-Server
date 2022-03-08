@@ -77,9 +77,9 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("getBranchSections")]
         public string getBranchSections(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             Boolean canDelete = false;
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -97,7 +97,7 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var sectionList =(from L in entity.sections where L.branchId == branchId && L.isFreeZone != 1
+                    var sectionList =(from L in entity.sections where L.branchId == branchId && L.isFreeZone != 1 && L.isKitchen != 1
                                       join b in entity.branches on L.branchId equals b.branchId into lj
                                       from v in lj.DefaultIfEmpty()
                                       select new SectionModel()
