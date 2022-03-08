@@ -52,6 +52,8 @@ namespace POS_Server.Models
         public decimal cashReturn { get; set; }
         public decimal shippingCost { get; set; }
         public decimal realShippingCost { get; set; }
+        public Nullable<long> reservationId { get; set; }
+        public Nullable<int> waiterId { get; set; }
 
         public IEnumerable<TableModel> tables { get; set; }
     }

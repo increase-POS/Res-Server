@@ -2364,6 +2364,8 @@ var strP = TokenManager.GetPrincipal(token);
                     tmpInvoice.cashReturn = newObject.cashReturn;
                     tmpInvoice.shippingCost = newObject.shippingCost;
                     tmpInvoice.realShippingCost = newObject.realShippingCost;
+                    tmpInvoice.reservationId = newObject.reservationId;
+                    tmpInvoice.waiterId = newObject.waiterId;
                     entity.SaveChanges();
                     res = tmpInvoice.invoiceId;
                     return res;
@@ -2479,7 +2481,7 @@ var strP = TokenManager.GetPrincipal(token);
                             message = "0";
                         else
                         {
-                            res = saveInvoiceTables(tables, invoiceId);
+                            res = saveInvoiceTables(tables, invoiceId, (int)newObject.updateUserId);
                             if (res == "0")
                                 message = "0";
                         }                      
@@ -2532,7 +2534,7 @@ var strP = TokenManager.GetPrincipal(token);
                     int invoiceId = saveInvoice(newObject);
                     if (invoiceId > 0)
                     {
-                       string res = saveInvoiceTables(tables, invoiceId);
+                       string res = saveInvoiceTables(tables, invoiceId,(int)newObject.updateUserId);
                         if (res == "0")
                             message = "0";                    
                     }
@@ -2559,6 +2561,7 @@ var strP = TokenManager.GetPrincipal(token);
             else
             {
                 int invoiceId = 0;
+                int userId = 0;
                 string tablesObject = "";
                 List<tables> tables = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -2567,6 +2570,10 @@ var strP = TokenManager.GetPrincipal(token);
                     if (c.Type == "invoiceId")
                     {
                         invoiceId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
                     }
                     else if (c.Type == "tablesObject")
                     {
@@ -2585,7 +2592,7 @@ var strP = TokenManager.GetPrincipal(token);
                         entity.SaveChanges();
                     }
 
-                    message = saveInvoiceTables(tables, invoiceId);
+                    message = saveInvoiceTables(tables, invoiceId, userId);
                 }
                 catch
                 {
@@ -2594,7 +2601,7 @@ var strP = TokenManager.GetPrincipal(token);
                 return TokenManager.GenerateToken(message);
             }
         }
-        public string saveInvoiceTables(List<tables> newObject, int invoiceId)
+        public string saveInvoiceTables(List<tables> newObject, int invoiceId,int userId)
         {
             string message = "";
             try
@@ -2622,8 +2629,8 @@ var strP = TokenManager.GetPrincipal(token);
                         tr.createDate = DateTime.Now;
                         tr.updateDate = DateTime.Now;
                         tr.isActive = 1;
-                        tr.updateUserId = newObject[i].createUserId;
-                        tr.createUserId = newObject[i].createUserId;
+                        tr.updateUserId = userId;
+                        tr.createUserId = userId;
 
                         tr = entity.invoiceTables.Add(tr);
                         entity.SaveChanges();
