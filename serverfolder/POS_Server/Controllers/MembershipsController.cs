@@ -44,10 +44,10 @@ namespace POS_Server.Controllers
                         isActive = S.isActive,
                         subscriptionType = S.subscriptionType,
                         code = S.code,
+                        subscriptionFee = S.subscriptionFees.FirstOrDefault().Amount,
 
 
-                    })
-                    .ToList();
+                    }).ToList();
 
                     if (List.Count > 0)
                     {
