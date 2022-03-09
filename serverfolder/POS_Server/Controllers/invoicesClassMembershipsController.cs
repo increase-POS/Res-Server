@@ -30,7 +30,8 @@ namespace POS_Server.Controllers
             {
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var List = entity.invoicesClassMemberships.Select(S => new invoicesClassMemberships
+                    var List1 = entity.invoicesClassMemberships.ToList();
+                    var List = List1.Select(S => new invoicesClassMemberships
                     {
                         invClassMemberId = S.invClassMemberId,
                         membershipId = S.membershipId,

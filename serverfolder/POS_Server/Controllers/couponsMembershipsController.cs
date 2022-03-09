@@ -28,9 +28,14 @@ namespace POS_Server.Controllers
             }
             else
             {
+                try
+                {
+
+              
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var List = entity.couponsMemberships.Select(S => new couponsMemberships
+                        var List1 = entity.couponsMemberships.ToList();
+                    var List = List1.Select(S => new couponsMemberships
                     {
                      
                         couponMembershipId = S.couponMembershipId,
@@ -48,6 +53,11 @@ namespace POS_Server.Controllers
 
                     return TokenManager.GenerateToken(List);
 
+                }
+                }
+                catch(Exception ex)
+                {
+                    return TokenManager.GenerateToken(ex.ToString());
                 }
             }
         }
