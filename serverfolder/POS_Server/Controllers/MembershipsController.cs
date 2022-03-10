@@ -45,6 +45,8 @@ namespace POS_Server.Controllers
                         subscriptionType = S.subscriptionType,
                         code = S.code,
                         subscriptionFee = S.subscriptionFees.FirstOrDefault().Amount,
+                        isFreeDelivery = S.isFreeDelivery,
+                        deliveryDiscountPercent = S.deliveryDiscountPercent,
 
 
                     }).ToList();
@@ -116,6 +118,8 @@ namespace POS_Server.Controllers
                        S.isActive,
                        S.subscriptionType,
                        S.code,
+                    S.isFreeDelivery,
+                      S.deliveryDiscountPercent,
                    })
                    .FirstOrDefault();
                     return TokenManager.GenerateToken(bank);
@@ -185,7 +189,7 @@ namespace POS_Server.Controllers
                             tmpObject.name = newObject.name;
 
                             tmpObject.notes = newObject.notes;
-                          //  tmpObject.createDate = newObject.createDate;
+                            //  tmpObject.createDate = newObject.createDate;
 
                             tmpObject.createUserId = newObject.createUserId;
                             tmpObject.updateUserId = newObject.updateUserId;
@@ -193,7 +197,8 @@ namespace POS_Server.Controllers
 
                             tmpObject.subscriptionType = newObject.subscriptionType;
                             tmpObject.code = newObject.code;
-
+                            tmpObject.isFreeDelivery = newObject.isFreeDelivery;
+                            tmpObject.deliveryDiscountPercent = newObject.deliveryDiscountPercent;
                             entity.SaveChanges();
                             message = tmpObject.membershipId.ToString();
 
@@ -325,7 +330,7 @@ namespace POS_Server.Controllers
                         tmpObject.name = newObject.name;
 
                         tmpObject.notes = newObject.notes;
-                      //  tmpObject.createDate = newObject.createDate;
+                        //  tmpObject.createDate = newObject.createDate;
 
                         tmpObject.createUserId = newObject.createUserId;
                         tmpObject.updateUserId = newObject.updateUserId;
@@ -403,6 +408,8 @@ namespace POS_Server.Controllers
 
                         tmpObject.subscriptionType = newObjectModel.subscriptionType;
                         tmpObject.code = newObjectModel.code;
+                        tmpObject.isFreeDelivery = newObjectModel.isFreeDelivery;
+                        tmpObject.deliveryDiscountPercent = newObjectModel.deliveryDiscountPercent;
 
                         if (newObjectModel.membershipId == 0)
                         {
@@ -413,7 +420,7 @@ namespace POS_Server.Controllers
                                 //new add subscriptionFees row
 
                                 //   newsubscrOb.updateDate = DateTime.Now;
-                                newsubscrOb.subscriptionFeesId =0;
+                                newsubscrOb.subscriptionFeesId = 0;
                                 newsubscrOb.membershipId = res;
 
                                 if (newObjectModel.subscriptionType == "o")
@@ -477,7 +484,7 @@ namespace POS_Server.Controllers
                             tmpObjectdb = entity.memberships.Where(p => p.membershipId == newObjectModel.membershipId).FirstOrDefault();
                             tmpsubListdb = entity.subscriptionFees.Where(p => p.membershipId == newObjectModel.membershipId).ToList();
                             tmpSubObjdb = tmpsubListdb.OrderBy(S => S.updateDate).LastOrDefault();
-                         //   string oldtype = tmpObjectdb.subscriptionType;
+                            //   string oldtype = tmpObjectdb.subscriptionType;
                             res = Save(tmpObject);
                             if (res > 0)
                             {
@@ -519,7 +526,7 @@ namespace POS_Server.Controllers
                                 else
                                 {
                                     int delres = 0;
-                                    delres= subscCntrller.DeleteByMembershipId(newObjectModel.membershipId);
+                                    delres = subscCntrller.DeleteByMembershipId(newObjectModel.membershipId);
 
                                     //the old not like new
                                     if (newObjectModel.subscriptionType == "o")
@@ -541,7 +548,8 @@ namespace POS_Server.Controllers
                                         {
                                             return TokenManager.GenerateToken("-1");
                                         }
-                                    }else if (newObjectModel.subscriptionType == "f")
+                                    }
+                                    else if (newObjectModel.subscriptionType == "f")
                                     {
                                         newsubscrOb.membershipId = newObjectModel.membershipId;
                                         newsubscrOb.monthsCount = 1;

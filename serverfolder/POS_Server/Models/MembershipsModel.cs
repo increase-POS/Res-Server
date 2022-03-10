@@ -18,6 +18,8 @@ namespace POS_Server.Models
         public byte isActive { get; set; }
         public string subscriptionType { get; set; }
         public string code { get; set; }
+        public bool isFreeDelivery { get; set; }
+        public decimal deliveryDiscountPercent { get; set; }
 
         public Nullable<decimal> subscriptionFee { get; set; }
         public bool canDelete { get; set; }
