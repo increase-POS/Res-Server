@@ -417,7 +417,203 @@ namespace POS_Server.Controllers
             }
 
         }
+        //[HttpPost]
+        //[Route("UpdateAgentsByMembershipId")]
+        //public string UpdateAgentsByMembershipId(string token)
+        //{
+        //    token = TokenManager.readToken(HttpContext.Current.Request);
+        //    string message = "";
+        //    var strP = TokenManager.GetPrincipal(token);
+        //    if (strP != "0") //invalid authorization
+        //    {
+        //        return TokenManager.GenerateToken(strP);
+        //    }
+        //    else
+        //    {
+        //        string strObject = "";
+        //        List<agentMemberships> newListObj = null;
+        //        int membershipId = 0;
+        //        int updateUserId = 0;
+        //        IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+        //        foreach (Claim c in claims)
+        //        {
+        //            if (c.Type == "newList")
+        //            {
+        //                strObject = c.Value.Replace("\\", string.Empty);
+        //                strObject = strObject.Trim('"');
+        //                newListObj = JsonConvert.DeserializeObject<List<agentMemberships>>(strObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
 
+        //            }
+        //            else if (c.Type == "membershipId")
+        //            {
+        //                membershipId = int.Parse(c.Value);
+        //            }
+        //            else
+        //          if (c.Type == "updateUserId")
+        //            {
+        //                updateUserId = int.Parse(c.Value);
+        //            }
+        //        }
+
+        //        List<agentMemberships> olditems = null;
+        //        List<agentMemberships> oldActiveitems = null;
+        //        List<agentMemberships> newitems = null;
+        //        agentMemberships tempob  = new agentMemberships();
+        //        // delete old invoice items
+        //        using (incposdbEntities entity = new incposdbEntities())
+        //        {
+        //            olditems = entity.agentMemberships.Where(x => x.membershipId == membershipId).ToList();
+
+        //            if (olditems != null)
+        //            {
+        //                //  entity.agentMemberships.RemoveRange(items);
+        //           //     oldActiveitems = olditems.Where(M=>M.agentMembershipsId!= cont)
+        //                try
+        //                {
+        //                    foreach (var oldrow in olditems)
+        //                    {
+        //                        oldActiveitems =  null;
+        //                        oldActiveitems = newListObj.Where(M => M.agentMembershipsId == oldrow.agentMembershipsId).ToList();
+        //                        if (oldActiveitems == null)
+        //                        {
+        //                            //isactive=0
+        //                            oldrow.isActive = 0;
+        //                            entity.SaveChanges();
+        //                        }
+        //                        else if(oldActiveitems.Count == 0)
+        //                        {
+        //                            //isactive=0
+        //                            oldrow.isActive = 0;
+        //                            entity.SaveChanges();
+
+        //                        }
+
+
+
+        //                    }
+
+
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    message = "-2";
+        //                    return TokenManager.GenerateToken(message);
+        //                }
+        //            }
+        //            //add new items
+        //            newitems = newListObj.Where(M => M.agentMembershipsId == 0).ToList();
+
+        //            foreach (var newrow in newitems)
+        //            {
+        //                newrow.membershipId = membershipId;
+        //                Save(newrow);
+
+
+        //            }
+        //            return TokenManager.GenerateToken("1");
+
+
+        //        }
+
+
+        //    }
+
+
+        //}
+
+
+        //public int Save(agentMemberships newObject)
+        //{
+        //    if (newObject != null)
+        //    {
+
+        //    int message = 0;
+        //        if (newObject.updateUserId == 0 || newObject.updateUserId == null)
+        //        {
+        //            Nullable<int> id = null;
+        //            newObject.updateUserId = id;
+        //        }
+        //        if (newObject.createUserId == 0 || newObject.createUserId == null)
+        //        {
+        //            Nullable<int> id = null;
+        //            newObject.createUserId = id;
+        //        }
+        //        if (newObject.subscriptionFeesId == 0 || newObject.subscriptionFeesId == null)
+        //        {
+        //            Nullable<int> id = null;
+        //            newObject.subscriptionFeesId = id;
+        //        }
+        //        if (newObject.cashTransId == 0 || newObject.cashTransId == null)
+        //        {
+        //            Nullable<int> id = null;
+        //            newObject.cashTransId = id;
+        //        }
+        //        if (newObject.membershipId == 0 || newObject.membershipId == null)
+        //        {
+        //            Nullable<int> id = null;
+        //            newObject.membershipId = id;
+        //        }
+        //        if (newObject.agentId == 0 || newObject.agentId == null)
+        //        {
+        //            Nullable<int> id = null;
+        //            newObject.agentId = id;
+        //        }
+        //        try
+        //        {
+        //            using (incposdbEntities entity = new incposdbEntities())
+        //            {
+        //                agentMemberships tmpObject = new agentMemberships();
+        //                var bankEntity = entity.Set<agentMemberships>();
+        //                if (newObject.agentMembershipsId == 0)
+        //                {
+        //                    newObject.createDate = DateTime.Now;
+        //                    newObject.updateDate = DateTime.Now;
+        //                    newObject.updateUserId = newObject.createUserId;
+        //                    tmpObject = bankEntity.Add(newObject);
+        //                    entity.SaveChanges();
+        //                    message = tmpObject.agentMembershipsId ;
+        //                }
+        //                else
+        //                {
+        //                    tmpObject = entity.agentMemberships.Where(p => p.agentMembershipsId == newObject.agentMembershipsId).FirstOrDefault();
+
+        //                    tmpObject.updateDate = DateTime.Now;
+
+        //                    tmpObject.agentMembershipsId = newObject.agentMembershipsId;
+        //                    tmpObject.subscriptionFeesId = newObject.subscriptionFeesId;
+        //                    tmpObject.cashTransId = newObject.cashTransId;
+        //                    tmpObject.membershipId = newObject.membershipId;
+        //                    tmpObject.agentId = newObject.agentId;
+        //                    tmpObject.startDate = newObject.startDate;
+        //                    tmpObject.EndDate = newObject.EndDate;
+        //                    tmpObject.notes = newObject.notes;
+        //                 //   tmpObject.createDate = newObject.createDate;
+        //                    tmpObject.updateDate = newObject.updateDate;
+        //                    tmpObject.createUserId = newObject.createUserId;
+        //                    tmpObject.updateUserId = newObject.updateUserId;
+        //                    tmpObject.isActive = newObject.isActive;
+
+        //                    entity.SaveChanges();
+        //                    message = tmpObject.agentMembershipsId ;
+
+        //                }
+        //                return  message;
+        //            }
+        //        }
+
+        //        catch
+        //        {
+        //            message = 0;
+        //            return message;
+        //        }
+        //    }
+        //    else
+        //        {
+
+        //            return 0;
+        //        }
+
+        //}
 
     }
 }
