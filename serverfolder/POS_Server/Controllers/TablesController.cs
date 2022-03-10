@@ -237,7 +237,7 @@ namespace POS_Server.Controllers
                             }
                            
                             // check if table is open
-                            var invoice = entity.invoices.Where(x => x.reservationId == reserv.reservationId && x.invType == "sd" && x.isActive == 1).FirstOrDefault();
+                            var invoice = entity.invoices.Where(x => x.reservationId == reserv.reservationId && x.invType == "sd" && x.isActive == true).FirstOrDefault();
                             if (invoice != null)
                                 isOpen = true;
                         }
@@ -387,7 +387,7 @@ namespace POS_Server.Controllers
                             }
                            
                             // check if table is open
-                            var invoice = entity.invoices.Where(x => x.reservationId == reserv.reservationId && x.invType == "sd" && x.isActive == 1).FirstOrDefault();
+                            var invoice = entity.invoices.Where(x => x.reservationId == reserv.reservationId && x.invType == "sd" && x.isActive == true).FirstOrDefault();
                             if (invoice != null)
                                 isOpen = true;
                         }
