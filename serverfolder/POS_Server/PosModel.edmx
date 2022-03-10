@@ -480,7 +480,7 @@
           </Key>
           <Property Name="invClassId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="minInvoiceValue" Type="decimal" Precision="20" Scale="3" Nullable="false" />
-          <Property Name="MaxInvoiceValue" Type="decimal" Precision="20" Scale="3" Nullable="false" />
+          <Property Name="maxInvoiceValue" Type="decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="discountValue" Type="decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="discountType" Type="tinyint" Nullable="false" />
           <Property Name="createDate" Type="datetime2" Precision="7" />
@@ -489,6 +489,7 @@
           <Property Name="createUserId" Type="int" />
           <Property Name="notes" Type="ntext" />
           <Property Name="isActive" Type="tinyint" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="invoicesClassMemberships">
           <Key>
@@ -742,7 +743,7 @@
           <Key>
             <PropertyRef Name="membershipId" />
           </Key>
-          <Property Name="membershipId" Type="int" Nullable="false" />
+          <Property Name="membershipId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="100" />
           <Property Name="notes" Type="ntext" />
           <Property Name="createDate" Type="datetime2" Precision="7" />
@@ -1168,7 +1169,7 @@
           <Key>
             <PropertyRef Name="subscriptionFeesId" />
           </Key>
-          <Property Name="subscriptionFeesId" Type="int" Nullable="false" />
+          <Property Name="subscriptionFeesId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="membershipId" Type="int" />
           <Property Name="monthsCount" Type="int" Nullable="false" />
           <Property Name="Amount" Type="decimal" Precision="20" Scale="3" Nullable="false" />
@@ -5757,7 +5758,6 @@
           </Key>
           <Property Name="invClassId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="minInvoiceValue" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
-          <Property Name="MaxInvoiceValue" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="discountValue" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="discountType" Type="Byte" Nullable="false" />
           <Property Name="createDate" Type="DateTime" Precision="7" />
@@ -5767,6 +5767,8 @@
           <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="isActive" Type="Byte" Nullable="false" />
           <NavigationProperty Name="invoicesClassMemberships" Relationship="Self.FK_invoicesClassMemberships_invoicesClass" FromRole="invoicesClass" ToRole="invoicesClassMemberships" />
+          <Property Name="maxInvoiceValue" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="invoicesClassMemberships">
           <Key>
@@ -11265,9 +11267,10 @@
           <EntitySetMapping Name="invoicesClass">
             <EntityTypeMapping TypeName="PosModel.invoicesClass">
               <MappingFragment StoreEntitySet="invoicesClass">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="maxInvoiceValue" ColumnName="maxInvoiceValue" />
                 <ScalarProperty Name="invClassId" ColumnName="invClassId" />
                 <ScalarProperty Name="minInvoiceValue" ColumnName="minInvoiceValue" />
-                <ScalarProperty Name="MaxInvoiceValue" ColumnName="MaxInvoiceValue" />
                 <ScalarProperty Name="discountValue" ColumnName="discountValue" />
                 <ScalarProperty Name="discountType" ColumnName="discountType" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />

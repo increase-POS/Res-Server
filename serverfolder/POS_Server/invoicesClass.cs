@@ -22,7 +22,6 @@ namespace POS_Server
     
         public int invClassId { get; set; }
         public decimal minInvoiceValue { get; set; }
-        public decimal MaxInvoiceValue { get; set; }
         public decimal discountValue { get; set; }
         public byte discountType { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
@@ -31,6 +30,8 @@ namespace POS_Server
         public Nullable<int> createUserId { get; set; }
         public string notes { get; set; }
         public byte isActive { get; set; }
+        public decimal maxInvoiceValue { get; set; }
+        public string name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<invoicesClassMemberships> invoicesClassMemberships { get; set; }

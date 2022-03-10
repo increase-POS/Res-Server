@@ -44,7 +44,7 @@ namespace POS_Server.Controllers
                         createUserId = S.createUserId,
                         notes = S.notes,
                         isActive = S.isActive,
-
+                        name = S.name,
 
 
                     })
@@ -113,7 +113,7 @@ namespace POS_Server.Controllers
                        S.createUserId,
                        S.notes,
                        S.isActive,
-
+                        S.name,
 
                    })
                    .FirstOrDefault();
@@ -191,7 +191,7 @@ namespace POS_Server.Controllers
                             tmpObject.createUserId = newObject.createUserId;
                             tmpObject.notes = newObject.notes;
                             tmpObject.isActive = newObject.isActive;
-
+                            tmpObject.name = newObject.name;
 
 
 
@@ -203,10 +203,12 @@ namespace POS_Server.Controllers
                     }
                 }
 
-                catch
+                catch (Exception ex)
                 {
-                    message = "0";
-                    return TokenManager.GenerateToken(message);
+                     
+                    return TokenManager.GenerateToken(ex.ToString());
+                    //message = "0";
+                    //return TokenManager.GenerateToken(message);
                 }
             }
         }
@@ -328,10 +330,11 @@ namespace POS_Server.Controllers
                                     createUserId = JBB.createUserId,
                                     notes = JBB.notes,
                                     isActive = JBB.isActive,
-
+                                   
                                     invClassMemberId = S.invClassMemberId,
 
                                     membershipId = S.membershipId,
+                                    name= JBB.name,
 
                                 }).ToList();
                     return TokenManager.GenerateToken(List);

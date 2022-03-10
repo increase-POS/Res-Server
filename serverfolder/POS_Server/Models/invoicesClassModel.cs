@@ -23,6 +23,7 @@ namespace POS_Server.Models
 
         public int invClassMemberId { get; set; }
         public Nullable<int> membershipId { get; set; }
-  
+        public string name { get; set; }
+
     }
 }
