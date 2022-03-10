@@ -2413,11 +2413,12 @@ var strP = TokenManager.GetPrincipal(token);
                     if (invoiceId > 0)
                     {
                         string res = tc.saveInvoiceItems(items, invoiceId);
+                        message = invoiceId.ToString();
                         if (res == "0")
                             message = "0";
                     }
                     else
-                        message = invoiceId.ToString();
+                        message = "0";
                     return TokenManager.GenerateToken(message);
                 }
                 catch

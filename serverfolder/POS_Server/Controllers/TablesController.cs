@@ -256,11 +256,10 @@ namespace POS_Server.Controllers
                         var invoiceTables = entity.invoiceTables.Where(searchPredicate).ToList();
                         
                         foreach(invoiceTables invTable in invoiceTables)
-                        {
-                            
+                        {                          
                             var invoice = entity.invoices.Find(invTable.invoiceId);
                             DateTime invTime = (DateTime)invoice.invDate;
-                          // return startTimeSearch.ToString() + "  " + invTime.ToString() + "   " + invTime.Add(timeStaying).ToString();
+                            // return startTimeSearch.ToString() + "  " + invTime.ToString() + "   " + invTime.Add(timeStaying).ToString();
 
                             if (searchForEndTime)
                             {
@@ -274,6 +273,7 @@ namespace POS_Server.Controllers
                             }
                             else if (invTime <= startTimeSearch && startTimeSearch <= invTime.Add(timeStaying))
                             {
+                              
                                 if (table.status == "empty")
                                     table.status = "opened";
                                 else if (table.status == "reserved")
@@ -352,18 +352,20 @@ namespace POS_Server.Controllers
                                        isActive = t.isActive,
                                        status = "empty",
                                    }).ToList();
-             
+
                     foreach (TableModel table in tablesList)
                     {
                         #region check reservation status                      
                         int tableId = table.tableId;
                         bool isOpen = false;
+                        
                         var reservPredicate = PredicateBuilder.New<reservations>();
                        
-                        reservPredicate = reservPredicate.And(x => x.reservationDate >= dateSearch && !reservationClose.Contains(x.status));
-                        
+                        //reservPredicate = reservPredicate.And(x => x.reservationDate >= dateSearch && !reservationClose.Contains(x.status));
+                        reservPredicate = reservPredicate.And(x => x.isActive == 1 && !reservationClose.Contains(x.status));
+
                         var reservation = (from rs in entity.reservations.Where(reservPredicate)
-                                           join tr in entity.tablesReservations.Where(x => x.tableId == tableId) on rs.reservationId equals tr.reservationId 
+                                           join tr in entity.tablesReservations.Where(x => x.tableId == tableId) on rs.reservationId equals tr.reservationId
                                            select new ReservationModel()
                                            {
                                                reservationId = rs.reservationId,
@@ -379,11 +381,12 @@ namespace POS_Server.Controllers
                                                createDate = rs.createDate,
                                                updateDate = rs.updateDate,
                                                isActive = rs.isActive,
-                                           }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime);
-                      
+                                           }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime).ToList() ;
+                        
                         foreach (ReservationModel reserv in reservation)
                         {
-                            if (startTime >= reserv.reservationTime && startTime <= reserv.endTime)
+                            //return startTime.ToString() + " --" + reserv.reservationTime.ToString() + "---" + reserv.endTime.ToString();
+                            //if (startTime >= reserv.reservationTime && startTime <= reserv.endTime)
                             {
                                 table.status = "reserved";
                             }
@@ -403,7 +406,7 @@ namespace POS_Server.Controllers
                         searchPredicate = searchPredicate.And(x => x.tableId == tableId  && x.invoices.invType == "sd");
 
                         var invoiceTables = entity.invoiceTables.Where(searchPredicate).ToList();
-                        if(invoiceTables.Count >0)
+                        if(invoiceTables.Count > 0)
                         {
                             if (table.status == "empty")
                                 table.status = "opened";
@@ -500,8 +503,7 @@ namespace POS_Server.Controllers
 
                     var reservation = (from r in entity.reservations.Where(reservPredicate)
                                        join tr in entity.tablesReservations.Where(x => x.tableId == tableId)
-                                        on r.reservationId equals tr.reservationId into rj
-                                       from tr in rj.DefaultIfEmpty()
+                                        on r.reservationId equals tr.reservationId 
                                        select new ReservationModel()
                                        {
                                            reservationId = r.reservationId,
@@ -521,7 +523,7 @@ namespace POS_Server.Controllers
                  
                     foreach (ReservationModel reserv in reservation)
                     {
-                      //  return "start date: " + startDate + "end date: " + endDate.ToString() + "start time: " + reserv.reservationTime + "end time: " + reserv.endTime;
+                       //return "start date: " + startDate + "end date: " + endDate.ToString() + "start time: " + reserv.reservationTime + "end time: " + reserv.endTime;
                         if ((startDate >= reserv.reservationTime && startDate <= reserv.endTime)|| (endDate >= reserv.reservationTime && endDate <= reserv.endTime))
                         {
                             return TokenManager.GenerateToken("0");
@@ -652,8 +654,17 @@ namespace POS_Server.Controllers
                                             agentId = rs.agentId,
                                             agentName = c.name,
                                             branchId = rs.branchId,
+                                            posId = rs.posId,
+                                            branchCreatorId = rs.branchCreatorId,
+                                            invType = rs.invType,
+                                            total = rs.total,
                                            totalNet = rs.totalNet,
+                                           discountType = rs.discountType,
+                                           discountValue = rs.discountValue,
                                            invoiceId = rs.invoiceId,
+                                           reservationId = rs.reservationId,
+                                           waiterId = rs.waiterId,
+                                           tax = rs.tax,
                                            tables = (from it in entity.invoiceTables.Where(x => x.invoiceId == rs.invoiceId && x.isActive == 1)
                                                      join ts in entity.tables on it.tableId equals ts.tableId
                                                      select new TableModel()
