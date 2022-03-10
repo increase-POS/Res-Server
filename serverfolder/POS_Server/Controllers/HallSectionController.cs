@@ -1,0 +1,202 @@
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using POS_Server.Models;
+using POS_Server.Models.VM;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Web;
+using System.Web.Http;
+
+namespace POS_Server.Controllers
+{
+    [RoutePrefix("api/HallSection")]
+    public class HallSectionController : ApiController
+    {
+        [HttpPost]
+        [Route("GetAll")]
+        public string GetAll(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            Boolean canDelete = false;
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var sectionsList = entity.hallSections.Select(S => new HallSectionModel()
+                    {
+                        name = S.name,
+                        sectionId = S.sectionId,
+                        branchId = S.branchId,
+                        details = S.details,
+                        notes = S.notes,
+                        createUserId = S.createUserId,
+                        updateUserId = S.updateUserId,
+                        createDate = S.createDate,
+                        updateDate = S.updateDate,
+                        isActive = (byte)S.isActive,
+                        branchName = S.branches.name,
+                    }).ToList();
+
+                    // can delet or not
+                    if (sectionsList.Count > 0)
+                    {
+                        foreach (HallSectionModel section in sectionsList)
+                        {
+                            canDelete = false;
+                            if (section.isActive == 1)
+                            {
+                                int cId = (int)section.sectionId;
+                                var tables = entity.tables.Where(x => x.sectionId == cId).FirstOrDefault();
+
+                                if (tables is null)
+                                    canDelete = true;
+                            }
+                            section.canDelete = canDelete;
+                        }
+                    }
+                    return TokenManager.GenerateToken(sectionsList);
+                }
+            }
+        }
+        [HttpPost]
+        [Route("Save")]
+        public string Save(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string itemObject = "";
+                hallSections Object = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemObject")
+                    {
+                        itemObject = c.Value.Replace("\\", string.Empty);
+                        itemObject = itemObject.Trim('"');
+                        Object = JsonConvert.DeserializeObject<hallSections>(itemObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                        break;
+                    }
+                }
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        hallSections tmpObject = new hallSections();
+                        if (Object.sectionId == 0)
+                        {
+                            Object.createDate = DateTime.Now;
+                            Object.updateDate = DateTime.Now;
+                            Object.updateUserId = Object.createUserId;
+                            Object.isActive = 1;
+                            entity.hallSections.Add(Object);
+                        }
+                        else
+                        {
+                            tmpObject = entity.hallSections.Find(Object.sectionId);
+                            tmpObject.name = Object.name;
+                            tmpObject.details = Object.details;
+                            tmpObject.notes = Object.notes;
+                            tmpObject.isActive = Object.isActive;
+                            tmpObject.updateUserId = Object.updateUserId;
+                            tmpObject.updateDate = DateTime.Now;
+                        }
+                        message = entity.SaveChanges().ToString();
+                    }
+                    return TokenManager.GenerateToken(message);
+                }
+                catch { return TokenManager.GenerateToken("0"); }
+            }
+        }
+
+        [HttpPost]
+        [Route("Delete")]
+        public string Delete(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int sectionId = 0;
+                int userId = 0;
+                Boolean final = false;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "sectionId")
+                    {
+                        sectionId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "final")
+                    {
+                        final = bool.Parse(c.Value);
+                    }
+                }
+                if (final)
+                {
+                    try
+                    {
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+                            hallSections tableObj = entity.hallSections.Find(sectionId);
+                            entity.hallSections.Remove(tableObj);
+                            message = entity.SaveChanges().ToString();
+                            return TokenManager.GenerateToken(message);
+                        }
+                    }
+                    catch
+                    {
+                        message = "0";
+                        return TokenManager.GenerateToken(message);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+                            hallSections tableObj = entity.hallSections.Find(sectionId);
+
+                            tableObj.isActive = 0;
+                            tableObj.updateUserId = userId;
+                            tableObj.updateDate = DateTime.Now;
+                            message = entity.SaveChanges().ToString();
+                            return TokenManager.GenerateToken(message);
+                        }
+                    }
+                    catch
+                    {
+                        message = "0";
+                        return TokenManager.GenerateToken(message);
+                    }
+                }
+            }
+        }
+    }
+}
