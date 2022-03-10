@@ -949,7 +949,7 @@ namespace POS_Server.Controllers
 
                         var result = Recursive(unitsList, (int)unitId);
 
-                        var units = (from iu in entity.itemsUnits.Where(x => x.itemId == itemId)
+                        var units = (from iu in entity.itemsUnits.Where(x => x.itemId == itemId && x.isActive == 1)
                                      join u in entity.units on iu.unitId equals u.unitId
                                      select new ItemUnitModel()
                                      {
@@ -975,13 +975,12 @@ namespace POS_Server.Controllers
         {
             List<itemsUnits> inner = new List<itemsUnits>();
 
-            foreach (var t in unitsList.Where(item => item.subUnitId == smallLevelid))
+            foreach (var t in unitsList.Where(item => item.subUnitId == smallLevelid && item.unitId != smallLevelid))
             {
-                // if (t.unitId.Value != smallLevelid)
-                // {
+
                 itemUnitsIds.Add(t.itemUnitId);
                 inner.Add(t);
-                // }
+
                 if (t.unitId.Value == smallLevelid)
                     return inner;
                 inner = inner.Union(Recursive(unitsList, t.unitId.Value)).ToList();
@@ -1037,7 +1036,7 @@ namespace POS_Server.Controllers
             using (incposdbEntities entity = new incposdbEntities())
             {
                 var unit = entity.itemsUnits.Where(x => x.itemUnitId == toItemUnit).Select(x => new { x.unitId, x.itemId }).FirstOrDefault();
-                var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
+                var upperUnit = entity.itemsUnits.Where(x => x.subUnitId == unit.unitId && x.itemId == unit.itemId && x.subUnitId != x.unitId && x.isActive == 1).Select(x => new { x.unitValue, x.itemUnitId }).FirstOrDefault();
                 if (upperUnit != null)
                     amount = (int)upperUnit.unitValue;
                 if (fromItemUnit == upperUnit.itemUnitId)
