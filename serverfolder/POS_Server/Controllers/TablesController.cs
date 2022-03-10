@@ -191,9 +191,9 @@ namespace POS_Server.Controllers
                         var reservPredicate = PredicateBuilder.New<reservations>();
 
                         if (searchForDate)
-                            reservPredicate = reservPredicate.And(x => x.reservationDate == dateSearch && !reservationClose.Contains(x.status));
+                            reservPredicate = reservPredicate.And(x => x.reservationDate == dateSearch && !reservationClose.Contains(x.status) && x.isActive == 1);
                         else
-                            reservPredicate = reservPredicate.And(x => x.reservationDate >= dateSearch && !reservationClose.Contains(x.status));
+                            reservPredicate = reservPredicate.And(x => x.reservationDate >= dateSearch && !reservationClose.Contains(x.status) && x.isActive == 1);
                         
                         var reservation = (from rs in entity.reservations.Where(reservPredicate)
                                            join tr in entity.tablesReservations.Where(x => x.tableId == tableId) on rs.reservationId equals tr.reservationId 
@@ -237,21 +237,21 @@ namespace POS_Server.Controllers
                             }
                            
                             // check if table is open
-                            var invoice = entity.invoices.Where(x => x.reservationId == reserv.reservationId && x.invType == "sd").FirstOrDefault();
+                            var invoice = entity.invoices.Where(x => x.reservationId == reserv.reservationId && x.invType == "sd" && x.isActive == 1).FirstOrDefault();
                             if (invoice != null)
                                 isOpen = true;
                         }
                         if (isOpen && reservation.Count() > 0)
-                            table.status = "opened + reserved";
+                            table.status = "openedReserved";
 
                         #endregion
                         #region check opened tables without reservation
                      
                         var searchPredicate = PredicateBuilder.New<invoiceTables>();
                         if (searchForDate)
-                            searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.invoices.invDate == dateSearch && x.invoices.invType == "sd");
+                            searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.invoices.invDate == dateSearch && x.invoices.invType == "sd" && x.isActive == 1);
                         else
-                            searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.invoices.invDate >= dateSearch  && x.invoices.invType == "sd");
+                            searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.invoices.invDate >= dateSearch  && x.invoices.invType == "sd" && x.isActive == 1);
 
                         var invoiceTables = entity.invoiceTables.Where(searchPredicate).ToList();
                         
@@ -315,13 +315,8 @@ namespace POS_Server.Controllers
                          dateSearch = DateTime.Parse(c.Value);
                         startTime = dateSearch;
                         dateSearch = DateTime.Parse(dateSearch.ToString().Split(' ')[0]);
-                    }
-                    //else if (c.Type == "startTimeSearch")
-                    //{
-                    //    startTime = DateTime.Parse(c.Value);
-                    //}                   
+                    }                 
                 }
-                //startTime = DateTime.Parse( dateSearch + " " + startTime);
                 #endregion
                 // return startTimeSearch.ToString();
                 using (incposdbEntities entity = new incposdbEntities())
@@ -392,12 +387,12 @@ namespace POS_Server.Controllers
                             }
                            
                             // check if table is open
-                            var invoice = entity.invoices.Where(x => x.reservationId == reserv.reservationId && x.invType == "sd").FirstOrDefault();
+                            var invoice = entity.invoices.Where(x => x.reservationId == reserv.reservationId && x.invType == "sd" && x.isActive == 1).FirstOrDefault();
                             if (invoice != null)
                                 isOpen = true;
                         }
                         if (isOpen && reservation.Count() > 0)
-                            table.status = "opened + reserved";
+                            table.status = "openedReserved";
 
                         #endregion
                         #region check opened tables without reservation
@@ -497,7 +492,7 @@ namespace POS_Server.Controllers
                     #region check reservation status                      
                     var reservPredicate = PredicateBuilder.New<reservations>();
                     reservPredicate = reservPredicate.And(x => DbFunctions.TruncateTime(x.reservationDate) == dateSearch && x.branchId == branchId
-                                                            && !reservationClose.Contains(x.status));
+                                                            && !reservationClose.Contains(x.status) && x.isActive == 1);
                     if (reservationId != 0)
                         reservPredicate = reservPredicate.And(x => x.reservationId != reservationId);
 
@@ -557,6 +552,47 @@ namespace POS_Server.Controllers
             }
         }
         [HttpPost]
+        [Route("checkOpenedTable")]
+        public string checkOpenedTable(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int tableId = 0;
+                int branchId = 0;              
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "tableId")
+                    {
+                        tableId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                }
+
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var searchPredicate = PredicateBuilder.New<invoiceTables>();
+                   searchPredicate = searchPredicate.And(x => x.tableId == tableId && x.isActive == 1 && x.invoices.invType == "sd");
+
+                    var invoiceTables = entity.invoiceTables.Where(searchPredicate).ToList();
+                    if(invoiceTables.Count > 0)
+                        return TokenManager.GenerateToken("0");
+                    else
+                        return TokenManager.GenerateToken("1");
+
+                }
+            }
+        }
+        [HttpPost]
         [Route("GetReservations")]
         public string GetReservations(string token)
         {
@@ -585,6 +621,7 @@ namespace POS_Server.Controllers
                     var reservations = (from rs in entity.reservations.Where(x => x.branchId == branchId && !reservationClose.Contains(x.status))
                                         join cu in entity.agents on rs.customerId equals cu.agentId into cuj
                                         from c in cuj.DefaultIfEmpty()
+                                        where !entity.invoices.Any(m => m.isActive == true && m.reservationId == rs.reservationId)
                                         select new ReservationModel()
                                         {
                                             reservationId = rs.reservationId,
