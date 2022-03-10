@@ -17,6 +17,8 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public users()
         {
+            this.agentMembershipCash = new HashSet<agentMembershipCash>();
+            this.agentMembershipCash1 = new HashSet<agentMembershipCash>();
             this.agentMemberships = new HashSet<agentMemberships>();
             this.agentMemberships1 = new HashSet<agentMemberships>();
             this.agents = new HashSet<agents>();
@@ -169,6 +171,10 @@ namespace POS_Server
         public byte balanceType { get; set; }
         public bool isAdmin { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<agentMembershipCash> agentMembershipCash { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<agentMembershipCash> agentMembershipCash1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agentMemberships> agentMemberships { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

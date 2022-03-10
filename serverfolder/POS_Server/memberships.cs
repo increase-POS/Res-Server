@@ -17,8 +17,8 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public memberships()
         {
+            this.agentMembershipCash = new HashSet<agentMembershipCash>();
             this.agentMemberships = new HashSet<agentMemberships>();
-            this.agentMemberships1 = new HashSet<agentMemberships>();
             this.couponsMemberships = new HashSet<couponsMemberships>();
             this.invoicesClassMemberships = new HashSet<invoicesClassMemberships>();
             this.membershipsOffers = new HashSet<membershipsOffers>();
@@ -37,9 +37,9 @@ namespace POS_Server
         public string subscriptionType { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<agentMemberships> agentMemberships { get; set; }
+        public virtual ICollection<agentMembershipCash> agentMembershipCash { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<agentMemberships> agentMemberships1 { get; set; }
+        public virtual ICollection<agentMemberships> agentMemberships { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<couponsMemberships> couponsMemberships { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

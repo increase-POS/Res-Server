@@ -1,16 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="PosModelStoreContainer" CdmEntityContainer="incposdbEntities">
-    <EntitySetMapping Name="agentMemberships">
-      <EntityTypeMapping TypeName="PosModel.agentMemberships">
-        <MappingFragment StoreEntitySet="agentMemberships">
-          <ScalarProperty Name="agentMembershipsId" ColumnName="agentMembershipsId" />
+    <EntitySetMapping Name="agentMembershipCash">
+      <EntityTypeMapping TypeName="PosModel.agentMembershipCash">
+        <MappingFragment StoreEntitySet="agentMembershipCash">
+          <ScalarProperty Name="agentMembershipCashId" ColumnName="agentMembershipCashId" />
           <ScalarProperty Name="subscriptionFeesId" ColumnName="subscriptionFeesId" />
           <ScalarProperty Name="cashTransId" ColumnName="cashTransId" />
           <ScalarProperty Name="membershipId" ColumnName="membershipId" />
           <ScalarProperty Name="agentId" ColumnName="agentId" />
           <ScalarProperty Name="startDate" ColumnName="startDate" />
-          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="endDate" ColumnName="endDate" />
+          <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+          <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+          <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+          <ScalarProperty Name="notes" ColumnName="notes" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="agentMemberships">
+      <EntityTypeMapping TypeName="PosModel.agentMemberships">
+        <MappingFragment StoreEntitySet="agentMemberships">
+          <ScalarProperty Name="agentMembershipsId" ColumnName="agentMembershipsId" />
+          <ScalarProperty Name="membershipId" ColumnName="membershipId" />
+          <ScalarProperty Name="agentId" ColumnName="agentId" />
           <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
@@ -501,7 +516,7 @@
         <MappingFragment StoreEntitySet="invoicesClass">
           <ScalarProperty Name="invClassId" ColumnName="invClassId" />
           <ScalarProperty Name="minInvoiceValue" ColumnName="minInvoiceValue" />
-          <ScalarProperty Name="MaxInvoiceValue" ColumnName="MaxInvoiceValue" />
+          <ScalarProperty Name="maxInvoiceValue" ColumnName="maxInvoiceValue" />
           <ScalarProperty Name="discountValue" ColumnName="discountValue" />
           <ScalarProperty Name="discountType" ColumnName="discountType" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
@@ -510,6 +525,7 @@
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
           <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="name" ColumnName="name" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -781,16 +797,14 @@
         <MappingFragment StoreEntitySet="memberships">
           <ScalarProperty Name="membershipId" ColumnName="membershipId" />
           <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="deliveryDiscount" ColumnName="deliveryDiscount" />
-          <ScalarProperty Name="deliveryDiscountType" ColumnName="deliveryDiscountType" />
-          <ScalarProperty Name="invoiceDiscount" ColumnName="invoiceDiscount" />
-          <ScalarProperty Name="invoiceDiscountType" ColumnName="invoiceDiscountType" />
           <ScalarProperty Name="notes" ColumnName="notes" />
           <ScalarProperty Name="createDate" ColumnName="createDate" />
           <ScalarProperty Name="updateDate" ColumnName="updateDate" />
           <ScalarProperty Name="createUserId" ColumnName="createUserId" />
           <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
           <ScalarProperty Name="isActive" ColumnName="isActive" />
+          <ScalarProperty Name="code" ColumnName="code" />
+          <ScalarProperty Name="subscriptionType" ColumnName="subscriptionType" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

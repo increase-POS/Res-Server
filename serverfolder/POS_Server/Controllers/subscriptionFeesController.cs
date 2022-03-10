@@ -58,7 +58,7 @@ namespace POS_Server.Controllers
                             if (List[i].isActive == 1)
                             {
                                 int subscriptionFeesId = (int)List[i].subscriptionFeesId;
-                                var items5 = entity.agentMemberships.Where(x => x.subscriptionFeesId == subscriptionFeesId).Select(b => new { b.agentMembershipsId }).FirstOrDefault();
+                                var items5 = entity.agentMembershipCash.Where(x => x.subscriptionFeesId == subscriptionFeesId).Select(b => new { b.agentMembershipCashId }).FirstOrDefault();
 
                                 if (items5 is null)
                                     canDelete = true;

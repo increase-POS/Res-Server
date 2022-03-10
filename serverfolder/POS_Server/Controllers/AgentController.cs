@@ -728,11 +728,9 @@ namespace POS_Server.Controllers
                                     GPSAddress = JBB.GPSAddress,
 
                                     agentMembershipsId = S.agentMembershipsId,
-                                    subscriptionFeesId = S.subscriptionFeesId,
-                                    cashTransId = S.cashTransId,
+                                  
                                     membershipId = S.membershipId,
-                                    startDate = S.startDate,
-                                    EndDate = S.EndDate,
+                                
 
 
                                 }).ToList();

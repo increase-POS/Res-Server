@@ -17,6 +17,7 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public agents()
         {
+            this.agentMembershipCash = new HashSet<agentMembershipCash>();
             this.agentMemberships = new HashSet<agentMemberships>();
             this.cashTransfer = new HashSet<cashTransfer>();
             this.invoices = new HashSet<invoices>();
@@ -53,6 +54,8 @@ namespace POS_Server
         public Nullable<int> residentSecId { get; set; }
         public string GPSAddress { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<agentMembershipCash> agentMembershipCash { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agentMemberships> agentMemberships { get; set; }
         public virtual Points Points { get; set; }

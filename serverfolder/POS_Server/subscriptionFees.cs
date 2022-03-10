@@ -17,7 +17,7 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public subscriptionFees()
         {
-            this.agentMemberships = new HashSet<agentMemberships>();
+            this.agentMembershipCash = new HashSet<agentMembershipCash>();
         }
     
         public int subscriptionFeesId { get; set; }
@@ -32,7 +32,7 @@ namespace POS_Server
         public byte isActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<agentMemberships> agentMemberships { get; set; }
+        public virtual ICollection<agentMembershipCash> agentMembershipCash { get; set; }
         public virtual memberships memberships { get; set; }
     }
 }

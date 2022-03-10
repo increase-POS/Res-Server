@@ -4,18 +4,32 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="agentMemberships">
+      <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="agentMembershipCash">
           <Key>
-            <PropertyRef Name="agentMembershipsId" />
+            <PropertyRef Name="agentMembershipCashId" />
           </Key>
-          <Property Name="agentMembershipsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="agentMembershipCashId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="subscriptionFeesId" Type="int" />
           <Property Name="cashTransId" Type="int" />
           <Property Name="membershipId" Type="int" />
           <Property Name="agentId" Type="int" />
           <Property Name="startDate" Type="datetime2" Precision="7" />
-          <Property Name="EndDate" Type="datetime2" Precision="7" />
+          <Property Name="endDate" Type="datetime2" Precision="7" />
+          <Property Name="updateUserId" Type="int" />
+          <Property Name="isActive" Type="tinyint" Nullable="false" />
+          <Property Name="createDate" Type="datetime2" Precision="7" />
+          <Property Name="updateDate" Type="datetime2" Precision="7" />
+          <Property Name="createUserId" Type="int" />
+          <Property Name="notes" Type="ntext" />
+        </EntityType>
+        <EntityType Name="agentMemberships">
+          <Key>
+            <PropertyRef Name="agentMembershipsId" />
+          </Key>
+          <Property Name="agentMembershipsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="membershipId" Type="int" />
+          <Property Name="agentId" Type="int" />
           <Property Name="notes" Type="ntext" />
           <Property Name="createDate" Type="datetime2" Precision="7" />
           <Property Name="updateDate" Type="datetime2" Precision="7" />
@@ -489,7 +503,7 @@
           <Property Name="createUserId" Type="int" />
           <Property Name="notes" Type="ntext" />
           <Property Name="isActive" Type="tinyint" Nullable="false" />
-          <Property Name="name" Type="nvarchar" MaxLength="200" />
+          <Property Name="name" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="invoicesClassMemberships">
           <Key>
@@ -752,7 +766,7 @@
           <Property Name="updateUserId" Type="int" />
           <Property Name="isActive" Type="tinyint" Nullable="false" />
           <Property Name="code" Type="nvarchar" MaxLength="500" />
-          <Property Name="subscriptionType" Type="nvarchar" MaxLength="100" />
+          <Property Name="subscriptionType" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="membershipsOffers">
           <Key>
@@ -1323,6 +1337,78 @@
           <Property Name="posId" Type="int" />
           <Property Name="userId" Type="int" />
         </EntityType>
+        <Association Name="FK_agentMembershipCash_agents">
+          <End Role="agents" Type="Self.agents" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="agents">
+              <PropertyRef Name="agentId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="agentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_agentMembershipCash_cashTransfer">
+          <End Role="cashTransfer" Type="Self.cashTransfer" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cashTransfer">
+              <PropertyRef Name="cashTransId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="cashTransId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_agentMembershipCash_memberships">
+          <End Role="memberships" Type="Self.memberships" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="memberships">
+              <PropertyRef Name="membershipId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="membershipId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_agentMembershipCash_subscriptionFees">
+          <End Role="subscriptionFees" Type="Self.subscriptionFees" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="subscriptionFees">
+              <PropertyRef Name="subscriptionFeesId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="subscriptionFeesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_agentMembershipCash_users">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="createUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_agentMembershipCash_users1">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="updateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_agentMemberships_agents">
           <End Role="agents" Type="Self.agents" Multiplicity="0..1" />
           <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="*" />
@@ -1335,30 +1421,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_agentMemberships_cashTransfer">
-          <End Role="cashTransfer" Type="Self.cashTransfer" Multiplicity="0..1" />
-          <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="cashTransfer">
-              <PropertyRef Name="cashTransId" />
-            </Principal>
-            <Dependent Role="agentMemberships">
-              <PropertyRef Name="cashTransId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_agentMemberships_memberships">
-          <End Role="memberships" Type="Self.memberships" Multiplicity="0..1" />
-          <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="memberships">
-              <PropertyRef Name="membershipId" />
-            </Principal>
-            <Dependent Role="agentMemberships">
-              <PropertyRef Name="membershipId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_agentMemberships_memberships2">
           <End Role="memberships" Type="Self.memberships" Multiplicity="0..1" />
           <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="*" />
@@ -1368,18 +1430,6 @@
             </Principal>
             <Dependent Role="agentMemberships">
               <PropertyRef Name="membershipId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_agentMemberships_subscriptionFees">
-          <End Role="subscriptionFees" Type="Self.subscriptionFees" Multiplicity="0..1" />
-          <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="subscriptionFees">
-              <PropertyRef Name="subscriptionFeesId" />
-            </Principal>
-            <Dependent Role="agentMemberships">
-              <PropertyRef Name="subscriptionFeesId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1608,18 +1658,6 @@
             </Principal>
             <Dependent Role="cards">
               <PropertyRef Name="updateUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_cashTransfer_agentMemberships">
-          <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="0..1" />
-          <End Role="cashTransfer" Type="Self.cashTransfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="agentMemberships">
-              <PropertyRef Name="agentMembershipsId" />
-            </Principal>
-            <Dependent Role="cashTransfer">
-              <PropertyRef Name="agentMembershipsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4132,6 +4170,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="PosModelStoreContainer">
+          <EntitySet Name="agentMembershipCash" EntityType="Self.agentMembershipCash" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="agentMemberships" EntityType="Self.agentMemberships" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="agents" EntityType="Self.agents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="banks" EntityType="Self.banks" Schema="dbo" store:Type="Tables" />
@@ -4211,24 +4250,36 @@
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="userSetValues" EntityType="Self.userSetValues" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="usersLogs" EntityType="Self.usersLogs" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_agentMembershipCash_agents" Association="Self.FK_agentMembershipCash_agents">
+            <End Role="agents" EntitySet="agents" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
+          <AssociationSet Name="FK_agentMembershipCash_cashTransfer" Association="Self.FK_agentMembershipCash_cashTransfer">
+            <End Role="cashTransfer" EntitySet="cashTransfer" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
+          <AssociationSet Name="FK_agentMembershipCash_memberships" Association="Self.FK_agentMembershipCash_memberships">
+            <End Role="memberships" EntitySet="memberships" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
+          <AssociationSet Name="FK_agentMembershipCash_subscriptionFees" Association="Self.FK_agentMembershipCash_subscriptionFees">
+            <End Role="subscriptionFees" EntitySet="subscriptionFees" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
+          <AssociationSet Name="FK_agentMembershipCash_users" Association="Self.FK_agentMembershipCash_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
+          <AssociationSet Name="FK_agentMembershipCash_users1" Association="Self.FK_agentMembershipCash_users1">
+            <End Role="users" EntitySet="users" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
           <AssociationSet Name="FK_agentMemberships_agents" Association="Self.FK_agentMemberships_agents">
             <End Role="agents" EntitySet="agents" />
             <End Role="agentMemberships" EntitySet="agentMemberships" />
           </AssociationSet>
-          <AssociationSet Name="FK_agentMemberships_cashTransfer" Association="Self.FK_agentMemberships_cashTransfer">
-            <End Role="cashTransfer" EntitySet="cashTransfer" />
-            <End Role="agentMemberships" EntitySet="agentMemberships" />
-          </AssociationSet>
-          <AssociationSet Name="FK_agentMemberships_memberships" Association="Self.FK_agentMemberships_memberships">
-            <End Role="memberships" EntitySet="memberships" />
-            <End Role="agentMemberships" EntitySet="agentMemberships" />
-          </AssociationSet>
           <AssociationSet Name="FK_agentMemberships_memberships2" Association="Self.FK_agentMemberships_memberships2">
             <End Role="memberships" EntitySet="memberships" />
-            <End Role="agentMemberships" EntitySet="agentMemberships" />
-          </AssociationSet>
-          <AssociationSet Name="FK_agentMemberships_subscriptionFees" Association="Self.FK_agentMemberships_subscriptionFees">
-            <End Role="subscriptionFees" EntitySet="subscriptionFees" />
             <End Role="agentMemberships" EntitySet="agentMemberships" />
           </AssociationSet>
           <AssociationSet Name="FK_agentMemberships_users1" Association="Self.FK_agentMemberships_users1">
@@ -4306,10 +4357,6 @@
           <AssociationSet Name="FK_cards_users1" Association="Self.FK_cards_users1">
             <End Role="users" EntitySet="users" />
             <End Role="cards" EntitySet="cards" />
-          </AssociationSet>
-          <AssociationSet Name="FK_cashTransfer_agentMemberships" Association="Self.FK_cashTransfer_agentMemberships">
-            <End Role="agentMemberships" EntitySet="agentMemberships" />
-            <End Role="cashTransfer" EntitySet="cashTransfer" />
           </AssociationSet>
           <AssociationSet Name="FK_cashTransfer_agents" Association="Self.FK_cashTransfer_agents">
             <End Role="agents" EntitySet="agents" />
@@ -5148,21 +5195,42 @@
             <End Role="usersLogs" EntitySet="usersLogs" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="agentMemberships">
+        <EntityType Name="agentMembershipCash">
           <Key>
-            <PropertyRef Name="agentMembershipsId" />
+            <PropertyRef Name="agentMembershipCashId" />
           </Key>
-          <Property Name="agentMembershipsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="agentMembershipCashId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="subscriptionFeesId" Type="Int32" />
           <Property Name="cashTransId" Type="Int32" />
           <Property Name="membershipId" Type="Int32" />
           <Property Name="agentId" Type="Int32" />
           <Property Name="startDate" Type="DateTime" Precision="7" />
-          <Property Name="EndDate" Type="DateTime" Precision="7" />
+          <Property Name="endDate" Type="DateTime" Precision="7" />
+          <Property Name="updateUserId" Type="Int32" />
+          <Property Name="isActive" Type="Byte" Nullable="false" />
+          <Property Name="createDate" Type="DateTime" Precision="7" />
+          <Property Name="updateDate" Type="DateTime" Precision="7" />
+          <Property Name="createUserId" Type="Int32" />
+          <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="agents" Relationship="Self.FK_agentMembershipCash_agents" FromRole="agentMembershipCash" ToRole="agents" />
+          <NavigationProperty Name="cashTransfer" Relationship="Self.FK_agentMembershipCash_cashTransfer" FromRole="agentMembershipCash" ToRole="cashTransfer" />
+          <NavigationProperty Name="memberships" Relationship="Self.FK_agentMembershipCash_memberships" FromRole="agentMembershipCash" ToRole="memberships" />
+          <NavigationProperty Name="subscriptionFees" Relationship="Self.FK_agentMembershipCash_subscriptionFees" FromRole="agentMembershipCash" ToRole="subscriptionFees" />
+          <NavigationProperty Name="users" Relationship="Self.FK_agentMembershipCash_users" FromRole="agentMembershipCash" ToRole="users" />
+          <NavigationProperty Name="users1" Relationship="Self.FK_agentMembershipCash_users1" FromRole="agentMembershipCash" ToRole="users" />
+        </EntityType>
+        <EntityType Name="agentMemberships">
+          <Key>
+            <PropertyRef Name="agentMembershipsId" />
+          </Key>
+          <Property Name="agentMembershipsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="membershipId" Type="Int32" />
+          <Property Name="agentId" Type="Int32" />
           <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="createDate" Type="DateTime" Precision="7" />
           <Property Name="updateDate" Type="DateTime" Precision="7" />
@@ -5170,13 +5238,9 @@
           <Property Name="updateUserId" Type="Int32" />
           <Property Name="isActive" Type="Byte" Nullable="false" />
           <NavigationProperty Name="agents" Relationship="Self.FK_agentMemberships_agents" FromRole="agentMemberships" ToRole="agents" />
-          <NavigationProperty Name="cashTransfer" Relationship="Self.FK_agentMemberships_cashTransfer" FromRole="agentMemberships" ToRole="cashTransfer" />
-          <NavigationProperty Name="memberships" Relationship="Self.FK_agentMemberships_memberships" FromRole="agentMemberships" ToRole="memberships" />
-          <NavigationProperty Name="memberships1" Relationship="Self.FK_agentMemberships_memberships2" FromRole="agentMemberships" ToRole="memberships" />
-          <NavigationProperty Name="subscriptionFees" Relationship="Self.FK_agentMemberships_subscriptionFees" FromRole="agentMemberships" ToRole="subscriptionFees" />
+          <NavigationProperty Name="memberships" Relationship="Self.FK_agentMemberships_memberships2" FromRole="agentMemberships" ToRole="memberships" />
           <NavigationProperty Name="users" Relationship="Self.FK_agentMemberships_users1" FromRole="agentMemberships" ToRole="users" />
           <NavigationProperty Name="users1" Relationship="Self.FK_agentMemberships_users2" FromRole="agentMemberships" ToRole="users" />
-          <NavigationProperty Name="cashTransfer1" Relationship="Self.FK_cashTransfer_agentMemberships" FromRole="agentMemberships" ToRole="cashTransfer" />
         </EntityType>
         <EntityType Name="agents">
           <Key>
@@ -5210,6 +5274,7 @@
           <Property Name="disallowReason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="residentSecId" Type="Int32" />
           <Property Name="GPSAddress" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="agentMembershipCash" Relationship="Self.FK_agentMembershipCash_agents" FromRole="agents" ToRole="agentMembershipCash" />
           <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_agents" FromRole="agents" ToRole="agentMemberships" />
           <NavigationProperty Name="Points" Relationship="Self.FK_agents_Points" FromRole="agents" ToRole="Points" />
           <NavigationProperty Name="residentialSectors" Relationship="Self.FK_agents_residentialSectors" FromRole="agents" ToRole="residentialSectors" />
@@ -5377,8 +5442,7 @@
           <Property Name="cardId" Type="Int32" />
           <Property Name="bondId" Type="Int32" />
           <Property Name="shippingCompanyId" Type="Int32" />
-          <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_cashTransfer" FromRole="cashTransfer" ToRole="agentMemberships" />
-          <NavigationProperty Name="agentMemberships1" Relationship="Self.FK_cashTransfer_agentMemberships" FromRole="cashTransfer" ToRole="agentMemberships" />
+          <NavigationProperty Name="agentMembershipCash" Relationship="Self.FK_agentMembershipCash_cashTransfer" FromRole="cashTransfer" ToRole="agentMembershipCash" />
           <NavigationProperty Name="agents" Relationship="Self.FK_cashTransfer_agents" FromRole="cashTransfer" ToRole="agents" />
           <NavigationProperty Name="banks" Relationship="Self.FK_cashTransfer_banks" FromRole="cashTransfer" ToRole="banks" />
           <NavigationProperty Name="bondes" Relationship="Self.FK_bondes_cashTransfer" FromRole="cashTransfer" ToRole="bondes" />
@@ -5758,6 +5822,7 @@
           </Key>
           <Property Name="invClassId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="minInvoiceValue" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
+          <Property Name="maxInvoiceValue" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="discountValue" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="discountType" Type="Byte" Nullable="false" />
           <Property Name="createDate" Type="DateTime" Precision="7" />
@@ -5766,9 +5831,8 @@
           <Property Name="createUserId" Type="Int32" />
           <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="isActive" Type="Byte" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="invoicesClassMemberships" Relationship="Self.FK_invoicesClassMemberships_invoicesClass" FromRole="invoicesClass" ToRole="invoicesClassMemberships" />
-          <Property Name="maxInvoiceValue" Type="Decimal" Nullable="false" Precision="20" Scale="3" />
-          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="invoicesClassMemberships">
           <Key>
@@ -6103,7 +6167,7 @@
           <Key>
             <PropertyRef Name="membershipId" />
           </Key>
-          <Property Name="membershipId" Type="Int32" Nullable="false" />
+          <Property Name="membershipId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="createDate" Type="DateTime" Precision="7" />
@@ -6111,16 +6175,16 @@
           <Property Name="createUserId" Type="Int32" />
           <Property Name="updateUserId" Type="Int32" />
           <Property Name="isActive" Type="Byte" Nullable="false" />
-          <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_memberships" FromRole="memberships" ToRole="agentMemberships" />
-          <NavigationProperty Name="agentMemberships1" Relationship="Self.FK_agentMemberships_memberships2" FromRole="memberships" ToRole="agentMemberships" />
+          <Property Name="code" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="subscriptionType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="agentMembershipCash" Relationship="Self.FK_agentMembershipCash_memberships" FromRole="memberships" ToRole="agentMembershipCash" />
+          <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_memberships2" FromRole="memberships" ToRole="agentMemberships" />
           <NavigationProperty Name="couponsMemberships" Relationship="Self.FK_couponsMemberships_memberships" FromRole="memberships" ToRole="couponsMemberships" />
           <NavigationProperty Name="invoicesClassMemberships" Relationship="Self.FK_invoicesClassMemberships_memberships" FromRole="memberships" ToRole="invoicesClassMemberships" />
           <NavigationProperty Name="users" Relationship="Self.FK_memberships_users" FromRole="memberships" ToRole="users" />
           <NavigationProperty Name="users1" Relationship="Self.FK_memberships_users1" FromRole="memberships" ToRole="users" />
           <NavigationProperty Name="membershipsOffers" Relationship="Self.FK_membershipsOffers_memberships" FromRole="memberships" ToRole="membershipsOffers" />
           <NavigationProperty Name="subscriptionFees" Relationship="Self.FK_subscriptionFees_memberships" FromRole="memberships" ToRole="subscriptionFees" />
-          <Property Name="code" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="subscriptionType" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="membershipsOffers">
           <Key>
@@ -6628,7 +6692,7 @@
           <Key>
             <PropertyRef Name="subscriptionFeesId" />
           </Key>
-          <Property Name="subscriptionFeesId" Type="Int32" Nullable="false" />
+          <Property Name="subscriptionFeesId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="membershipId" Type="Int32" />
           <Property Name="monthsCount" Type="Int32" Nullable="false" />
           <Property Name="Amount" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
@@ -6638,7 +6702,7 @@
           <Property Name="createUserId" Type="Int32" />
           <Property Name="updateUserId" Type="Int32" />
           <Property Name="isActive" Type="Byte" Nullable="false" />
-          <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_subscriptionFees" FromRole="subscriptionFees" ToRole="agentMemberships" />
+          <NavigationProperty Name="agentMembershipCash" Relationship="Self.FK_agentMembershipCash_subscriptionFees" FromRole="subscriptionFees" ToRole="agentMembershipCash" />
           <NavigationProperty Name="memberships" Relationship="Self.FK_subscriptionFees_memberships" FromRole="subscriptionFees" ToRole="memberships" />
         </EntityType>
         <EntityType Name="sysdiagrams">
@@ -6782,6 +6846,8 @@
           <Property Name="balance" Type="Decimal" Precision="20" Scale="3" Nullable="false" />
           <Property Name="balanceType" Type="Byte" Nullable="false" />
           <Property Name="isAdmin" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="agentMembershipCash" Relationship="Self.FK_agentMembershipCash_users" FromRole="users" ToRole="agentMembershipCash" />
+          <NavigationProperty Name="agentMembershipCash1" Relationship="Self.FK_agentMembershipCash_users1" FromRole="users" ToRole="agentMembershipCash" />
           <NavigationProperty Name="agentMemberships" Relationship="Self.FK_agentMemberships_users1" FromRole="users" ToRole="agentMemberships" />
           <NavigationProperty Name="agentMemberships1" Relationship="Self.FK_agentMemberships_users2" FromRole="users" ToRole="agentMemberships" />
           <NavigationProperty Name="agents" Relationship="Self.FK_agents_users" FromRole="users" ToRole="agents" />
@@ -6938,6 +7004,78 @@
           <NavigationProperty Name="pos" Relationship="Self.FK_usersLogs_pos" FromRole="usersLogs" ToRole="pos" />
           <NavigationProperty Name="users" Relationship="Self.FK_usersLogs_users" FromRole="usersLogs" ToRole="users" />
         </EntityType>
+        <Association Name="FK_agentMembershipCash_agents">
+          <End Role="agents" Type="Self.agents" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="agents">
+              <PropertyRef Name="agentId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="agentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_agentMembershipCash_cashTransfer">
+          <End Role="cashTransfer" Type="Self.cashTransfer" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cashTransfer">
+              <PropertyRef Name="cashTransId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="cashTransId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_agentMembershipCash_memberships">
+          <End Role="memberships" Type="Self.memberships" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="memberships">
+              <PropertyRef Name="membershipId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="membershipId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_agentMembershipCash_subscriptionFees">
+          <End Role="subscriptionFees" Type="Self.subscriptionFees" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="subscriptionFees">
+              <PropertyRef Name="subscriptionFeesId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="subscriptionFeesId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_agentMembershipCash_users">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="createUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_agentMembershipCash_users1">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="agentMembershipCash" Type="Self.agentMembershipCash" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="agentMembershipCash">
+              <PropertyRef Name="updateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_agentMemberships_agents">
           <End Role="agents" Type="Self.agents" Multiplicity="0..1" />
           <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="*" />
@@ -6950,30 +7088,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_agentMemberships_cashTransfer">
-          <End Role="cashTransfer" Type="Self.cashTransfer" Multiplicity="0..1" />
-          <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="cashTransfer">
-              <PropertyRef Name="cashTransId" />
-            </Principal>
-            <Dependent Role="agentMemberships">
-              <PropertyRef Name="cashTransId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_agentMemberships_memberships">
-          <End Role="memberships" Type="Self.memberships" Multiplicity="0..1" />
-          <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="memberships">
-              <PropertyRef Name="membershipId" />
-            </Principal>
-            <Dependent Role="agentMemberships">
-              <PropertyRef Name="membershipId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_agentMemberships_memberships2">
           <End Role="memberships" Type="Self.memberships" Multiplicity="0..1" />
           <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="*" />
@@ -6983,18 +7097,6 @@
             </Principal>
             <Dependent Role="agentMemberships">
               <PropertyRef Name="membershipId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_agentMemberships_subscriptionFees">
-          <End Role="subscriptionFees" Type="Self.subscriptionFees" Multiplicity="0..1" />
-          <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="subscriptionFees">
-              <PropertyRef Name="subscriptionFeesId" />
-            </Principal>
-            <Dependent Role="agentMemberships">
-              <PropertyRef Name="subscriptionFeesId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7019,18 +7121,6 @@
             </Principal>
             <Dependent Role="agentMemberships">
               <PropertyRef Name="createUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_cashTransfer_agentMemberships">
-          <End Role="agentMemberships" Type="Self.agentMemberships" Multiplicity="0..1" />
-          <End Role="cashTransfer" Type="Self.cashTransfer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="agentMemberships">
-              <PropertyRef Name="agentMembershipsId" />
-            </Principal>
-            <Dependent Role="cashTransfer">
-              <PropertyRef Name="agentMembershipsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9747,6 +9837,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="incposdbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="agentMembershipCash" EntityType="Self.agentMembershipCash" />
           <EntitySet Name="agentMemberships" EntityType="Self.agentMemberships" />
           <EntitySet Name="agents" EntityType="Self.agents" />
           <EntitySet Name="banks" EntityType="Self.banks" />
@@ -9826,24 +9917,36 @@
           <EntitySet Name="users" EntityType="Self.users" />
           <EntitySet Name="userSetValues" EntityType="Self.userSetValues" />
           <EntitySet Name="usersLogs" EntityType="Self.usersLogs" />
+          <AssociationSet Name="FK_agentMembershipCash_agents" Association="Self.FK_agentMembershipCash_agents">
+            <End Role="agents" EntitySet="agents" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
+          <AssociationSet Name="FK_agentMembershipCash_cashTransfer" Association="Self.FK_agentMembershipCash_cashTransfer">
+            <End Role="cashTransfer" EntitySet="cashTransfer" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
+          <AssociationSet Name="FK_agentMembershipCash_memberships" Association="Self.FK_agentMembershipCash_memberships">
+            <End Role="memberships" EntitySet="memberships" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
+          <AssociationSet Name="FK_agentMembershipCash_subscriptionFees" Association="Self.FK_agentMembershipCash_subscriptionFees">
+            <End Role="subscriptionFees" EntitySet="subscriptionFees" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
+          <AssociationSet Name="FK_agentMembershipCash_users" Association="Self.FK_agentMembershipCash_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
+          <AssociationSet Name="FK_agentMembershipCash_users1" Association="Self.FK_agentMembershipCash_users1">
+            <End Role="users" EntitySet="users" />
+            <End Role="agentMembershipCash" EntitySet="agentMembershipCash" />
+          </AssociationSet>
           <AssociationSet Name="FK_agentMemberships_agents" Association="Self.FK_agentMemberships_agents">
             <End Role="agents" EntitySet="agents" />
             <End Role="agentMemberships" EntitySet="agentMemberships" />
           </AssociationSet>
-          <AssociationSet Name="FK_agentMemberships_cashTransfer" Association="Self.FK_agentMemberships_cashTransfer">
-            <End Role="cashTransfer" EntitySet="cashTransfer" />
-            <End Role="agentMemberships" EntitySet="agentMemberships" />
-          </AssociationSet>
-          <AssociationSet Name="FK_agentMemberships_memberships" Association="Self.FK_agentMemberships_memberships">
-            <End Role="memberships" EntitySet="memberships" />
-            <End Role="agentMemberships" EntitySet="agentMemberships" />
-          </AssociationSet>
           <AssociationSet Name="FK_agentMemberships_memberships2" Association="Self.FK_agentMemberships_memberships2">
             <End Role="memberships" EntitySet="memberships" />
-            <End Role="agentMemberships" EntitySet="agentMemberships" />
-          </AssociationSet>
-          <AssociationSet Name="FK_agentMemberships_subscriptionFees" Association="Self.FK_agentMemberships_subscriptionFees">
-            <End Role="subscriptionFees" EntitySet="subscriptionFees" />
             <End Role="agentMemberships" EntitySet="agentMemberships" />
           </AssociationSet>
           <AssociationSet Name="FK_agentMemberships_users1" Association="Self.FK_agentMemberships_users1">
@@ -9853,10 +9956,6 @@
           <AssociationSet Name="FK_agentMemberships_users2" Association="Self.FK_agentMemberships_users2">
             <End Role="users" EntitySet="users" />
             <End Role="agentMemberships" EntitySet="agentMemberships" />
-          </AssociationSet>
-          <AssociationSet Name="FK_cashTransfer_agentMemberships" Association="Self.FK_cashTransfer_agentMemberships">
-            <End Role="agentMemberships" EntitySet="agentMemberships" />
-            <End Role="cashTransfer" EntitySet="cashTransfer" />
           </AssociationSet>
           <AssociationSet Name="FK_agents_Points" Association="Self.FK_agents_Points">
             <End Role="Points" EntitySet="Points" />
@@ -10769,16 +10868,31 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="PosModelStoreContainer" CdmEntityContainer="incposdbEntities">
-          <EntitySetMapping Name="agentMemberships">
-            <EntityTypeMapping TypeName="PosModel.agentMemberships">
-              <MappingFragment StoreEntitySet="agentMemberships">
-                <ScalarProperty Name="agentMembershipsId" ColumnName="agentMembershipsId" />
+          <EntitySetMapping Name="agentMembershipCash">
+            <EntityTypeMapping TypeName="PosModel.agentMembershipCash">
+              <MappingFragment StoreEntitySet="agentMembershipCash">
+                <ScalarProperty Name="agentMembershipCashId" ColumnName="agentMembershipCashId" />
                 <ScalarProperty Name="subscriptionFeesId" ColumnName="subscriptionFeesId" />
                 <ScalarProperty Name="cashTransId" ColumnName="cashTransId" />
                 <ScalarProperty Name="membershipId" ColumnName="membershipId" />
                 <ScalarProperty Name="agentId" ColumnName="agentId" />
                 <ScalarProperty Name="startDate" ColumnName="startDate" />
-                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="endDate" ColumnName="endDate" />
+                <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="createDate" ColumnName="createDate" />
+                <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+                <ScalarProperty Name="createUserId" ColumnName="createUserId" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="agentMemberships">
+            <EntityTypeMapping TypeName="PosModel.agentMemberships">
+              <MappingFragment StoreEntitySet="agentMemberships">
+                <ScalarProperty Name="agentMembershipsId" ColumnName="agentMembershipsId" />
+                <ScalarProperty Name="membershipId" ColumnName="membershipId" />
+                <ScalarProperty Name="agentId" ColumnName="agentId" />
                 <ScalarProperty Name="notes" ColumnName="notes" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
                 <ScalarProperty Name="updateDate" ColumnName="updateDate" />
@@ -11267,10 +11381,9 @@
           <EntitySetMapping Name="invoicesClass">
             <EntityTypeMapping TypeName="PosModel.invoicesClass">
               <MappingFragment StoreEntitySet="invoicesClass">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="maxInvoiceValue" ColumnName="maxInvoiceValue" />
                 <ScalarProperty Name="invClassId" ColumnName="invClassId" />
                 <ScalarProperty Name="minInvoiceValue" ColumnName="minInvoiceValue" />
+                <ScalarProperty Name="maxInvoiceValue" ColumnName="maxInvoiceValue" />
                 <ScalarProperty Name="discountValue" ColumnName="discountValue" />
                 <ScalarProperty Name="discountType" ColumnName="discountType" />
                 <ScalarProperty Name="createDate" ColumnName="createDate" />
@@ -11279,6 +11392,7 @@
                 <ScalarProperty Name="createUserId" ColumnName="createUserId" />
                 <ScalarProperty Name="notes" ColumnName="notes" />
                 <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -11548,8 +11662,6 @@
           <EntitySetMapping Name="memberships">
             <EntityTypeMapping TypeName="PosModel.memberships">
               <MappingFragment StoreEntitySet="memberships">
-                <ScalarProperty Name="subscriptionType" ColumnName="subscriptionType" />
-                <ScalarProperty Name="code" ColumnName="code" />
                 <ScalarProperty Name="membershipId" ColumnName="membershipId" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="notes" ColumnName="notes" />
@@ -11558,6 +11670,8 @@
                 <ScalarProperty Name="createUserId" ColumnName="createUserId" />
                 <ScalarProperty Name="updateUserId" ColumnName="updateUserId" />
                 <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="subscriptionType" ColumnName="subscriptionType" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

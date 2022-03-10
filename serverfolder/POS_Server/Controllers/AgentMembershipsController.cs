@@ -36,12 +36,10 @@ namespace POS_Server.Controllers
                     var List = entity.agentMemberships.Select(S => new AgentMembershipsModel
                     {
                         agentMembershipsId = S.agentMembershipsId,
-                        subscriptionFeesId = S.subscriptionFeesId,
-                        cashTransId = S.cashTransId,
+                        
                         membershipId = S.membershipId,
                         agentId = S.agentId,
-                        startDate = S.startDate,
-                        EndDate = S.EndDate,
+                        
                         notes = S.notes,
                         createDate = S.createDate,
                         updateDate = S.updateDate,
@@ -90,12 +88,10 @@ namespace POS_Server.Controllers
                    .Select(S => new
                    {
                        S.agentMembershipsId,
-                       S.subscriptionFeesId,
-                       S.cashTransId,
+                       
                        S.membershipId,
                        S.agentId,
-                       S.startDate,
-                       S.EndDate,
+                      
                        S.notes,
                        S.createDate,
                        S.updateDate,
@@ -149,16 +145,7 @@ namespace POS_Server.Controllers
                     Nullable<int> id = null;
                     newObject.createUserId = id;
                 }
-                if (newObject.subscriptionFeesId == 0 || newObject.subscriptionFeesId == null)
-                {
-                    Nullable<int> id = null;
-                    newObject.subscriptionFeesId = id;
-                }
-                if (newObject.cashTransId == 0 || newObject.cashTransId == null)
-                {
-                    Nullable<int> id = null;
-                    newObject.cashTransId = id;
-                }
+                
                 if (newObject.membershipId == 0 || newObject.membershipId == null)
                 {
                     Nullable<int> id = null;
@@ -191,14 +178,12 @@ namespace POS_Server.Controllers
                             tmpObject.updateDate = DateTime.Now;
 
                             tmpObject.agentMembershipsId = newObject.agentMembershipsId;
-                            tmpObject.subscriptionFeesId = newObject.subscriptionFeesId;
-                            tmpObject.cashTransId = newObject.cashTransId;
+                  
                             tmpObject.membershipId = newObject.membershipId;
                             tmpObject.agentId = newObject.agentId;
-                            tmpObject.startDate = newObject.startDate;
-                            tmpObject.EndDate = newObject.EndDate;
+                   
                             tmpObject.notes = newObject.notes;
-                            tmpObject.createDate = newObject.createDate;
+                          //  tmpObject.createDate = newObject.createDate;
                             tmpObject.updateDate = newObject.updateDate;
                             tmpObject.createUserId = newObject.createUserId;
                             tmpObject.updateUserId = newObject.updateUserId;
@@ -378,16 +363,7 @@ namespace POS_Server.Controllers
                                 Nullable<int> id = null;
                                 newListObj[i].agentId = id;
                             }
-                            if (newListObj[i].subscriptionFeesId == 0 || newListObj[i].subscriptionFeesId == null)
-                            {
-                                Nullable<int> id = null;
-                                newListObj[i].subscriptionFeesId = id;
-                            }
-                            if (newListObj[i].cashTransId == 0 || newListObj[i].cashTransId == null)
-                            {
-                                Nullable<int> id = null;
-                                newListObj[i].cashTransId = id;
-                            }
+                         
                             var branchEntity = entity.Set<agentMemberships>();
 
                             newListObj[i].createDate = DateTime.Now;

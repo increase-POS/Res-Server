@@ -25,6 +25,7 @@ namespace POS_Server
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<agentMembershipCash> agentMembershipCash { get; set; }
         public virtual DbSet<agentMemberships> agentMemberships { get; set; }
         public virtual DbSet<agents> agents { get; set; }
         public virtual DbSet<banks> banks { get; set; }

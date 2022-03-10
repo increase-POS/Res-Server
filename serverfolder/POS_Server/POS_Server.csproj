@@ -198,6 +198,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="agentMembershipCash.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="agentMemberships.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
@@ -267,6 +270,7 @@
     <Compile Include="Classes\ProgramInfo.cs" />
     <Compile Include="Controllers\ActivateController.cs" />
     <Compile Include="Controllers\AgentController.cs" />
+    <Compile Include="Controllers\AgentMembershipCashController.cs" />
     <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\BranchesUsersController.cs" />
     <Compile Include="Controllers\AgentMembershipsController.cs" />
@@ -441,6 +445,7 @@
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ActivateModel.cs" />
+    <Compile Include="Models\AgentMembershipCashModel.cs" />
     <Compile Include="Models\BackupModel.cs" />
     <Compile Include="Models\BranchesUsersModel.cs" />
     <Compile Include="Models\AgentMembershipsModel.cs" />
