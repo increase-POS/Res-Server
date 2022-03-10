@@ -795,6 +795,8 @@
     <EntitySetMapping Name="memberships">
       <EntityTypeMapping TypeName="PosModel.memberships">
         <MappingFragment StoreEntitySet="memberships">
+          <ScalarProperty Name="deliveryDiscountPercent" ColumnName="deliveryDiscountPercent" />
+          <ScalarProperty Name="isFreeDelivery" ColumnName="isFreeDelivery" />
           <ScalarProperty Name="membershipId" ColumnName="membershipId" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="notes" ColumnName="notes" />

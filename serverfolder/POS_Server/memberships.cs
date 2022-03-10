@@ -35,6 +35,8 @@ namespace POS_Server
         public byte isActive { get; set; }
         public string code { get; set; }
         public string subscriptionType { get; set; }
+        public bool isFreeDelivery { get; set; }
+        public decimal deliveryDiscountPercent { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agentMembershipCash> agentMembershipCash { get; set; }

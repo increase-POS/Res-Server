@@ -762,6 +762,8 @@
     <Property Name="isActive" Type="tinyint" Nullable="false" />
     <Property Name="code" Type="nvarchar" MaxLength="500" />
     <Property Name="subscriptionType" Type="nvarchar" MaxLength="50" />
+    <Property Name="isFreeDelivery" Type="bit" Nullable="false" />
+    <Property Name="deliveryDiscountPercent" Type="decimal" Precision="20" Scale="3" Nullable="false" />
   </EntityType>
   <EntityType Name="membershipsOffers">
     <Key>
