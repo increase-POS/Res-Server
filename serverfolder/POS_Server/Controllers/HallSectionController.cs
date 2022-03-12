@@ -159,6 +159,7 @@ namespace POS_Server.Controllers
                         {
                             tmpObject = entity.hallSections.Find(Object.sectionId);
                             tmpObject.name = Object.name;
+                            tmpObject.branchId = Object.branchId;
                             tmpObject.details = Object.details;
                             tmpObject.notes = Object.notes;
                             tmpObject.isActive = Object.isActive;
