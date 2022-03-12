@@ -68,6 +68,54 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [Route("getBranchSections")]
+        public string getBranchSections(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int branchId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var sectionList = (from L in entity.hallSections
+                                       where L.branchId == branchId && L.isActive == 1
+                                       join b in entity.branches on L.branchId equals b.branchId into lj
+                                       from v in lj.DefaultIfEmpty()
+                                       select new SectionModel()
+                                       {
+                                           sectionId = L.sectionId,
+                                           name = L.name,
+                                           isActive = (byte)L.isActive,
+                                           branchId = L.branchId,
+                                           notes = L.notes,
+                                           branchName = v.name,
+                                           createDate = L.createDate,
+                                           updateDate = L.updateDate,
+                                           createUserId = L.createUserId,
+                                           updateUserId = L.updateUserId,
+                                           type = L.type,
+                                       })
+                                        .ToList();
+
+                    return TokenManager.GenerateToken(sectionList);
+                }
+            }
+        }
         [HttpPost]
         [Route("Save")]
         public string Save(string token)
