@@ -338,7 +338,8 @@ namespace POS_Server.Controllers
 
                         tmpObject.subscriptionType = newObject.subscriptionType;
                         tmpObject.code = newObject.code;
-
+                        tmpObject.isFreeDelivery = newObject.isFreeDelivery;
+                        tmpObject.deliveryDiscountPercent = newObject.deliveryDiscountPercent;
                         entity.SaveChanges();
                         message = tmpObject.membershipId;
 
