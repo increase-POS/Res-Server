@@ -161,7 +161,7 @@ namespace POS_Server.Controllers
             else
             {
                 string itemObject = "";
-                dishIngredients Object = null;
+                dishIngredients newObject = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -169,30 +169,46 @@ namespace POS_Server.Controllers
                     {
                         itemObject = c.Value.Replace("\\", string.Empty);
                         itemObject = itemObject.Trim('"');
-                        Object = JsonConvert.DeserializeObject<dishIngredients>(itemObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                        newObject = JsonConvert.DeserializeObject<dishIngredients>(itemObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
                         break;
                     }
                 }
+                if (newObject.updateUserId == 0 || newObject.updateUserId == null)
+                {
+                    Nullable<int> id = null;
+                    newObject.updateUserId = id;
+                }
+                if (newObject.createUserId == 0 || newObject.createUserId == null)
+                {
+                    Nullable<int> id = null;
+                    newObject.createUserId = id;
+                }
+                if (newObject.itemUnitId == 0 || newObject.itemUnitId == null)
+                {
+                    Nullable<int> id = null;
+                    newObject.itemUnitId = id;
+                }
                 try
                 {
+
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         dishIngredients tmpObject = new dishIngredients();
-                        if (Object.dishIngredId == 0)
+                        if (newObject.dishIngredId == 0)
                         {
-                            Object.createDate = DateTime.Now;
-                            Object.updateDate = DateTime.Now;
-                            Object.updateUserId = Object.createUserId;
-                            entity.dishIngredients.Add(Object);
+                            newObject.createDate = DateTime.Now;
+                            newObject.updateDate = DateTime.Now;
+                            newObject.updateUserId = newObject.createUserId;
+                            entity.dishIngredients.Add(newObject);
                         }
                         else
                         {
-                            tmpObject = entity.dishIngredients.Find(Object.dishIngredId);
-                            tmpObject.name = Object.name;
-                            tmpObject.itemUnitId = Object.itemUnitId;
-                            tmpObject.notes = Object.notes;
-                            tmpObject.isActive = Object.isActive;
-                            tmpObject.updateUserId = Object.createUserId;
+                            tmpObject = entity.dishIngredients.Find(newObject.dishIngredId);
+                            tmpObject.name = newObject.name;
+                            tmpObject.itemUnitId = newObject.itemUnitId;
+                            tmpObject.notes = newObject.notes;
+                            tmpObject.isActive = newObject.isActive;
+                            tmpObject.updateUserId = newObject.createUserId;
                             tmpObject.updateDate = DateTime.Now;
                         }
                         message = entity.SaveChanges().ToString();
