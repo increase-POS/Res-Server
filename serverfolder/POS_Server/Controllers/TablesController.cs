@@ -656,6 +656,8 @@ namespace POS_Server.Controllers
                         var startPlusWarning = res.reservationTime + exceedTime;
                         if (startPlusWarning < DateTime.Now)
                             res.isExceed = "exceed";
+                        else
+                            res.isExceed = "";
                     }
                     
                     return TokenManager.GenerateToken(reservations);
