@@ -649,7 +649,17 @@ namespace POS_Server.Controllers
                                                       isActive = ts.isActive}).ToList(),
                                         }).ToList().OrderBy(x => x.reservationDate).ThenBy(x => x.reservationTime);
 
-                                            
+                    var warningTimeForLate = entity.setValues.Where(x => x.setting.name == "warningTimeForLateReservation").Select(x => x.value).FirstOrDefault();
+                    TimeSpan exceedTime = new TimeSpan(0, int.Parse(warningTimeForLate), 0);
+                    foreach (ReservationModel res in reservations)
+                    {                       
+                        var startPlusWarning = res.reservationTime + exceedTime;
+                        if (startPlusWarning < DateTime.Now)
+                            res.isExceed = "exceed";
+                        else
+                            res.isExceed = "";
+                    }
+                    
                     return TokenManager.GenerateToken(reservations);
                 }
             }
