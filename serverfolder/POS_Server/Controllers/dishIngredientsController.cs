@@ -65,8 +65,8 @@ namespace POS_Server.Controllers
         }
 
         [HttpPost]
-        [Route("GetGetByItemUnitId")]
-        public string GetGetByItemUnitId(string token)
+        [Route("GetByItemUnitId")]
+        public string GetByItemUnitId(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             Boolean canDelete = false;
