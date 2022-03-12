@@ -117,6 +117,50 @@ namespace POS_Server.Controllers
             }
         }
         [HttpPost]
+        [Route("GetById")]
+        public string GetById(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int sectionId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemId")
+                    {
+                        sectionId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var location = entity.hallSections
+                   .Where(u => u.sectionId == sectionId)
+                   .Select(L => new HallSectionModel
+                   {
+                       sectionId = L.sectionId,
+                       name = L.name,
+                       isActive =(byte) L.isActive,
+                       branchId = L.branchId,
+                       notes = L.notes,
+                       details = L.details,
+                       createDate = L.createDate,
+                       updateDate = L.updateDate,
+                       createUserId = L.createUserId,
+                       updateUserId = L.updateUserId,
+
+                   })
+                   .FirstOrDefault();
+                    return TokenManager.GenerateToken(location);
+                }
+            }
+        }
+        [HttpPost]
         [Route("Save")]
         public string Save(string token)
         {
