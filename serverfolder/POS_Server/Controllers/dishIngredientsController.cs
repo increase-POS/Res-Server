@@ -29,9 +29,67 @@ namespace POS_Server.Controllers
             }
             else
             {
+                try
+                {
+
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var List = entity.dishIngredients.Select(S => new dishIngredients
+                        var List1 = entity.dishIngredients.ToList();
+                        var List = List1.Select(S => new dishIngredients
+                       
+                    {
+
+                        dishIngredId = S.dishIngredId,
+                        name = S.name,
+                        itemUnitId = S.itemUnitId,
+                        notes = S.notes,
+                        isActive = S.isActive,
+                        createDate = S.createDate,
+                        updateDate = S.updateDate,
+                        createUserId = S.createUserId,
+                        updateUserId = S.updateUserId,
+
+                    }).ToList();
+
+                  
+                    return TokenManager.GenerateToken(List);
+
+                }
+
+                }
+                catch (Exception ex)
+                {
+                    return TokenManager.GenerateToken(ex.ToString());
+                }
+            }
+        }
+
+        [HttpPost]
+        [Route("GetGetByItemUnitId")]
+        public string GetGetByItemUnitId(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            Boolean canDelete = false;
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int itemUnitId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemId")
+                    {
+                        itemUnitId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var List1 = entity.dishIngredients.ToList();
+                    var List = List1.Where(S => S.itemUnitId == itemUnitId).Select(S => new dishIngredients
                     {
 
                         dishIngredId = S.dishIngredId,
@@ -48,24 +106,12 @@ namespace POS_Server.Controllers
 
                     }).ToList();
 
-                  
+
                     return TokenManager.GenerateToken(List);
 
                 }
             }
         }
-        /*
-         * 
-            public long dishIngredId { get; set; }
-        public string name { get; set; }
-        public Nullable<int> itemUnitId { get; set; }
-        public string notes { get; set; }
-        public byte isActive { get; set; }
-        public Nullable<System.DateTime> createDate { get; set; }
-        public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
-         * */
         [HttpPost]
         [Route("Get")]
         public string Get(string token)
