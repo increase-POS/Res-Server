@@ -17,6 +17,56 @@ namespace POS_Server.Controllers
     public class dishIngredientsController : ApiController
     {
         [HttpPost]
+        [Route("GetAll")]
+        public string GetAll(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            Boolean canDelete = false;
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var List = entity.dishIngredients.Select(S => new dishIngredients
+                    {
+
+                        dishIngredId = S.dishIngredId,
+                        name = S.name,
+                        itemUnitId = S.itemUnitId,
+                        notes = S.notes,
+                        isActive = S.isActive,
+                        createDate = S.createDate,
+                        updateDate = S.updateDate,
+                        createUserId = S.createUserId,
+                        updateUserId = S.updateUserId,
+
+
+
+                    }).ToList();
+
+                  
+                    return TokenManager.GenerateToken(List);
+
+                }
+            }
+        }
+        /*
+         * 
+            public long dishIngredId { get; set; }
+        public string name { get; set; }
+        public Nullable<int> itemUnitId { get; set; }
+        public string notes { get; set; }
+        public byte isActive { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> updateDate { get; set; }
+        public Nullable<int> createUserId { get; set; }
+        public Nullable<int> updateUserId { get; set; }
+         * */
+        [HttpPost]
         [Route("Get")]
         public string Get(string token)
         {
@@ -50,6 +100,52 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [Route("GetById")]
+        public string GetById(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int dishIngredId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemId")
+                    {
+                        dishIngredId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var bank = entity.dishIngredients
+                   .Where(S => S.dishIngredId == dishIngredId)
+                   .Select(S => new
+                   {
+                       S.dishIngredId,
+                       S.name,
+                       S.itemUnitId,
+                       S.notes,
+                       S.isActive,
+                       S.createDate,
+                       S.updateDate,
+                       S.createUserId,
+                       S.updateUserId,
+
+                   })
+                   .FirstOrDefault();
+                    return TokenManager.GenerateToken(bank);
+
+                }
+            }
+        }
+
         // add or update menu settings 
         [HttpPost]
         [Route("Save")]
@@ -104,6 +200,79 @@ namespace POS_Server.Controllers
                     return TokenManager.GenerateToken(message);
                 }
                 catch { return TokenManager.GenerateToken("0"); }
+            }
+        }
+
+        [HttpPost]
+        [Route("Delete")]
+        public string Delete(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int dishIngredId = 0;
+                int userId = 0;
+                Boolean final = false;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemId")
+                    {
+                        dishIngredId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "final")
+                    {
+                        final = bool.Parse(c.Value);
+                    }
+                }
+                if (final)
+                {
+                    try
+                    {
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+
+                            dishIngredients objDelete = entity.dishIngredients.Find(dishIngredId);
+                            entity.dishIngredients.Remove(objDelete);
+                            message = entity.SaveChanges().ToString();
+                            return TokenManager.GenerateToken(message);
+                        }
+                    }
+                    catch
+                    {
+                        return TokenManager.GenerateToken("0");
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+
+                            dishIngredients objDelete = entity.dishIngredients.Find(dishIngredId);
+                            objDelete.isActive = 0;
+                            objDelete.updateUserId = userId;
+                            objDelete.updateDate = DateTime.Now;
+                            message = entity.SaveChanges().ToString();
+                            return TokenManager.GenerateToken(message);
+                        }
+                    }
+                    catch
+                    {
+                        return TokenManager.GenerateToken("0");
+                    }
+                }
             }
         }
     }

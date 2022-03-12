@@ -448,6 +448,7 @@
     <Compile Include="Models\ActivateModel.cs" />
     <Compile Include="Models\AgentMembershipCashModel.cs" />
     <Compile Include="Models\BackupModel.cs" />
+    <Compile Include="Models\dishIngredientsModel.cs" />
     <Compile Include="Models\BranchesUsersModel.cs" />
     <Compile Include="Models\AgentMembershipsModel.cs" />
     <Compile Include="Models\AgentModel.cs" />
