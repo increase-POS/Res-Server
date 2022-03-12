@@ -47,7 +47,8 @@ var strP = TokenManager.GetPrincipal(token);
                                             updateUserId=L.updateUserId,
                                             isActive=L.isActive,
                                             isFreeZone=L.isFreeZone,
-                                            branchId=L.branchId,
+                                             isKitchen = L.isKitchen,
+                                             branchId =L.branchId,
                                              sectionId =L.sectionId,
                                             sectionName = v.name,
                                             notes = L.notes,
@@ -112,6 +113,7 @@ var strP = TokenManager.GetPrincipal(token);
                        L.updateUserId,
                        L.isActive,
                        L.isFreeZone,
+                       L.isKitchen,
                        L.branchId,
                        L.sectionId,
                        note = L.notes,
@@ -165,6 +167,7 @@ var strP = TokenManager.GetPrincipal(token);
                                              updateUserId = L.updateUserId,
                                              isActive = L.isActive,
                                              isFreeZone = L.isFreeZone,
+                                             isKitchen = L.isKitchen,
                                              branchId = L.branchId,
                                              sectionId = L.sectionId,
                                              sectionName = v.name,
@@ -231,6 +234,7 @@ var strP = TokenManager.GetPrincipal(token);
                                              updateUserId = L.updateUserId,
                                              isActive = L.isActive,
                                              isFreeZone = L.isFreeZone,
+                                             isKitchen = L.isKitchen,
                                              branchId = L.branchId,
                                              sectionId = L.sectionId,
                                              sectionName = v.name,
@@ -308,6 +312,8 @@ var strP = TokenManager.GetPrincipal(token);
                             tmpLocation.z = newObject.z;
                             tmpLocation.branchId = newObject.branchId;
                             tmpLocation.isFreeZone = newObject.isFreeZone;
+                            //tmpLocation.isKitchen = newObject.isKitchen;
+                          
                             tmpLocation.updateDate = DateTime.Now;
                             tmpLocation.updateUserId = newObject.updateUserId;
                             tmpLocation.sectionId = newObject.sectionId;

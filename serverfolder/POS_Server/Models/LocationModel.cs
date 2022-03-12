@@ -20,7 +20,7 @@ namespace POS_Server.Models
         public string notes { get; set; }
         public Nullable<int> branchId { get; set; }
         public byte isFreeZone { get; set; }
-
+        public byte isKitchen { get; set; }
 
 
         public Boolean canDelete { get; set; }
