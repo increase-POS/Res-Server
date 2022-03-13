@@ -68,6 +68,8 @@ namespace POS_Server.Controllers
                        createDate = S.createDate,
                        updateDate = S.updateDate,
                        isActive = S.isActive,
+                       sectionName = S.hallSections.name,
+                       branchName = S.branches1.name,
                        
                    }).ToList();
 
