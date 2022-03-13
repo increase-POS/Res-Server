@@ -108,6 +108,65 @@ namespace POS_Server.Controllers
                 }
             }
         }
+         [HttpPost]
+        [Route("GetAgentMemberShip")]
+        public string GetAgentMemberShip(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int agentId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "agentId")
+                    {
+                        agentId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var agentMemberShip = entity.agentMemberships
+                   .Where(S => S.agentId == agentId)
+                   .Select(S => new AgentMembershipsModel()
+                   {
+                       agentMembershipsId = S.agentMembershipsId,
+
+                       membershipId = S.membershipId,
+                       agentId = S.agentId,
+
+                       notes = S.notes,
+                       createDate = S.createDate,
+                       updateDate = S.updateDate,
+                       createUserId = S.createUserId,
+                       updateUserId = S.updateUserId,
+                       isActive = S.isActive,
+                       memberShip = entity.memberships.Where(x => x.membershipId == S.membershipId)
+                                                        .Select(x => new MembershipsModel()
+                                                           {
+                                                            membershipId = x.membershipId,
+                                                           code = x.code,
+                                                           createDate = x.createDate,
+                                                           updateDate = x.updateDate,
+                                                           isActive = x.isActive,
+                                                           isFreeDelivery = x.isFreeDelivery,
+                                                           deliveryDiscountPercent = x.deliveryDiscountPercent,
+                                                           name = x.name,
+                                                           notes=  x.notes,
+                                                           subscriptionFee = x.subscriptionFees.FirstOrDefault().Amount,
+                                                           subscriptionType = x.subscriptionType,                                                           
+                                                           }).FirstOrDefault()
+                   }).FirstOrDefault();
+                    return TokenManager.GenerateToken(agentMemberShip);
+
+                }
+            }
+        }
 
         [HttpPost]
         [Route("Save")]
