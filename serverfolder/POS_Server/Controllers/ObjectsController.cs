@@ -55,6 +55,7 @@ namespace POS_Server.Controllers
                                        objectType = c.objectType,
                                        translate = c.translate,
                                        icon= c.icon,
+                                       translateHint=  c.translateHint,
                                    })
                                    .ToList();
                         if (List.Count > 0)
@@ -133,6 +134,7 @@ namespace POS_Server.Controllers
                            c.objectType,
                            c.translate,
                             c.icon,
+                           c.translateHint,
                        })
                        .FirstOrDefault();
 
@@ -215,6 +217,7 @@ namespace POS_Server.Controllers
                                     tmps.parentObjectId = newObject.parentObjectId;
                                     tmps.objectType = newObject.objectType;
                                     tmps.translate = newObject.translate;
+                                tmps.translateHint = newObject.translateHint;
                                 tmps.icon = newObject.icon;
                                 
                                     entity.SaveChanges();
