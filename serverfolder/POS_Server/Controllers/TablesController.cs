@@ -49,6 +49,7 @@ namespace POS_Server.Controllers
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var searchPredicate = PredicateBuilder.New<tables>();
+                    searchPredicate = searchPredicate.And(x => true);
                     if (branchId != 0)
                         searchPredicate.And(x => x.branchId == branchId);
                     if (sectionId != 0)
@@ -67,6 +68,9 @@ namespace POS_Server.Controllers
                        createDate = S.createDate,
                        updateDate = S.updateDate,
                        isActive = S.isActive,
+                       sectionName = S.hallSections.name,
+                       branchName = S.branches1.name,
+                       
                    }).ToList();
 
                     // can delet or not

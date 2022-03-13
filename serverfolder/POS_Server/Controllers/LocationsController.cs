@@ -21,9 +21,9 @@ namespace POS_Server.Controllers
         [Route("Get")]
         public string Get(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             Boolean canDelete = false;
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -51,6 +51,7 @@ var strP = TokenManager.GetPrincipal(token);
                                              branchId =L.branchId,
                                              sectionId =L.sectionId,
                                             sectionName = v.name,
+                                            branchName = v.branches.name,
                                             notes = L.notes,
                                         }).ToList();
 
