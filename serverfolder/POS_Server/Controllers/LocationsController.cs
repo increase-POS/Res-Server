@@ -51,7 +51,7 @@ namespace POS_Server.Controllers
                                              branchId =L.branchId,
                                              sectionId =L.sectionId,
                                             sectionName = v.name,
-                                            branchName = v.branches.name,
+                                            branchName = L.branches.name,
                                             notes = L.notes,
                                         }).ToList();
 
