@@ -42,17 +42,11 @@ namespace POS_Server.Models
         public Nullable<int> agentId { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
-       
-        public Nullable<int> updateUserId { get; set; }
-        
-        public Nullable<System.DateTime> createDate { get; set; }
+        //public Nullable<int> updateUserId { get; set; }
+        //public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-
-
-
+        //public Nullable<int> createUserId { get; set; }
         public decimal Amount { get; set; }
-      
         public Nullable<int> pointId { get; set; }
         public string agentName { get; set; }
         public string agentcode { get; set; }
@@ -67,7 +61,6 @@ namespace POS_Server.Models
         public decimal agentbalance { get; set; }
         public byte agentbalanceType { get; set; }
        
-       
         public string agentfax { get; set; }
         public decimal agentmaxDeserve { get; set; }
         public bool agentisLimited { get; set; }
@@ -77,27 +70,18 @@ namespace POS_Server.Models
         public Nullable<int> agentresidentSecId { get; set; }
         public string agentGPSAddress { get; set; }
 
-       
         public string membershipName { get; set; }
 
-       
-        
         public byte membershipisActive { get; set; }
         public string subscriptionType { get; set; }
         public string cashsubscriptionType { get; set; }
         public string membershipcode { get; set; }
         public bool isFreeDelivery { get; set; }
         public decimal deliveryDiscountPercent { get; set; }
-
         public Nullable<decimal> subscriptionFee { get; set; }
-
-
-      
         public Nullable<int> monthsCount { get; set; }
-
         public string transType { get; set; }
         public string transNum { get; set; }
-
 
     }
     /*
