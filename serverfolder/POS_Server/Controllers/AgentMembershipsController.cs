@@ -377,6 +377,67 @@ namespace POS_Server.Controllers
                     }
                 }
 
+         
+                try
+                {
+                    AgentController agcont = new AgentController();
+                        foreach (var row in newListObj)
+                    {
+                        agcont.UpdateMembershipId((int)row.agentId,(int) row.membershipId);
+                    }
+                        
+                    message = "1";
+                    return TokenManager.GenerateToken(message);
+                }
+                catch
+                {
+                    message = "0";
+                    return TokenManager.GenerateToken(message);
+                }
+
+            }
+
+        }
+
+        /*
+         *        [HttpPost]
+        [Route("UpdateAgentsByMembershipId")]
+        public string UpdateAgentsByMembershipId(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string strObject = "";
+                List<agentMemberships> newListObj = null;
+                int membershipId = 0;
+                int updateUserId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "newList")
+                    {
+                        strObject = c.Value.Replace("\\", string.Empty);
+                        strObject = strObject.Trim('"');
+                        newListObj = JsonConvert.DeserializeObject<List<agentMemberships>>(strObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+
+                    }
+                    else if (c.Type == "membershipId")
+                    {
+                        membershipId = int.Parse(c.Value);
+                    }
+                    else
+                  if (c.Type == "updateUserId")
+                    {
+                        updateUserId = int.Parse(c.Value);
+                    }
+                }
+
                 List<agentMemberships> items = null;
                 // delete old invoice items
                 using (incposdbEntities entity = new incposdbEntities())
@@ -452,6 +513,7 @@ namespace POS_Server.Controllers
             }
 
         }
+         * */
         //[HttpPost]
         //[Route("UpdateAgentsByMembershipId")]
         //public string UpdateAgentsByMembershipId(string token)
