@@ -693,6 +693,77 @@ namespace POS_Server.Controllers
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
+                    var List = (from S in entity.agents
+                          
+                                where S.membershipId == membershipId
+                                select new AgentModel()
+                                {
+                                    agentId = S.agentId,
+                                    name = S.name,
+                                    code = S.code,
+                                    company = S.company,
+                                    address = S.address,
+                                    email = S.email,
+                                    phone = S.phone,
+                                    mobile = S.mobile,
+                                    image = S.image,
+                                    type = S.type,
+                                    accType = S.accType,
+                                    balance = S.balance,
+                                    balanceType = S.balanceType,
+                                    notes = S.notes,
+                                    isActive = S.isActive,
+                                    createDate = S.createDate,
+                                    updateDate = S.updateDate,
+                                    maxDeserve = S.maxDeserve,
+                                    fax = S.fax,
+                                    isLimited = S.isLimited,
+                                    payType = S.payType,
+                                    canReserve = S.canReserve,
+                                    disallowReason = S.disallowReason,
+                                    residentSecId = S.residentSecId,
+                                    GPSAddress = S.GPSAddress,
+
+                             
+                                  
+                                    membershipId = S.membershipId,
+                                
+
+
+                                }).ToList();
+                    return TokenManager.GenerateToken(List);
+
+
+                }
+            }
+        }
+
+        /*
+       //  old
+           [HttpPost]
+        [Route("GetAgentsByMembershipId")]
+        public string GetAgentsByMembershipId(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+
+                int membershipId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemId")
+                    {
+                        membershipId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
                     var List = (from S in entity.agentMemberships
                                 join B in entity.agents on S.agentId equals B.agentId into JB
                                 join U in entity.memberships on S.membershipId equals U.membershipId into JU
@@ -739,6 +810,33 @@ namespace POS_Server.Controllers
 
                 }
             }
+        }
+
+         * */
+        public int UpdateMembershipId(int agentId,int membershipId)
+        {
+           
+            int message =0;
+                try
+                {
+                    agents agent;
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var agentEntity = entity.Set<agents>();
+                        agent = entity.agents.Where(p => p.agentId == agentId).First();
+                        agent.membershipId = membershipId;
+                        entity.SaveChanges();
+                    }
+                    message = agent.agentId;
+                    return  message;
+                }
+
+                catch
+                {
+                    message = 0;
+                    return message;
+                }
+           
         }
 
 
