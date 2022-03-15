@@ -752,8 +752,10 @@ namespace POS_Server.Controllers
                     }
                 }
                 int branchId = 0;
-                int secId = 0;
-                int locId = 0;
+                int secfreezoneId = 0;
+                int seckitchenId = 0;
+                int lockitchenId = 0;
+                int locfreezoneId = 0;
                 int res = 0;
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
@@ -793,7 +795,6 @@ namespace POS_Server.Controllers
                             }
                             else
                             {
-
                                 //new branch
 
                                 newObject.createDate = DateTime.Now;
@@ -810,7 +811,7 @@ namespace POS_Server.Controllers
                                     //save section
                                     try
                                     {
-
+                                        //save freezone section
                                         sections section = new sections();
                                         section.name = "FreeZone";
                                         section.branchId = branchId;
@@ -819,8 +820,8 @@ namespace POS_Server.Controllers
                                         section.updateUserId = newObject.createUserId;
                                         section.isActive = 1;
                                         section.isFreeZone = 1;
-                                        secId = SaveSec(section);
-                                        res = secId;
+                                        secfreezoneId = SaveSec(section);
+                                        res = secfreezoneId;
                                         if (res == -2)
                                         {
                                             res = DeleteBranch(branchId, (int)newObject.createUserId, true);
@@ -837,53 +838,59 @@ namespace POS_Server.Controllers
                                             section.isActive = 1;
                                             section.isFreeZone = 0;
                                             section.isKitchen = 1;
-                                            secId = SaveSec(section);
+                                            seckitchenId = SaveSec(section);
+                                            res = seckitchenId;
                                             if (res == -2)
                                             {
                                                 res = DeleteBranch(branchId, (int)newObject.createUserId, true);
                                             }
                                         }
-                               
 
                                         //save location
                                         try
                                         {
+                                            //save isFreeZone location
                                             locations location = new locations();
                                             location.x = location.y = location.z = "0";
                                             location.notes = "";
                                             location.createUserId = newObject.createUserId;
                                             location.updateUserId = newObject.createUserId;
                                             location.isActive = 1;
-                                            location.sectionId = secId;
+                                            location.sectionId = secfreezoneId;
                                             location.branchId = branchId;
                                             location.isFreeZone = 1;
-                                            locId = SaveLoc(location);
+                                            locfreezoneId = SaveLoc(location);
                                           //  return locId.ToString();
-                                            res = locId;
+                                            res = locfreezoneId;
                                             if (res == -2)
                                             {
-                                                res = DeleteSec(secId, (int)newObject.createUserId, true);
+                                                res = DeleteSec(secfreezoneId, (int)newObject.createUserId, true);
+                                             //   res = DeleteSec(seckitchenId, (int)newObject.createUserId, true);
                                                 res = DeleteBranch(branchId, (int)newObject.createUserId, true);
 
                                             }
                                             else
                                             {
+                                                //save isKitchen location
                                                 location = new locations();
                                                 location.x = location.y = location.z = "0";
                                                 location.notes = "";
                                                 location.createUserId = newObject.createUserId;
                                                 location.updateUserId = newObject.createUserId;
                                                 location.isActive = 1;
-                                                location.sectionId = secId;
+                                                location.sectionId = seckitchenId;
                                                 location.branchId = branchId;
                                                 location.isFreeZone = 0;
                                                 location.isKitchen = 1;
-                                                locId = SaveLoc(location);
+                                                lockitchenId = SaveLoc(location);
                                               
-                                                res = locId;
+                                                res = lockitchenId;
                                                 if (res == -2)
                                                 {
-                                                    res = DeleteSec(secId, (int)newObject.createUserId, true);
+                                                    res = DeleteLoc(locfreezoneId, (int)newObject.createUserId, true);
+                                                    res = DeleteSec(secfreezoneId, (int)newObject.createUserId, true);
+                                                    res = DeleteSec(seckitchenId, (int)newObject.createUserId, true);
+                                                 
                                                     res = DeleteBranch(branchId, (int)newObject.createUserId, true);
 
                                                 }
@@ -894,7 +901,10 @@ namespace POS_Server.Controllers
                                         {
                                             // error locaion : delete sec+branch
 
-                                            res = DeleteSec(secId, (int)newObject.createUserId, true);
+                                            res = DeleteLoc(lockitchenId, (int)newObject.createUserId, true);
+                                            res = DeleteLoc(locfreezoneId, (int)newObject.createUserId, true);
+                                            res = DeleteSec(secfreezoneId, (int)newObject.createUserId, true);
+                                            res = DeleteSec(seckitchenId, (int)newObject.createUserId, true);
                                             res = DeleteBranch(branchId, (int)newObject.createUserId, true);
 
                                         }
@@ -920,7 +930,7 @@ namespace POS_Server.Controllers
 
 
                             }
-                            if (branchId > 0 && secId > 0 && locId > 0)
+                            if (branchId > 0 && secfreezoneId > 0 && locfreezoneId > 0 && seckitchenId > 0 && lockitchenId > 0 )
                             {
                                 return TokenManager.GenerateToken(branchId.ToString());
                             }
