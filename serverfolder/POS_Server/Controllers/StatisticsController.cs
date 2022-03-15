@@ -7703,7 +7703,6 @@ else
 
         }
 
-
         //كشف حساب
         [HttpPost]
         [Route("GetStatement")]
@@ -7712,8 +7711,6 @@ else
             // public ResponseVM GetPurinv(string token)
 
             //int mainBranchId, int userId
-
-
 
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -7789,7 +7786,7 @@ else
                                             //*createUserId = C.createUserId,
                                             //*notes = C.notes,
                                             //*posIdCreator = C.posIdCreator,
-                                            isConfirm = C.isConfirm,
+                                            isConfirm =(byte?) C.isConfirm,/////////////////////////
                                             cashTransIdSource = C.cashTransIdSource,
                                             side = C.side,
 
@@ -7814,19 +7811,19 @@ else
                                             //*createUserJob = jucc.job,
                                             cardName = jcrd.name,
                                             //*bondDeserveDate = jbbo.deserveDate,
-                                            bondIsRecieved = jbbo.isRecieved ,
+                                            bondIsRecieved = (byte?)jbbo.isRecieved ,////////////////////////
 
                                             //*agentCompany = jaa.company,
                                             shippingCompanyId = C.shippingCompanyId,
                                             shippingCompanyName = C.shippingCompanies.name,
 
                                             //*agentBalance = jaa.balance,
-                                            agentBType = jaa.balanceType,
+                                            agentBType = (byte?)jaa.balanceType,///////////////////////
                                             //*userBalance = juu.balance,
-                                            userBType = juu.balanceType,
+                                            userBType = (byte?)juu.balanceType,/////////////////
                                             shippingBalance = (decimal?)jshh.balance,
 
-                                            shippingCompaniesBType = jshh.balanceType,
+                                            shippingCompaniesBType = (byte?)jshh.balanceType,/////////////////
 
                                             invNumber = jinvv.invNumber,//yasmine
                                             bondNumber = jbbo.number,//yasmine
@@ -7866,17 +7863,15 @@ else
                         */
 
 
-
-
-
                         return TokenManager.GenerateToken(cachlist);
 
                     }
 
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return TokenManager.GenerateToken("0");
+                    return TokenManager.GenerateToken(ex.ToString());
+                 //   return TokenManager.GenerateToken("0");
                 }
 
             }
@@ -9941,9 +9936,10 @@ else
                     }
 
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return TokenManager.GenerateToken("0");
+                    return TokenManager.GenerateToken(ex.ToString());
+                  //  return TokenManager.GenerateToken("0");
                 }
 
             }
