@@ -66,6 +66,20 @@ namespace POS_Server.Controllers
                         {
                             o.num = index;
                             index++;
+
+                            if (o.preparingTime != null)
+                            {
+                                DateTime createDate = (DateTime)o.createDate;
+                                createDate = createDate.AddMinutes((double)o.preparingTime);
+
+                                if (createDate > DateTime.Now)
+                                    o.remainingTime = 0;
+                                else
+                                {
+                                    TimeSpan remainingTime = DateTime.Now - createDate;
+                                    o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                }
+                            }
                         }
                         return TokenManager.GenerateToken(prepOrders);
                     }
@@ -227,6 +241,53 @@ namespace POS_Server.Controllers
             }
             catch { message = "0"; }
             return message;
+        }
+        [HttpPost]
+        [Route("GetLastNumOfOrder")]
+        public string GetLastNumOfOrder(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string orderCode = "";
+                int branchId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "orderCode")
+                    {
+                        orderCode = c.Value;
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                }
+                List<string> numberList;
+                int lastNum = 0;
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    numberList = entity.orderPreparing.Where(b => b.orderNum.Contains(orderCode + "-") && b.invoices.branchId == branchId).Select(b => b.orderNum).ToList();
+
+                    for (int i = 0; i < numberList.Count; i++)
+                    {
+                        string code = numberList[i];
+                        string s = code.Substring(code.LastIndexOf("-") + 1);
+                        numberList[i] = s;
+                    }
+                    if (numberList.Count > 0)
+                    {
+                        numberList.Sort();
+                        lastNum = int.Parse(numberList[numberList.Count - 1]);
+                    }
+                }
+                return TokenManager.GenerateToken(lastNum);
+            }
         }
     }
 }
