@@ -23,5 +23,25 @@ namespace POS_Server.Models
         public string status { get; set; }
         public int num { get; set; }
         public decimal remainingTime { get; set; }
+        public string invNum_Tables { get; set; }
+        public List<itemOrderPreparingModel> items  {get; set;}
+    }
+    public class itemOrderPreparingModel
+    {
+        public int itemOrderId { get; set; }
+        public Nullable<int> itemUnitId { get; set; }
+        public Nullable<int> orderPreparingId { get; set; }
+        public Nullable<int> quantity { get; set; }
+        public string notes { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> updateDate { get; set; }
+        public Nullable<int> createUserId { get; set; }
+        public Nullable<int> updateUserId { get; set; }
+
+
+        public string itemName { get; set; }
+        public decimal remainingTime { get; set; }
+        public int sequence { get; set; }
+
     }
 }
