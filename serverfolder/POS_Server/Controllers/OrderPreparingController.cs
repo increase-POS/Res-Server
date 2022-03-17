@@ -66,7 +66,7 @@ namespace POS_Server.Controllers
                         {
                             o.num = index;
                             index++;
-
+                            #region calculate remaining time
                             if (o.preparingTime != null)
                             {
                                 DateTime createDate = (DateTime)o.createDate;
@@ -79,6 +79,123 @@ namespace POS_Server.Controllers
                                     TimeSpan remainingTime = DateTime.Now - createDate;
                                     o.remainingTime = (decimal)remainingTime.TotalMinutes;
                                 }
+                            }
+                            #endregion
+                        }
+                        return TokenManager.GenerateToken(prepOrders);
+                    }
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+         [HttpPost]
+        [Route("GetPreparingOrdersWithStatus")]
+        public string GetPreparingOrdersWithStatus(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string statusStr = "";               
+                List<string> statusL = new List<string>();
+                int branchId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "status")
+                    {
+                        statusStr = c.Value;
+                        string[] statusArray = statusStr.Split(',');
+                        foreach (string s in statusArray)
+                            statusL.Add(s.Trim());
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId =int.Parse(c.Value);
+                    }
+                }
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoices.branchId == branchId)
+                                          join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                          where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                          select new OrderPreparingModel()
+                                             {
+                                                 orderPreparingId = o.orderPreparingId,
+                                                 invoiceId = o.invoiceId,
+                                                 notes = o.notes,
+                                                 orderNum = o.orderNum,
+                                                preparingTime =o.preparingTime,
+                                                 updateDate = o.updateDate,
+                                                 updateUserId = o.updateUserId,
+                                                createDate = o.createDate,
+                                                createUserId= o.createUserId,
+                                                invNum_Tables= o.invoices.invNumber,
+                                                items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
+                                                                                .Select(x => new itemOrderPreparingModel()
+                                                                                {
+                                                                                    itemOrderId = x.itemOrderId,
+                                                                                    itemName = x.itemsUnits.items.name,
+                                                                                    itemUnitId = x.itemUnitId,
+                                                                                    quantity= x.quantity,
+                                                                                    createDate = x.createDate,
+                                                                                    updateDate = x.updateDate,
+                                                                                    createUserId = x.createUserId,
+                                                                                    updateUserId = x.updateUserId,
+                                                                                }).ToList(),
+                                                status = s.status,
+                                             }).Where(x => statusL.Contains(x.status)).OrderBy(x => x.orderNum).ToList();
+
+                        
+                        foreach (OrderPreparingModel o in prepOrders)
+                        {
+                            int index = 1;
+
+                            #region get invoice tables
+                            var tables = ( from t in entity.tables.Where(x => x.isActive == 1)
+                                           join it in entity.invoiceTables.Where(x => x.invoiceId == o.invoiceId) on t.tableId equals it.tableId
+                                           select new TableModel() {
+                                               tableId = t.tableId,
+                                               name = t.name,
+                                           }).ToList();
+                            string tablesNames = "";
+                            foreach (TableModel tabl in tables)
+                            {
+                                if (tablesNames == "")
+                                    tablesNames += tabl.name;
+                                else tablesNames += ", " + tabl.name;
+                            }
+                            o.invNum_Tables += " - " + tablesNames;
+                            #endregion
+                            #region calculate remaining time
+                            if (o.preparingTime != null)
+                            {
+                                DateTime createDate = (DateTime)o.createDate;
+                                createDate = createDate.AddMinutes((double)o.preparingTime);
+
+                                if (createDate > DateTime.Now)
+                                    o.remainingTime = 0;
+                                else
+                                {
+                                    TimeSpan remainingTime = DateTime.Now - createDate;
+                                    o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                }
+                            }
+                            #endregion
+                            // set sequence num to items
+                            foreach (itemOrderPreparingModel item in o.items)
+                            {
+                                item.sequence = index;
+                                index++;                               
                             }
                         }
                         return TokenManager.GenerateToken(prepOrders);
