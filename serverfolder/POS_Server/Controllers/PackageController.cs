@@ -1082,6 +1082,39 @@ namespace POS_Server.Controllers
 
         }
         #endregion
+        public List<PackageModel> GetChildsByParentId(int parentIUId)
+        {
+            List<PackageModel> list = new List<PackageModel>();
 
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    list = (from S in entity.packages
+                            join IU in entity.itemsUnits on S.childIUId equals IU.itemUnitId
+                            join I in entity.items on IU.itemId equals I.itemId
+                            where S.parentIUId == parentIUId
+                            select new PackageModel()
+                            {
+
+                                packageId = S.packageId,
+                                parentIUId = S.parentIUId,
+                                childIUId = S.childIUId,
+                                quantity = S.quantity,
+                                isActive = S.isActive,
+                                avgPurchasePrice = I.avgPurchasePrice,
+                                citemId = I.itemId,
+                                type = I.type,
+                            }).ToList();
+
+                    return list;
+
+                }
+            }
+            catch
+            {
+                return list;
+            }
+        }
     }
 }

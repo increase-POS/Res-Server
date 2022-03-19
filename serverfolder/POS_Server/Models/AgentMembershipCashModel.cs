@@ -29,6 +29,20 @@ namespace POS_Server.Models
       
 
         public bool canDelete { get; set; }
+        public Nullable<int> monthsCount { get; set; }
+        public string agentName { get; set; }
+        public string agentcode { get; set; }
+        public string agentcompany { get; set; }
+        public string agenttype { get; set; }
+        public string membershipName { get; set; }
+
+        
+        public string membershipcode { get; set; }
+        public string transType { get; set; }
+        public string transNum { get; set; }
+        public Nullable<System.DateTime> payDate { get; set; }
+        public byte membershipisActive { get; set; }
+
     }
     public class AgenttoPayCashModel
     {
@@ -82,8 +96,8 @@ namespace POS_Server.Models
         public Nullable<int> monthsCount { get; set; }
         public string transType { get; set; }
         public string transNum { get; set; }
-
-    }
+        public Nullable<System.DateTime> payDate { get; set; }
+}
     /*
      * public int agentId { get; set; }
         public Nullable<int> pointId { get; set; }

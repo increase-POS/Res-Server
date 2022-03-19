@@ -9791,6 +9791,9 @@ else
 
                 }
                 // DateTime cmpdate = DateTime.Now.AddDays(newdays);
+                int ITitemUnitId = 0;
+                int ITitemId = 0;
+                decimal? avgPurchasePrice = 0;
                 try
                 {
 
@@ -9834,7 +9837,7 @@ else
                                                                          ITitemId = IU.itemId,
                                                                          ITunitId = IU.unitId,
                                                                          ITquantity = IT.quantity,
-                                                                         avgPurchasePrice= ITEM. avgPurchasePrice,
+                                                                         avgPurchasePrice = ITEM.avgPurchasePrice,
                                                                          // ITcreateDate = IT.createDate,
                                                                          ITupdateDate = IT.updateDate,
                                                                          //  ITcreateUserId = IT.createUserId,
@@ -9852,12 +9855,12 @@ else
                                                                          agentId = I.agentId,
                                                                          posId = I.posId,
                                                                          invType = I.invType,
-                                                                         total = I.total,
+                                                                         total = I.total - I.shippingCost,
                                                                          totalNet = I.totalNet,
                                                                          //  I.paid,
                                                                          // I.deserved,
                                                                          //I.deservedDate,
-                                                                         //  I.invDate,
+                                                                         // I.invDate,
                                                                          //  I.invoiceMainId,
                                                                          // I.invCase,
                                                                          //  I.invTime,
@@ -9868,7 +9871,10 @@ else
                                                                          updateDate = I.updateDate,
                                                                          updateUserId = I.updateUserId,
                                                                          branchId = I.branchId,
-                                                                         discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * I.total) : 0),  //
+                                                                         //calc coupon + manual discount
+                                                                         discountValue = ((I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * (I.total - I.shippingCost)) : 0))
+                                                                         + ((I.manualDiscountType == "1" || I.manualDiscountType == null) ? I.manualDiscountValue : (I.manualDiscountType == "2" ? ((I.manualDiscountValue / 100) * (I.total - I.shippingCost)) : 0))
+                                                                          ,
                                                                          discountType = I.discountType,
                                                                          tax = I.tax,
                                                                          //  I.name,
@@ -9894,11 +9900,18 @@ else
                                                                          uUserAccName = JUPUS.username,
                                                                          agentCompany = JAA.company,
                                                                          subTotal = ((IT.price - (ITEM.taxes * IU.price / 100)) * IT.quantity),
+                                                                         shippingCost = I.shippingCost,
+                                                                         realShippingCost = I.realShippingCost,
+                                                                         shippingProfit = I.shippingCost - I.realShippingCost,
+                                                                         totalNetNoShip = (decimal)I.totalNet - I.shippingCost,
+                                                                         totalNoShip = (decimal)I.total - I.shippingCost,
+                                                                         itemType = ITEM.type,
                                                                          //(ITEM.taxes *IU.price/100) = tax value
                                                                          //username
 
                                                                          //  I.invoiceId,
                                                                          //    JBB.name
+
                                                                      }).ToList();
 
 
@@ -9906,30 +9919,59 @@ else
                         {
                             decimal unitpurchasePrice = 0;
                             //   unitpurchasePrice = invoice.AvgItemPurPrice((int)row.ITitemUnitId, (int)row.ITitemId);
-                            unitpurchasePrice = AvgPurPrice((int)row.ITitemUnitId, (int)row.ITitemId,row.avgPurchasePrice);
-                            row.purchasePrice = (decimal)row.ITquantity * unitpurchasePrice;
+                            //4 test
+                            ITitemUnitId = (int)row.ITitemUnitId;
+                            ITitemId = (int)row.ITitemId;
+                            avgPurchasePrice = row.avgPurchasePrice;
 
-                            if (row.discountValue > 0)
+
+                            //
+                            if (row.itemType == "p")
                             {
-                                decimal ITdiscountpercent = 0;
-                                ITdiscountpercent = ((decimal)row.subTotal * 100) / (decimal)row.total;
-                                decimal subTotalDiscount = (ITdiscountpercent * (decimal)row.discountValue) / 100;
-                                row.subTotalNet = (decimal)row.subTotal - subTotalDiscount;
+
+                                unitpurchasePrice = AvgPackagePurPrice(ITitemUnitId);
+                                row.purchasePrice = (decimal)row.ITquantity * unitpurchasePrice;
+
+                                if (row.discountValue > 0)
+                                {
+                                    decimal ITdiscountpercent = 0;
+                                    ITdiscountpercent = ((decimal)row.subTotal * 100) / (decimal)row.totalNoShip;
+                                    decimal subTotalDiscount = (ITdiscountpercent * (decimal)row.discountValue) / 100;
+                                    row.subTotalNet = (decimal)row.subTotal - subTotalDiscount;
+
+                                }
+                                else
+                                {
+                                    row.subTotalNet = (decimal)row.subTotal;
+                                }
+
+                                row.itemunitProfit = row.subTotalNet - row.purchasePrice;
 
                             }
                             else
                             {
-                                row.subTotalNet = (decimal)row.subTotal;
+
+                                unitpurchasePrice = AvgPurPrice((int)row.ITitemUnitId, (int)row.ITitemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice);
+                                row.purchasePrice = (decimal)row.ITquantity * unitpurchasePrice;
+
+                                if (row.discountValue > 0)
+                                {
+                                    decimal ITdiscountpercent = 0;
+                                    ITdiscountpercent = ((decimal)row.subTotal * 100) / (decimal)row.totalNoShip;
+                                    decimal subTotalDiscount = (ITdiscountpercent * (decimal)row.discountValue) / 100;
+                                    row.subTotalNet = (decimal)row.subTotal - subTotalDiscount;
+
+                                }
+                                else
+                                {
+                                    row.subTotalNet = (decimal)row.subTotal;
+                                }
+
+                                row.itemunitProfit = row.subTotalNet - row.purchasePrice;
+
                             }
 
-                            row.itemunitProfit = row.subTotalNet - row.purchasePrice;
-
-
-
                         }
-
-
-
 
                         return TokenManager.GenerateToken(invListm);
 
@@ -9938,13 +9980,37 @@ else
                 }
                 catch (Exception ex)
                 {
-                    return TokenManager.GenerateToken(ex.ToString());
-                  //  return TokenManager.GenerateToken("0");
+                    //  return TokenManager.GenerateToken(ITitemUnitId.ToString() + "-" + ITitemId.ToString() + "-" + avgPurchasePrice.ToString()); 
+
+
+                    return TokenManager.GenerateToken("0");
                 }
 
             }
 
-           
+
+        }
+
+        public decimal AvgPackagePurPrice(int parentIUId)
+        {
+            PackageController pctrlr = new PackageController();
+            decimal avgtotal = 0;
+
+            List<PackageModel> list = pctrlr.GetChildsByParentId(parentIUId);
+            foreach (var row in list)
+            {
+                if (row.type == "p")
+                {
+                    avgtotal += AvgPackagePurPrice((int)row.childIUId);
+                }
+                else
+                {
+                    avgtotal += AvgPurPrice((int)row.childIUId, (int)row.citemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice) * row.quantity;
+
+                }
+            }
+            return avgtotal;
+
         }
         public decimal AvgPurPrice(int itemUnitId, int itemId,decimal? smallavgprice)
         {
