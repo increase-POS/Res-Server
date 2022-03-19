@@ -23,7 +23,8 @@ namespace POS_Server.Models
         public string status { get; set; }
         public int num { get; set; }
         public decimal remainingTime { get; set; }
-        public string invNum_Tables { get; set; }
+        public string invNum { get; set; }
+        public string tables { get; set; }
         public List<itemOrderPreparingModel> items  {get; set;}
     }
     public class itemOrderPreparingModel

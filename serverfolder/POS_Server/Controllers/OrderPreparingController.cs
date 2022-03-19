@@ -139,7 +139,8 @@ namespace POS_Server.Controllers
                                                  updateUserId = o.updateUserId,
                                                 createDate = o.createDate,
                                                 createUserId= o.createUserId,
-                                                invNum_Tables= o.invoices.invNumber,
+                                                invNum= o.invoices.invNumber,
+                                                
                                                 items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
                                                                                 .Select(x => new itemOrderPreparingModel()
                                                                                 {
@@ -153,9 +154,13 @@ namespace POS_Server.Controllers
                                                                                     updateUserId = x.updateUserId,
                                                                                 }).ToList(),
                                                 status = s.status,
-                                             }).Where(x => statusL.Contains(x.status)).OrderBy(x => x.orderNum).ToList();
+                                             }).ToList();
 
-                        
+                        #region get orders according to status
+                        if (statusStr != "")
+                            prepOrders = prepOrders.Where(x => statusL.Contains(x.status)).OrderBy(x => x.orderNum).ToList();
+                        #endregion
+
                         foreach (OrderPreparingModel o in prepOrders)
                         {
                             int index = 1;
@@ -174,7 +179,7 @@ namespace POS_Server.Controllers
                                     tablesNames += tabl.name;
                                 else tablesNames += ", " + tabl.name;
                             }
-                            o.invNum_Tables += " - " + tablesNames;
+                            o.tables = tablesNames;
                             #endregion
                             #region calculate remaining time
                             if (o.preparingTime != null)
@@ -265,6 +270,95 @@ namespace POS_Server.Controllers
                                 message = "0";
                         }
                     }
+                }
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+        [HttpPost]
+        [Route("EditOrderAndStatus")]
+        public string EditOrderAndStatus(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string orderObject = "";
+                string statusObject = "";
+                orderPreparing newObject = null;
+                orderPreparingStatus status = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "orderObject")
+                    {
+                        orderObject = c.Value.Replace("\\", string.Empty);
+                        orderObject = orderObject.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<orderPreparing>(orderObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                    else if (c.Type == "statusObject")
+                    {
+                        statusObject = c.Value.Replace("\\", string.Empty);
+                        statusObject = statusObject.Trim('"');
+                        status = JsonConvert.DeserializeObject<orderPreparingStatus>(statusObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
+
+                try
+                {
+                    int orderId = savePreparingOrder(newObject);
+                    if (orderId > 0)
+                    {
+                       string res = saveInvoiceStatus(status, orderId);
+                        if (res == "0")
+                            message = "0";
+                    }
+                }
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+
+        [HttpPost]
+        [Route("updateOrderStatus")]
+        public string updateOrderStatus(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string statusObject = "";
+                orderPreparingStatus status = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "statusObject")
+                    {
+                        statusObject = c.Value.Replace("\\", string.Empty);
+                        statusObject = statusObject.Trim('"');
+                        status = JsonConvert.DeserializeObject<orderPreparingStatus>(statusObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
+
+                try
+                {                   
+                    message = saveInvoiceStatus(status, (int)status.orderPreparingId);
                 }
                 catch
                 {
