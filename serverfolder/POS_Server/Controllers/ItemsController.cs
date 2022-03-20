@@ -1347,6 +1347,7 @@ namespace POS_Server.Controllers
                                          type = I.type,
                                          isActive = I.isActive,
                                          updateDate = I.updateDate,
+                                         categoryId = I.categoryId,
                                          itemUnitId = I.itemsUnits.Where(iu => iu.itemId == I.itemId && iu.defaultPurchase == 1).Select(iu => iu.itemUnitId).FirstOrDefault(),
                                      }).Where(x => x.isActive == 1).Distinct().ToList();
 
