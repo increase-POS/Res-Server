@@ -584,8 +584,10 @@ namespace POS_Server.Controllers
                                                desPrice = iu.price,
                                                defaultSale = iu.defaultSale,
                                                used = itof.used,
+                                               forAgent = off.forAgents,
 
-                                           }).Where(IO => IO.isActiveOffer == 1 && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0 && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1 && IO.itemCount > IO.used).Distinct().ToList();
+                                           }).Where(IO => IO.isActiveOffer == 1 && IO.forAgent == "pb" && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0 
+                                                        && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1 && IO.itemCount > IO.used).Distinct().ToList();
                     #endregion
                     for (int i = 0; i < itemsList.Count; i++)
                     {

@@ -39,6 +39,7 @@ namespace POS_Server.Models
         public Nullable<decimal> desPrice { get; set; }
         public int isNew { get; set; }
         public int isOffer { get; set; }
+        public string forAgent { get; set; }
         // unit item
         public decimal price { get; set; }
         public Nullable<decimal> basicPrice { get; set; }
