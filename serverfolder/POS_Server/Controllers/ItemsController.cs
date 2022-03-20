@@ -1333,6 +1333,7 @@ namespace POS_Server.Controllers
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var searchPredicate = PredicateBuilder.New<items>();
+                    searchPredicate = searchPredicate.And(x => true);
                     if (categoryId != 0)
                         searchPredicate = searchPredicate.And(x => x.categoryId == categoryId);
                     var itemsList = (from I in entity.items.Where(searchPredicate)
