@@ -17,6 +17,8 @@ namespace POS_Server.Models
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
 
+
+        // item
         public string itemName { get; set; }
         public Nullable<int> itemUnitId { get; set; }
         public int quantity { get; set; }
@@ -41,6 +43,8 @@ namespace POS_Server.Models
 
 
         public string itemName { get; set; }
+        public Nullable<int> itemId { get; set; }
+
         public decimal remainingTime { get; set; }
         public int sequence { get; set; }
 

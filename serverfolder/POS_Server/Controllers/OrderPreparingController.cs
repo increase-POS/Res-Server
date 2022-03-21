@@ -146,6 +146,7 @@ namespace POS_Server.Controllers
                                                                                 {
                                                                                     itemOrderId = x.itemOrderId,
                                                                                     itemName = x.itemsUnits.items.name,
+                                                                                    itemId = x.itemsUnits.items.itemId,
                                                                                     itemUnitId = x.itemUnitId,
                                                                                     quantity= x.quantity,
                                                                                     createDate = x.createDate,
