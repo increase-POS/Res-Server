@@ -33,42 +33,42 @@ namespace POS_Server.Controllers
             {
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var List = ( from CSH in entity.agentMembershipCash
-                                 join G in entity.agents on CSH.agentId equals G.agentId
-                                 join CT in entity.cashTransfer on CSH.cashTransId equals CT.cashTransId
-                                 join M in entity.memberships on CSH.membershipId equals M.membershipId
+                    var List = (from CSH in entity.agentMembershipCash
+                                join G in entity.agents on CSH.agentId equals G.agentId
+                                join CT in entity.cashTransfer on CSH.cashTransId equals CT.cashTransId
+                                join M in entity.memberships on CSH.membershipId equals M.membershipId
 
-                                 //from JCTR in CTR.DefaultIfEmpty()
-                                 //  from JSU in SU.DefaultIfEmpty()
+                                //from JCTR in CTR.DefaultIfEmpty()
+                                //  from JSU in SU.DefaultIfEmpty()
 
-                                 select new AgentMembershipCashModel
-                                 {
-                                     transNum = CT.transNum,
-                                     transType = CT.transType,
+                                select new AgentMembershipCashModel
+                                {
+                                    transNum = CT.transNum,
+                                    transType = CT.transType,
 
-                                     agentMembershipCashId = CSH.agentMembershipCashId,
-                                     subscriptionFeesId = CSH.subscriptionFeesId,
-                                     cashTransId = CSH.cashTransId,
-                                     membershipId = M.membershipId,
-                                     agentId = G.agentId,
-                                     startDate = CSH.startDate,
-                                     endDate = CSH.endDate,
+                                    agentMembershipCashId = CSH.agentMembershipCashId,
+                                    subscriptionFeesId = CSH.subscriptionFeesId,
+                                    cashTransId = CSH.cashTransId,
+                                    membershipId = M.membershipId,
+                                    agentId = G.agentId,
+                                    startDate = CSH.startDate,
+                                    endDate = CSH.endDate,
 
-                                     Amount = CT.cash,
-                                     agentName = G.name,
-                                     agentcompany = G.company,
-                                     agenttype = G.type,
-                                     agentcode = G.code,
-                                     membershipName = M.name,
-                                     membershipcode=M.code,
+                                    Amount = CT.cash,
+                                    agentName = G.name,
+                                    agentcompany = G.company,
+                                    agenttype = G.type,
+                                    agentcode = G.code,
+                                    membershipName = M.name,
+                                    membershipcode = M.code,
 
-                                     membershipisActive = M.isActive,
-                                     monthsCount = CSH.monthsCount,
+                                    membershipisActive = M.isActive,
+                                    monthsCount = CSH.monthsCount,
 
-                                     updateDate = CSH.updateDate,
-                                     subscriptionType = CSH.subscriptionType,
-                                     payDate = CT.updateDate,
-                                 }
+                                    updateDate = CSH.updateDate,
+                                    subscriptionType = CSH.subscriptionType,
+                                    payDate = CT.updateDate,
+                                }
                                 ).OrderBy(X => X.updateDate).ToList();
                     //var List = List1.GroupBy(S => S.agentId).Select(S => new AgenttoPayCashModel
                     //{
@@ -118,7 +118,7 @@ namespace POS_Server.Controllers
                     //})
                     //.ToList();
 
-                   
+
                     return TokenManager.GenerateToken(List);
 
                 }
@@ -141,58 +141,58 @@ namespace POS_Server.Controllers
                 try
                 {
 
-                using (incposdbEntities entity = new incposdbEntities())
-                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
 
                         var List1 = (from G in entity.agents
-                                     
-                                    join M in entity.memberships on G.membershipId equals M.membershipId
-                                    join S in entity.subscriptionFees on M.membershipId equals S.membershipId into SU
-                                    join CSH in entity.agentMembershipCash on G.agentId equals CSH.agentId into CS
-                                    from JCS in CS.DefaultIfEmpty()
-                                        // join CSH2 in entity.agentMembershipCash on G.agentId equals CSH2.agentId
-                                    join CT in entity.cashTransfer on JCS.cashTransId equals CT.cashTransId into CTR
 
-                                    where (M.subscriptionType != "F" && M.isActive == 1)
-                                    //  from I in entity.invoices.Where(I => I.invoiceId == IT.invoiceId)
+                                     join M in entity.memberships on G.membershipId equals M.membershipId
+                                     join S in entity.subscriptionFees on M.membershipId equals S.membershipId into SU
+                                     join CSH in entity.agentMembershipCash on G.agentId equals CSH.agentId into CS
+                                     from JCS in CS.DefaultIfEmpty()
+                                         // join CSH2 in entity.agentMembershipCash on G.agentId equals CSH2.agentId
+                                     join CT in entity.cashTransfer on JCS.cashTransId equals CT.cashTransId into CTR
 
-                                    //  join IUL in entity.itemsLocations on L.locationId equals IUL.locationId
+                                     where (M.subscriptionType != "F" && M.isActive == 1)
+                                     //  from I in entity.invoices.Where(I => I.invoiceId == IT.invoiceId)
 
-                                    from JCTR in CTR.DefaultIfEmpty()
-                                    from JSU in SU.DefaultIfEmpty()
+                                     //  join IUL in entity.itemsLocations on L.locationId equals IUL.locationId
 
-                                    select new AgenttoPayCashModel
-                                    {
-                                        transNum = JCTR.transNum,
-                                        transType = JCTR.transType,
-                                       // agentMembershipsId = AM.agentMembershipsId,
-                                        agentMembershipCashId = JCS.agentMembershipCashId,
-                                        subscriptionFeesId = JSU.subscriptionFeesId,
-                                        cashTransId = JCS.cashTransId,
-                                        membershipId = M.membershipId,
-                                        agentId = G.agentId,
-                                        startDate = JCS.startDate,
-                                        endDate = JCS.endDate,
+                                     from JCTR in CTR.DefaultIfEmpty()
+                                     from JSU in SU.DefaultIfEmpty()
 
-                                        Amount = JSU.Amount,
-                                        agentName = G.name,
-                                        agentcompany=G.company,
-                                        agenttype=G.type,
-                                        agentcode=G.code,
-                                        membershipName = M.name,
-                                        membershipisActive = M.isActive,
-                                        monthsCount = JSU.monthsCount,
-                                        subscriptionType = M.subscriptionType,
-                                        updateDate = JCS.updateDate,
-                                        cashsubscriptionType= JCS.subscriptionType,
-                                  
-                                    }
-                                    ).OrderBy(X=>X.updateDate).ToList();
+                                     select new AgenttoPayCashModel
+                                     {
+                                         transNum = JCTR.transNum,
+                                         transType = JCTR.transType,
+                                         // agentMembershipsId = AM.agentMembershipsId,
+                                         agentMembershipCashId = JCS.agentMembershipCashId,
+                                         subscriptionFeesId = JSU.subscriptionFeesId,
+                                         cashTransId = JCS.cashTransId,
+                                         membershipId = M.membershipId,
+                                         agentId = G.agentId,
+                                         startDate = JCS.startDate,
+                                         endDate = JCS.endDate,
+
+                                         Amount = JSU.Amount,
+                                         agentName = G.name,
+                                         agentcompany = G.company,
+                                         agenttype = G.type,
+                                         agentcode = G.code,
+                                         membershipName = M.name,
+                                         membershipisActive = M.isActive,
+                                         monthsCount = JSU.monthsCount,
+                                         subscriptionType = M.subscriptionType,
+                                         updateDate = JCS.updateDate,
+                                         cashsubscriptionType = JCS.subscriptionType,
+
+                                     }
+                                    ).OrderBy(X => X.updateDate).ToList();
                         var List = List1.GroupBy(S => S.agentId).Select(S => new AgenttoPayCashModel
                         {
                             transNum = S.LastOrDefault().transNum,
                             transType = S.LastOrDefault().transType,
-                          //  agentMembershipsId = S.LastOrDefault().agentMembershipsId,
+                            //  agentMembershipsId = S.LastOrDefault().agentMembershipsId,
                             agentMembershipCashId = S.LastOrDefault().agentMembershipCashId,
                             subscriptionFeesId = S.LastOrDefault().subscriptionFeesId,
                             cashTransId = S.LastOrDefault().cashTransId,
@@ -208,29 +208,29 @@ namespace POS_Server.Controllers
                             monthsCount = S.LastOrDefault().monthsCount,
                             subscriptionType = S.LastOrDefault().subscriptionType,
                             updateDate = S.LastOrDefault().updateDate,
-                            cashsubscriptionType=S.LastOrDefault().cashsubscriptionType,
+                            cashsubscriptionType = S.LastOrDefault().cashsubscriptionType,
                         }
-                        ).Where(S=>(S.agentMembershipCashId==null || S.agentMembershipCashId == 0 )
-                        || (S.subscriptionType == "o" &&  S.agentMembershipCashId >0  && ( S.cashTransId ==0 || S.cashTransId == null)&& S.subscriptionType==S.cashsubscriptionType)
-                        || ((S.subscriptionType == "m"|| S.subscriptionType == "y") && (S.agentMembershipCashId != null && S.agentMembershipCashId > 0) && S.subscriptionType == S.cashsubscriptionType)
-                        
+                        ).Where(S => (S.agentMembershipCashId == null || S.agentMembershipCashId == 0)
+                        || (S.subscriptionType == "o" && S.agentMembershipCashId > 0 && (S.cashTransId == 0 || S.cashTransId == null) && S.subscriptionType == S.cashsubscriptionType)
+                        || ((S.subscriptionType == "m" || S.subscriptionType == "y") && (S.agentMembershipCashId != null && S.agentMembershipCashId > 0) && S.subscriptionType == S.cashsubscriptionType)
+
                         ).ToList();
 
-                    //                var List = entity.agentMembershipCash.Select(S => new AgentMembershipCashModel
-                    //{
-                    //    agentMembershipCashId = S.agentMembershipCashId,
-                    //    subscriptionFeesId = S.subscriptionFeesId,
-                    //    cashTransId = S.cashTransId,
-                    //    membershipId = S.membershipId,
-                    //    agentId = S.agentId,
-                    //    startDate = S.startDate,
-                    //    endDate = S.endDate,
-                    //    notes = S.notes,
-                    //    createDate = S.createDate,
-                    //    updateDate = S.updateDate,
-                    //    createUserId = S.createUserId,
-                    //    updateUserId = S.updateUserId,
-                    //    isActive = S.isActive,
+                        //                var List = entity.agentMembershipCash.Select(S => new AgentMembershipCashModel
+                        //{
+                        //    agentMembershipCashId = S.agentMembershipCashId,
+                        //    subscriptionFeesId = S.subscriptionFeesId,
+                        //    cashTransId = S.cashTransId,
+                        //    membershipId = S.membershipId,
+                        //    agentId = S.agentId,
+                        //    startDate = S.startDate,
+                        //    endDate = S.endDate,
+                        //    notes = S.notes,
+                        //    createDate = S.createDate,
+                        //    updateDate = S.updateDate,
+                        //    createUserId = S.createUserId,
+                        //    updateUserId = S.updateUserId,
+                        //    isActive = S.isActive,
 
 
                         //})
@@ -239,7 +239,7 @@ namespace POS_Server.Controllers
 
                         return TokenManager.GenerateToken(List);
 
-                }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -489,7 +489,7 @@ namespace POS_Server.Controllers
                             tmpObject.updateUserId = newObject.updateUserId;
                             tmpObject.isActive = newObject.isActive;
                             tmpObject.monthsCount = newObject.monthsCount;
-
+                            tmpObject.subscriptionType = newObject.subscriptionType;
 
                             entity.SaveChanges();
                             message = tmpObject.agentMembershipCashId.ToString();
@@ -900,7 +900,172 @@ namespace POS_Server.Controllers
 
         //}
 
+
+
+        public string Saveamc(agentMembershipCash newObject)
+        {
+            int message = 0;
+            if (newObject.updateUserId == 0 || newObject.updateUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.updateUserId = id;
+            }
+            if (newObject.createUserId == 0 || newObject.createUserId == null)
+            {
+                Nullable<int> id = null;
+                newObject.createUserId = id;
+            }
+            if (newObject.subscriptionFeesId == 0 || newObject.subscriptionFeesId == null)
+            {
+                Nullable<int> id = null;
+                newObject.subscriptionFeesId = id;
+            }
+            if (newObject.cashTransId == 0 || newObject.cashTransId == null)
+            {
+                Nullable<int> id = null;
+                newObject.cashTransId = id;
+            }
+            if (newObject.membershipId == 0 || newObject.membershipId == null)
+            {
+                Nullable<int> id = null;
+                newObject.membershipId = id;
+            }
+            if (newObject.agentId == 0 || newObject.agentId == null)
+            {
+                Nullable<int> id = null;
+                newObject.agentId = id;
+            }
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    agentMembershipCash tmpObject = new agentMembershipCash();
+                    var bankEntity = entity.Set<agentMembershipCash>();
+                    if (newObject.agentMembershipCashId == 0)
+                    {
+                        newObject.createDate = DateTime.Now;
+                        newObject.updateDate = DateTime.Now;
+                        newObject.updateUserId = newObject.createUserId;
+                        tmpObject = bankEntity.Add(newObject);
+                        entity.SaveChanges();
+                        message = tmpObject.agentMembershipCashId;
+                    }
+                    else
+                    {
+                        tmpObject = entity.agentMembershipCash.Where(p => p.agentMembershipCashId == newObject.agentMembershipCashId).FirstOrDefault();
+
+                        tmpObject.updateDate = DateTime.Now;
+
+                        tmpObject.agentMembershipCashId = newObject.agentMembershipCashId;
+                        tmpObject.subscriptionFeesId = newObject.subscriptionFeesId;
+                        tmpObject.cashTransId = newObject.cashTransId;
+                        tmpObject.membershipId = newObject.membershipId;
+                        tmpObject.agentId = newObject.agentId;
+                        tmpObject.startDate = newObject.startDate;
+                        tmpObject.endDate = newObject.endDate;
+                        tmpObject.notes = newObject.notes;
+                        tmpObject.createDate = newObject.createDate;
+                        tmpObject.updateDate = newObject.updateDate;
+                        tmpObject.createUserId = newObject.createUserId;
+                        tmpObject.updateUserId = newObject.updateUserId;
+                        tmpObject.isActive = newObject.isActive;
+                        tmpObject.monthsCount = newObject.monthsCount;
+                        tmpObject.subscriptionType = newObject.subscriptionType;
+
+                        entity.SaveChanges();
+                        message = tmpObject.agentMembershipCashId;
+
+                    }
+                    return TokenManager.GenerateToken(message);
+                }
+            }
+
+            catch
+            {
+                message = 0;
+                return TokenManager.GenerateToken(message);
+            }
+        }
+
+        [HttpPost]
+        [Route("Savepay")]
+        public string Savepay(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string agentMembershipCashId = "";
+                string cashTransferObjectstring = "";
+                agentMembershipCash newObject = null;
+                cashTransfer cashTransferObject = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemObject")
+                    {
+                        agentMembershipCashId = c.Value.Replace("\\", string.Empty);
+                        agentMembershipCashId = agentMembershipCashId.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<agentMembershipCash>(agentMembershipCashId, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+
+                    }
+                    else if (c.Type == "cashtransferobject")
+                    {
+                        cashTransferObjectstring = c.Value.Replace("\\", string.Empty);
+                        cashTransferObjectstring = cashTransferObjectstring.Trim('"');
+                        cashTransferObject = JsonConvert.DeserializeObject<cashTransfer>(cashTransferObjectstring, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+
+                    }
+                }
+
+                try
+                {
+                    int cashTransId = 0;
+                    DateTime lastenddate =DateTime.Now;
+
+                    CashTransferController cashcntrlr = new CashTransferController();
+                    //check type to extend endDate
+                    if (newObject.subscriptionType=="m")
+                    {
+                        newObject.endDate = lastenddate.AddMonths((int)newObject.monthsCount);
+                    }
+                    else if (newObject.subscriptionType == "y")
+                    {
+                        newObject.endDate = lastenddate.AddYears((int)newObject.monthsCount);
+                    }
+                    //save cash trans 
+                    cashTransId= cashcntrlr.Save(cashTransferObject);
+                    if (cashTransId > 0)
+                    {
+
+                        newObject.cashTransId = cashTransId;
+                        
+
+                        message = Saveamc(newObject);
+                        return TokenManager.GenerateToken(message);
+                    }
+                    else
+                    {
+                        return TokenManager.GenerateToken("0");
+                    }
+                    
+
+                }
+
+                catch
+                {
+                    message = "0";
+                    return TokenManager.GenerateToken(message);
+                }
+            }
+        }
+
     }
 
-  
+
 }

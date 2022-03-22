@@ -9756,6 +9756,7 @@ else
 
         // الارباح
 
+
         [HttpPost]
         [Route("GetProfit")]
         public string GetProfit(string token)
@@ -9899,7 +9900,7 @@ else
                                                                          uuserLast = JUPUS.lastname,
                                                                          uUserAccName = JUPUS.username,
                                                                          agentCompany = JAA.company,
-                                                                         subTotal = ((IT.price - (ITEM.taxes * IU.price / 100)) * IT.quantity),
+                                                                         subTotal = ((IT.price - (IT.itemTax * IU.price / 100)) * IT.quantity),
                                                                          shippingCost = I.shippingCost,
                                                                          realShippingCost = I.realShippingCost,
                                                                          shippingProfit = I.shippingCost - I.realShippingCost,
@@ -9920,56 +9921,41 @@ else
                             decimal unitpurchasePrice = 0;
                             //   unitpurchasePrice = invoice.AvgItemPurPrice((int)row.ITitemUnitId, (int)row.ITitemId);
                             //4 test
-                            ITitemUnitId = (int)row.ITitemUnitId;
-                            ITitemId = (int)row.ITitemId;
+
                             avgPurchasePrice = row.avgPurchasePrice;
 
 
                             //
                             if (row.itemType == "p")
                             {
-
                                 unitpurchasePrice = AvgPackagePurPrice(ITitemUnitId);
-                                row.purchasePrice = (decimal)row.ITquantity * unitpurchasePrice;
-
-                                if (row.discountValue > 0)
-                                {
-                                    decimal ITdiscountpercent = 0;
-                                    ITdiscountpercent = ((decimal)row.subTotal * 100) / (decimal)row.totalNoShip;
-                                    decimal subTotalDiscount = (ITdiscountpercent * (decimal)row.discountValue) / 100;
-                                    row.subTotalNet = (decimal)row.subTotal - subTotalDiscount;
-
-                                }
-                                else
-                                {
-                                    row.subTotalNet = (decimal)row.subTotal;
-                                }
-
-                                row.itemunitProfit = row.subTotalNet - row.purchasePrice;
-
                             }
                             else
                             {
-
                                 unitpurchasePrice = AvgPurPrice((int)row.ITitemUnitId, (int)row.ITitemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice);
-                                row.purchasePrice = (decimal)row.ITquantity * unitpurchasePrice;
-
-                                if (row.discountValue > 0)
-                                {
-                                    decimal ITdiscountpercent = 0;
-                                    ITdiscountpercent = ((decimal)row.subTotal * 100) / (decimal)row.totalNoShip;
-                                    decimal subTotalDiscount = (ITdiscountpercent * (decimal)row.discountValue) / 100;
-                                    row.subTotalNet = (decimal)row.subTotal - subTotalDiscount;
-
-                                }
-                                else
-                                {
-                                    row.subTotalNet = (decimal)row.subTotal;
-                                }
-
-                                row.itemunitProfit = row.subTotalNet - row.purchasePrice;
 
                             }
+
+
+                            row.purchasePrice = (decimal)row.ITquantity * unitpurchasePrice;
+
+                            if (row.discountValue > 0)
+                            {
+                                decimal ITdiscountpercent = 0;
+                                ITdiscountpercent = ((decimal)row.ITprice * 100) / ((decimal)row.totalNoShip);
+                                decimal subTotalDiscount = (ITdiscountpercent * (decimal)row.discountValue) / 100;
+                                row.subTotalNet = (decimal)row.subTotal - subTotalDiscount;
+                                //   row.ITdiscountpercent = ITdiscountpercent;
+                            }
+                            else
+                            {
+                                row.subTotalNet = (decimal)row.subTotal;
+                                // row.ITdiscountpercent = 0;
+                            }
+
+                            row.itemunitProfit = row.subTotalNet - row.purchasePrice;
+
+
 
                         }
 
