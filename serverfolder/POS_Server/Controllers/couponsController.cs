@@ -126,6 +126,93 @@ namespace POS_Server.Controllers
                 }
             }
         }
+        [HttpPost]
+        [Route("GetEffictiveByMemberShipID")]
+        public string GetEffictiveByMemberShipID(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int memberShipId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "memberShipId")
+                    {
+                        memberShipId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    #region public effective coupons
+                    var couponsList = entity.coupons.Where(x => (x.remainQ > 0 || x.quantity == 0) && (x.startDate <= DateTime.Now || x.startDate == null)
+                                                            && (x.endDate >= DateTime.Now || x.endDate == null) && x.isActive == 1
+                                                            && x.forAgents == "pb")
+
+                   .Select(c => new CouponModel
+                   {
+                       cId = c.cId,
+                       name = c.name,
+                       code = c.code,
+                       isActive = c.isActive,
+                       discountType = c.discountType,
+                       discountValue = c.discountValue,
+                       startDate = c.startDate,
+                       endDate = c.endDate,
+                       notes = c.notes,
+                       quantity = c.quantity,
+                       remainQ = c.remainQ,
+                       invMin = c.invMin,
+                       invMax = c.invMax,
+                       createDate = c.createDate,
+                       updateDate = c.updateDate,
+                       createUserId = c.createUserId,
+                       updateUserId = c.updateUserId,
+                       barcode = c.barcode,
+                       forAgents = c.forAgents,
+                   })
+                   .ToList();
+                    #endregion
+                    #region memberShip Coupons
+                    var memberShipcoupons =(from c in entity.coupons.Where(x => (x.remainQ > 0 || x.quantity == 0) && (x.startDate <= DateTime.Now || x.startDate == null)
+                                                            && (x.endDate >= DateTime.Now || x.endDate == null) && x.isActive == 1)
+                                            join cm in entity.couponsMemberships.Where(x => x.membershipId == memberShipId) on c.cId equals cm.cId
+
+                                           select new CouponModel
+                                           {
+                                               cId = c.cId,
+                                               name = c.name,
+                                               code = c.code,
+                                               isActive = c.isActive,
+                                               discountType = c.discountType,
+                                               discountValue = c.discountValue,
+                                               startDate = c.startDate,
+                                               endDate = c.endDate,
+                                               notes = c.notes,
+                                               quantity = c.quantity,
+                                               remainQ = c.remainQ,
+                                               invMin = c.invMin,
+                                               invMax = c.invMax,
+                                               createDate = c.createDate,
+                                               updateDate = c.updateDate,
+                                               createUserId = c.createUserId,
+                                               updateUserId = c.updateUserId,
+                                               barcode = c.barcode,
+                                               forAgents = c.forAgents,
+                                           }).ToList();
+                    #endregion
+
+                    //merge tow list
+                    couponsList.AddRange(memberShipcoupons);
+                    return TokenManager.GenerateToken(couponsList.Distinct());
+                }
+            }
+        }
         // GET api/<controller>  Get Coupon By ID 
         [HttpPost]
         [Route("GetCouponByID")]

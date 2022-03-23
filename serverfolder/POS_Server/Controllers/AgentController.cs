@@ -153,6 +153,7 @@ namespace POS_Server.Controllers
                        p.disallowReason,
                         p.residentSecId,
                      p.GPSAddress,
+                     p.membershipId,
                    })
                    .ToList();
 
