@@ -9,7 +9,7 @@ namespace POS_Server.Models
     {
 
         ///////////////
-        public decimal avgPurchasePrice { get; set; }
+        public Nullable<decimal> avgPurchasePrice { get; set; }
         public string ITitemName { get; set; }
         public string ITunitName { get; set; }
         public int ITitemsTransId { get; set; }
@@ -17,13 +17,13 @@ namespace POS_Server.Models
 
         public Nullable<int> ITitemId { get; set; }
         public Nullable<int> ITunitId { get; set; }
-        public long ITquantity { get; set; }
+        public Nullable<long> ITquantity { get; set; }
 
         public Nullable<System.DateTime> ITupdateDate { get; set; }
         //  public Nullable<int> IT.createUserId { get; set; } 
         public Nullable<int> ITupdateUserId { get; set; }
 
-        public decimal ITprice { get; set; }
+        public Nullable<decimal> ITprice { get; set; }
         public string ITbarcode { get; set; }
 
         public string ITUpdateuserNam { get; set; }
@@ -34,15 +34,15 @@ namespace POS_Server.Models
         public Nullable<int> agentId { get; set; }
         public Nullable<int> posId { get; set; }
         public string invType { get; set; }
-        public decimal total { get; set; }
-        public decimal totalNet { get; set; }
+        public Nullable<decimal> total { get; set; }
+        public Nullable<decimal> totalNet { get; set; }
 
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> updateUserId { get; set; }
         public Nullable<int> branchId { get; set; }
-        public decimal discountValue { get; set; }
+        public Nullable<decimal> discountValue { get; set; }
         public string discountType { get; set; }
-        public decimal tax { get; set; }
+        public Nullable<decimal> tax { get; set; }
         // public string name { get; set; }
         //  isApproved { get; set; }
 
@@ -61,12 +61,18 @@ namespace POS_Server.Models
         public string uuserLast { get; set; }
         public string uUserAccName { get; set; }
         public string agentCompany { get; set; }
-        public decimal subTotal { get; set; }
+        public Nullable<decimal> subTotal { get; set; }
         public decimal purchasePrice { get; set; }
-       public  decimal totalwithTax  { get; set; } 
-       public  decimal subTotalNet { get; set; } // with invoice discount 
+        public decimal totalwithTax { get; set; }
+        public decimal subTotalNet { get; set; } // with invoice discount 
         public decimal itemunitProfit { get; set; }
         public decimal invoiceProfit { get; set; }
-
+        public decimal shippingCost { get; set; }
+        public decimal realShippingCost { get; set; }
+        public decimal shippingProfit { get; set; }
+        public decimal totalNoShip { get; set; }
+        public decimal totalNetNoShip { get; set; }
+        public string itemType { get; set; }
+        //  public Nullable<decimal> ITdiscountpercent { get; set; }
     }
 }
