@@ -381,6 +381,7 @@ namespace POS_Server.Controllers
                 try
                 {
                     AgentController agcont = new AgentController();
+                    agcont.resetMembershipId(membershipId);
                         foreach (var row in newListObj)
                     {
                         agcont.UpdateMembershipId((int)row.agentId,(int) row.membershipId);

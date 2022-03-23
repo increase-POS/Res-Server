@@ -839,6 +839,35 @@ namespace POS_Server.Controllers
                 }
            
         }
+        public int resetMembershipId(  int membershipId)
+        {
+
+            int message = 0;
+            try
+            {
+                List<agents> agentlist;
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var agentEntity = entity.Set<agents>();
+                    agentlist = entity.agents.Where(p => p.membershipId == membershipId).ToList();
+                    foreach (agents row in agentlist)
+                    {
+                        row.membershipId = null;
+                    }
+                  
+                    entity.SaveChanges();
+                }
+                message =1;
+                return message;
+            }
+
+            catch
+            {
+                message = 0;
+                return message;
+            }
+
+        }
 
 
     }
