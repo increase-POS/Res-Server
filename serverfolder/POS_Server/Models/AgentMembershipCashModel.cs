@@ -42,6 +42,8 @@ namespace POS_Server.Models
         public string transNum { get; set; }
         public Nullable<System.DateTime> payDate { get; set; }
         public byte membershipisActive { get; set; }
+        public decimal discountValue { get; set; }
+        public decimal total { get; set; }
 
     }
     public class AgenttoPayCashModel
@@ -99,6 +101,8 @@ namespace POS_Server.Models
         public string transNum { get; set; }
         public Nullable<System.DateTime> payDate { get; set; }
         public string membershipStatus { get; set; }
+        public decimal discountValue { get; set; }
+        public decimal total { get; set; }
     }
     /*
      * public int agentId { get; set; }

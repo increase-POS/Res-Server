@@ -140,7 +140,7 @@ namespace POS_Server.Controllers
                                                 createDate = o.createDate,
                                                 createUserId= o.createUserId,
                                                 invNum= o.invoices.invNumber,
-                                                
+                                              
                                                 items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
                                                                                 .Select(x => new itemOrderPreparingModel()
                                                                                 {
@@ -153,6 +153,9 @@ namespace POS_Server.Controllers
                                                                                     updateDate = x.updateDate,
                                                                                     createUserId = x.createUserId,
                                                                                     updateUserId = x.updateUserId,
+                                                                                    categoryId =x.itemsUnits.items.categories.categoryId,
+                                                                                    categoryName = x.itemsUnits.items.categories.name,
+
                                                                                 }).ToList(),
                                                 status = s.status,
                                              }).ToList();

@@ -27,7 +27,7 @@ namespace POS_Server.Models
         public decimal remainingTime { get; set; }
         public string invNum { get; set; }
         public string tables { get; set; }
-        public List<itemOrderPreparingModel> items  {get; set;}
+        public List<itemOrderPreparingModel> items { get; set; }
     }
     public class itemOrderPreparingModel
     {
@@ -47,6 +47,9 @@ namespace POS_Server.Models
 
         public decimal remainingTime { get; set; }
         public int sequence { get; set; }
+        //
+        public Nullable<int> categoryId { get; set; }
+        public string categoryName { get; set; }
 
     }
 }

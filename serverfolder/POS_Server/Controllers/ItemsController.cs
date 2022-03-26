@@ -1349,6 +1349,9 @@ namespace POS_Server.Controllers
                                          updateDate = I.updateDate,
                                          categoryId = I.categoryId,
                                          itemUnitId = I.itemsUnits.Where(iu => iu.itemId == I.itemId && iu.defaultPurchase == 1).Select(iu => iu.itemUnitId).FirstOrDefault(),
+                                         unitName= entity.units.Where(u => u.unitId==
+                                         I.itemsUnits.Where(iu => iu.itemId == I.itemId && iu.defaultPurchase == 1).Select(iu => iu.unitId).FirstOrDefault()
+                                         ).Select(u => u.name).FirstOrDefault() ,
                                      }).Where(x => x.isActive == 1).Distinct().ToList();
 
                    foreach(ItemModel item in itemsList)

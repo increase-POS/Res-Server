@@ -390,5 +390,43 @@ namespace POS_Server.Controllers
             }
 
         }
+
+        public subscriptionFees GetById(int subscriptionFeesId)
+        {
+            subscriptionFees item = new subscriptionFees();
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                      item = entity.subscriptionFees
+                   .Where(S => S.subscriptionFeesId == subscriptionFeesId)
+                   .Select(S => new subscriptionFees
+                   {
+                       subscriptionFeesId = S.subscriptionFeesId,
+                       membershipId = S.membershipId,
+                       monthsCount = S.monthsCount,
+                       Amount = S.Amount,
+                       notes = S.notes,
+                       createDate = S.createDate,
+                       updateDate = S.updateDate,
+                       createUserId = S.createUserId,
+                       updateUserId = S.updateUserId,
+                       isActive = S.isActive,
+
+                   }).FirstOrDefault();
+                    return item;
+
+                }
+            }
+            catch
+            {
+                return item;
+            }
+
+
+                
+            
+        }
+
     }
 }
