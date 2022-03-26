@@ -651,13 +651,11 @@ namespace POS_Server.Controllers
                                      join S in entity.subscriptionFees on M.membershipId equals S.membershipId into SU
                                      join CSH in entity.agentMembershipCash on M.membershipId equals CSH.membershipId into CS
                                      from JCS in CS.DefaultIfEmpty()
-                                         // join CSH2 in entity.agentMembershipCash on G.agentId equals CSH2.agentId
-                                         //  join CT in entity.cashTransfer on JCS.cashTransId equals CT.cashTransId into CTR
 
-                                     where (agentId ==A.agentId && M.isActive == 1 &&
+                                     where (agentId == A.agentId && M.isActive == 1 &&
                                      (M.subscriptionType == "f" ||
-                                     (M.subscriptionType == "o" && JCS.cashTransId > 0) 
-                                     || ((JCS.subscriptionType == "m"|| JCS.subscriptionType == "y") && JCS.cashTransId > 0 && JCS.endDate>= dtnow && A.membershipId== JCS.membershipId)))
+                                     (M.subscriptionType == "o" && JCS.cashTransId > 0)
+                                     || ((JCS.subscriptionType == "m" || JCS.subscriptionType == "y") && JCS.cashTransId > 0 && JCS.endDate >= dtnow && A.membershipId == JCS.membershipId)))
 
                                      from JSU in SU.DefaultIfEmpty()
 
@@ -744,6 +742,106 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [Route("GetmembershipStateByAgentId")]
+        public string GetmembershipStateByAgentId(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int agentId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemId")
+                    {
+                        agentId = int.Parse(c.Value);
+                    }
+                }
+                try
+                {
+                    DateTime dtnow = DateTime.Now;
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+
+
+                        var List1 = (from M in entity.memberships
+                                     join A in entity.agents on M.membershipId equals A.membershipId
+                                     join S in entity.subscriptionFees on M.membershipId equals S.membershipId into SU
+                                     join CSH in entity.agentMembershipCash on M.membershipId equals CSH.membershipId into CS
+                                     from JCS in CS.DefaultIfEmpty()
+                                     from JSU in SU.DefaultIfEmpty()
+                                         //where (agentId == A.agentId && M.isActive == 1 &&
+                                         //(M.subscriptionType == "f" ||
+                                         //(M.subscriptionType == "o" && JCS.cashTransId > 0)
+                                         //|| ((JCS.subscriptionType == "m" || JCS.subscriptionType == "y") && JCS.cashTransId > 0 && JCS.endDate >= dtnow && A.membershipId == JCS.membershipId)))
+                                     where (agentId == A.agentId && M.membershipId==A.membershipId)
+                                     select new AgenttoPayCashModel
+                                     {
+                                       //  transNum = JCTR.transNum,
+                                         //transType = JCTR.transType,
+                                         // agentMembershipsId = AM.agentMembershipsId,
+                                         agentMembershipCashId = JCS.agentMembershipCashId,
+                                         subscriptionFeesId = JSU.subscriptionFeesId,
+                                         cashTransId = JCS.cashTransId,
+                                         membershipId = M.membershipId,
+                                         // agentId = G.agentId,
+                                         startDate = JCS.startDate,
+                                         endDate = JCS.endDate,
+
+                                         Amount = JSU.Amount,
+                                         membershipName = M.name,
+                                         membershipisActive = M.isActive,
+                                         monthsCount = JSU.monthsCount,
+                                         subscriptionType = M.subscriptionType,
+                                         updateDate = JCS.updateDate,
+                                         createDate = JCS.createDate,
+                                         cashsubscriptionType = JCS.subscriptionType,
+
+                                     }
+                                    ).OrderBy(X => X.createDate).ToList();
+
+                        foreach (AgenttoPayCashModel row in List1)
+                        {
+                            if (row.membershipisActive==0)
+                            {
+                                row.membershipStatus = "notactive";
+
+                            }else if(row.subscriptionType == "o" && !(row.cashTransId > 0))
+                            {
+                                row.membershipStatus = "notpayed";
+                            }
+                            else if ((row.subscriptionType == "m" || row.subscriptionType == "y") && !(row.cashTransId > 0)  )
+                            {
+                                row.membershipStatus = "notpayed";
+                            }
+                            else if ((row.subscriptionType == "m" || row.subscriptionType == "y")   && !(row.endDate >= dtnow))
+                            {
+                                row.membershipStatus = "expired";
+                            }
+                            // && row.endDate >= dtnow
+
+                        }
+                        var List = List1.LastOrDefault();
+
+                        return TokenManager.GenerateToken(List);
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return TokenManager.GenerateToken(ex.ToString());
+                }
+            }
+        }
+
 
     }
 }

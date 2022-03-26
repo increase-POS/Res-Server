@@ -59,6 +59,7 @@ namespace POS_Server.Models
         //public Nullable<int> updateUserId { get; set; }
         //public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
         //public Nullable<int> createUserId { get; set; }
         public decimal Amount { get; set; }
         public Nullable<int> pointId { get; set; }
@@ -97,7 +98,8 @@ namespace POS_Server.Models
         public string transType { get; set; }
         public string transNum { get; set; }
         public Nullable<System.DateTime> payDate { get; set; }
-}
+        public string membershipStatus { get; set; }
+    }
     /*
      * public int agentId { get; set; }
         public Nullable<int> pointId { get; set; }
