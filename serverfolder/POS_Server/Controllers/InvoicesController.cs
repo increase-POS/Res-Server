@@ -443,8 +443,8 @@ namespace POS_Server.Controllers
         [Route("GetByInvoiceType")]
         public string GetByInvoiceType(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -588,11 +588,208 @@ var strP = TokenManager.GetPrincipal(token);
             }
         }
         [HttpPost]
+        [Route("getExportInvoices")]
+        public string getExportInvoices(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string invType = "";
+                int branchId = 0;
+                List<string> invTypeL = new List<string>();
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invType")
+                    {
+                        invType = c.Value;
+                        string[] invTypeArray = invType.Split(',');
+                        foreach (string s in invTypeArray)
+                            invTypeL.Add(s.Trim());
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                }
+
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var searchPredicate = PredicateBuilder.New<invoices>();
+                    if (branchId != 0)
+                        searchPredicate = searchPredicate.Or(inv => inv.branchId == branchId && inv.isActive == true && invTypeL.Contains(inv.invType));
+
+                    var invoicesList = (from b in entity.invoices.Where(searchPredicate)
+                                        join l in entity.branches on b.branchId equals l.branchId into lj
+                                        from x in lj.DefaultIfEmpty()
+                                        select new InvoiceModel()
+                                        {
+                                            invoiceId = b.invoiceId,
+                                            invNumber = b.invNumber,
+                                            agentId = b.agentId,
+                                            invType = b.invType,
+                                            total = b.total,
+                                            totalNet = b.totalNet,
+                                            paid = b.paid,
+                                            deserved = b.deserved,
+                                            deservedDate = b.deservedDate,
+                                            invDate = b.invDate,
+                                            invoiceMainId = b.invoiceMainId,
+                                            invCase = b.invCase,
+                                            invTime = b.invTime,
+                                            notes = b.notes,
+                                            vendorInvNum = b.vendorInvNum,
+                                            vendorInvDate = b.vendorInvDate,
+                                            createUserId = b.createUserId,
+                                            updateDate = b.updateDate,
+                                            updateUserId = b.updateUserId,
+                                            branchId = b.branchId,
+                                            discountValue = b.discountValue,
+                                            discountType = b.discountType,
+                                            tax = b.tax,
+                                            taxtype = b.taxtype,
+                                            name = b.name,
+                                            isApproved = b.isApproved,
+                                            branchCreatorName = entity.invoices.Where(m => m.invoiceId == b.invoiceMainId).Select(m => m.branches.name).FirstOrDefault(),
+                                            branchCreatorId = b.branchCreatorId,
+                                            shippingCompanyId = b.shippingCompanyId,
+                                            shipUserId = b.shipUserId,
+                                            userId = b.userId,
+                                            manualDiscountType = b.manualDiscountType,
+                                            manualDiscountValue = b.manualDiscountValue,
+                                            cashReturn = b.cashReturn,
+                                            shippingCost = b.shippingCost,
+                                            realShippingCost = b.realShippingCost,
+                                        }).ToList();
+                    if (invoicesList != null)
+                    {
+                        for (int i = 0; i < invoicesList.Count; i++)
+                        {
+                            int invoiceId = invoicesList[i].invoiceId;
+                            int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+                            invoicesList[i].itemsCount = itemCount;
+                        }
+                    }
+
+                    return TokenManager.GenerateToken(invoicesList);
+                }
+            }
+        }
+        [HttpPost]
+        [Route("getExportImportInvoices")]
+        public string getExportImportInvoices(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string invType = "";
+                int branchId = 0;
+                List<string> invTypeL = new List<string>();
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invType")
+                    {
+                        invType = c.Value;
+                        string[] invTypeArray = invType.Split(',');
+                        foreach (string s in invTypeArray)
+                            invTypeL.Add(s.Trim());
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                }
+
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var searchPredicate = PredicateBuilder.New<invoices>();
+
+                    if (branchId != 0)
+                        searchPredicate = searchPredicate.Or(inv => inv.branchId == branchId && inv.isActive == true && invTypeL.Contains(inv.invType));
+
+                    var invoicesList = (from b in entity.invoices.Where(searchPredicate)
+                                        join l in entity.branches on b.branchId equals l.branchId into lj
+                                        from x in lj.DefaultIfEmpty()
+                                        select new InvoiceModel()
+                                        {
+                                            invoiceId = b.invoiceId,
+                                            invNumber = b.invNumber,
+                                            agentId = b.agentId,
+                                            invType = b.invType,
+                                            total = b.total,
+                                            totalNet = b.totalNet,
+                                            paid = b.paid,
+                                            deserved = b.deserved,
+                                            deservedDate = b.deservedDate,
+                                            invDate = b.invDate,
+                                            invoiceMainId = b.invoiceMainId,
+                                            invCase = b.invCase,
+                                            invTime = b.invTime,
+                                            notes = b.notes,
+                                            vendorInvNum = b.vendorInvNum,
+                                            vendorInvDate = b.vendorInvDate,
+                                            createUserId = b.createUserId,
+                                            updateDate = b.updateDate,
+                                            updateUserId = b.updateUserId,
+                                            branchId = b.branchId,
+                                            discountValue = b.discountValue,
+                                            discountType = b.discountType,
+                                            tax = b.tax,
+                                            taxtype = b.taxtype,
+                                            name = b.name,
+                                            isApproved = b.isApproved,
+                                            branchCreatorName = b.invoiceMainId != null ? (from i in entity.invoices.Where(m => m.invoiceId == b.invoiceMainId)
+                                                                                           join b in entity.branches on i.branchId equals b.branchId
+                                                                                           select b.name).FirstOrDefault()
+                                                                                 : (from i in entity.invoices.Where(m => m.invoiceMainId == b.invoiceId)
+                                                                                    join b in entity.branches on i.branchId equals b.branchId
+                                                                                    select b.name).FirstOrDefault(),
+                                            branchCreatorId = b.branchCreatorId,
+                                            shippingCompanyId = b.shippingCompanyId,
+                                            shipUserId = b.shipUserId,
+                                            userId = b.userId,
+                                            manualDiscountType = b.manualDiscountType,
+                                            manualDiscountValue = b.manualDiscountValue,
+                                            cashReturn = b.cashReturn,
+                                            shippingCost = b.shippingCost,
+                                            realShippingCost = b.realShippingCost,
+                                        })
+                    .ToList();
+                    if (invoicesList != null)
+                    {
+                        for (int i = 0; i < invoicesList.Count; i++)
+                        {
+                            int invoiceId = invoicesList[i].invoiceId;
+                            int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+                            invoicesList[i].itemsCount = itemCount;
+                        }
+                    }
+
+                    return TokenManager.GenerateToken(invoicesList);
+                }
+            }
+        }
+
+
+        [HttpPost]
         [Route("GetInvoicesByCreator")]
         public string GetInvoicesByCreator(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -717,7 +914,7 @@ var strP = TokenManager.GetPrincipal(token);
         public string GetInvoicesForAdmin(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -812,6 +1009,7 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
         [HttpPost]
         [Route("GetCountInvoicesForAdmin")]
         public string GetCountInvoicesForAdmin(string token)
@@ -872,8 +1070,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetCountByCreator")]
         public string GetCountByCreator(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -962,12 +1160,13 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
         [HttpPost]
         [Route("getBranchInvoices")]
         public string getBranchInvoices(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1004,7 +1203,7 @@ var strP = TokenManager.GetPrincipal(token);
                     var searchPredicate = PredicateBuilder.New<invoices>();
                     if (branchCreatorId != 0)
                         searchPredicate = searchPredicate.And(inv => inv.branchCreatorId == branchCreatorId && inv.isActive == true && invTypeL.Contains(inv.invType));
-                    // searchPredicate = searchPredicate.And(inv => invTypeL.Contains(inv.invType));
+
                     if (branchId != 0)
                         searchPredicate = searchPredicate.Or(inv => inv.branchId == branchId && inv.isActive == true && invTypeL.Contains(inv.invType));
 
@@ -1063,12 +1262,13 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
         [HttpPost]
         [Route("getInvoicesToReturn")]
         public string getInvoicesToReturn(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1147,6 +1347,7 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
         [HttpPost]
         [Route("getUnHandeldOrders")]
         public string getUnHandeldOrders(string token)
@@ -1183,12 +1384,13 @@ var strP = TokenManager.GetPrincipal(token);
                return TokenManager.GenerateToken(invoicesList);
              }
         }
+
         [HttpPost]
         [Route("GetCountUnHandeledOrders")]
         public string GetCountUnHandeledOrders(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1277,8 +1479,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetCountBranchInvoices")]
         public string GetCountBranchInvoices(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1312,9 +1514,10 @@ var strP = TokenManager.GetPrincipal(token);
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var searchPredicate = PredicateBuilder.New<invoices>();
+
                     if (branchCreatorId != 0)
                         searchPredicate = searchPredicate.And(inv => inv.branchCreatorId == branchCreatorId && inv.isActive == true && invTypeL.Contains(inv.invType));
-                    // searchPredicate = searchPredicate.And(inv => invTypeL.Contains(inv.invType));
+
                     if (branchId != 0)
                         searchPredicate = searchPredicate.Or(inv => inv.branchId == branchId && inv.isActive == true && invTypeL.Contains(inv.invType));
 
@@ -1363,12 +1566,13 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
         [HttpPost]
         [Route("getDeliverOrders")]
         public string getDeliverOrders(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1454,12 +1658,13 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
         [HttpPost]
         [Route("getDeliverOrdersCount")]
         public string getDeliverOrdersCount(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1536,12 +1741,13 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
         [HttpPost]
         [Route("getOrdersForPay")]
         public string getOrdersForPay(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1621,12 +1827,13 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
         [HttpPost]
         [Route("getAgentInvoices")]
         public string getAgentInvoices(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1667,8 +1874,6 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    //var invoicesList = (from b in entity.invoices.Where(x => x.agentId == agentId && x.shipUserId == null && typesList.Contains(x.invType)
-                    //                    && x.deserved > 0 && x.branchCreatorId == branchId )
                     var invoicesList = (from b in entity.invoices.Where(x => x.agentId == agentId && typesList.Contains(x.invType)
                                                  && x.deserved > 0 && x.branchCreatorId == branchId &&
                                            ((x.shippingCompanyId == null && x.shipUserId == null && x.agentId != null) ||
@@ -1707,6 +1912,8 @@ var strP = TokenManager.GetPrincipal(token);
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
                                         }).ToList();
+
+
                     if (invoicesList != null)
                     {
                         for (int i = 0; i < invoicesList.Count; i++)
@@ -1724,8 +1931,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("getNotPaidAgentInvoices")]
         public string getNotPaidAgentInvoices(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1741,6 +1948,7 @@ var strP = TokenManager.GetPrincipal(token);
                         agentId = int.Parse(c.Value);
                     }
                 }
+
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var invoicesList = (from b in entity.invoices.Where(x => x.agentId == agentId && x.deserved > 0)
@@ -1783,12 +1991,13 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
         [HttpPost]
         [Route("getShipCompanyInvoices")]
         public string getShipCompanyInvoices(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1828,12 +2037,10 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    //var invoicesList = (from b in entity.invoices.Where(x => x.shippingCompanyId == shippingCompanyId && typesList.Contains(x.invType)
-                    //                    && x.deserved > 0 && x.branchCreatorId == branchId)
                     var invoicesList = (from b in entity.invoices.Where(x => x.shippingCompanyId == shippingCompanyId && typesList.Contains(x.invType)
                                       && x.deserved > 0 && x.branchCreatorId == branchId &&
                                          x.shippingCompanyId != null && x.shipUserId == null && x.agentId != null)
-                    select new InvoiceModel()
+                                        select new InvoiceModel()
                                         {
                                             invoiceId = b.invoiceId,
                                             invNumber = b.invNumber,
@@ -1867,6 +2074,8 @@ var strP = TokenManager.GetPrincipal(token);
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
                                         }).ToList();
+
+
                     if (invoicesList != null)
                     {
                         for (int i = 0; i < invoicesList.Count; i++)
@@ -1885,8 +2094,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("getUserInvoices")]
         public string getUserInvoices(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -1959,6 +2168,8 @@ var strP = TokenManager.GetPrincipal(token);
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
                                         }).ToList();
+
+
                     if (invoicesList != null)
                     {
                         for (int i = 0; i < invoicesList.Count; i++)
@@ -1978,7 +2189,7 @@ var strP = TokenManager.GetPrincipal(token);
         public string GetOrderByType(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -2048,8 +2259,9 @@ var strP = TokenManager.GetPrincipal(token);
                                                 manualDiscountType = b.manualDiscountType,
                                                 manualDiscountValue = b.manualDiscountValue,
                                                 cashReturn = b.cashReturn,
-                                            })
-                        .ToList();
+                                            }).ToList();
+
+
                         if (invoicesList != null)
                         {
                             for (int i = 0; i < invoicesList.Count; i++)
@@ -2102,8 +2314,9 @@ var strP = TokenManager.GetPrincipal(token);
                                                 userId = b.userId,
                                                 manualDiscountType = b.manualDiscountType,
                                                 manualDiscountValue = b.manualDiscountValue,
-                                            })
-                        .ToList();
+                                            }).ToList();
+
+
                         if (invoicesList != null)
                         {
                             for (int i = 0; i < invoicesList.Count; i++)
@@ -2123,8 +2336,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetLastNumOfInv")]
         public string GetLastNumOfInv(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -2171,8 +2384,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetinvCountBydate")]
         public string GetinvCountBydate(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -2372,6 +2585,7 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
         [HttpPost]
         [Route("SaveWithItems")]
         public string SaveWithItems(string token)
