@@ -247,6 +247,7 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
         /*
    old
      using (incposdbEntities entity = new incposdbEntities())
@@ -902,7 +903,7 @@ namespace POS_Server.Controllers
 
 
 
-        public string Saveamc(agentMembershipCash newObject)
+        public int Saveamc(agentMembershipCash newObject)
         {
             int message = 0;
             if (newObject.updateUserId == 0 || newObject.updateUserId == null)
@@ -976,14 +977,14 @@ namespace POS_Server.Controllers
                         message = tmpObject.agentMembershipCashId;
 
                     }
-                    return TokenManager.GenerateToken(message);
+                    return message;
                 }
             }
 
             catch
             {
                 message = 0;
-                return TokenManager.GenerateToken(message);
+                return message;
             }
         }
 
@@ -1046,8 +1047,8 @@ namespace POS_Server.Controllers
                         newObject.cashTransId = cashTransId;
                         
 
-                        message = Saveamc(newObject);
-                        return TokenManager.GenerateToken(message);
+                       int res = Saveamc(newObject);
+                        return TokenManager.GenerateToken(res.ToString());
                     }
                     else
                     {
