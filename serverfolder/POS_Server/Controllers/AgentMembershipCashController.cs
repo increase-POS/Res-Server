@@ -993,7 +993,7 @@ namespace POS_Server.Controllers
 
             catch
             {
-                message = 0;
+                message = -126;
                 return message;
             }
         }
@@ -1050,6 +1050,7 @@ namespace POS_Server.Controllers
                     subscriptionmodel = subctrlr.GetById((int)newObject.subscriptionFeesId);
                    // return TokenManager.GenerateToken(subscriptionmodel);
                     newObject.monthsCount = subscriptionmodel.monthsCount;
+
                     ///////////////////////////////////////////////////////////
                     if (LastAgentmcash !=null)
                     {
@@ -1124,7 +1125,8 @@ namespace POS_Server.Controllers
                         else
                         {
                             newObject.endDate = DTNow;
-                        }
+                             //   newObject.endDate = DTNow.AddMonths(1);
+                            }
                     }
                     }
                     else
@@ -1145,13 +1147,15 @@ namespace POS_Server.Controllers
                         else
                         {
                             newObject.endDate = DTNow;
+                         //   newObject.endDate = DTNow.AddMonths(2);
                         }
                     }
 
                     ////////////////////////////////////////////////////////
                     //save cash trans 
-
                     cashTransId = cashcntrlr.Save(cashTransferObject);
+                    //string ms    = cashcntrlr.Save(cashTransferObject);
+                 //   return TokenManager.GenerateToken(ms);
                     if (cashTransId > 0)
                     {
 
@@ -1162,7 +1166,7 @@ namespace POS_Server.Controllers
                     }
                     else
                     {
-                        return TokenManager.GenerateToken("0");
+                        return TokenManager.GenerateToken("-687");
                     }
 
 
@@ -1170,7 +1174,7 @@ namespace POS_Server.Controllers
 
                 catch
                 {
-                    message = "0";
+                    message = "-79";
                     return TokenManager.GenerateToken(message);
                 }
             }
