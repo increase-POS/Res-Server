@@ -178,7 +178,7 @@ namespace POS_Server.Controllers
                                          startDate = JCS.startDate,
                                          endDate = JCS.endDate,
 
-                                         Amount = JSU.Amount,
+                                         Amount = JSU.Amount==null?0 : JSU.Amount,
                                          agentName = G.name,
                                          agentcompany = G.company,
                                          agenttype = G.type,
@@ -189,8 +189,8 @@ namespace POS_Server.Controllers
                                          subscriptionType = M.subscriptionType,
                                          updateDate = JCS.updateDate,
                                          cashsubscriptionType = JCS.subscriptionType,
-                                         discountValue = JCS.discountValue,
-                                         total = JCS.total,
+                                         discountValue = JCS.discountValue==null?0: JCS.discountValue,
+                                         total = JCS.total==null?0 : JCS.total,
                                      }
                                     ).OrderBy(X => X.updateDate).ToList();
                         var List = List1.GroupBy(S => S.agentId).Select(S => new AgenttoPayCashModel
