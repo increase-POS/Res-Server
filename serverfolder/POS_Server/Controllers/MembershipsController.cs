@@ -784,7 +784,7 @@ namespace POS_Server.Controllers
                     {
 
 
-                        var List1 = (from M in entity.memberships
+                        var List1 = (from M in entity.memberships.Where(x => x.isActive == 1)
                                      join A in entity.agents on M.membershipId equals A.membershipId
                                      join S in entity.subscriptionFees on M.membershipId equals S.membershipId into SU
                                      join CSH in entity.agentMembershipCash on M.membershipId equals CSH.membershipId into CS
@@ -816,7 +816,7 @@ namespace POS_Server.Controllers
                                          updateDate = JCS.updateDate,
                                          createDate = JCS.createDate,
                                          cashsubscriptionType = JCS.subscriptionType,
-
+                                        invoicesClassesCount =  M.invoicesClassMemberships.Where(X => X.membershipId == M.membershipId).ToList().Count(),
                                      }
                                     ).OrderBy(X => X.createDate).ToList();
 
@@ -843,7 +843,8 @@ namespace POS_Server.Controllers
                             {
                                 row.membershipStatus = "valid";
                             }
-                            // && row.endDate >= dtnow
+
+                            row.couponsCount = entity.couponsMemberships.Where(x => x.membershipId == row.membershipId).Count;
 
                         }
                         var List = List1.LastOrDefault();

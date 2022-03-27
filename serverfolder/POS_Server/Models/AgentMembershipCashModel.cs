@@ -105,6 +105,11 @@ namespace POS_Server.Models
         public decimal discountValue { get; set; }
         public decimal total { get; set; }
         public string processType { get; set; }
+
+
+        public int couponsCount { get; set; }
+        public int invoicesClassesCount { get; set; }
+
     }
     /*
      * public int agentId { get; set; }
