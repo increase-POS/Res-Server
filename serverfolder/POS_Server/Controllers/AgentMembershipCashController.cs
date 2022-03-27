@@ -70,6 +70,7 @@ namespace POS_Server.Controllers
                                     payDate = CT.updateDate,
                                     discountValue  =CSH.discountValue,
                                     total = CSH.total,
+                                   processType=CT.processType
 
                                 }
                                 ).OrderBy(X => X.updateDate).ToList();

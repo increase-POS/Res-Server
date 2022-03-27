@@ -44,6 +44,7 @@ namespace POS_Server.Models
         public byte membershipisActive { get; set; }
         public decimal discountValue { get; set; }
         public decimal total { get; set; }
+        public string processType { get; set; }
 
     }
     public class AgenttoPayCashModel
@@ -103,6 +104,7 @@ namespace POS_Server.Models
         public string membershipStatus { get; set; }
         public decimal discountValue { get; set; }
         public decimal total { get; set; }
+        public string processType { get; set; }
     }
     /*
      * public int agentId { get; set; }
