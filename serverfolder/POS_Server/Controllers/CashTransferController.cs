@@ -5723,6 +5723,124 @@ namespace POS_Server.Controllers
             //return NotFound();
         }
 
+        //public string Save(cashTransfer newObject)
+        //{
+
+        //    //string Object
+        //    int message = 0;
+
+
+
+        //        if (newObject != null)
+        //        {
+
+        //            try
+        //            {
+
+        //                if (newObject.updateUserId == 0 || newObject.updateUserId == null)
+        //                {
+        //                    Nullable<int> id = null;
+        //                    newObject.updateUserId = id;
+        //                }
+        //                if (newObject.createUserId == 0 || newObject.createUserId == null)
+        //                {
+        //                    Nullable<int> id = null;
+        //                    newObject.createUserId = id;
+        //                }
+
+        //                if (newObject.agentId == 0 || newObject.agentId == null)
+        //                {
+        //                    Nullable<int> id = null;
+        //                    newObject.agentId = id;
+        //                }
+        //                if (newObject.invId == 0 || newObject.invId == null)
+        //                {
+        //                    Nullable<int> id = null;
+        //                    newObject.invId = id;
+        //                }
+        //                if (newObject.posIdCreator == 0 || newObject.posIdCreator == null)
+        //                {
+        //                    Nullable<int> id = null;
+        //                    newObject.posIdCreator = id;
+        //                }
+
+        //                if (newObject.cashTransIdSource == 0 || newObject.cashTransIdSource == null)
+        //                {
+        //                    Nullable<int> id = null;
+        //                    newObject.cashTransIdSource = id;
+        //                }
+        //                if (newObject.bankId == 0 || newObject.bankId == null)
+        //                {
+        //                    Nullable<int> id = null;
+        //                    newObject.bankId = id;
+        //                }
+
+        //                cashTransfer cashtr;
+        //                using (incposdbEntities entity = new incposdbEntities())
+        //                {
+        //                    var cEntity = entity.Set<cashTransfer>();
+        //                    if (newObject.cashTransId == 0)
+        //                    {
+        //                        newObject.createDate = DateTime.Now;
+        //                        newObject.updateDate = DateTime.Now;
+        //                        newObject.updateUserId = newObject.createUserId;
+        //                        cashtr = cEntity.Add(newObject);
+        //                    }
+        //                    else
+        //                    {
+        //                        cashtr = entity.cashTransfer.Where(p => p.cashTransId == newObject.cashTransId).First();
+        //                        cashtr.transType = newObject.transType;
+        //                        cashtr.posId = newObject.posId;
+        //                        cashtr.userId = newObject.userId;
+        //                        cashtr.agentId = newObject.agentId;
+        //                        cashtr.invId = newObject.invId;
+        //                        cashtr.transNum = newObject.transNum;
+        //                        cashtr.createDate = newObject.createDate;
+        //                        cashtr.updateDate = DateTime.Now;// server current date
+        //                        cashtr.cash = newObject.cash;
+        //                        cashtr.updateUserId = newObject.updateUserId;
+        //                        // cashtr.createUserId = newObject. ;
+        //                        cashtr.notes = newObject.notes;
+        //                        cashtr.posIdCreator = newObject.posIdCreator;
+        //                        cashtr.isConfirm = newObject.isConfirm;
+        //                        cashtr.cashTransIdSource = newObject.cashTransIdSource;
+        //                        cashtr.side = newObject.side;
+
+        //                        cashtr.docName = newObject.docName;
+        //                        cashtr.docNum = newObject.docNum;
+        //                        cashtr.docImage = newObject.docImage;
+        //                        cashtr.bankId = newObject.bankId;
+        //                        cashtr.updateDate = DateTime.Now;// server current date
+        //                        cashtr.processType = newObject.processType;
+        //                        cashtr.cardId = newObject.cardId;
+        //                        cashtr.bondId = newObject.bondId;
+        //                        cashtr.shippingCompanyId = newObject.shippingCompanyId;
+
+        //                    }
+        //                    entity.SaveChanges();
+        //                }
+        //                message = cashtr.cashTransId ;
+
+        //                return  message.ToString() ;
+
+        //            }
+        //            catch (Exception ex)
+        //            {
+
+        //            //message =-ex;
+        //            return ex.ToString();
+
+        //            //  return TokenManager.GenerateToken(ex.ToString());
+        //        }
+
+
+        //        }
+        //        message = -214;
+        //        return message.ToString();
+
+        //}
+
+
         public int Save(cashTransfer newObject)
         {
 
@@ -5730,113 +5848,113 @@ namespace POS_Server.Controllers
             int message = 0;
 
 
- 
-                if (newObject != null)
+
+            if (newObject != null)
+            {
+
+                try
                 {
 
-                    try
+                    if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                     {
-
-                        if (newObject.updateUserId == 0 || newObject.updateUserId == null)
-                        {
-                            Nullable<int> id = null;
-                            newObject.updateUserId = id;
-                        }
-                        if (newObject.createUserId == 0 || newObject.createUserId == null)
-                        {
-                            Nullable<int> id = null;
-                            newObject.createUserId = id;
-                        }
-
-                        if (newObject.agentId == 0 || newObject.agentId == null)
-                        {
-                            Nullable<int> id = null;
-                            newObject.agentId = id;
-                        }
-                        if (newObject.invId == 0 || newObject.invId == null)
-                        {
-                            Nullable<int> id = null;
-                            newObject.invId = id;
-                        }
-                        if (newObject.posIdCreator == 0 || newObject.posIdCreator == null)
-                        {
-                            Nullable<int> id = null;
-                            newObject.posIdCreator = id;
-                        }
-
-                        if (newObject.cashTransIdSource == 0 || newObject.cashTransIdSource == null)
-                        {
-                            Nullable<int> id = null;
-                            newObject.cashTransIdSource = id;
-                        }
-                        if (newObject.bankId == 0 || newObject.bankId == null)
-                        {
-                            Nullable<int> id = null;
-                            newObject.bankId = id;
-                        }
-
-                        cashTransfer cashtr;
-                        using (incposdbEntities entity = new incposdbEntities())
-                        {
-                            var cEntity = entity.Set<cashTransfer>();
-                            if (newObject.cashTransId == 0)
-                            {
-                                newObject.createDate = DateTime.Now;
-                                newObject.updateDate = DateTime.Now;
-                                newObject.updateUserId = newObject.createUserId;
-                                cashtr = cEntity.Add(newObject);
-                            }
-                            else
-                            {
-                                cashtr = entity.cashTransfer.Where(p => p.cashTransId == newObject.cashTransId).First();
-                                cashtr.transType = newObject.transType;
-                                cashtr.posId = newObject.posId;
-                                cashtr.userId = newObject.userId;
-                                cashtr.agentId = newObject.agentId;
-                                cashtr.invId = newObject.invId;
-                                cashtr.transNum = newObject.transNum;
-                                cashtr.createDate = newObject.createDate;
-                                cashtr.updateDate = DateTime.Now;// server current date
-                                cashtr.cash = newObject.cash;
-                                cashtr.updateUserId = newObject.updateUserId;
-                                // cashtr.createUserId = newObject. ;
-                                cashtr.notes = newObject.notes;
-                                cashtr.posIdCreator = newObject.posIdCreator;
-                                cashtr.isConfirm = newObject.isConfirm;
-                                cashtr.cashTransIdSource = newObject.cashTransIdSource;
-                                cashtr.side = newObject.side;
-
-                                cashtr.docName = newObject.docName;
-                                cashtr.docNum = newObject.docNum;
-                                cashtr.docImage = newObject.docImage;
-                                cashtr.bankId = newObject.bankId;
-                                cashtr.updateDate = DateTime.Now;// server current date
-                                cashtr.processType = newObject.processType;
-                                cashtr.cardId = newObject.cardId;
-                                cashtr.bondId = newObject.bondId;
-                                cashtr.shippingCompanyId = newObject.shippingCompanyId;
-
-                            }
-                            entity.SaveChanges();
-                        }
-                        message = cashtr.cashTransId ;
-
-                        return  message ;
-
+                        Nullable<int> id = null;
+                        newObject.updateUserId = id;
                     }
-                    catch (Exception ex)
+                    if (newObject.createUserId == 0 || newObject.createUserId == null)
                     {
+                        Nullable<int> id = null;
+                        newObject.createUserId = id;
+                    }
 
-                    message =0;
+                    if (newObject.agentId == 0 || newObject.agentId == null)
+                    {
+                        Nullable<int> id = null;
+                        newObject.agentId = id;
+                    }
+                    if (newObject.invId == 0 || newObject.invId == null)
+                    {
+                        Nullable<int> id = null;
+                        newObject.invId = id;
+                    }
+                    if (newObject.posIdCreator == 0 || newObject.posIdCreator == null)
+                    {
+                        Nullable<int> id = null;
+                        newObject.posIdCreator = id;
+                    }
+
+                    if (newObject.cashTransIdSource == 0 || newObject.cashTransIdSource == null)
+                    {
+                        Nullable<int> id = null;
+                        newObject.cashTransIdSource = id;
+                    }
+                    if (newObject.bankId == 0 || newObject.bankId == null)
+                    {
+                        Nullable<int> id = null;
+                        newObject.bankId = id;
+                    }
+
+                    cashTransfer cashtr;
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var cEntity = entity.Set<cashTransfer>();
+                        if (newObject.cashTransId == 0)
+                        {
+                            newObject.createDate = DateTime.Now;
+                            newObject.updateDate = DateTime.Now;
+                            newObject.updateUserId = newObject.createUserId;
+                            cashtr = cEntity.Add(newObject);
+                        }
+                        else
+                        {
+                            cashtr = entity.cashTransfer.Where(p => p.cashTransId == newObject.cashTransId).First();
+                            cashtr.transType = newObject.transType;
+                            cashtr.posId = newObject.posId;
+                            cashtr.userId = newObject.userId;
+                            cashtr.agentId = newObject.agentId;
+                            cashtr.invId = newObject.invId;
+                            cashtr.transNum = newObject.transNum;
+                            cashtr.createDate = newObject.createDate;
+                            cashtr.updateDate = DateTime.Now;// server current date
+                            cashtr.cash = newObject.cash;
+                            cashtr.updateUserId = newObject.updateUserId;
+                            // cashtr.createUserId = newObject. ;
+                            cashtr.notes = newObject.notes;
+                            cashtr.posIdCreator = newObject.posIdCreator;
+                            cashtr.isConfirm = newObject.isConfirm;
+                            cashtr.cashTransIdSource = newObject.cashTransIdSource;
+                            cashtr.side = newObject.side;
+
+                            cashtr.docName = newObject.docName;
+                            cashtr.docNum = newObject.docNum;
+                            cashtr.docImage = newObject.docImage;
+                            cashtr.bankId = newObject.bankId;
+                            cashtr.updateDate = DateTime.Now;// server current date
+                            cashtr.processType = newObject.processType;
+                            cashtr.cardId = newObject.cardId;
+                            cashtr.bondId = newObject.bondId;
+                            cashtr.shippingCompanyId = newObject.shippingCompanyId;
+
+                        }
+                        entity.SaveChanges();
+                    }
+                    message = cashtr.cashTransId;
+
+                    return message;
+
+                }
+                catch (Exception ex)
+                {
+
+                    message = -213;
                     return message;
 
                     //  return TokenManager.GenerateToken(ex.ToString());
                 }
 
 
-                }
-                message = 0;
-                return message;
+            }
+            message = -214;
+            return message;
 
         }
 
