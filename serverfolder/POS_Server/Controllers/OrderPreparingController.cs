@@ -168,7 +168,13 @@ namespace POS_Server.Controllers
                         foreach (OrderPreparingModel o in prepOrders)
                         {
                             int index = 1;
-
+                            #region preparing time from menu list
+                            if (o.status == "Listed")
+                            {
+                                var orderItemUnits = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId).Select(x => x.itemUnitId).ToList();
+                                o.preparingTime = entity.menuSettings.Where(x => orderItemUnits.Contains(x.itemUnitId)).Select(x => x.preparingTime).Max();
+                            }
+                            #endregion
                             #region get invoice tables
                             var tables = ( from t in entity.tables.Where(x => x.isActive == 1)
                                            join it in entity.invoiceTables.Where(x => x.invoiceId == o.invoiceId) on t.tableId equals it.tableId
@@ -190,13 +196,15 @@ namespace POS_Server.Controllers
                             {
                                 DateTime createDate = (DateTime)o.createDate;
                                 createDate = createDate.AddMinutes((double)o.preparingTime);
-
-                                if (createDate > DateTime.Now)
-                                    o.remainingTime = 0;
-                                else
+                               
+                                if (createDate > DateTime.Now && o.status !="Listed")
                                 {
-                                    TimeSpan remainingTime = DateTime.Now - createDate;
+                                    TimeSpan remainingTime =  createDate - DateTime.Now ;
                                     o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                }
+                                else 
+                                {
+                                    o.remainingTime = 0;
                                 }
                             }
                             #endregion
