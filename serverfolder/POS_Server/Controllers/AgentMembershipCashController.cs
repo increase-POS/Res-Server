@@ -1117,11 +1117,14 @@ namespace POS_Server.Controllers
                         {
 
                             newObject.endDate = lastenddate.AddMonths((int)newObject.monthsCount);
-                        }
+                                newObject.startDate = DTNow;
+
+                            }
                         else if (newObject.subscriptionType == "y")
                         {
                             newObject.endDate = lastenddate.AddYears((int)newObject.monthsCount);
-                        }
+                                newObject.startDate = DTNow;
+                            }
                         else
                         {
                             newObject.endDate = DTNow;
@@ -1139,6 +1142,7 @@ namespace POS_Server.Controllers
                         {
 
                             newObject.endDate = lastenddate.AddMonths((int)newObject.monthsCount);
+                            newObject.startDate = DTNow;
                         }
                         else if (newObject.subscriptionType == "y")
                         {
@@ -1147,7 +1151,8 @@ namespace POS_Server.Controllers
                         else
                         {
                             newObject.endDate = DTNow;
-                         //   newObject.endDate = DTNow.AddMonths(2);
+                            newObject.startDate = DTNow;
+                            //   newObject.endDate = DTNow.AddMonths(2);
                         }
                     }
 

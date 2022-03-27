@@ -822,6 +822,7 @@ namespace POS_Server.Controllers
 
                         foreach (AgenttoPayCashModel row in List1)
                         {
+                            
                             if (row.membershipisActive==0)
                             {
                                 row.membershipStatus = "notactive";
@@ -837,6 +838,10 @@ namespace POS_Server.Controllers
                             else if ((row.subscriptionType == "m" || row.subscriptionType == "y")   && !(row.endDate >= dtnow))
                             {
                                 row.membershipStatus = "expired";
+                            }
+                            else
+                            {
+                                row.membershipStatus = "valid";
                             }
                             // && row.endDate >= dtnow
 
