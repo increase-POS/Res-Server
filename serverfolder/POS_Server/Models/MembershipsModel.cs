@@ -23,5 +23,13 @@ namespace POS_Server.Models
 
         public Nullable<decimal> subscriptionFee { get; set; }
         public bool canDelete { get; set; }
+
+        public int customersCount { get; set; }
+        public int couponsCount { get; set; }
+        public int offersCount { get; set; }
+        public int invoicesClassesCount { get; set; }
+
+
+
     }
 }

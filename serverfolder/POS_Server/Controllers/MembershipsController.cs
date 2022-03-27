@@ -47,10 +47,22 @@ namespace POS_Server.Controllers
                         subscriptionFee = S.subscriptionFees.FirstOrDefault().Amount,
                         isFreeDelivery = S.isFreeDelivery,
                         deliveryDiscountPercent = S.deliveryDiscountPercent,
-
-
+                        couponsCount = S.couponsMemberships.Where(X=>X.membershipId== S.membershipId).ToList().Count(),
+                        offersCount = S.membershipsOffers.Where(X => X.membershipId == S.membershipId).ToList().Count(),
+                        invoicesClassesCount = S.invoicesClassMemberships.Where(X => X.membershipId == S.membershipId).ToList().Count(),
+                        customersCount = S.agents.Where(X => X.membershipId == S.membershipId).ToList().Count(),
                     }).ToList();
+                    /*
+                         public Nullable<int> couponsCounts { get; set; }
+        public Nullable<int> offersCounts { get; set; }
+        public Nullable<int> invoicesClassCounts { get; set; }
+        public Nullable<int> agentsCounts { get; set; }
 
+                        public int customersCount { get; set; }
+        public int couponsCount { get; set; }
+        public int offersCount { get; set; }
+        public int invoicesClassesCount { get; set; }
+                     * */
                     if (List.Count > 0)
                     {
                         for (int i = 0; i < List.Count; i++)
