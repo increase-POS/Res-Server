@@ -398,8 +398,10 @@ namespace POS_Server.Controllers
             {
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                      item = entity.subscriptionFees
-                   .Where(S => S.subscriptionFeesId == subscriptionFeesId)
+
+                    var list = entity.subscriptionFees.ToList();
+
+                    item= list.Where(S => S.subscriptionFeesId == subscriptionFeesId)
                    .Select(S => new subscriptionFees
                    {
                        subscriptionFeesId = S.subscriptionFeesId,
@@ -418,8 +420,9 @@ namespace POS_Server.Controllers
 
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                //item.notes = ex.ToString();
                 return item;
             }
 

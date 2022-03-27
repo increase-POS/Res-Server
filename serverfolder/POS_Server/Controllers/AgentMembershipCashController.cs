@@ -1043,13 +1043,19 @@ namespace POS_Server.Controllers
                     AgenttoPayCashModel LastAgentmcash = new AgenttoPayCashModel();
                     subscriptionFees subscriptionmodel = new subscriptionFees();
                     LastAgentmcash = GetLastAgentmcash(newObject);
-
+                  //  return TokenManager.GenerateToken(LastAgentmcash);
                     subscriptionFeesController subctrlr = new subscriptionFeesController();
                     // get month count
+
                     subscriptionmodel = subctrlr.GetById((int)newObject.subscriptionFeesId);
+                   // return TokenManager.GenerateToken(subscriptionmodel);
                     newObject.monthsCount = subscriptionmodel.monthsCount;
                     ///////////////////////////////////////////////////////////
-                    if (LastAgentmcash.agentMembershipCashId > 0)
+                    if (LastAgentmcash !=null)
+                    {
+
+                 
+                        if ( LastAgentmcash.agentMembershipCashId > 0)
                     {
                         if ((LastAgentmcash.cashsubscriptionType == "m" || LastAgentmcash.cashsubscriptionType == "y")
                             && (newObject.subscriptionType == "m" || newObject.subscriptionType == "y"))
@@ -1120,8 +1126,31 @@ namespace POS_Server.Controllers
                             newObject.endDate = DTNow;
                         }
                     }
+                    }
+                    else
+                    {
+                        //new pay or the last type is free
+                        lastenddate = DTNow;
+                        newObject.startDate = DTNow;
+                        //check type to extend endDate
+                        if (newObject.subscriptionType == "m")
+                        {
+
+                            newObject.endDate = lastenddate.AddMonths((int)newObject.monthsCount);
+                        }
+                        else if (newObject.subscriptionType == "y")
+                        {
+                            newObject.endDate = lastenddate.AddYears((int)newObject.monthsCount);
+                        }
+                        else
+                        {
+                            newObject.endDate = DTNow;
+                        }
+                    }
+
                     ////////////////////////////////////////////////////////
                     //save cash trans 
+
                     cashTransId = cashcntrlr.Save(cashTransferObject);
                     if (cashTransId > 0)
                     {
@@ -1254,6 +1283,7 @@ namespace POS_Server.Controllers
             }
             catch (Exception ex)
             {
+                lastrow.agentName = ex.ToString();
                 return lastrow;
             }
 
