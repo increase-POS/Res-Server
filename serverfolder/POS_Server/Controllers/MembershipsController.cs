@@ -845,7 +845,7 @@ namespace POS_Server.Controllers
                                 row.membershipStatus = "valid";
                             }
 
-                            row.couponsCount = entity.couponsMemberships.Where(x => x.membershipId == row.membershipId).Count;
+                            row.couponsCount = entity.couponsMemberships.Where(x => x.membershipId == row.membershipId).Count();
 
                         }
                         var List = List1.LastOrDefault();
