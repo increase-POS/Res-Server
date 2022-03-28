@@ -810,6 +810,7 @@ namespace POS_Server.Controllers
 
                                          Amount = JSU.Amount,
                                          membershipName = M.name,
+                                         membershipcode= M.code,
                                          membershipisActive = M.isActive,
                                          monthsCount = JSU.monthsCount,
                                          subscriptionType = M.subscriptionType,
