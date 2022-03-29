@@ -47,7 +47,7 @@ namespace POS_Server.Models
         public string processType { get; set; }
         public Nullable<int> cardId { get; set; }
         public string cardName { get; set; }
-
+        public string docNum { get; set; }
 
     }
     public class AgenttoPayCashModel

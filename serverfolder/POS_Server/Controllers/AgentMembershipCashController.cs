@@ -73,7 +73,7 @@ namespace POS_Server.Controllers
                                    processType=CT.processType,
                                   cardId=CT.cardId,
                                   cardName=CT.cards.name,
-
+                                    docNum= CT.docNum,
                                 }
                                 ).OrderBy(X => X.updateDate).ToList();
                
