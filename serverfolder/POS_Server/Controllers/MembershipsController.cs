@@ -71,13 +71,13 @@ namespace POS_Server.Controllers
                             if (List[i].isActive == 1)
                             {
                                 int membershipId = (int)List[i].membershipId;
-                                var itemsI = entity.agentMemberships.Where(x => x.membershipId == membershipId).Select(b => new { b.agentMembershipsId }).FirstOrDefault();
+                                //var itemsI = entity.agentMemberships.Where(x => x.membershipId == membershipId).Select(b => new { b.agentMembershipsId }).FirstOrDefault();
                                 var items2 = entity.subscriptionFees.Where(x => x.membershipId == membershipId).Select(b => new { b.subscriptionFeesId }).FirstOrDefault();
                                 var items3 = entity.couponsMemberships.Where(x => x.membershipId == membershipId).Select(b => new { b.couponMembershipId }).FirstOrDefault();
                                 var items4 = entity.membershipsOffers.Where(x => x.membershipId == membershipId).Select(b => new { b.membershipOfferId }).FirstOrDefault();
                                 var items5 = entity.invoicesClassMemberships.Where(x => x.membershipId == membershipId).Select(b => new { b.invClassMemberId }).FirstOrDefault();
 
-                                if ((itemsI is null && items2 is null && items3 is null && items4 is null && items5 is null))
+                                if ((items2 is null && items3 is null && items4 is null && items5 is null))
                                     canDelete = true;
 
                             }

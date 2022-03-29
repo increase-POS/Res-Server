@@ -18,326 +18,326 @@ namespace POS_Server.Controllers
     [RoutePrefix("api/AgentMemberships")]
     public class AgentMembershipsController : ApiController
     {
-        [HttpPost]
-        [Route("GetAll")]
-        public string GetAll(string token)
-        {
-            token = TokenManager.readToken(HttpContext.Current.Request);
-            Boolean canDelete = false;
-            var strP = TokenManager.GetPrincipal(token);
-            if (strP != "0") //invalid authorization
-            {
-                return TokenManager.GenerateToken(strP);
-            }
-            else
-            {
-                using (incposdbEntities entity = new incposdbEntities())
-                {
-                    var List = entity.agentMemberships.Select(S => new AgentMembershipsModel
-                    {
-                        agentMembershipsId = S.agentMembershipsId,
+        //[HttpPost]
+        //[Route("GetAll")]
+        //public string GetAll(string token)
+        //{
+        //    token = TokenManager.readToken(HttpContext.Current.Request);
+        //    Boolean canDelete = false;
+        //    var strP = TokenManager.GetPrincipal(token);
+        //    if (strP != "0") //invalid authorization
+        //    {
+        //        return TokenManager.GenerateToken(strP);
+        //    }
+        //    else
+        //    {
+        //        using (incposdbEntities entity = new incposdbEntities())
+        //        {
+        //            var List = entity.agentMemberships.Select(S => new AgentMembershipsModel
+        //            {
+        //                agentMembershipsId = S.agentMembershipsId,
                         
-                        membershipId = S.membershipId,
-                        agentId = S.agentId,
+        //                membershipId = S.membershipId,
+        //                agentId = S.agentId,
                         
-                        notes = S.notes,
-                        createDate = S.createDate,
-                        updateDate = S.updateDate,
-                        createUserId = S.createUserId,
-                        updateUserId = S.updateUserId,
-                        isActive = S.isActive,
+        //                notes = S.notes,
+        //                createDate = S.createDate,
+        //                updateDate = S.updateDate,
+        //                createUserId = S.createUserId,
+        //                updateUserId = S.updateUserId,
+        //                isActive = S.isActive,
 
 
-                    })
-                    .ToList();
+        //            })
+        //            .ToList();
 
                    
-                    return TokenManager.GenerateToken(List);
+        //            return TokenManager.GenerateToken(List);
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
         /*
    
          * */
-        [HttpPost]
-        [Route("GetById")]
-        public string GetById(string token)
-        {
-            token = TokenManager.readToken(HttpContext.Current.Request);
-            var strP = TokenManager.GetPrincipal(token);
-            if (strP != "0") //invalid authorization
-            {
-                return TokenManager.GenerateToken(strP);
-            }
-            else
-            {
-                int agentMembershipsId = 0;
-                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
-                foreach (Claim c in claims)
-                {
-                    if (c.Type == "itemId")
-                    {
-                        agentMembershipsId = int.Parse(c.Value);
-                    }
-                }
-                using (incposdbEntities entity = new incposdbEntities())
-                {
-                    var bank = entity.agentMemberships
-                   .Where(S => S.agentMembershipsId == agentMembershipsId)
-                   .Select(S => new
-                   {
-                       S.agentMembershipsId,
+        //[HttpPost]
+        //[Route("GetById")]
+        //public string GetById(string token)
+        //{
+        //    token = TokenManager.readToken(HttpContext.Current.Request);
+        //    var strP = TokenManager.GetPrincipal(token);
+        //    if (strP != "0") //invalid authorization
+        //    {
+        //        return TokenManager.GenerateToken(strP);
+        //    }
+        //    else
+        //    {
+        //        int agentMembershipsId = 0;
+        //        IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+        //        foreach (Claim c in claims)
+        //        {
+        //            if (c.Type == "itemId")
+        //            {
+        //                agentMembershipsId = int.Parse(c.Value);
+        //            }
+        //        }
+        //        using (incposdbEntities entity = new incposdbEntities())
+        //        {
+        //            var bank = entity.agentMemberships
+        //           .Where(S => S.agentMembershipsId == agentMembershipsId)
+        //           .Select(S => new
+        //           {
+        //               S.agentMembershipsId,
                        
-                       S.membershipId,
-                       S.agentId,
+        //               S.membershipId,
+        //               S.agentId,
                       
-                       S.notes,
-                       S.createDate,
-                       S.updateDate,
-                       S.createUserId,
-                       S.updateUserId,
-                       S.isActive,
+        //               S.notes,
+        //               S.createDate,
+        //               S.updateDate,
+        //               S.createUserId,
+        //               S.updateUserId,
+        //               S.isActive,
 
 
 
-                   })
-                   .FirstOrDefault();
-                    return TokenManager.GenerateToken(bank);
+        //           })
+        //           .FirstOrDefault();
+        //            return TokenManager.GenerateToken(bank);
 
-                }
-            }
-        }
-         [HttpPost]
-        [Route("GetAgentMemberShip")]
-        public string GetAgentMemberShip(string token)
-        {
-            token = TokenManager.readToken(HttpContext.Current.Request);
-            var strP = TokenManager.GetPrincipal(token);
-            if (strP != "0") //invalid authorization
-            {
-                return TokenManager.GenerateToken(strP);
-            }
-            else
-            {
-                int agentId = 0;
-                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
-                foreach (Claim c in claims)
-                {
-                    if (c.Type == "agentId")
-                    {
-                        agentId = int.Parse(c.Value);
-                    }
-                }
-                using (incposdbEntities entity = new incposdbEntities())
-                {
-                    var agentMemberShip = entity.agentMemberships
-                   .Where(S => S.agentId == agentId)
-                   .Select(S => new AgentMembershipsModel()
-                   {
-                       agentMembershipsId = S.agentMembershipsId,
+        //        }
+        //    }
+        //}
+        // [HttpPost]
+        //[Route("GetAgentMemberShip")]
+        //public string GetAgentMemberShip(string token)
+        //{
+        //    token = TokenManager.readToken(HttpContext.Current.Request);
+        //    var strP = TokenManager.GetPrincipal(token);
+        //    if (strP != "0") //invalid authorization
+        //    {
+        //        return TokenManager.GenerateToken(strP);
+        //    }
+        //    else
+        //    {
+        //        int agentId = 0;
+        //        IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+        //        foreach (Claim c in claims)
+        //        {
+        //            if (c.Type == "agentId")
+        //            {
+        //                agentId = int.Parse(c.Value);
+        //            }
+        //        }
+        //        using (incposdbEntities entity = new incposdbEntities())
+        //        {
+        //            var agentMemberShip = entity.agentMemberships
+        //           .Where(S => S.agentId == agentId)
+        //           .Select(S => new AgentMembershipsModel()
+        //           {
+        //               agentMembershipsId = S.agentMembershipsId,
 
-                       membershipId = S.membershipId,
-                       agentId = S.agentId,
+        //               membershipId = S.membershipId,
+        //               agentId = S.agentId,
 
-                       notes = S.notes,
-                       createDate = S.createDate,
-                       updateDate = S.updateDate,
-                       createUserId = S.createUserId,
-                       updateUserId = S.updateUserId,
-                       isActive = S.isActive,
-                       memberShip = entity.memberships.Where(x => x.membershipId == S.membershipId)
-                                                        .Select(x => new MembershipsModel()
-                                                           {
-                                                            membershipId = x.membershipId,
-                                                           code = x.code,
-                                                           createDate = x.createDate,
-                                                           updateDate = x.updateDate,
-                                                           isActive = x.isActive,
-                                                           isFreeDelivery = x.isFreeDelivery,
-                                                           deliveryDiscountPercent = x.deliveryDiscountPercent,
-                                                           name = x.name,
-                                                           notes=  x.notes,
-                                                           subscriptionFee = x.subscriptionFees.FirstOrDefault().Amount,
-                                                           subscriptionType = x.subscriptionType,                                                           
-                                                           }).FirstOrDefault()
-                   }).FirstOrDefault();
-                    return TokenManager.GenerateToken(agentMemberShip);
+        //               notes = S.notes,
+        //               createDate = S.createDate,
+        //               updateDate = S.updateDate,
+        //               createUserId = S.createUserId,
+        //               updateUserId = S.updateUserId,
+        //               isActive = S.isActive,
+        //               memberShip = entity.memberships.Where(x => x.membershipId == S.membershipId)
+        //                                                .Select(x => new MembershipsModel()
+        //                                                   {
+        //                                                    membershipId = x.membershipId,
+        //                                                   code = x.code,
+        //                                                   createDate = x.createDate,
+        //                                                   updateDate = x.updateDate,
+        //                                                   isActive = x.isActive,
+        //                                                   isFreeDelivery = x.isFreeDelivery,
+        //                                                   deliveryDiscountPercent = x.deliveryDiscountPercent,
+        //                                                   name = x.name,
+        //                                                   notes=  x.notes,
+        //                                                   subscriptionFee = x.subscriptionFees.FirstOrDefault().Amount,
+        //                                                   subscriptionType = x.subscriptionType,                                                           
+        //                                                   }).FirstOrDefault()
+        //           }).FirstOrDefault();
+        //            return TokenManager.GenerateToken(agentMemberShip);
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
 
-        [HttpPost]
-        [Route("Save")]
-        public string Save(string token)
-        {
-            token = TokenManager.readToken(HttpContext.Current.Request);
-            string message = "";
-            var strP = TokenManager.GetPrincipal(token);
-            if (strP != "0") //invalid authorization
-            {
-                return TokenManager.GenerateToken(strP);
-            }
-            else
-            {
-                string agentMembershipsId = "";
-                agentMemberships newObject = null;
-                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
-                foreach (Claim c in claims)
-                {
-                    if (c.Type == "itemObject")
-                    {
-                        agentMembershipsId = c.Value.Replace("\\", string.Empty);
-                        agentMembershipsId = agentMembershipsId.Trim('"');
-                        newObject = JsonConvert.DeserializeObject<agentMemberships>(agentMembershipsId, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
-                        break;
-                    }
-                }
-                if (newObject.updateUserId == 0 || newObject.updateUserId == null)
-                {
-                    Nullable<int> id = null;
-                    newObject.updateUserId = id;
-                }
-                if (newObject.createUserId == 0 || newObject.createUserId == null)
-                {
-                    Nullable<int> id = null;
-                    newObject.createUserId = id;
-                }
+        //[HttpPost]
+        //[Route("Save")]
+        //public string Save(string token)
+        //{
+        //    token = TokenManager.readToken(HttpContext.Current.Request);
+        //    string message = "";
+        //    var strP = TokenManager.GetPrincipal(token);
+        //    if (strP != "0") //invalid authorization
+        //    {
+        //        return TokenManager.GenerateToken(strP);
+        //    }
+        //    else
+        //    {
+        //        string agentMembershipsId = "";
+        //        agentMemberships newObject = null;
+        //        IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+        //        foreach (Claim c in claims)
+        //        {
+        //            if (c.Type == "itemObject")
+        //            {
+        //                agentMembershipsId = c.Value.Replace("\\", string.Empty);
+        //                agentMembershipsId = agentMembershipsId.Trim('"');
+        //                newObject = JsonConvert.DeserializeObject<agentMemberships>(agentMembershipsId, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+        //                break;
+        //            }
+        //        }
+        //        if (newObject.updateUserId == 0 || newObject.updateUserId == null)
+        //        {
+        //            Nullable<int> id = null;
+        //            newObject.updateUserId = id;
+        //        }
+        //        if (newObject.createUserId == 0 || newObject.createUserId == null)
+        //        {
+        //            Nullable<int> id = null;
+        //            newObject.createUserId = id;
+        //        }
                 
-                if (newObject.membershipId == 0 || newObject.membershipId == null)
-                {
-                    Nullable<int> id = null;
-                    newObject.membershipId = id;
-                }
-                if (newObject.agentId == 0 || newObject.agentId == null)
-                {
-                    Nullable<int> id = null;
-                    newObject.agentId = id;
-                }
-                try
-                {
-                    using (incposdbEntities entity = new incposdbEntities())
-                    {
-                        agentMemberships tmpObject = new agentMemberships();
-                        var bankEntity = entity.Set<agentMemberships>();
-                        if (newObject.agentMembershipsId == 0)
-                        {
-                            newObject.createDate = DateTime.Now;
-                            newObject.updateDate = DateTime.Now;
-                            newObject.updateUserId = newObject.createUserId;
-                            tmpObject = bankEntity.Add(newObject);
-                            entity.SaveChanges();
-                            message = tmpObject.agentMembershipsId.ToString(); ;
-                        }
-                        else
-                        {
-                            tmpObject = entity.agentMemberships.Where(p => p.agentMembershipsId == newObject.agentMembershipsId).FirstOrDefault();
+        //        if (newObject.membershipId == 0 || newObject.membershipId == null)
+        //        {
+        //            Nullable<int> id = null;
+        //            newObject.membershipId = id;
+        //        }
+        //        if (newObject.agentId == 0 || newObject.agentId == null)
+        //        {
+        //            Nullable<int> id = null;
+        //            newObject.agentId = id;
+        //        }
+        //        try
+        //        {
+        //            using (incposdbEntities entity = new incposdbEntities())
+        //            {
+        //                agentMemberships tmpObject = new agentMemberships();
+        //                var bankEntity = entity.Set<agentMemberships>();
+        //                if (newObject.agentMembershipsId == 0)
+        //                {
+        //                    newObject.createDate = DateTime.Now;
+        //                    newObject.updateDate = DateTime.Now;
+        //                    newObject.updateUserId = newObject.createUserId;
+        //                    tmpObject = bankEntity.Add(newObject);
+        //                    entity.SaveChanges();
+        //                    message = tmpObject.agentMembershipsId.ToString(); ;
+        //                }
+        //                else
+        //                {
+        //                    tmpObject = entity.agentMemberships.Where(p => p.agentMembershipsId == newObject.agentMembershipsId).FirstOrDefault();
 
-                            tmpObject.updateDate = DateTime.Now;
+        //                    tmpObject.updateDate = DateTime.Now;
 
-                            tmpObject.agentMembershipsId = newObject.agentMembershipsId;
+        //                    tmpObject.agentMembershipsId = newObject.agentMembershipsId;
                   
-                            tmpObject.membershipId = newObject.membershipId;
-                            tmpObject.agentId = newObject.agentId;
+        //                    tmpObject.membershipId = newObject.membershipId;
+        //                    tmpObject.agentId = newObject.agentId;
                    
-                            tmpObject.notes = newObject.notes;
-                          //  tmpObject.createDate = newObject.createDate;
-                            tmpObject.updateDate = newObject.updateDate;
-                            tmpObject.createUserId = newObject.createUserId;
-                            tmpObject.updateUserId = newObject.updateUserId;
-                            tmpObject.isActive = newObject.isActive;
+        //                    tmpObject.notes = newObject.notes;
+        //                  //  tmpObject.createDate = newObject.createDate;
+        //                    tmpObject.updateDate = newObject.updateDate;
+        //                    tmpObject.createUserId = newObject.createUserId;
+        //                    tmpObject.updateUserId = newObject.updateUserId;
+        //                    tmpObject.isActive = newObject.isActive;
 
 
 
-                            entity.SaveChanges();
-                            message = tmpObject.agentMembershipsId.ToString();
+        //                    entity.SaveChanges();
+        //                    message = tmpObject.agentMembershipsId.ToString();
 
-                        }
-                        return TokenManager.GenerateToken(message);
-                    }
-                }
+        //                }
+        //                return TokenManager.GenerateToken(message);
+        //            }
+        //        }
 
-                catch
-                {
-                    message = "0";
-                    return TokenManager.GenerateToken(message);
-                }
-            }
-        }
+        //        catch
+        //        {
+        //            message = "0";
+        //            return TokenManager.GenerateToken(message);
+        //        }
+        //    }
+        //}
 
-        [HttpPost]
-        [Route("Delete")]
-        public string Delete(string token)
-        {
-            token = TokenManager.readToken(HttpContext.Current.Request);
-            string message = "";
-            var strP = TokenManager.GetPrincipal(token);
-            if (strP != "0") //invalid authorization
-            {
-                return TokenManager.GenerateToken(strP);
-            }
-            else
-            {
-                int agentMembershipsId = 0;
-                int userId = 0;
-                Boolean final = false;
-                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
-                foreach (Claim c in claims)
-                {
-                    if (c.Type == "itemId")
-                    {
-                        agentMembershipsId = int.Parse(c.Value);
-                    }
-                    else if (c.Type == "userId")
-                    {
-                        userId = int.Parse(c.Value);
-                    }
-                    else if (c.Type == "final")
-                    {
-                        final = bool.Parse(c.Value);
-                    }
-                }
-                if (final)
-                {
-                    try
-                    {
-                        using (incposdbEntities entity = new incposdbEntities())
-                        {
+        //[HttpPost]
+        //[Route("Delete")]
+        //public string Delete(string token)
+        //{
+        //    token = TokenManager.readToken(HttpContext.Current.Request);
+        //    string message = "";
+        //    var strP = TokenManager.GetPrincipal(token);
+        //    if (strP != "0") //invalid authorization
+        //    {
+        //        return TokenManager.GenerateToken(strP);
+        //    }
+        //    else
+        //    {
+        //        int agentMembershipsId = 0;
+        //        int userId = 0;
+        //        Boolean final = false;
+        //        IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+        //        foreach (Claim c in claims)
+        //        {
+        //            if (c.Type == "itemId")
+        //            {
+        //                agentMembershipsId = int.Parse(c.Value);
+        //            }
+        //            else if (c.Type == "userId")
+        //            {
+        //                userId = int.Parse(c.Value);
+        //            }
+        //            else if (c.Type == "final")
+        //            {
+        //                final = bool.Parse(c.Value);
+        //            }
+        //        }
+        //        if (final)
+        //        {
+        //            try
+        //            {
+        //                using (incposdbEntities entity = new incposdbEntities())
+        //                {
 
-                            agentMemberships objDelete = entity.agentMemberships.Find(agentMembershipsId);
-                            entity.agentMemberships.Remove(objDelete);
-                            message = entity.SaveChanges().ToString();
-                            return TokenManager.GenerateToken(message);
-                        }
-                    }
-                    catch
-                    {
-                        return TokenManager.GenerateToken("0");
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        using (incposdbEntities entity = new incposdbEntities())
-                        {
+        //                    agentMemberships objDelete = entity.agentMemberships.Find(agentMembershipsId);
+        //                    entity.agentMemberships.Remove(objDelete);
+        //                    message = entity.SaveChanges().ToString();
+        //                    return TokenManager.GenerateToken(message);
+        //                }
+        //            }
+        //            catch
+        //            {
+        //                return TokenManager.GenerateToken("0");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            try
+        //            {
+        //                using (incposdbEntities entity = new incposdbEntities())
+        //                {
 
-                            agentMemberships objDelete = entity.agentMemberships.Find(agentMembershipsId);
-                            objDelete.isActive = 0;
-                            objDelete.updateUserId = userId;
-                            objDelete.updateDate = DateTime.Now;
-                            message = entity.SaveChanges().ToString();
-                            return TokenManager.GenerateToken(message);
-                        }
-                    }
-                    catch
-                    {
-                        return TokenManager.GenerateToken("0");
-                    }
-                }
-            }
-        }
+        //                    agentMemberships objDelete = entity.agentMemberships.Find(agentMembershipsId);
+        //                    objDelete.isActive = 0;
+        //                    objDelete.updateUserId = userId;
+        //                    objDelete.updateDate = DateTime.Now;
+        //                    message = entity.SaveChanges().ToString();
+        //                    return TokenManager.GenerateToken(message);
+        //                }
+        //            }
+        //            catch
+        //            {
+        //                return TokenManager.GenerateToken("0");
+        //            }
+        //        }
+        //    }
+        //}
 
         [HttpPost]
         [Route("UpdateAgentsByMembershipId")]
@@ -353,7 +353,7 @@ namespace POS_Server.Controllers
             else
             {
                 string strObject = "";
-                List<agentMemberships> newListObj = null;
+                List<AgentMembershipsModel> newListObj = null;
                 int membershipId = 0;
                 int updateUserId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -363,7 +363,7 @@ namespace POS_Server.Controllers
                     {
                         strObject = c.Value.Replace("\\", string.Empty);
                         strObject = strObject.Trim('"');
-                        newListObj = JsonConvert.DeserializeObject<List<agentMemberships>>(strObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                        newListObj = JsonConvert.DeserializeObject<List<AgentMembershipsModel>>(strObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
 
                     }
                     else if (c.Type == "membershipId")
