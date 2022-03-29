@@ -31,7 +31,8 @@ namespace POS_Server.Controllers
             {
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var List = entity.subscriptionFees.Select(S => new subscriptionFeesModel
+                    var List1 = entity.subscriptionFees.ToList();
+                     var List= List1.Select(S => new subscriptionFeesModel
                     {
                         subscriptionFeesId = S.subscriptionFeesId,
                         membershipId = S.membershipId,
@@ -43,9 +44,6 @@ namespace POS_Server.Controllers
                         createUserId = S.createUserId,
                         updateUserId = S.updateUserId,
                         isActive = S.isActive,
-
-
-
 
                     })
                     .ToList();

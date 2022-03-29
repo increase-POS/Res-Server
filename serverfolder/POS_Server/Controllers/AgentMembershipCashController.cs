@@ -1099,8 +1099,8 @@ namespace POS_Server.Controllers
                     ////////////////////////////////////////////////////////
                     //save cash trans 
                     cashTransId = cashcntrlr.Save(cashTransferObject);
-                    //string ms    = cashcntrlr.Save(cashTransferObject);
-                 //   return TokenManager.GenerateToken(ms);
+                    //string ms = cashcntrlr.Save(cashTransferObject);
+                    //return TokenManager.GenerateToken(ms);
                     if (cashTransId > 0)
                     {
 

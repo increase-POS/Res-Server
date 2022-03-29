@@ -201,9 +201,6 @@
     <Compile Include="agentMembershipCash.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="agentMemberships.cs">
-      <DependentUpon>PosModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="agents.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
