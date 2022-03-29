@@ -3918,7 +3918,7 @@ namespace POS_Server.Controllers
                                                sectionId = s.sectionId,
                                                isFreeZone = s.isFreeZone,
                                                itemType = i.type,
-                                               location = l.x + "-" + l.y + "-" + l.z,
+                                               location = l.x + l.y + l.z,
                                            }).OrderBy(a => a.endDate)
                                             .ToList();
 
