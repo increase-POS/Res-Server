@@ -45,6 +45,9 @@ namespace POS_Server.Models
         public decimal discountValue { get; set; }
         public decimal total { get; set; }
         public string processType { get; set; }
+        public Nullable<int> cardId { get; set; }
+        public string cardName { get; set; }
+
 
     }
     public class AgenttoPayCashModel
