@@ -89,8 +89,8 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("GetPosByID")]
         public string GetPosByID(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -127,6 +127,7 @@ var strP = TokenManager.GetPrincipal(token);
                                     balanceAll = p.balanceAll,
                                     notes = p.notes,
                                     branchCode = x.code,
+                                    boxState = p.boxState,
                                 }).FirstOrDefault();
                     return TokenManager.GenerateToken(pos);
                 }

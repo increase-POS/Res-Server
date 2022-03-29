@@ -19,9 +19,9 @@ namespace POS_Server.Models
         public byte isActive { get; set; }
         public string notes { get; set; }
         public decimal balanceAll { get; set; }
+        public string boxState { get; set; }
 
 
-     
         public string branchName { get; set; }
         public string branchCode { get; set; }
       
