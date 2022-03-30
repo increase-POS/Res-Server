@@ -112,6 +112,7 @@ namespace POS_Server.Models
 
         public int couponsCount { get; set; }
         public int invoicesClassesCount { get; set; }
+        public int offersCount { get; set; }
 
     }
     /*

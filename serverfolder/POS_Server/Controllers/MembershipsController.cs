@@ -818,6 +818,7 @@ namespace POS_Server.Controllers
                                          createDate = JCS.createDate,
                                          cashsubscriptionType = JCS.subscriptionType,
                                         invoicesClassesCount =  M.invoicesClassMemberships.Where(X => X.membershipId == M.membershipId).ToList().Count(),
+                                        offersCount = M.membershipsOffers.Where(x => x.membershipId == M.membershipId).ToList().Count(),
                                      }
                                     ).OrderBy(X => X.createDate).ToList();
 
