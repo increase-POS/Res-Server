@@ -290,6 +290,95 @@ namespace POS_Server.Controllers
                 return TokenManager.GenerateToken(message);
             }
         }
+
+        [HttpPost]
+        [Route("SaveOrdersWithItemsAndStatus")]
+        public string SaveOrdersWithItemsAndStatus(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string orderObject = "";
+                string itemsObject = "";
+                string statusObject = "";
+                int branchId = 0;
+                orderPreparing newObject = null;
+                List<itemOrderPreparing> items = null;
+                orderPreparingStatus status = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "orderObject")
+                    {
+                        orderObject = c.Value.Replace("\\", string.Empty);
+                        orderObject = orderObject.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<orderPreparing>(orderObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                    else if (c.Type == "itemsObject")
+                    {
+                        itemsObject = c.Value.Replace("\\", string.Empty);
+                        itemsObject = itemsObject.Trim('"');
+                        items = JsonConvert.DeserializeObject<List<itemOrderPreparing>>(itemsObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                    else if (c.Type == "statusObject")
+                    {
+                        statusObject = c.Value.Replace("\\", string.Empty);
+                        statusObject = statusObject.Trim('"');
+                        status = JsonConvert.DeserializeObject<orderPreparingStatus>(statusObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                }
+
+                try
+                {
+                    foreach(itemOrderPreparing item in items)
+                    {
+                        #region orderNum
+                        string branchCode = "";
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+                            branchCode = entity.branches.Where(x => x.branchId == branchId).Select(x => x.code).ToString();
+                        }
+                        var orderNum = GetLastNumOfOrder("ko", branchId);
+                        orderNum++;
+                        string strSeq = orderNum.ToString();
+                        if (orderNum <= 999999)
+                            strSeq = orderNum.ToString().PadLeft(6, '0');
+                        string invoiceNum = "ko" + "-" + branchCode + "-" + strSeq;
+                        newObject.orderNum = invoiceNum;
+                        #endregion
+                        int orderId = savePreparingOrder(newObject);
+                        if (orderId > 0)
+                        {
+                            string res = savePreparingOrderItems(items, orderId);
+                            if (res == "0")
+                                message = "0";
+                            else
+                            {
+                                res = saveInvoiceStatus(status, orderId);
+                                if (res == "0")
+                                    message = "0";
+                            }
+                        }
+                    }
+                    
+                }
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
         [HttpPost]
         [Route("EditOrderAndStatus")]
         public string EditOrderAndStatus(string token)
@@ -491,26 +580,32 @@ namespace POS_Server.Controllers
                         branchId = int.Parse(c.Value);
                     }
                 }
-                List<string> numberList;
-                int lastNum = 0;
-                using (incposdbEntities entity = new incposdbEntities())
-                {
-                    numberList = entity.orderPreparing.Where(b => b.orderNum.Contains(orderCode + "-") && b.invoices.branchId == branchId).Select(b => b.orderNum).ToList();
 
-                    for (int i = 0; i < numberList.Count; i++)
-                    {
-                        string code = numberList[i];
-                        string s = code.Substring(code.LastIndexOf("-") + 1);
-                        numberList[i] = s;
-                    }
-                    if (numberList.Count > 0)
-                    {
-                        numberList.Sort();
-                        lastNum = int.Parse(numberList[numberList.Count - 1]);
-                    }
-                }
+                int lastNum = GetLastNumOfOrder(orderCode,branchId);               
                 return TokenManager.GenerateToken(lastNum);
             }
+        }
+        private int GetLastNumOfOrder(string orderCode, int branchId)
+        {
+            List<string> numberList;
+            int lastNum = 0;
+            using (incposdbEntities entity = new incposdbEntities())
+            {
+                numberList = entity.orderPreparing.Where(b => b.orderNum.Contains(orderCode + "-") && b.invoices.branchId == branchId).Select(b => b.orderNum).ToList();
+
+                for (int i = 0; i < numberList.Count; i++)
+                {
+                    string code = numberList[i];
+                    string s = code.Substring(code.LastIndexOf("-") + 1);
+                    numberList[i] = s;
+                }
+                if (numberList.Count > 0)
+                {
+                    numberList.Sort();
+                    lastNum = int.Parse(numberList[numberList.Count - 1]);
+                }
+            }
+            return lastNum;
         }
     }
 }
