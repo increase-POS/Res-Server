@@ -73,11 +73,14 @@ namespace POS_Server.Controllers
                                 createDate = createDate.AddMinutes((double)o.preparingTime);
 
                                 if (createDate > DateTime.Now)
-                                    o.remainingTime = 0;
+                                {
+                                    TimeSpan remainingTime =  createDate - DateTime.Now;
+                                    o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                }
                                 else
                                 {
-                                    TimeSpan remainingTime = DateTime.Now - createDate;
-                                    o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                    o.remainingTime = 0;
+
                                 }
                             }
                             #endregion
@@ -340,14 +343,15 @@ namespace POS_Server.Controllers
 
                 try
                 {
-                    foreach(itemOrderPreparing item in items)
+                    string branchCode = "";
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        branchCode = entity.branches.Where(x => x.branchId == branchId).Select(x => x.code).FirstOrDefault();
+                    }
+                    foreach (itemOrderPreparing item in items)
                     {
                         #region orderNum
-                        string branchCode = "";
-                        using (incposdbEntities entity = new incposdbEntities())
-                        {
-                            branchCode = entity.branches.Where(x => x.branchId == branchId).Select(x => x.code).ToString();
-                        }
+                        
                         var orderNum = GetLastNumOfOrder("ko", branchId);
                         orderNum++;
                         string strSeq = orderNum.ToString();
@@ -356,10 +360,13 @@ namespace POS_Server.Controllers
                         string invoiceNum = "ko" + "-" + branchCode + "-" + strSeq;
                         newObject.orderNum = invoiceNum;
                         #endregion
+                        newObject.orderPreparingId = 0;
                         int orderId = savePreparingOrder(newObject);
                         if (orderId > 0)
                         {
-                            string res = savePreparingOrderItems(items, orderId);
+                            List<itemOrderPreparing> orderItem = new List<itemOrderPreparing>();
+                            orderItem.Add(item);
+                            string res = savePreparingOrderItems(orderItem, orderId);
                             if (res == "0")
                                 message = "0";
                             else
