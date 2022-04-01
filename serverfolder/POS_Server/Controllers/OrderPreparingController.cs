@@ -143,7 +143,7 @@ namespace POS_Server.Controllers
                                                 createDate = o.createDate,
                                                 createUserId= o.createUserId,
                                                 invNum= o.invoices.invNumber,
-                                              
+                                              waiter = entity.users.Where(x => x.userId == o.invoices.waiterId).Select(x => x.name).FirstOrDefault(),
                                                 items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
                                                                                 .Select(x => new itemOrderPreparingModel()
                                                                                 {
@@ -219,6 +219,64 @@ namespace POS_Server.Controllers
                             }
                         }
                         return TokenManager.GenerateToken(prepOrders);
+                    }
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+         [HttpPost]
+        [Route("GetCountPreparingOrders")]
+        public string GetCountPreparingOrders(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string statusStr = "";               
+                List<string> statusL = new List<string>();
+                int branchId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "status")
+                    {
+                        statusStr = c.Value;
+                        string[] statusArray = statusStr.Split(',');
+                        foreach (string s in statusArray)
+                            statusL.Add(s.Trim());
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId =int.Parse(c.Value);
+                    }
+                }
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoices.branchId == branchId)
+                                          join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                          where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                          select new OrderPreparingModel()
+                                             {
+                                                 orderPreparingId = o.orderPreparingId,
+                                                status = s.status,
+                                             }).ToList();
+
+                        #region get orders according to status
+                        if (statusStr != "")
+                            prepOrders = prepOrders.Where(x => statusL.Contains(x.status)).OrderBy(x => x.orderNum).ToList();
+                        #endregion
+
+                        
+                        return TokenManager.GenerateToken(prepOrders.Count());
                     }
                 }
                 catch

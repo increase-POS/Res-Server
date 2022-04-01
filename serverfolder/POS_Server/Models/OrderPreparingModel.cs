@@ -27,6 +27,7 @@ namespace POS_Server.Models
         public decimal remainingTime { get; set; }
         public string invNum { get; set; }
         public string tables { get; set; }
+        public string waiter { get; set; }
         public List<itemOrderPreparingModel> items { get; set; }
     }
     public class itemOrderPreparingModel
