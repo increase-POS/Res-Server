@@ -874,6 +874,8 @@ namespace POS_Server.Controllers
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
                                             cashReturn = b.cashReturn,
+                                            shippingCost = b.shippingCost,
+                                            realShippingCost = b.realShippingCost,
                                         })
                     .ToList();
 
