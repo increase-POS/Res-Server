@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LinqKit;
+using Newtonsoft.Json;
 using POS_Server.Models;
 using POS_Server.Models.VM;
 using System;
@@ -106,9 +107,11 @@ namespace POS_Server.Controllers
             }
             else
             {
+                #region params
                 string statusStr = "";               
                 List<string> statusL = new List<string>();
                 int branchId = 0;
+                int duration = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -123,12 +126,27 @@ namespace POS_Server.Controllers
                     {
                         branchId =int.Parse(c.Value);
                     }
+                    else if (c.Type == "duration")
+                    {
+                        duration =int.Parse(c.Value);
+                    }
                 }
+                #endregion
                 try
                 {
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoices.branchId == branchId)
+                        var searchPredicate = PredicateBuilder.New<orderPreparing>();
+                        searchPredicate = searchPredicate.And(x => x.invoices.branchId == branchId);
+
+                        if(duration > 0)
+                        {
+                            DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-duration));
+                            searchPredicate = searchPredicate.And(x => x.createDate >= dt);
+                           // return dt.ToString();
+                        }
+
+                        var prepOrders = (from o in entity.orderPreparing.Where(searchPredicate)
                                           join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
                                           where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
                                           select new OrderPreparingModel()
