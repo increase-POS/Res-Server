@@ -369,6 +369,117 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [Route("GetTakAwayOrdersWithStatus")]
+        public string GetTakAwayOrdersWithStatus(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
+                int branchId = 0;
+                int duration = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "branchId")
+                    {
+                        branchId =int.Parse(c.Value);
+                    }
+                    else if (c.Type == "duration")
+                    {
+                        duration =int.Parse(c.Value);
+                    }
+                }
+                #endregion
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var searchPredicate = PredicateBuilder.New<invoices>();
+                        searchPredicate = searchPredicate.And(x => x.branchId == branchId);
+
+                        searchPredicate = searchPredicate.And(x => x.invType =="ts");
+                        if(duration > 0)
+                        {
+                            DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-duration));
+                            searchPredicate = searchPredicate.And(x => x.invDate >= dt);
+                        }
+
+                        var invoices = entity.invoices.Where(searchPredicate)
+                                                    .Select(x => new InvoiceModel() {
+                                                    invNumber = x.invNumber,                                                  
+                                                    invoiceId= x.invoiceId}).ToList();
+
+
+                        foreach(InvoiceModel inv in invoices)
+                        {
+                            var prepOrders = (from o in entity.orderPreparing.Where(x=> x.invoiceId == inv.invoiceId)
+                                              join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                              where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                              select new OrderPreparingModel()
+                                              {
+                                                  orderPreparingId = o.orderPreparingId,
+                                                  invoiceId = o.invoiceId,
+                                                  notes = o.notes,
+                                                  orderNum = o.orderNum,
+                                                  preparingTime = o.preparingTime,
+                                                  updateDate = o.updateDate,
+                                                  updateUserId = o.updateUserId,
+                                                  createDate = o.createDate,
+                                                  createUserId = o.createUserId,
+                                                  invNum = o.invoices.invNumber,
+                                                  items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
+                                                                                    .Select(x => new itemOrderPreparingModel()
+                                                                                    {
+                                                                                        itemOrderId = x.itemOrderId,
+                                                                                        itemName = x.itemsUnits.items.name,
+                                                                                        itemId = x.itemsUnits.items.itemId,
+                                                                                        itemUnitId = x.itemUnitId,
+                                                                                        quantity = x.quantity,
+                                                                                        createDate = x.createDate,
+                                                                                        updateDate = x.updateDate,
+                                                                                        createUserId = x.createUserId,
+                                                                                        updateUserId = x.updateUserId,
+                                                                                        categoryId = x.itemsUnits.items.categories.categoryId,
+                                                                                        categoryName = x.itemsUnits.items.categories.name,
+
+                                                                                    }).ToList(),
+                                                  status = s.status,
+                                              }).ToList();
+
+
+                            foreach (OrderPreparingModel o in prepOrders)
+                            {
+                                #region set inv status
+                                if (o.status != "Ready")
+                                {
+                                    inv.status = "Listed";
+                                    break;
+                                }
+                                inv.status = "Ready";
+                                #endregion
+
+                            }
+
+                        }
+
+                        
+                        return TokenManager.GenerateToken(invoices);
+                    }
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
          [HttpPost]
         [Route("GetCountHallOrders")]
         public string GetCountHallOrders(string token)
