@@ -95,7 +95,7 @@ namespace POS_Server.Controllers
                 }
             }
         }
-         [HttpPost]
+        [HttpPost]
         [Route("GetPreparingOrdersWithStatus")]
         public string GetPreparingOrdersWithStatus(string token)
         {
@@ -245,9 +245,10 @@ namespace POS_Server.Controllers
                 }
             }
         }
-         [HttpPost]
-        [Route("GetCountPreparingOrders")]
-        public string GetCountPreparingOrders(string token)
+
+        [HttpPost]
+        [Route("GetHallOrdersWithStatus")]
+        public string GetHallOrdersWithStatus(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -257,9 +258,11 @@ namespace POS_Server.Controllers
             }
             else
             {
+                #region params
                 string statusStr = "";               
                 List<string> statusL = new List<string>();
                 int branchId = 0;
+                int duration = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -274,12 +277,151 @@ namespace POS_Server.Controllers
                     {
                         branchId =int.Parse(c.Value);
                     }
+                    else if (c.Type == "duration")
+                    {
+                        duration =int.Parse(c.Value);
+                    }
                 }
+                #endregion
                 try
                 {
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoices.branchId == branchId)
+                        var searchPredicate = PredicateBuilder.New<orderPreparing>();
+                        searchPredicate = searchPredicate.And(x => x.invoices.branchId == branchId);
+
+                        if(duration > 0)
+                        {
+                            DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-duration));
+                            searchPredicate = searchPredicate.And(x => x.createDate >= dt);
+                           // return dt.ToString();
+                        }
+
+                        var prepOrders = (from o in entity.orderPreparing.Where(searchPredicate)
+                                          join i in entity.invoices on o.invoiceId equals i.invoiceId
+                                          join it in entity.invoiceTables on i.invoiceId equals it.invoiceId
+                                          join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                          where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                          select new OrderPreparingModel()
+                                             {
+                                                 orderPreparingId = o.orderPreparingId,
+                                                 invoiceId = o.invoiceId,
+                                                 notes = o.notes,
+                                                 orderNum = o.orderNum,
+                                                preparingTime =o.preparingTime,
+                                                 updateDate = o.updateDate,
+                                                 updateUserId = o.updateUserId,
+                                                createDate = o.createDate,
+                                                createUserId= o.createUserId,
+                                                invNum= o.invoices.invNumber,
+                                              waiter = entity.users.Where(x => x.userId == o.invoices.waiterId).Select(x => x.name).FirstOrDefault(),
+                                                items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
+                                                                                .Select(x => new itemOrderPreparingModel()
+                                                                                {
+                                                                                    itemOrderId = x.itemOrderId,
+                                                                                    itemName = x.itemsUnits.items.name,
+                                                                                    itemId = x.itemsUnits.items.itemId,
+                                                                                    itemUnitId = x.itemUnitId,
+                                                                                    quantity= x.quantity,
+                                                                                    createDate = x.createDate,
+                                                                                    updateDate = x.updateDate,
+                                                                                    createUserId = x.createUserId,
+                                                                                    updateUserId = x.updateUserId,
+                                                                                    categoryId =x.itemsUnits.items.categories.categoryId,
+                                                                                    categoryName = x.itemsUnits.items.categories.name,
+
+                                                                                }).ToList(),
+                                                status = s.status,
+                                             }).ToList();
+
+                        #region get orders according to status
+                        if (statusStr != "")
+                            prepOrders = prepOrders.Where(x => statusL.Contains(x.status)).OrderBy(x => x.orderNum).ToList();
+                        #endregion
+
+                        foreach (OrderPreparingModel o in prepOrders)
+                        {
+                            #region get invoice tables
+                            var tables = (from t in entity.tables.Where(x => x.isActive == 1)
+                                          join it in entity.invoiceTables.Where(x => x.invoiceId == o.invoiceId) on t.tableId equals it.tableId
+                                          select new TableModel()
+                                          {
+                                              tableId = t.tableId,
+                                              name = t.name,
+                                          }).ToList();
+                            string tablesNames = "";
+                            foreach (TableModel tabl in tables)
+                            {
+                                if (tablesNames == "")
+                                    tablesNames += tabl.name;
+                                else tablesNames += ", " + tabl.name;
+                            }
+                            o.tables = tablesNames;
+                            #endregion
+
+                        }
+                        return TokenManager.GenerateToken(prepOrders);
+                    }
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+         [HttpPost]
+        [Route("GetCountHallOrders")]
+        public string GetCountHallOrders(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
+                string statusStr = "";               
+                List<string> statusL = new List<string>();
+                int branchId = 0;
+                int duration = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "status")
+                    {
+                        statusStr = c.Value;
+                        string[] statusArray = statusStr.Split(',');
+                        foreach (string s in statusArray)
+                            statusL.Add(s.Trim());
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId =int.Parse(c.Value);
+                    }
+                    else if (c.Type == "duration")
+                    {
+                        duration = int.Parse(c.Value);
+                    }
+                }
+                #endregion
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var searchPredicate = PredicateBuilder.New<orderPreparing>();
+                        searchPredicate = searchPredicate.And(x => x.invoices.branchId == branchId);
+
+                        if (duration > 0)
+                        {
+                            DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-duration));
+                            searchPredicate = searchPredicate.And(x => x.createDate >= dt);
+                        }
+
+                        var prepOrders = (from o in entity.orderPreparing.Where(searchPredicate)
+                                          join i in entity.invoices on o.invoiceId equals i.invoiceId
+                                          join it in entity.invoiceTables on i.invoiceId equals it.invoiceId
                                           join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
                                           where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
                                           select new OrderPreparingModel()
