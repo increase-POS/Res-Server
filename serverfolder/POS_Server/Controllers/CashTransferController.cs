@@ -2855,16 +2855,42 @@ namespace POS_Server.Controllers
                                                shipUserId = b.shipUserId,
                                            }).ToList().OrderBy(b => b.deservedDate);
 
+
+                            List<InvoiceModel> res = new List<InvoiceModel>();
                             cashTransfer ct;
                             agents agent;
-                            if (invList.ToList().Count > 0)
+                            //get only with rc status
+                            if (payType == "feed")
+                            {
+                                foreach (InvoiceModel inv in invList)
+                                {
+                                    int invoiceId = inv.invoiceId;
+
+                                    var statusObj = entity.invoiceStatus.Where(x => x.invoiceId == invoiceId && x.status == "rc").FirstOrDefault();
+
+                                    if (statusObj != null)
+                                    {
+                                        int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+                                        inv.itemsCount = itemCount;
+                                        res.Add(inv);
+
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                res.AddRange(invList);
+                            }
+
+                            if (res.ToList().Count > 0)
                             {
                                 switch (payType)
                                 {
                                     #region payments
                                     case "pay"://get pw,p,sb invoices
 
-                                        foreach (InvoiceModel inv in invList)
+                                        foreach (InvoiceModel inv in res)
                                         {
                                             decimal paid = 0;
                                             agent = entity.agents.Find(agentId);
@@ -2874,7 +2900,7 @@ namespace POS_Server.Controllers
                                             if (amount >= inv.deserved)
                                             {
                                                 paid = (decimal)inv.deserved;
-                                                invObj.paid += (decimal)inv.deserved;
+                                                invObj.paid += inv.deserved;
                                                 invObj.deserved = 0;
                                                 amount -= (decimal)inv.deserved;
                                             }
@@ -2948,7 +2974,7 @@ namespace POS_Server.Controllers
                                     #endregion
                                     #region feed
                                     case "feed": //get s, pb
-                                        foreach (InvoiceModel inv in invList)
+                                        foreach (InvoiceModel inv in res)
                                         {
                                             agent = entity.agents.Find(agentId);
 
@@ -2958,7 +2984,7 @@ namespace POS_Server.Controllers
                                             if (amount >= inv.deserved)
                                             {
                                                 paid = (decimal)inv.deserved;
-                                                invObj.paid = (decimal)invObj.paid + (decimal)inv.deserved;
+                                                invObj.paid = invObj.paid + inv.deserved;
                                                 invObj.deserved = 0;
                                                 amount -= (decimal)inv.deserved;
                                             }
@@ -3120,324 +3146,6 @@ namespace POS_Server.Controllers
 
             }
 
-
-
-            //var re = Request;
-            //var headers = re.Headers;
-            //string token = "";
-
-            //if (headers.Contains("APIKey"))
-            //{
-            //    token = headers.GetValues("APIKey").First();
-            //}
-            //Validation validation = new Validation();
-            //bool valid = validation.CheckApiKey(token);
-
-            //if (valid)
-            //{
-            //    List<string> typesList = new List<string>();
-            //    string cashIds = "";
-            //    switch (payType)
-            //    {
-            //        case "pay"://get pw,pi,sb invoices
-
-            //            typesList.Add("pw");
-            //            typesList.Add("p");
-            //            typesList.Add("sb");
-            //            break;
-            //        case "feed": //get si, pb
-
-            //            typesList.Add("pb");
-            //            typesList.Add("s");
-            //            break;
-            //    }
-            //    cashTransfer cashTr = JsonConvert.DeserializeObject<cashTransfer>(cashTransfer, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
-            //    using (incposdbEntities entity = new incposdbEntities())
-            //    {
-            //        var invList = (from b in entity.invoices.Where(x => x.agentId == agentId && typesList.Contains(x.invType) && x.deserved > 0)
-            //                       select new InvoiceModel()
-            //                       {
-            //                           invoiceId = b.invoiceId,
-            //                           invNumber = b.invNumber,
-            //                           agentId = b.agentId,
-            //                           invType = b.invType,
-            //                           total = b.total,
-            //                           totalNet = b.totalNet,
-            //                           paid = b.paid,
-            //                           deserved = b.deserved,
-            //                           deservedDate = b.deservedDate,
-            //                           invDate = b.invDate,
-            //                           invoiceMainId = b.invoiceMainId,
-            //                           invCase = b.invCase,
-            //                           invTime = b.invTime,
-            //                           notes = b.notes,
-            //                           vendorInvNum = b.vendorInvNum,
-            //                           vendorInvDate = b.vendorInvDate,
-            //                           createUserId = b.createUserId,
-            //                           updateDate = b.updateDate,
-            //                           updateUserId = b.updateUserId,
-            //                           branchId = b.branchId,
-            //                           discountValue = b.discountValue,
-            //                           discountType = b.discountType,
-            //                           tax = b.tax,
-            //                           taxtype = b.taxtype,
-            //                           name = b.name,
-            //                           isApproved = b.isApproved,
-            //                           branchCreatorId = b.branchCreatorId,
-            //                           shippingCompanyId = b.shippingCompanyId,
-            //                           shipUserId = b.shipUserId,
-            //                       }).ToList().OrderBy(b => b.deservedDate);
-
-            //        cashTransfer ct;
-            //        agents agent;
-            //        if (invList.ToList().Count > 0)
-            //        {
-            //            switch (payType)
-            //            {
-            //                #region payments
-            //                case "pay"://get pw,p,sb invoices
-
-            //                    foreach (InvoiceModel inv in invList)
-            //                    {
-            //                        decimal paid = 0;
-            //                        agent = entity.agents.Find(agentId);
-            //                        decimal agentBalance = (decimal)agent.balance;
-            //                        var invObj = entity.invoices.Find(inv.invoiceId);
-            //                        cashTr.invId = inv.invoiceId;
-            //                        if (amount >= inv.deserved)
-            //                        {
-            //                            paid = (decimal)inv.deserved;
-            //                            invObj.paid += inv.deserved;
-            //                            invObj.deserved = 0;
-            //                            amount -= (decimal)inv.deserved;
-            //                        }
-            //                        else
-            //                        {
-            //                            paid = amount;
-            //                            invObj.paid = invObj.paid + amount;
-            //                            invObj.deserved -= amount;
-            //                            amount = 0;
-            //                        }
-            //                        cashTr.cash = paid;
-            //                        cashTr.createDate = DateTime.Now;
-            //                        cashTr.updateDate = DateTime.Now;
-            //                        cashTr.updateUserId = cashTr.createUserId;
-            //                        ct = entity.cashTransfer.Add(cashTr);
-
-            //                        // increase agent balance
-            //                        if (agent.balanceType == 0)
-            //                        {
-            //                            if (paid <= (decimal)agent.balance)
-            //                            {
-            //                                agent.balance = agentBalance - paid;
-            //                            }
-            //                            else
-            //                            {
-            //                                agent.balance = paid - agentBalance;
-            //                                agent.balanceType = 1;
-            //                            }
-            //                        }
-            //                        else
-            //                        {
-            //                            agent.balance = agentBalance + paid;
-            //                        }
-
-            //                        entity.SaveChanges();
-            //                        cashIds += ct.cashTransId + ",";
-            //                        if (amount == 0)
-            //                            break;
-            //                    }
-            //                    if (amount > 0) // save remain amount
-            //                    {
-            //                        agent = entity.agents.Find(agentId);
-            //                        decimal agentBalance = (decimal)agent.balance;
-            //                        cashTr.cash = amount;
-            //                        cashTr.invId = null;
-            //                        cashTr.createDate = DateTime.Now;
-            //                        cashTr.updateDate = DateTime.Now;
-            //                        cashTr.updateUserId = cashTr.createUserId;
-            //                        ct = entity.cashTransfer.Add(cashTr);
-
-            //                        // increase agent balance
-            //                        if (agent.balanceType == 0)
-            //                        {
-            //                            if (amount <= (decimal)agent.balance)
-            //                            {
-            //                                agent.balance = agentBalance - amount;
-            //                            }
-            //                            else
-            //                            {
-            //                                agent.balance = amount - agentBalance;
-            //                                agent.balanceType = 1;
-            //                            }
-            //                        }
-            //                        else
-            //                        {
-            //                            agent.balance = agentBalance + amount;
-            //                        }
-            //                        entity.SaveChanges();
-            //                    }
-            //                    break;
-            //                #endregion
-            //                #region feed
-            //                case "feed": //get s, pb
-            //                    foreach (InvoiceModel inv in invList)
-            //                    {
-            //                        agent = entity.agents.Find(agentId);
-
-            //                        decimal paid = 0;
-            //                        var invObj = entity.invoices.Find(inv.invoiceId);
-            //                        cashTr.invId = inv.invoiceId;
-            //                        if (amount >= inv.deserved)
-            //                        {
-            //                            paid = (decimal)inv.deserved;
-            //                            invObj.paid = invObj.paid + inv.deserved;
-            //                            invObj.deserved = 0;
-            //                            amount -= (decimal)inv.deserved;
-            //                        }
-            //                        else
-            //                        {
-            //                            paid = amount;
-            //                            invObj.paid = invObj.paid + amount;
-            //                            invObj.deserved -= amount;
-            //                            amount = 0;
-            //                        }
-            //                        cashTr.cash = paid;
-            //                        cashTr.createDate = DateTime.Now;
-            //                        cashTr.updateDate = DateTime.Now;
-            //                        cashTr.updateUserId = cashTr.createUserId;
-            //                        ct = entity.cashTransfer.Add(cashTr);
-
-            //                        // decrease agent balance
-            //                        if (agent.balanceType == 1)
-            //                        {
-            //                            if (paid <= (decimal)agent.balance)
-            //                            {
-            //                                agent.balance -= paid;
-            //                            }
-            //                            else
-            //                            {
-            //                                agent.balance = paid - agent.balance;
-            //                                agent.balanceType = 0;
-            //                            }
-            //                        }
-            //                        else
-            //                        {
-            //                            agent.balance += paid;
-            //                        }
-
-            //                        entity.SaveChanges();
-            //                        cashIds += ct.cashTransId + ",";
-            //                        if (amount == 0)
-            //                            break;
-            //                    }
-            //                    if (amount > 0) // save remain amount
-            //                    {
-            //                        agent = entity.agents.Find(agentId);
-
-            //                        cashTr.cash = amount;
-            //                        cashTr.invId = null;
-            //                        cashTr.createDate = DateTime.Now;
-            //                        cashTr.updateDate = DateTime.Now;
-            //                        cashTr.updateUserId = cashTr.createUserId;
-            //                        ct = entity.cashTransfer.Add(cashTr);
-            //                        // decrease agent balance
-            //                        if (agent.balanceType == 1)
-            //                        {
-            //                            if (amount <= (decimal)agent.balance)
-            //                            {
-            //                                agent.balance = agent.balance - amount;
-            //                            }
-            //                            else
-            //                            {
-            //                                agent.balance = amount - agent.balance;
-            //                                agent.balanceType = 0;
-            //                            }
-            //                        }
-            //                        else
-            //                        {
-            //                            agent.balance += amount;
-            //                        }
-
-            //                        entity.SaveChanges();
-            //                    }
-            //                    break;
-            //                    #endregion
-            //            }
-            //            return Ok(cashIds);
-            //        }
-            //        else
-            //        {
-            //            if (amount > 0) // save remain amount
-            //            {
-            //                switch (payType)
-            //                {
-            //                    case "pay":
-            //                        agent = entity.agents.Find(agentId);
-            //                        decimal agentBalance = (decimal)agent.balance;
-            //                        cashTr.cash = amount;
-            //                        cashTr.invId = null;
-            //                        cashTr.createDate = DateTime.Now;
-            //                        cashTr.updateDate = DateTime.Now;
-            //                        cashTr.updateUserId = cashTr.createUserId;
-            //                        ct = entity.cashTransfer.Add(cashTr);
-
-            //                        // increase agent balance
-            //                        if (agent.balanceType == 0)
-            //                        {
-            //                            if (amount <= (decimal)agent.balance)
-            //                            {
-            //                                agent.balance = agentBalance - amount;
-            //                            }
-            //                            else
-            //                            {
-            //                                agent.balance = amount - agentBalance;
-            //                                agent.balanceType = 1;
-            //                            }
-            //                        }
-            //                        else
-            //                        {
-            //                            agent.balance = agentBalance + amount;
-            //                        }
-            //                        entity.SaveChanges();
-            //                        break;
-            //                    case "feed":
-            //                        agent = entity.agents.Find(agentId);
-
-            //                        cashTr.cash = amount;
-            //                        cashTr.invId = null;
-            //                        cashTr.createDate = DateTime.Now;
-            //                        cashTr.updateDate = DateTime.Now;
-            //                        cashTr.updateUserId = cashTr.createUserId;
-            //                        ct = entity.cashTransfer.Add(cashTr);
-            //                        // decrease agent balance
-            //                        if (agent.balanceType == 1)
-            //                        {
-            //                            if (amount <= (decimal)agent.balance)
-            //                            {
-            //                                agent.balance = agent.balance - amount;
-            //                            }
-            //                            else
-            //                            {
-            //                                agent.balance = amount - agent.balance;
-            //                                agent.balanceType = 0;
-            //                            }
-            //                        }
-            //                        else
-            //                        {
-            //                            agent.balance += amount;
-            //                        }
-
-            //                        entity.SaveChanges();
-            //                        break;
-            //                }
-            //            }
-            //            return Ok("-1");
-            //        }
-            //    }
-            //}
-            //else
-            //    return Ok("false");
         }
 
 

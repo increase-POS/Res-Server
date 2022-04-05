@@ -1876,6 +1876,8 @@ namespace POS_Server.Controllers
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
+                    //var invoicesList = (from b in entity.invoices.Where(x => x.agentId == agentId && x.shipUserId == null && typesList.Contains(x.invType)
+                    //                    && x.deserved > 0 && x.branchCreatorId == branchId )
                     var invoicesList = (from b in entity.invoices.Where(x => x.agentId == agentId && typesList.Contains(x.invType)
                                                  && x.deserved > 0 && x.branchCreatorId == branchId &&
                                            ((x.shippingCompanyId == null && x.shipUserId == null && x.agentId != null) ||
@@ -1913,10 +1915,31 @@ namespace POS_Server.Controllers
                                             shipUserId = b.shipUserId,
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
+                                            realShippingCost = b.realShippingCost,
+                                            shippingCost = b.shippingCost,
                                         }).ToList();
 
 
-                    if (invoicesList != null)
+                    //get only with rc status
+                    if (type == "feed")
+                    {
+                        List<InvoiceModel> res = new List<InvoiceModel>();
+                        foreach (InvoiceModel inv in invoicesList)
+                        {
+                            int invoiceId = inv.invoiceId;
+
+                            var statusObj = entity.invoiceStatus.Where(x => x.invoiceId == invoiceId && x.status == "rc").FirstOrDefault();
+
+                            if (statusObj != null)
+                            {
+                                int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+                                inv.itemsCount = itemCount;
+                                res.Add(inv);
+                            }
+                        }
+                        return TokenManager.GenerateToken(res);
+                    }
+                    else
                     {
                         for (int i = 0; i < invoicesList.Count; i++)
                         {
@@ -1924,8 +1947,9 @@ namespace POS_Server.Controllers
                             int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                             invoicesList[i].itemsCount = itemCount;
                         }
+                        return TokenManager.GenerateToken(invoicesList);
                     }
-                    return TokenManager.GenerateToken(invoicesList);
+
                 }
             }
         }
