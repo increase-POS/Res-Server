@@ -319,7 +319,8 @@ namespace POS_Server.Controllers
                                 agentObj.createDate = DateTime.Now;
                                 agentObj.updateDate = DateTime.Now;
                                 agentObj.updateUserId = agentObj.createUserId;
-                                agent = agentEntity.Add(agentObj);
+                                agentObj.balanceType = 0;
+                               agent = agentEntity.Add(agentObj);
                             }
                         }
                         else
