@@ -161,6 +161,8 @@ namespace POS_Server.Controllers
                                                 createDate = o.createDate,
                                                 createUserId= o.createUserId,
                                                 invNum= o.invoices.invNumber,
+                                                invType= o.invoices.invType,
+                                                shippingCompanyId = o.invoices.shippingCompanyId,
                                               waiter = entity.users.Where(x => x.userId == o.invoices.waiterId).Select(x => x.name).FirstOrDefault(),
                                                 items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
                                                                                 .Select(x => new itemOrderPreparingModel()
