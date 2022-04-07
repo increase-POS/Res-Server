@@ -253,5 +253,55 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+
+        [HttpPost]
+        [Route("GetResSectorsByUserId")]
+        public string GetResSectorsByUserId(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+
+                int userId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var List = (from S in entity.residentialSectorsUsers
+                                join B in entity.residentialSectors on S.residentSecId equals B.residentSecId into JB
+                                join U in entity.users on S.userId equals U.userId into JU
+                                from JBB in JB.DefaultIfEmpty()
+                                from JUU in JU.DefaultIfEmpty()
+                                where S.userId == userId
+                                select new ResidentialSectorsModel()
+                                {
+                                    residentSecId = JBB.residentSecId,
+                                    name = JBB.name,
+                                    notes = JBB.notes,
+                                    isActive = JBB.isActive,
+                                    createDate = JBB.createDate,
+                                    updateDate = JBB.updateDate,
+                                    createUserId = JBB.createUserId,
+                                    updateUserId = JBB.updateUserId,
+
+                                }).ToList();
+                    return TokenManager.GenerateToken(List);
+
+
+                }
+            }
+        }
     }
 }
