@@ -281,6 +281,7 @@
     <Compile Include="Controllers\membershipsOffersController.cs" />
     <Compile Include="Controllers\invoicesClassMembershipsController.cs" />
     <Compile Include="Controllers\OrderPreparingController.cs" />
+    <Compile Include="Controllers\ResidentialSectorsUsersController.cs" />
     <Compile Include="Controllers\subscriptionFeesController.cs" />
     <Compile Include="Controllers\invoicesClassController.cs" />
     <Compile Include="Controllers\menuSettingsController.cs" />
@@ -378,6 +379,9 @@
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="inventoryItemLocation.cs">
+      <DependentUpon>PosModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="invoiceClassDiscount.cs">
       <DependentUpon>PosModel.tt</DependentUpon>
     </Compile>
     <Compile Include="invoiceOrder.cs">

@@ -30,7 +30,7 @@ namespace POS_Server.Models
         public byte balanceType { get; set; }
         public bool isAdmin { get; set; }
 
-      
+        public byte driverIsAvailable { get; set; }
         public Boolean canDelete { get; set; }
       
     }
