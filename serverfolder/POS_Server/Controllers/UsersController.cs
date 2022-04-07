@@ -63,6 +63,7 @@ namespace POS_Server.Controllers
                         balance = u.balance,
                         balanceType = u.balanceType,
                         isAdmin = u.isAdmin,
+                        driverIsAvailable=u.driverIsAvailable,
                     })
                     .ToList();
 
@@ -123,6 +124,7 @@ namespace POS_Server.Controllers
                         balance = u.balance,
                         balanceType = u.balanceType,
                         isAdmin = u.isAdmin,
+                        driverIsAvailable = u.driverIsAvailable,
                     })
                     .ToList();
 
@@ -204,6 +206,7 @@ namespace POS_Server.Controllers
                             balance = u.balance,
                             balanceType = u.balanceType,
                             isAdmin = u.isAdmin,
+                            driverIsAvailable = u.driverIsAvailable,
                         })
                         .ToList();
 
@@ -282,6 +285,7 @@ namespace POS_Server.Controllers
                         balance = u.balance,
                         balanceType = u.balanceType,
                         isAdmin = u.isAdmin,
+                        driverIsAvailable = u.driverIsAvailable,
 
                     })
                     .ToList();
@@ -356,6 +360,7 @@ namespace POS_Server.Controllers
                        u.balance,
                        u.balanceType,
                        u.isAdmin,
+                       u.driverIsAvailable,
                    })
                    .FirstOrDefault();
                     return TokenManager.GenerateToken(user);
@@ -596,7 +601,7 @@ namespace POS_Server.Controllers
                             userObj.balance = newObject.balance;
                             userObj.balanceType = newObject.balanceType;
                             userObj.isOnline = newObject.isOnline;
-
+                            userObj.driverIsAvailable = newObject.driverIsAvailable;
                             entity.SaveChanges().ToString();
                             message = userObj.userId.ToString();
                             return TokenManager.GenerateToken(message);
