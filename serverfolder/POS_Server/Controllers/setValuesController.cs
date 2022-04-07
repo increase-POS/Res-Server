@@ -239,6 +239,68 @@ namespace POS_Server.Controllers
             //return NotFound();
         }
 
+      [HttpPost]
+      [Route("GetBySetNameAndUserId")]
+      public string GetBySetNameAndUserId(string token)
+        {
+
+            
+            token = TokenManager.readToken(HttpContext.Current.Request); 
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+               string name = "";
+                int userId = 0;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "name")
+                    {
+                        name = c.Value;
+                    }
+                  else if(c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                }
+
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        setting sett = entity.setting.Where(s => s.name == name).FirstOrDefault();
+                        var list = (from s in entity.setValues where sett.settingId == s.settingId
+                            join us in entity.userSetValues on s.valId equals us.valId
+                            where us.userId == userId
+                             select new setValuesModel()
+                             {
+                                valId= s.valId,
+                                value= s.value,
+                                isDefault= s.isDefault,
+                                 isSystem= s.isSystem,
+                                settingId = s.settingId,
+                                 notes =s.notes,
+
+                             })
+                             .FirstOrDefault();
+                        return TokenManager.GenerateToken(list);
+
+                    }
+
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+
+            }
+        }
+
 
 
         public string GetBySettingName(string settingName)
@@ -602,8 +664,9 @@ namespace POS_Server.Controllers
 
                                 }
                                 sEntity.Add(newObject);
+                                 entity.SaveChanges();
                                 message = newObject.valId.ToString();
-                                entity.SaveChanges();
+                               
                             }
                             else
                             {
