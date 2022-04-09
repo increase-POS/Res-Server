@@ -2405,6 +2405,63 @@ namespace POS_Server.Controllers
                     return TokenManager.GenerateToken(lastNum);
             }
         }
+
+        [HttpPost]
+        [Route("GetLastDialyNumOfInv")]
+        public string GetLastDialyNumOfInv(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string invCode = "";
+                string invType = "";
+                int branchId = 0;
+                List<string> invTypeL = new List<string>();
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "invType")
+                    {
+                        invType = c.Value;
+                        string[] invTypeArray = invType.Split(',');
+                        foreach (string s in invTypeArray)
+                            invTypeL.Add(s.Trim());
+                    }
+                }
+                //List<string> numberList;
+                int lastNum = 0;
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    DateTime dateSearch = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
+
+                    lastNum = entity.invoices.Where(b => invTypeL.Contains(b.invType)
+                                                        && b.branchId == branchId
+                                                        && b.invDate >= dateSearch).Select(b => b.invNumber).Count();
+
+                    //for (int i = 0; i < numberList.Count; i++)
+                    //{
+                    //    string code = numberList[i];
+                    //    string s = code.Substring(code.LastIndexOf("-") + 1);
+                    //    numberList[i] = s;
+                    //}
+                    //if (numberList.Count > 0)
+                    //{
+                    //    numberList.Sort();
+                    //    lastNum = int.Parse(numberList[numberList.Count - 1]);
+                    //}
+                }
+                    return TokenManager.GenerateToken(lastNum);
+            }
+        }
         // for report
         [HttpPost]
         [Route("GetinvCountBydate")]

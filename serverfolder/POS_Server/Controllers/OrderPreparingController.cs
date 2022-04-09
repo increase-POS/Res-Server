@@ -523,13 +523,16 @@ namespace POS_Server.Controllers
                         searchPredicate = searchPredicate.And(x => x.branchId == branchId);
 
                         searchPredicate = searchPredicate.And(x => x.invType =="ts" || x.invType == "ss");
-                        searchPredicate = searchPredicate.And(x => x.shippingCompanyId != null);
-                       
+                        searchPredicate = searchPredicate.And(x => x.shipUserId != null);
+
 
                         var invoices = entity.invoices.Where(searchPredicate)
                                                     .Select(x => new InvoiceModel() {
-                                                    invNumber = x.invNumber,                                                    
-                                                    invoiceId= x.invoiceId}).ToList();
+                                                        invNumber = x.invNumber,
+                                                        invoiceId = x.invoiceId,
+                                                        shipUserId = x.shipUserId,
+                                                        shipUserName = entity.users.Where(y => y.userId == x.shipUserId).Select(y => y.name).SingleOrDefault(),
+                                                    }).ToList();
 
 
                         foreach(InvoiceModel inv in invoices)
