@@ -528,7 +528,7 @@ namespace POS_Server.Controllers
 
                         var invoices = entity.invoices.Where(searchPredicate)
                                                     .Select(x => new InvoiceModel() {
-                                                    invNumber = x.invNumber,                                                  
+                                                    invNumber = x.invNumber,                                                    
                                                     invoiceId= x.invoiceId}).ToList();
 
 
@@ -872,6 +872,59 @@ namespace POS_Server.Controllers
                        string res = saveInvoiceStatus(status, orderId);
                         if (res == "0")
                             message = "0";
+                    }
+                }
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+        [HttpPost]
+        [Route("EditInvoiceOrdersStatus")]
+        public string EditInvoiceOrdersStatus(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int invoiceId = 0;
+                string statusObject = "";
+                orderPreparingStatus status = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceId")
+                    {
+                        invoiceId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "status")
+                    {
+                        statusObject = c.Value.Replace("\\", string.Empty);
+                        statusObject = statusObject.Trim('"');
+                        status = JsonConvert.DeserializeObject<orderPreparingStatus>(statusObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
+
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var orders = entity.orderPreparing.Where(x => x.invoiceId == invoiceId).ToList();
+
+                        foreach(orderPreparing o in orders)
+                        {
+                            int orderId = o.orderPreparingId;
+                            string res = saveInvoiceStatus(status, orderId);
+                            if (res == "0")
+                                message = "0";
+                        }
                     }
                 }
                 catch
