@@ -489,7 +489,106 @@ namespace POS_Server.Controllers
                 }
             }
         }
+        [HttpPost]
+        [Route("getUsersForDelivery")]
+        public string getUsersForDelivery(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string job = "";
+            int customerId = 0;
 
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "job")
+                    {
+                        job = c.Value;
+                    }
+                    else if (c.Type == "customerId")
+                    {
+                        customerId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var residentSecId = entity.agents.Where(x => x.agentId == customerId).Select(x => x.residentSecId).SingleOrDefault();
+
+                    List<UserModel> usersList = new List<UserModel>();
+
+                    if (residentSecId != null)
+                    {
+                        usersList = (from u in entity.users.Where(u => u.userId != 1 && u.isActive == 1 && u.driverIsAvailable == 1)
+                                     join su in entity.residentialSectorsUsers on u.userId equals su.userId
+                                     select new UserModel
+                                     {
+                                         userId = u.userId,
+                                         username = u.username,
+                                         password = u.password,
+                                         name = u.name,
+                                         lastname = u.lastname,
+                                         fullName = u.name + " " + u.lastname,
+                                         job = u.job,
+                                         workHours = u.workHours,
+                                         createDate = u.createDate,
+                                         updateDate = u.updateDate,
+                                         createUserId = u.createUserId,
+                                         updateUserId = u.updateUserId,
+                                         phone = u.phone,
+                                         mobile = u.mobile,
+                                         email = u.email,
+                                         isActive = u.isActive,
+                                         isOnline = u.isOnline,
+                                         balance = u.balance,
+                                         balanceType = u.balanceType,
+                                         isAdmin = u.isAdmin,
+                                         driverIsAvailable = u.driverIsAvailable,
+                                     })
+                        .Distinct().ToList();
+                    }
+
+                    if (usersList.Count == 0)
+                    {
+                        usersList = entity.users.Where(u => u.userId != 1 && u.isActive == 1 && u.job == job && u.driverIsAvailable == 1)
+                        .Select(u => new UserModel
+                        {
+                            userId = u.userId,
+                            username = u.username,
+                            password = u.password,
+                            name = u.name,
+                            lastname = u.lastname,
+                            fullName = u.name + " " + u.lastname,
+                            job = u.job,
+                            workHours = u.workHours,
+                            createDate = u.createDate,
+                            updateDate = u.updateDate,
+                            createUserId = u.createUserId,
+                            updateUserId = u.updateUserId,
+                            phone = u.phone,
+                            mobile = u.mobile,
+                            email = u.email,
+                            notes = u.notes,
+                            address = u.address,
+                            isActive = u.isActive,
+                            isOnline = u.isOnline,
+                            image = u.image,
+                            balance = u.balance,
+                            balanceType = u.balanceType,
+                            isAdmin = u.isAdmin,
+                            driverIsAvailable = u.driverIsAvailable,
+                        })
+                        .ToList();
+                    }
+                    return TokenManager.GenerateToken(usersList);
+                }
+            }
+        }
 
         // add or update unit
         [HttpPost]
