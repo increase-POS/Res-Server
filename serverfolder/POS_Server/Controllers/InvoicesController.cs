@@ -2462,6 +2462,50 @@ namespace POS_Server.Controllers
                     return TokenManager.GenerateToken(lastNum);
             }
         }
+        [HttpPost]
+        [Route("clearInvoiceCouponsAndClasses")]
+        public string clearInvoiceCouponsAndClasses(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int invoiceId = 0;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceId")
+                    {
+                        invoiceId = int.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    // remove invoice coupons
+                    var oldList = entity.couponsInvoices.Where(p => p.InvoiceId == invoiceId);
+                    if (oldList.Count() > 0)
+                    {
+                        entity.couponsInvoices.RemoveRange(oldList);
+                    }
+
+                    // remove inv class
+                    var invClass = entity.invoiceClassDiscount.Where(x => x.invoiceId == invoiceId).FirstOrDefault();
+                    if (invClass != null)
+                        entity.invoiceClassDiscount.Remove(invClass);
+
+                    entity.SaveChanges();
+                   
+                }
+                message = "1";
+                return TokenManager.GenerateToken(message);
+            }
+        }
         // for report
         [HttpPost]
         [Route("GetinvCountBydate")]
