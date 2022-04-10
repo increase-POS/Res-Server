@@ -907,7 +907,7 @@ namespace POS_Server.Controllers
                     {
                         invoiceId = int.Parse(c.Value);
                     }
-                    else if (c.Type == "status")
+                    else if (c.Type == "statusObject")
                     {
                         statusObject = c.Value.Replace("\\", string.Empty);
                         statusObject = statusObject.Trim('"');
