@@ -5752,6 +5752,44 @@ namespace POS_Server.Controllers
             return message;
 
         }
+        [HttpPost]
+        [Route("getLastOpenTransNum")]
+        public string getLastOpenTransNum(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int posId = 0;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "posId")
+                    {
+                        posId = int.Parse(c.Value);
+                    }
+                }
+                try
+                {
+                    string numberList = "";
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        numberList = entity.cashTransfer.Where(b => b.posId == posId && b.transType == "o").ToList().OrderBy(b => b.cashTransId).LastOrDefault().transNum;
+                    }
+                    return TokenManager.GenerateToken(numberList);
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+
 
     }
 }
