@@ -2506,6 +2506,71 @@ namespace POS_Server.Controllers
                 return TokenManager.GenerateToken(message);
             }
         }
+
+        [HttpPost]
+        [Route("saveMemberShipClassDis")]
+        public string saveMemberShipClassDis(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
+                string classObject = "";
+                int invoiceId = 0;
+                invoicesClass Object = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemObject")
+                    {
+                        classObject = c.Value.Replace("\\", string.Empty);
+                        classObject = classObject.Trim('"');
+                        Object = JsonConvert.DeserializeObject<invoicesClass>(classObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                        //break;
+                    }
+                    else if (c.Type == "invoiceId")
+                    {
+                        invoiceId = int.Parse(c.Value);
+                    }
+
+                }
+                #endregion
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+
+                        var oldList = entity.invoiceClassDiscount.Where(p => p.invoiceId == invoiceId);
+                        if (oldList.Count() > 0)
+                        {
+                            entity.invoiceClassDiscount.RemoveRange(oldList);
+                        }
+
+                        invoiceClassDiscount inCls = new invoiceClassDiscount()
+                        {
+                            invoiceId = invoiceId,
+                            invClassId = Object.invClassId,
+                            discountType = Object.discountType,
+                            discountValue = Object.discountValue,
+                        };
+
+                        entity.invoiceClassDiscount.Add(inCls);
+
+                        entity.SaveChanges();
+                        message = inCls.invClassDiscountId.ToString();
+                    }
+                }
+                catch { message = "0"; }
+
+                return TokenManager.GenerateToken(message);
+            }
+        }
         // for report
         [HttpPost]
         [Route("GetinvCountBydate")]
