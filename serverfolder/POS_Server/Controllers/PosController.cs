@@ -552,6 +552,71 @@ var strP = TokenManager.GetPrincipal(token);
                 }
             }
         }
+
+        [HttpPost]
+        [Route("updateBoxState")]
+        public string updateBoxState(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int posId = 0;
+                int userId = 0;
+                string boxState = "";
+                string cashObject = "";
+                int isAdminClose = 0;
+                cashTransfer cashTransfer = new cashTransfer();
+                CashTransferController cc = new CashTransferController();
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "posId")
+                    {
+                        posId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "isAdminClose")
+                    {
+                        isAdminClose = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "state")
+                    {
+                        boxState = c.Value;
+                    }
+                    if (c.Type == "cashTransfer")
+                    {
+                        cashObject = c.Value.Replace("\\", string.Empty);
+                        cashObject = cashObject.Trim('"');
+                        cashTransfer = JsonConvert.DeserializeObject<cashTransfer>(cashObject, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                        break;
+                    }
+                }
+
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    pos pos = entity.pos.Find(posId);
+
+                    pos.boxState = boxState;
+                    pos.isAdminClose = (byte)isAdminClose;
+                    pos.updateUserId = userId;
+                    pos.updateDate = DateTime.Now;
+                    message = entity.SaveChanges().ToString();
+
+                    cc.addCashTransfer(cashTransfer);
+                    return TokenManager.GenerateToken(message);
+                }
+            }
+        }
+
         [HttpPost]
         [Route("GetUnactivated")]
         public string GetUnactivated(string token)
@@ -590,6 +655,7 @@ var strP = TokenManager.GetPrincipal(token);
             }
 
         }
+
 
     }
 }
