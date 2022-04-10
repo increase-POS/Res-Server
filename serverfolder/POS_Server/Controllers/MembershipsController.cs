@@ -804,6 +804,8 @@ namespace POS_Server.Controllers
                                          subscriptionFeesId = JSU.subscriptionFeesId,
                                          cashTransId = JCS.cashTransId,
                                          membershipId = M.membershipId,
+                                         isFreeDelivery = M.isFreeDelivery,
+                                         deliveryDiscountPercent = M.deliveryDiscountPercent,
                                          // agentId = G.agentId,
                                          startDate = JCS.startDate,
                                          endDate = JCS.endDate,
