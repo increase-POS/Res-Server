@@ -2771,6 +2771,7 @@ namespace POS_Server.Controllers
                     tmpInvoice.realShippingCost = newObject.realShippingCost;
                     tmpInvoice.reservationId = newObject.reservationId;
                     tmpInvoice.waiterId = newObject.waiterId;
+                    tmpInvoice.orderTime = newObject.orderTime;
                     entity.SaveChanges();
                     res = tmpInvoice.invoiceId;
                     return res;

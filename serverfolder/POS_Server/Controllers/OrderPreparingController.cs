@@ -535,6 +535,7 @@ namespace POS_Server.Controllers
                                            invoiceId = x.invoiceId,
                                            shipUserId = x.shipUserId,
                                            shipUserName = y.name,
+                                           orderTime = x.orderTime,
                                        }).ToList();
 
 
