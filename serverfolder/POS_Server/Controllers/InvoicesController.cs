@@ -876,6 +876,7 @@ namespace POS_Server.Controllers
                                             cashReturn = b.cashReturn,
                                             shippingCost = b.shippingCost,
                                             realShippingCost = b.realShippingCost,
+                                            orderTime = b.orderTime,
                                         })
                     .ToList();
 
