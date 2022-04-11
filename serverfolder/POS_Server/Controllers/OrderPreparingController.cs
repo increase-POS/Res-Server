@@ -526,13 +526,16 @@ namespace POS_Server.Controllers
                         searchPredicate = searchPredicate.And(x => x.shipUserId != null);
 
 
-                        var invoices = entity.invoices.Where(searchPredicate)
-                                                    .Select(x => new InvoiceModel() {
-                                                        invNumber = x.invNumber,
-                                                        invoiceId = x.invoiceId,
-                                                        shipUserId = x.shipUserId,
-                                                        shipUserName = entity.users.Where(y => y.userId == x.shipUserId).Select(y => y.name).SingleOrDefault(),
-                                                    }).ToList();
+                        var invoices =(from x in entity.invoices.Where(searchPredicate)
+                                       join u in entity.users on x.shipUserId equals u.userId into lj
+                                       from y in lj.DefaultIfEmpty()
+                                       select new InvoiceModel()
+                                       {
+                                           invNumber = x.invNumber,
+                                           invoiceId = x.invoiceId,
+                                           shipUserId = x.shipUserId,
+                                           shipUserName = y.name,
+                                       }).ToList();
 
 
                         foreach(InvoiceModel inv in invoices)
