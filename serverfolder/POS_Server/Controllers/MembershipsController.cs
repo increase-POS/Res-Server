@@ -47,7 +47,7 @@ namespace POS_Server.Controllers
                         subscriptionFee = S.subscriptionFees.FirstOrDefault().Amount,
                         isFreeDelivery = S.isFreeDelivery,
                         deliveryDiscountPercent = S.deliveryDiscountPercent,
-                        couponsCount = S.couponsMemberships.Where(X=>X.membershipId== S.membershipId).ToList().Count(),
+                        couponsCount = S.couponsMemberships.Where(X => X.membershipId == S.membershipId).ToList().Count(),
                         offersCount = S.membershipsOffers.Where(X => X.membershipId == S.membershipId).ToList().Count(),
                         invoicesClassesCount = S.invoicesClassMemberships.Where(X => X.membershipId == S.membershipId).ToList().Count(),
                         customersCount = S.agents.Where(X => X.membershipId == S.membershipId).ToList().Count(),
@@ -794,13 +794,14 @@ namespace POS_Server.Controllers
                                          //(M.subscriptionType == "f" ||
                                          //(M.subscriptionType == "o" && JCS.cashTransId > 0)
                                          //|| ((JCS.subscriptionType == "m" || JCS.subscriptionType == "y") && JCS.cashTransId > 0 && JCS.endDate >= dtnow && A.membershipId == JCS.membershipId)))
-                                     where (agentId == A.agentId && M.membershipId==A.membershipId)
+                                     where (agentId == A.agentId && M.membershipId == A.membershipId)
                                      select new AgenttoPayCashModel
                                      {
-                                       //  transNum = JCTR.transNum,
+                                         //  transNum = JCTR.transNum,
                                          //transType = JCTR.transType,
                                          // agentMembershipsId = AM.agentMembershipsId,
-                                         agentMembershipCashId = JCS.agentMembershipCashId,
+                                        // agentMembershipCashId = A.agentMembershipCash.Where(x => x.agentId==agentId && M.membershipId==x.membershipId).ToList().LastOrDefault().agentMembershipCashId,
+                                       agentMembershipCashId = JCS.agentMembershipCashId,
                                          subscriptionFeesId = JSU.subscriptionFeesId,
                                          cashTransId = JCS.cashTransId,
                                          membershipId = M.membershipId,
@@ -812,41 +813,54 @@ namespace POS_Server.Controllers
 
                                          Amount = JSU.Amount,
                                          membershipName = M.name,
-                                         membershipcode= M.code,
+                                         membershipcode = M.code,
                                          membershipisActive = M.isActive,
                                          monthsCount = JSU.monthsCount,
                                          subscriptionType = M.subscriptionType,
                                          updateDate = JCS.updateDate,
                                          createDate = JCS.createDate,
                                          cashsubscriptionType = JCS.subscriptionType,
-                                        invoicesClassesCount =  M.invoicesClassMemberships.Where(X => X.membershipId == M.membershipId).ToList().Count(),
-                                        offersCount = M.membershipsOffers.Where(x => x.membershipId == M.membershipId).ToList().Count(),
+                                         invoicesClassesCount = M.invoicesClassMemberships.Where(X => X.membershipId == M.membershipId).ToList().Count(),
+                                         offersCount = M.membershipsOffers.Where(x => x.membershipId == M.membershipId).ToList().Count(),
+                                         cachpayrowCount = entity.agentMembershipCash.Where(X => X.agentId == agentId).Count(),
                                      }
                                     ).OrderBy(X => X.createDate).ToList();
 
                         foreach (AgenttoPayCashModel row in List1)
                         {
-                            
-                            if (row.membershipisActive==0)
+
+                            if (row.membershipisActive == 0)
                             {
                                 row.membershipStatus = "notactive";
 
-                            }else if(row.subscriptionType == "o" && !(row.cashTransId > 0))
+                            }
+                            else if (row.subscriptionType == "o" && (!(row.cashTransId > 0) || row.cachpayrowCount == 0))
                             {
                                 row.membershipStatus = "notpayed";
                             }
-                            else if ((row.subscriptionType == "m" || row.subscriptionType == "y") && !(row.cashTransId > 0)  )
+                            else if ((row.subscriptionType == "m" || row.subscriptionType == "y") && (!(row.cashTransId > 0)|| row.cachpayrowCount == 0))
                             {
                                 row.membershipStatus = "notpayed";
+
+
                             }
-                            else if ((row.subscriptionType == "m" || row.subscriptionType == "y")   && !(row.endDate >= dtnow))
+                            else if ((row.subscriptionType == "m" || row.subscriptionType == "y") && !(row.endDate >= dtnow))
                             {
                                 row.membershipStatus = "expired";
                             }
                             else
                             {
-                                row.membershipStatus = "valid";
+                                if ((row.subscriptionType == "m" || row.subscriptionType == "y") && (row.cashTransId > 0) && !(row.endDate >= dtnow))
+                                {
+                                    row.membershipStatus = "expired";
+                                }
+                                else
+                                {
+                                    row.membershipStatus = "valid";
+                                }
+
                             }
+                           
 
                             row.couponsCount = entity.couponsMemberships.Where(x => x.membershipId == row.membershipId).Count();
 

@@ -8981,5 +8981,92 @@ else
         }
         #endregion
 
+        #region Kitchen
+
+        // preparing orders
+        [HttpPost]
+        [Route("GetPreparingOrders")]
+        public string GetInvoicePreparingOrders(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int invoiceId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceId")
+                    {
+                        invoiceId = int.Parse(c.Value);
+                    }
+                }
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == invoiceId)
+                                          join i in entity.itemOrderPreparing on o.orderPreparingId equals i.orderPreparingId
+                                          join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                          where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                          select new OrderPreparingModel()
+                                          {
+                                              orderPreparingId = o.orderPreparingId,
+                                              invoiceId = o.invoiceId,
+                                              notes = o.notes,
+                                              orderNum = o.orderNum,
+                                              preparingTime = o.preparingTime,
+                                              updateDate = o.updateDate,
+                                              updateUserId = o.updateUserId,
+                                              createDate = o.createDate,
+                                              createUserId = o.createUserId,
+                                              itemName = i.itemsUnits.items.name,
+                                              quantity = (int)i.quantity,
+                                              status = s.status,
+                                              itemUnitId = i.itemUnitId,
+                                          }).OrderBy(x => x.orderNum).ToList();
+
+                        int index = 1;
+                        foreach (OrderPreparingModel o in prepOrders)
+                        {
+                            o.num = index;
+                            index++;
+                            #region calculate remaining time
+                            if (o.preparingTime != null)
+                            {
+                                DateTime createDate = (DateTime)o.createDate;
+                                createDate = createDate.AddMinutes((double)o.preparingTime);
+
+                                if (createDate > DateTime.Now)
+                                {
+                                    TimeSpan remainingTime = createDate - DateTime.Now;
+                                    o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                }
+                                else
+                                {
+                                    o.remainingTime = 0;
+
+                                }
+                            }
+                            #endregion
+                        }
+                        return TokenManager.GenerateToken(prepOrders);
+                    }
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+
+
+
+        #endregion
+
     }
 }
