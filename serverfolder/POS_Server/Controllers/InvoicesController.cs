@@ -796,6 +796,7 @@ namespace POS_Server.Controllers
             }
             else
             {
+                #region params
                 string invType = "";
                 int createUserId = 0;
                 int duration = 0;
@@ -820,7 +821,7 @@ namespace POS_Server.Controllers
                         duration = int.Parse(c.Value);
                     }
                 }
-               
+                #endregion
 
                 using (incposdbEntities entity = new incposdbEntities())
                 {
@@ -877,6 +878,17 @@ namespace POS_Server.Controllers
                                             shippingCost = b.shippingCost,
                                             realShippingCost = b.realShippingCost,
                                             orderTime = b.orderTime,
+                                            tables = (from it in entity.invoiceTables.Where(y => y.invoiceId == b.invoiceId && y.isActive == 1)
+                                                      join ts in entity.tables on it.tableId equals ts.tableId
+                                                      select new TableModel()
+                                                      {
+                                                          tableId = it.tableId,
+                                                          name = ts.name,
+                                                          canDelete = false,
+                                                          isActive = it.isActive,
+                                                          createUserId = ts.createUserId,
+                                                          updateUserId = ts.updateUserId,
+                                                      }).ToList(),
                                         })
                     .ToList();
 

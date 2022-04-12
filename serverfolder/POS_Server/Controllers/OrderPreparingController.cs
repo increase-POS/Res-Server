@@ -902,6 +902,7 @@ namespace POS_Server.Controllers
             else
             {
                 int invoiceId = 0;
+                int shipUserId = 0;
                 string statusObject = "";
                 orderPreparingStatus status = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -910,6 +911,10 @@ namespace POS_Server.Controllers
                     if (c.Type == "invoiceId")
                     {
                         invoiceId = int.Parse(c.Value);
+                    }
+                    else if(c.Type == "shipUserId")
+                    {
+                        shipUserId = int.Parse(c.Value);
                     }
                     else if (c.Type == "statusObject")
                     {
@@ -923,6 +928,14 @@ namespace POS_Server.Controllers
                 {
                     using (incposdbEntities entity = new incposdbEntities())
                     {
+                        #region edit shipUserId
+                        var inv = entity.invoices.Find(invoiceId);
+                        inv.shipUserId = shipUserId;
+                        inv.updateDate = DateTime.Now;
+                        entity.SaveChanges();
+                        #endregion
+
+                        #region edit orders status
                         var orders = entity.orderPreparing.Where(x => x.invoiceId == invoiceId).ToList();
 
                         foreach(orderPreparing o in orders)
@@ -932,6 +945,7 @@ namespace POS_Server.Controllers
                             if (res == "0")
                                 message = "0";
                         }
+                        #endregion
                     }
                 }
                 catch
