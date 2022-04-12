@@ -876,6 +876,7 @@ namespace POS_Server.Controllers
                                             manualDiscountValue = b.manualDiscountValue,
                                             cashReturn = b.cashReturn,
                                             shippingCost = b.shippingCost,
+                                            shippingCostDiscount = b.shippingCostDiscount,
                                             realShippingCost = b.realShippingCost,
                                             orderTime = b.orderTime,
                                             tables = (from it in entity.invoiceTables.Where(y => y.invoiceId == b.invoiceId && y.isActive == 1)
@@ -2782,6 +2783,7 @@ namespace POS_Server.Controllers
                     tmpInvoice.cashReturn = newObject.cashReturn;
                     tmpInvoice.shippingCost = newObject.shippingCost;
                     tmpInvoice.realShippingCost = newObject.realShippingCost;
+                    tmpInvoice.shippingCostDiscount = newObject.shippingCostDiscount;
                     tmpInvoice.reservationId = newObject.reservationId;
                     tmpInvoice.waiterId = newObject.waiterId;
                     tmpInvoice.orderTime = newObject.orderTime;

@@ -55,6 +55,9 @@ namespace POS_Server.Models
         public Nullable<long> reservationId { get; set; }
         public Nullable<int> waiterId { get; set; }
         public Nullable<System.DateTime> orderTime { get; set; }
+        public Nullable<decimal> shippingCostDiscount { get; set; }
+
+
         public IEnumerable<TableModel> tables { get; set; }
     }
 
