@@ -1071,6 +1071,7 @@ namespace POS_Server.Controllers
                     statusObject.orderPreparingId = preparingOrderId;
                     statusObject.isActive = 1;
                     statusObject.updateUserId = statusObject.createUserId;
+                    statusObject.createDate = statusObject.updateDate = DateTime.Now;
                     entity.orderPreparingStatus.Add(statusObject);
                     entity.SaveChanges();
                     message = statusObject.orderStatusId.ToString();                   
