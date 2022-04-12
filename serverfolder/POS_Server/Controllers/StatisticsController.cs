@@ -4338,7 +4338,7 @@ else
 
         }
 
-      
+
 
         // حركة الاصناف الخارجية -مع العملاء والموردين
         [HttpPost]
@@ -4523,7 +4523,7 @@ else
 
             }
 
-           
+
         }
 
         [HttpPost]
@@ -5621,7 +5621,7 @@ else
                                                                 //*updateUserLName = jucc.lastname,
                                                                 updateUserAcc = jucc.username,
                                                                 //*createUserJob = jucc.job,
-                                                              cardName = jcrd.name,
+                                                                cardName = jcrd.name,
                                                                 //*bondDeserveDate = jbbo.deserveDate,
                                                                 //*bondIsRecieved = jbbo.isRecieved,
                                                                 agentCompany = jaa.company,
@@ -5772,7 +5772,7 @@ else
                                                                 createUserJob = jucc.job,
                                                                 cardName = jcrd.name,
                                                                 bondDeserveDate = jbbo.deserveDate,
-                                                              //  bondIsRecieved = jbbo.isRecieved,
+                                                                //  bondIsRecieved = jbbo.isRecieved,
                                                                 agentCompany = jaa.company,
                                                                 shippingCompanyId = C.shippingCompanyId,
                                                                 shippingCompanyName = C.shippingCompanies.name,
@@ -5817,7 +5817,7 @@ else
 
             }
 
-       
+
         }
         // المقبوضات
         [HttpPost]
@@ -6240,7 +6240,7 @@ else
 
             }
 
-    
+
         }
 
         // حركات ال POS
@@ -6281,8 +6281,8 @@ else
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         List<CashTransferModel> cachlist = (from C in entity.cashTransfer
-                                                            //join b in entity.banks on C.bankId equals b.bankId into jb
-                                                            //join a in entity.agents on C.agentId equals a.agentId into ja
+                                                                //join b in entity.banks on C.bankId equals b.bankId into jb
+                                                                //join a in entity.agents on C.agentId equals a.agentId into ja
                                                             join p in entity.pos on C.posId equals p.posId into jp
                                                             join pc in entity.pos on C.posIdCreator equals pc.posId into jpcr
                                                             join u in entity.users on C.userId equals u.userId into ju
@@ -6300,9 +6300,9 @@ else
                                                             from jucc in juc.DefaultIfEmpty()
                                                             from jupdateusr in jup.DefaultIfEmpty()
 
-                                                            //from jcrd in jcr.DefaultIfEmpty()
-                                                            //from jbbo in jbo.DefaultIfEmpty()
-                                                            //from jssh in jsh.DefaultIfEmpty()
+                                                                //from jcrd in jcr.DefaultIfEmpty()
+                                                                //from jbbo in jbo.DefaultIfEmpty()
+                                                                //from jssh in jsh.DefaultIfEmpty()
                                                             select new CashTransferModel()
                                                             {
                                                                 cashTransId = C.cashTransId,
@@ -6342,7 +6342,7 @@ else
                                                                 createUserJob = jucc.job,
                                                                 //cardName = jcrd.name,
                                                                 //bondDeserveDate = jbbo.deserveDate,
-                                                              //  bondIsRecieved = jbbo.isRecieved,
+                                                                //  bondIsRecieved = jbbo.isRecieved,
                                                                 shippingCompanyId = C.shippingCompanyId,
                                                                 //shippingCompanyName = jssh.name,
                                                                 branchCreatorId = jpcc.branchId,
@@ -6480,7 +6480,7 @@ else
                                             //*createUserId = C.createUserId,
                                             //*notes = C.notes,
                                             //*posIdCreator = C.posIdCreator,
-                                            isConfirm =(byte?) C.isConfirm,/////////////////////////
+                                            isConfirm = (byte?)C.isConfirm,/////////////////////////
                                             cashTransIdSource = C.cashTransIdSource,
                                             side = C.side,
 
@@ -6505,7 +6505,7 @@ else
                                             //*createUserJob = jucc.job,
                                             cardName = jcrd.name,
                                             //*bondDeserveDate = jbbo.deserveDate,
-                                            bondIsRecieved = (byte?)jbbo.isRecieved ,////////////////////////
+                                            bondIsRecieved = (byte?)jbbo.isRecieved,////////////////////////
 
                                             //*agentCompany = jaa.company,
                                             shippingCompanyId = C.shippingCompanyId,
@@ -6529,7 +6529,7 @@ else
                                             //invAgentId = jinvv.agentId,
                                             //invAgentName = jinvv.agents.name,
 
-                                            invAgentId = C.invId==null? C.agentId: jinvv.agentId,
+                                            invAgentId = C.invId == null ? C.agentId : jinvv.agentId,
                                             invAgentName = C.invId == null ? jaa.name : jinvv.agents.name,
 
                                             invShippingCompanyName = jinvv.shippingCompanies.name,
@@ -6565,12 +6565,12 @@ else
                 catch (Exception ex)
                 {
                     return TokenManager.GenerateToken(ex.ToString());
-                 //   return TokenManager.GenerateToken("0");
+                    //   return TokenManager.GenerateToken("0");
                 }
 
             }
 
-  
+
         }
 
 
@@ -6774,7 +6774,7 @@ else
 
             }
 
- 
+
         }
 
 
@@ -7486,7 +7486,7 @@ else
 
             }
 
-   
+
         }
 
         // يومية فواتير المشتريات العامة في قسم التقارير
@@ -7801,7 +7801,7 @@ else
 
             }
 
-        
+
         }
 
         // يومية الصندوق
@@ -8135,7 +8135,7 @@ else
 
             }
 
-        
+
         }
 
         // الارباح
@@ -8933,25 +8933,25 @@ else
         //    return avgtotal;
 
         //}
-        public decimal AvgPurPrice(int itemUnitId, int itemId,decimal? smallavgprice)
+        public decimal AvgPurPrice(int itemUnitId, int itemId, decimal? smallavgprice)
         {
-          
+
 
             decimal avgPrice = 0;
-            
+
             using (incposdbEntities entity = new incposdbEntities())
             {
                 var itemUnits = (from i in entity.itemsUnits where (i.itemId == itemId) select (i.itemUnitId)).ToList();
 
-           
+
 
                 var smallestUnitId = (from iu in entity.itemsUnits
                                       where (itemUnits.Contains((int)iu.itemUnitId) && iu.unitId == iu.subUnitId)
                                       select iu.itemUnitId).FirstOrDefault();
 
-              
+
                 if (itemUnitId == smallestUnitId || smallestUnitId == null || smallestUnitId == 0)
-                    return ( decimal) smallavgprice;
+                    return (decimal)smallavgprice;
                 else
                 {
                     avgPrice = ((decimal)smallavgprice) * getUpperUnitValue(smallestUnitId, itemUnitId);
@@ -8980,13 +8980,13 @@ else
             }
         }
         #endregion
-
+        // 
         #region Kitchen
 
         // preparing orders
         [HttpPost]
         [Route("GetPreparingOrders")]
-        public string GetInvoicePreparingOrders(string token)
+        public string GetPreparingOrders(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -8996,77 +8996,107 @@ else
             }
             else
             {
-                int invoiceId = 0;
+                //  int invoiceId = 0;
+                int mainBranchId = 0;
+                int userId = 0;
+
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
-                    if (c.Type == "invoiceId")
+
+                    if (c.Type == "mainBranchId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        mainBranchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
                     }
                 }
                 try
                 {
+                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == invoiceId)
+                        List<OrderPreparingSTSModel> prepOrders1 = (from o in entity.orderPreparing
                                           join i in entity.itemOrderPreparing on o.orderPreparingId equals i.orderPreparingId
                                           join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
-                                          where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
-                                          select new OrderPreparingModel()
+                                          where (brIds.Contains((int)o.invoices.branchId)) && (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                          select new OrderPreparingSTSModel()
                                           {
+
                                               orderPreparingId = o.orderPreparingId,
                                               invoiceId = o.invoiceId,
                                               notes = o.notes,
                                               orderNum = o.orderNum,
                                               preparingTime = o.preparingTime,
-                                              updateDate = o.updateDate,
-                                              updateUserId = o.updateUserId,
-                                              createDate = o.createDate,
-                                              createUserId = o.createUserId,
+                                              updateDate = s.updateDate,
+                                              updateUserId = s.updateUserId,
+                                              createDate = s.createDate,
+                                              createUserId = s.createUserId,
                                               itemName = i.itemsUnits.items.name,
                                               quantity = (int)i.quantity,
                                               status = s.status,
                                               itemUnitId = i.itemUnitId,
+                                              branchId = o.invoices.branchId,
+                                              branchName = o.invoices.branches.name,
+                                              categoryId = i.itemsUnits.items.categoryId,
+                                              categoryName = i.itemsUnits.items.categories.name,
+                                              invNumber = o.invoices.invNumber,
+                                              tagId = i.itemsUnits.items.tagId,
+                                              tagName = i.itemsUnits.items.tags.tagName,
+                                              listedDate = entity.orderPreparingStatus.Where(X => X.orderPreparingId == o.orderPreparingId).OrderBy(X => X.orderStatusId).Select(X => X.createDate).FirstOrDefault().Value,
+
                                           }).OrderBy(x => x.orderNum).ToList();
 
-                        int index = 1;
-                        foreach (OrderPreparingModel o in prepOrders)
+
+                        List<OrderPreparingSTSModel> prepOrders = prepOrders1.GroupBy(X => X.orderPreparingId).SelectMany(grouping => grouping.Take(1)).ToList();
+
+                        //int index = 1;
+                        foreach (OrderPreparingSTSModel o in prepOrders)
                         {
-                            o.num = index;
-                            index++;
-                            #region calculate remaining time
-                            if (o.preparingTime != null)
+                            if(o.createDate==null || o.listedDate == null)
                             {
-                                DateTime createDate = (DateTime)o.createDate;
-                                createDate = createDate.AddMinutes((double)o.preparingTime);
-
-                                if (createDate > DateTime.Now)
-                                {
-                                    TimeSpan remainingTime = createDate - DateTime.Now;
-                                    o.remainingTime = (decimal)remainingTime.TotalMinutes;
-                                }
-                                else
-                                {
-                                    o.remainingTime = 0;
-
-                                }
+                                o.realDuration = 0;
                             }
-                            #endregion
+                            else
+                            {
+                                TimeSpan remainingTime = (DateTime)o.createDate - (DateTime)o.listedDate;
+                                o.realDuration = (int)remainingTime.TotalMinutes;
+                            }
+                        
+                            //  o.num = index;
+                            //index++;
+                            //#region calculate remaining time
+                            //if (o.preparingTime != null)
+                            //{
+                            //    DateTime createDate = (DateTime)o.createDate;
+                            //    createDate = createDate.AddMinutes((double)o.preparingTime);
+
+                            //    if (createDate > DateTime.Now)
+                            //    {
+                            //        TimeSpan remainingTime = createDate - DateTime.Now;
+                            //        o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                            //    }
+                            //    else
+                            //    {
+                            //        o.remainingTime = 0;
+
+                            //    }
+                            //}
+                            
                         }
                         return TokenManager.GenerateToken(prepOrders);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return TokenManager.GenerateToken("0");
+                    return TokenManager.GenerateToken(ex.ToString());
                 }
             }
         }
+#endregion
 
-
-
-        #endregion
 
     }
 }
