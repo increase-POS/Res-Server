@@ -43,6 +43,8 @@ namespace POS_Server.Models
         public Nullable<int> shipUserId { get; set; }
         public string agentName { get; set; }
         public string shipUserName { get; set; }
+        public string shippingCompanyName { get; set; }
+
         public string status { get; set; }
         public int invStatusId { get; set; }
         public decimal manualDiscountValue { get; set; }

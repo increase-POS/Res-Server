@@ -417,7 +417,10 @@ namespace POS_Server.Controllers
                         var invoices = entity.invoices.Where(searchPredicate)
                                                     .Select(x => new InvoiceModel() {
                                                     invNumber = x.invNumber,                                                  
-                                                    invoiceId= x.invoiceId}).ToList();
+                                                    invoiceId= x.invoiceId,
+                                                    shippingCompanyName = x.shippingCompanies.name,
+                                                    agentName = x.agents.name,
+                                                    }).ToList();
 
 
                         foreach(InvoiceModel inv in invoices)
@@ -437,22 +440,6 @@ namespace POS_Server.Controllers
                                                   createDate = o.createDate,
                                                   createUserId = o.createUserId,
                                                   invNum = o.invoices.invNumber,
-                                                  items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
-                                                                                    .Select(x => new itemOrderPreparingModel()
-                                                                                    {
-                                                                                        itemOrderId = x.itemOrderId,
-                                                                                        itemName = x.itemsUnits.items.name,
-                                                                                        itemId = x.itemsUnits.items.itemId,
-                                                                                        itemUnitId = x.itemUnitId,
-                                                                                        quantity = x.quantity,
-                                                                                        createDate = x.createDate,
-                                                                                        updateDate = x.updateDate,
-                                                                                        createUserId = x.createUserId,
-                                                                                        updateUserId = x.updateUserId,
-                                                                                        categoryId = x.itemsUnits.items.categories.categoryId,
-                                                                                        categoryName = x.itemsUnits.items.categories.name,
-
-                                                                                    }).ToList(),
                                                   status = s.status,
                                               }).ToList();
 
