@@ -248,7 +248,7 @@ namespace POS_Server.Controllers
                 }
 
             }
-
+            #region old
             //       var re = Request;
             //       var headers = re.Headers;
             //       string token = "";
@@ -422,6 +422,7 @@ namespace POS_Server.Controllers
             //       }
             //       else
             //           return NotFound();
+            #endregion
         }
 
         [HttpPost]
@@ -990,7 +991,7 @@ namespace POS_Server.Controllers
                 }
 
             }
-
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -1057,6 +1058,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return NotFound();
+            #endregion
         }
 
 
@@ -1144,6 +1146,7 @@ namespace POS_Server.Controllers
                 }
 
             }
+            #region old
             //      var re = Request;
             //      var headers = re.Headers;
             //      string token = "";
@@ -1208,6 +1211,7 @@ namespace POS_Server.Controllers
             //      }
             //      else
             //          return NotFound();
+            #endregion
         }
 
         // GET api/Agent
@@ -1299,7 +1303,7 @@ namespace POS_Server.Controllers
                 }
 
             }
-
+            #region
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -1359,6 +1363,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return NotFound();
+            #endregion
         }
 
         // add or update agent
@@ -1500,6 +1505,8 @@ namespace POS_Server.Controllers
                 message = "0";
                 return TokenManager.GenerateToken(message);
             }
+
+            #region old
             // return TokenManager.GenerateToken(message);
 
 
@@ -1613,7 +1620,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return 0;
-
+            #endregion
         }
 
 
@@ -1777,7 +1784,7 @@ namespace POS_Server.Controllers
 
             }
 
-
+            #region old
             //string type = "all";
 
             //var re = Request;
@@ -1919,6 +1926,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return NotFound();
+            #endregion
         }
 
         [HttpPost]
@@ -2003,7 +2011,7 @@ namespace POS_Server.Controllers
 
 
             }
-
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -2065,6 +2073,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return NotFound();
+            #endregion
         }
 
 
@@ -2203,6 +2212,7 @@ namespace POS_Server.Controllers
 
 
             }
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -2309,6 +2319,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return NotFound();
+            #endregion
         }
 
         public List<CashTransferModel> Getpostransmodel(int cashTransId)
@@ -2529,6 +2540,7 @@ namespace POS_Server.Controllers
 
 
             }
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -2612,6 +2624,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return NotFound();
+            #endregion
         }
 
 
@@ -2713,6 +2726,7 @@ namespace POS_Server.Controllers
 
 
             }
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -2795,6 +2809,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return NotFound();
+            #endregion
         }
 
 
@@ -3978,6 +3993,7 @@ namespace POS_Server.Controllers
                 }
                 return TokenManager.GenerateToken("0");
             }
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -4180,6 +4196,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return Ok("false");
+            #endregion
         }
         /// <summary>
         /// //////////////
@@ -4320,7 +4337,23 @@ namespace POS_Server.Controllers
                                         ct = entity.cashTransfer.Add(cashTr);
                                         cashIds += ct.cashTransId + ",";
                                         // decrease agent balance
-                                        if (agent.balanceType == 0)
+                                        //if (agent.balanceType == 0)
+                                        //{
+                                        //    if (paid <= (decimal)agent.balance)
+                                        //    {
+                                        //        agent.balance = agent.balance - paid;
+                                        //    }
+                                        //    else
+                                        //    {
+                                        //        agent.balance = paid - agent.balance;
+                                        //        agent.balanceType = 1;
+                                        //    }
+                                        //}
+                                        //else if (agent.balanceType == 1)
+                                        //{
+                                        //    agent.balance += paid;
+                                        //}
+                                        if (agent.balanceType == 1)
                                         {
                                             if (paid <= (decimal)agent.balance)
                                             {
@@ -4329,10 +4362,10 @@ namespace POS_Server.Controllers
                                             else
                                             {
                                                 agent.balance = paid - agent.balance;
-                                                agent.balanceType = 1;
+                                                agent.balanceType = 0;
                                             }
                                         }
-                                        else if (agent.balanceType == 1)
+                                        else if (agent.balanceType == 0)
                                         {
                                             agent.balance += paid;
                                         }
@@ -4361,7 +4394,7 @@ namespace POS_Server.Controllers
                 //  return TokenManager.GenerateToken("0");
             }
 
-
+            #region old
             //                var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -4471,7 +4504,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return Ok("false");
-
+            #endregion
         }
 
         /// <summary>
@@ -4576,7 +4609,23 @@ namespace POS_Server.Controllers
                                         ct = entity.cashTransfer.Add(cashTr);
                                         cashIds += ct.cashTransId + ",";
                                         // decrease user balance
-                                        if (user.balanceType == 0)
+                                        //if (user.balanceType == 0)
+                                        //{
+                                        //    if (paid <= (decimal)user.balance)
+                                        //    {
+                                        //        user.balance = user.balance - paid;
+                                        //    }
+                                        //    else
+                                        //    {
+                                        //        user.balance = paid - user.balance;
+                                        //        user.balanceType = 1;
+                                        //    }
+                                        //}
+                                        //else if (user.balanceType == 1)
+                                        //{
+                                        //    user.balance += paid;
+                                        //}
+                                        if (user.balanceType == 1)
                                         {
                                             if (paid <= (decimal)user.balance)
                                             {
@@ -4585,10 +4634,10 @@ namespace POS_Server.Controllers
                                             else
                                             {
                                                 user.balance = paid - user.balance;
-                                                user.balanceType = 1;
+                                                user.balanceType = 0;
                                             }
                                         }
-                                        else if (user.balanceType == 1)
+                                        else if (user.balanceType == 0)
                                         {
                                             user.balance += paid;
                                         }
@@ -4617,7 +4666,7 @@ namespace POS_Server.Controllers
                 //  return TokenManager.GenerateToken("0");
             }
 
-
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -4688,7 +4737,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return Ok("false");
-
+            #endregion
         }
 
         /// <summary>
@@ -4792,7 +4841,23 @@ namespace POS_Server.Controllers
                                         ct = entity.cashTransfer.Add(cashTr);
                                         cashIds += ct.cashTransId + ",";
                                         // decrease shippingCompany balance
-                                        if (shippingCompany.balanceType == 0)
+                                        //if (shippingCompany.balanceType == 0)
+                                        //{
+                                        //    if (paid <= (decimal)shippingCompany.balance)
+                                        //    {
+                                        //        shippingCompany.balance = shippingCompany.balance - paid;
+                                        //    }
+                                        //    else
+                                        //    {
+                                        //        shippingCompany.balance = paid - shippingCompany.balance;
+                                        //        shippingCompany.balanceType = 1;
+                                        //    }
+                                        //}
+                                        //else if (shippingCompany.balanceType == 1)
+                                        //{
+                                        //    shippingCompany.balance += paid;
+                                        //}
+                                        if (shippingCompany.balanceType == 1)
                                         {
                                             if (paid <= (decimal)shippingCompany.balance)
                                             {
@@ -4801,10 +4866,10 @@ namespace POS_Server.Controllers
                                             else
                                             {
                                                 shippingCompany.balance = paid - shippingCompany.balance;
-                                                shippingCompany.balanceType = 1;
+                                                shippingCompany.balanceType = 0;
                                             }
                                         }
-                                        else if (shippingCompany.balanceType == 1)
+                                        else if (shippingCompany.balanceType == 0)
                                         {
                                             shippingCompany.balance += paid;
                                         }
@@ -4834,7 +4899,7 @@ namespace POS_Server.Controllers
                 //  return TokenManager.GenerateToken("0");
             }
 
-
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -4905,9 +4970,10 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return Ok("false");
-
+            #endregion
         }
 
+        #region old
         //[HttpPost]
         //[Route("payOrderInvoice")]
         //public IHttpActionResult payOrderInvoice(int invoiceId, int invStatusId , decimal amount, string payType, string cashTransfer)
@@ -5009,6 +5075,8 @@ namespace POS_Server.Controllers
         //        return Ok("false");
 
         //}
+        #endregion
+
         [HttpPost]
         [Route("payOrderInvoice")]
         public string payOrderInvoice(string token)
@@ -5187,6 +5255,7 @@ namespace POS_Server.Controllers
                 //  return TokenManager.GenerateToken("0");
             }
 
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -5297,7 +5366,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return Ok("false");
-
+            #endregion
         }
         [HttpPost]
         [Route("GetLastNumOfCash")]
@@ -5374,6 +5443,7 @@ namespace POS_Server.Controllers
                 //  return TokenManager.GenerateToken("0");
             }
 
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -5407,6 +5477,7 @@ namespace POS_Server.Controllers
             //    return Ok(lastNum);
             //}
             //return NotFound();
+            #endregion
         }
         [HttpPost]
         [Route("GetLastNumOfDocNum")]
@@ -5482,7 +5553,7 @@ namespace POS_Server.Controllers
 
                 //  return TokenManager.GenerateToken("0");
             }
-
+            #region old
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -5516,7 +5587,10 @@ namespace POS_Server.Controllers
             //    return Ok(lastNum);
             //}
             //return NotFound();
+            #endregion
         }
+
+        #region old
 
         //public string Save(cashTransfer newObject)
         //{
@@ -5634,7 +5708,7 @@ namespace POS_Server.Controllers
         //    return message.ToString();
 
         //}
-
+        #endregion
 
         public int Save(cashTransfer newObject)
         {
