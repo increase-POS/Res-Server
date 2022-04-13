@@ -9095,7 +9095,289 @@ else
                 }
             }
         }
-#endregion
+
+
+        //فواتير الصرف من المخزن الى المطبخ 
+        [HttpPost]
+        [Route("GetSpendingRequest")]
+        public string GetSpendingRequest(string token)
+        {
+
+            // public ResponseVM GetPurinv(string token)
+
+            //int mainBranchId, int userId
+
+
+
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int mainBranchId = 0;
+                int userId = 0;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "mainBranchId")
+                    {
+                        mainBranchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+
+                }
+                // DateTime cmpdate = DateTime.Now.AddDays(newdays);
+                try
+                {
+
+                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+
+                        var invListm = (from I in entity.invoices
+
+                                            //join B in entity.branches on I.branchId equals B.branchId into JB
+                                        join BC in entity.branches on I.branchId equals BC.branchId into JBC
+                                      
+                                        join U in entity.users on I.createUserId equals U.userId into JU
+                                        join UPUSR in entity.users on I.updateUserId equals UPUSR.userId into JUPUSR
+                                        
+                                        join P in entity.pos on I.posId equals P.posId into JP
+
+                                        //   from JBB in JB
+                                        from JPP in JP.DefaultIfEmpty()
+                                        from JUU in JU.DefaultIfEmpty()
+                                        from JUPUS in JUPUSR.DefaultIfEmpty()
+                                        from JBCC in JBC.DefaultIfEmpty()
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "sr" || I.invType == "srd" || I.invType == "srw" || I.invType == "src" || I.invType == "srbd" || I.invType == "srb" )
+
+                                        select new
+                                        {
+
+                                            I.invoiceId,
+                                            count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
+                                            I.invNumber,
+
+                                            I.posId,
+                                            I.invType,
+                                            //I.total,
+                                            //I.totalNet,
+                                            //I.paid,
+                                            //I.deserved,
+                                            //I.deservedDate,
+                                            I.invDate,
+                                            //I.invoiceMainId,
+                                            I.invCase,
+                                            I.invTime,
+                                            I.notes,
+                                            //I.vendorInvNum,
+                                            //I.vendorInvDate,
+                                            I.createUserId,
+                                            I.updateDate,
+                                            I.updateUserId,
+                                            I.branchId,
+                                            //discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
+                                            //I.discountType,
+                                            //I.tax,
+                                            //I.name,
+                                            //I.isApproved,
+
+                                            //
+                                            //I.branchCreatorId,
+                                            //branchCreatorName = JBCC.name,
+                                            //
+                                            // branchName = JBB.name,
+
+                                            //     branchType = JBB.type,
+                                            posName = JPP.name,
+                                            posCode = JPP.code,
+                                            cuserName = JUU.name,
+                                            cuserLast = JUU.lastname,
+                                            cUserAccName = JUU.username,
+                                            uuserName = JUPUS.name,
+                                            uuserLast = JUPUS.lastname,
+                                            uUserAccName = JUPUS.username,
+                                            //username
+
+                                            //  I.invoiceId,
+                                            //    JBB.name
+                                        }).ToList();
+
+
+
+
+                        return TokenManager.GenerateToken(invListm);
+
+                    }
+
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+
+            }
+
+       
+        }
+
+        //عناصر فواتير الصرف
+        [HttpPost]
+        [Route("GetSpendingItems")]
+        public string GetSpendingItems(string token)
+        {
+
+            // public ResponseVM GetPurinv(string token)
+
+            //int mainBranchId, int userId
+
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int mainBranchId = 0;
+                int userId = 0;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "mainBranchId")
+                    {
+                        mainBranchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+
+                }
+                // DateTime cmpdate = DateTime.Now.AddDays(newdays);
+                try
+                {
+
+                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+
+
+                        var invListm = (from IT in entity.itemsTransfer
+                                        from I in entity.invoices.Where(I => I.invoiceId == IT.invoiceId)
+
+                                        from IU in entity.itemsUnits.Where(IU => IU.itemUnitId == IT.itemUnitId)
+                              
+                                        join ITEM in entity.items on IU.itemId equals ITEM.itemId
+                                        join UNIT in entity.units on IU.unitId equals UNIT.unitId
+                                        //    join B in entity.branches on I.branchId equals B.branchId into JB
+                                        join BC in entity.branches on I.branchId equals BC.branchId into JBC
+                                  
+                                        //join U in entity.users on I.createUserId equals U.userId into JU
+                                        //join UPUSR in entity.users on I.updateUserId equals UPUSR.userId into JUPUSR
+                                        //join IM in entity.invoices on I.invoiceMainId equals IM.invoiceId into JIM
+                                        join P in entity.pos on I.posId equals P.posId into JP
+
+                                        // from JBB in JB
+                                        from JPP in JP.DefaultIfEmpty()
+                                       
+                                   
+                                    
+                                        from JBCC in JBC.DefaultIfEmpty()
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "sr" || I.invType == "srd" || I.invType == "srw" || I.invType == "src" || I.invType == "srbd" || I.invType == "srb")
+
+                                        select new
+                                        {
+
+                                            ITitemName = ITEM.name,
+                                            ITunitName = UNIT.name,
+                                            ITitemsTransId = IT.itemsTransId,
+                                            ITitemUnitId = IT.itemUnitId,
+
+                                            ITitemId = IU.itemId,
+                                            ITunitId = IU.unitId,
+                                            ITquantity = IT.quantity,
+
+                                            //ITcreateDate = IT.createDate,
+                                            //ITupdateDate = IT.updateDate,
+                                            //ITcreateUserId = IT.createUserId,
+                                            //ITupdateUserId = IT.updateUserId,
+                                            //ITnotes = IT.notes,
+                                            //ITprice = IT.price,
+                                            ITbarcode = IU.barcode,
+                                            
+                                            I.invoiceId,
+                                            I.invNumber,
+                                            //I.agentId,
+                                            I.posId,
+                                            I.invType,
+                                            //I.total,
+                                            //I.totalNet,
+                                            //I.paid,
+                                            //I.deserved,
+                                            //I.deservedDate,
+                                            I.invDate,
+                                            //I.invoiceMainId,
+                                            I.invCase,
+                                            I.invTime,
+                                            I.notes,
+                                            I.vendorInvNum,
+                                            I.vendorInvDate,
+                                            I.createUserId,
+                                            I.updateDate,
+                                            I.updateUserId,
+                                            I.branchId,
+                                            //discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
+                                            //I.discountType,
+                                            I.tax,
+                                            
+                                            I.isApproved,
+
+                                            //
+                                            I.branchCreatorId,
+                                            branchCreatorName = JBCC.name,
+                                            //
+                                            //  branchName = JBB.name,
+
+                                            //  branchType = JBB.type,
+                                            posName = JPP.name,
+                                            posCode = JPP.code,
+                                           
+                                            //subTotal = (IT.price * IT.quantity),
+                                            //username
+
+                                            //  I.invoiceId,
+                                            //    JBB.name
+                                        }).ToList();
+
+
+
+
+
+                        return TokenManager.GenerateToken(invListm);
+
+                    }
+
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+
+            }
+
+   
+        }
+
+        #endregion
 
 
     }
