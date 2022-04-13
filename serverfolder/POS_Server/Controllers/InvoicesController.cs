@@ -800,6 +800,7 @@ namespace POS_Server.Controllers
                 string invType = "";
                 int createUserId = 0;
                 int duration = 0;
+                int hours = 0;
                 List<string> invTypeL = new List<string>();
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -820,6 +821,10 @@ namespace POS_Server.Controllers
                     {
                         duration = int.Parse(c.Value);
                     }
+                    else if (c.Type == "hours")
+                    {
+                        hours = int.Parse(c.Value);
+                    }
                 }
                 #endregion
 
@@ -827,14 +832,21 @@ namespace POS_Server.Controllers
                 {
                     var searchPredicate = PredicateBuilder.New<invoices>();
 
+                    searchPredicate = searchPredicate.And(inv => invTypeL.Contains(inv.invType));
+                    searchPredicate = searchPredicate.And(inv => inv.createUserId == createUserId);
+                    searchPredicate = searchPredicate.And(inv => inv.isActive == true);
+
                     if (duration > 0)
                     {
                         DateTime dt = Convert.ToDateTime(DateTime.Today.AddDays(-duration).ToShortDateString());
                         searchPredicate = searchPredicate.And(inv => inv.updateDate >= dt);
                     }
-                    searchPredicate = searchPredicate.And(inv => invTypeL.Contains(inv.invType));
-                    searchPredicate = searchPredicate.And(inv => inv.createUserId == createUserId);
-                    searchPredicate = searchPredicate.And(inv => inv.isActive == true);
+                    if(hours > 0)
+                    {
+                        DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-hours));
+                        searchPredicate = searchPredicate.And(x => x.invDate >= dt);
+                    }
+                    
 
                     var invoicesList = (from b in entity.invoices.Where(searchPredicate)
                                         join l in entity.branches on b.branchId equals l.branchId into lj
@@ -844,6 +856,7 @@ namespace POS_Server.Controllers
                                             invoiceId = b.invoiceId,
                                             invNumber = b.invNumber,
                                             agentId = b.agentId,
+                                            agentName = b.agents.name,
                                             invType = b.invType,
                                             total = b.total,
                                             totalNet = b.totalNet,
@@ -895,29 +908,29 @@ namespace POS_Server.Controllers
 
                     if (invoicesList != null)
                     {
-                        string complete = "ready";
+                        //string complete = "ready";
                         for (int i = 0; i < invoicesList.Count; i++)
                         {
-                           complete = "ready";
+                           //complete = "ready";
                             int invoiceId = invoicesList[i].invoiceId;
                             //int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                             var itemList = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
                             invoicesList[i].itemsCount = itemList.Count;
-                            if(invTypeL.Contains("or"))
-                            {
-                                foreach (itemsTransfer tr in itemList)
-                                {
-                                    var lockedQuantity = entity.itemsLocations
-                                       .Where(x => x.invoiceId == invoiceId && x.itemUnitId == tr.itemUnitId)
-                                       .Select(x => x.quantity).Sum();
-                                    if(lockedQuantity < tr.quantity)
-                                    {
-                                        complete = "notReady";
-                                        break;
-                                    }
-                                }
-                            }
-                            invoicesList[i].status = complete;
+                            //if(invTypeL.Contains("or"))
+                            //{
+                            //    foreach (itemsTransfer tr in itemList)
+                            //    {
+                            //        var lockedQuantity = entity.itemsLocations
+                            //           .Where(x => x.invoiceId == invoiceId && x.itemUnitId == tr.itemUnitId)
+                            //           .Select(x => x.quantity).Sum();
+                            //        if(lockedQuantity < tr.quantity)
+                            //        {
+                            //            complete = "notReady";
+                            //            break;
+                            //        }
+                            //    }
+                            //}
+                            //invoicesList[i].status = complete;
                         }
                     }
                  
@@ -1094,9 +1107,11 @@ namespace POS_Server.Controllers
             }
             else
             {
+                #region params
                 string invType = "";
                 int createUserId = 0;
                 int duration = 0;
+                int hours = 0;
                 List<string> invTypeL = new List<string>();
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1117,10 +1132,15 @@ namespace POS_Server.Controllers
                     {
                         duration = int.Parse(c.Value);
                     }
+                    else if (c.Type == "hours")
+                    {
+                        hours = int.Parse(c.Value);
+                    }
                 }
-
+                #endregion
                 using (incposdbEntities entity = new incposdbEntities())
                 {
+                    #region search conditions
                     var searchPredicate = PredicateBuilder.New<invoices>();
 
                     if (duration > 0)
@@ -1128,13 +1148,19 @@ namespace POS_Server.Controllers
                         DateTime dt = Convert.ToDateTime(DateTime.Today.AddDays(-duration).ToShortDateString());
                         searchPredicate = searchPredicate.And(inv => inv.updateDate >= dt);
                     }
+                    if (hours > 0)
+                    {
+                        DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-hours));
+                        searchPredicate = searchPredicate.And(inv => inv.invDate >= dt);
+                    }
                     searchPredicate = searchPredicate.And(inv => invTypeL.Contains(inv.invType));
                     searchPredicate = searchPredicate.And(inv => inv.createUserId == createUserId);
                     searchPredicate = searchPredicate.And(inv => inv.isActive == true);
+                    #endregion
 
                     var invoicesCount = (from b in entity.invoices.Where(searchPredicate)
                                         join l in entity.branches on b.branchId equals l.branchId into lj
-                                        from x in lj.DefaultIfEmpty()
+                                        from x in lj.DefaultIfEmpty()                                       
                                         select new InvoiceModel()
                                         {
                                             invoiceId = b.invoiceId,
@@ -1170,8 +1196,8 @@ namespace POS_Server.Controllers
                                             userId = b.userId,
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
-                                        })
-                    .ToList().Count;
+                                        }).ToList().Count;
+
                     return TokenManager.GenerateToken(invoicesCount);
                 }
             }

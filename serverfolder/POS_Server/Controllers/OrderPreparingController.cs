@@ -296,7 +296,6 @@ namespace POS_Server.Controllers
                         {
                             DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-duration));
                             searchPredicate = searchPredicate.And(x => x.createDate >= dt);
-                           // return dt.ToString();
                         }
 
                         var prepOrders = (from o in entity.orderPreparing.Where(searchPredicate)
@@ -373,8 +372,8 @@ namespace POS_Server.Controllers
         }
 
         [HttpPost]
-        [Route("GetTakAwayOrdersWithStatus")]
-        public string GetTakAwayOrdersWithStatus(string token)
+        [Route("GetOrdersByTypeWithStatus")]
+        public string GetOrdersByTypeWithStatus(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -387,6 +386,7 @@ namespace POS_Server.Controllers
                 #region params
                 int branchId = 0;
                 int duration = 0;
+                string type = "";
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -398,6 +398,10 @@ namespace POS_Server.Controllers
                     {
                         duration =int.Parse(c.Value);
                     }
+                    else if (c.Type == "type")
+                    {
+                        type =c.Value;
+                    }
                 }
                 #endregion
                 try
@@ -407,7 +411,7 @@ namespace POS_Server.Controllers
                         var searchPredicate = PredicateBuilder.New<invoices>();
                         searchPredicate = searchPredicate.And(x => x.branchId == branchId);
 
-                        searchPredicate = searchPredicate.And(x => x.invType =="ts");
+                        searchPredicate = searchPredicate.And(x => x.invType ==type);
                         if(duration > 0)
                         {
                             DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-duration));
@@ -446,6 +450,24 @@ namespace POS_Server.Controllers
 
                             foreach (OrderPreparingModel o in prepOrders)
                             {
+                                #region get invoice tables
+                                var tables = (from t in entity.tables.Where(x => x.isActive == 1)
+                                              join it in entity.invoiceTables.Where(x => x.invoiceId == o.invoiceId) on t.tableId equals it.tableId
+                                              select new TableModel()
+                                              {
+                                                  tableId = t.tableId,
+                                                  name = t.name,
+                                              }).ToList();
+                                string tablesNames = "";
+                                foreach (TableModel tabl in tables)
+                                {
+                                    if (tablesNames == "")
+                                        tablesNames += tabl.name;
+                                    else tablesNames += ", " + tabl.name;
+                                }
+                                o.tables = tablesNames;
+                                #endregion
+
                                 #region set inv status
                                 if (o.status == "Listed" || o.status == "preparing")
                                 {
