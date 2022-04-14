@@ -263,6 +263,7 @@ namespace POS_Server.Controllers
                                          avgPurchasePrice = I.avgPurchasePrice,
                                          notes = I.notes,
                                          categoryString = I.categoryString,
+                                         categoryName=I.categories.name,
                                          itemUnitId = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultPurchase == 1).FirstOrDefault().itemUnitId,
                                      })
                                    .ToList();
