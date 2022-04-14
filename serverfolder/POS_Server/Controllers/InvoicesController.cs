@@ -2981,6 +2981,7 @@ namespace POS_Server.Controllers
                 try
                 {
                     int invoiceId = saveInvoice(newObject);
+                    message = invoiceId.ToString();
                     if (invoiceId > 0)
                     {
                        string res = saveInvoiceTables(tables, invoiceId,(int)newObject.updateUserId);
