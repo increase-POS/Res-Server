@@ -481,7 +481,9 @@ namespace POS_Server.Controllers
             }
             else
             {
+                #region params
                 string day = "";
+                int membershipId = 0;
                 DateTime cmpdate = DateTime.Now.AddDays(newdays);
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -490,7 +492,12 @@ namespace POS_Server.Controllers
                     {
                         day = c.Value;
                     }
+                    else if (c.Type == "membershipId")
+                    {
+                        membershipId = int.Parse(c.Value);
+                    }
                 }
+                #endregion
                 #region get day column in db
                 var searchPredicate = PredicateBuilder.New<menuSettings>();
                 searchPredicate = searchPredicate.And(x => x.isActive == 1);
@@ -552,44 +559,83 @@ namespace POS_Server.Controllers
                                          avgPurchasePrice = I.avgPurchasePrice,
                                          notes = I.notes,
                                          categoryString = I.categoryString,
+                                         
                                          itemUnitId = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().itemUnitId,
-                                         price = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().price   ,
-                                         basicPrice = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().price   ,
-                                         priceWithService = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().priceWithService ,
+                                         price = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().price,
+                                         basicPrice = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().price,
+                                         priceWithService = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().priceWithService,
                                      })
                                    .ToList();
                     #region offers
-                    var itemsofferslist = (from off in entity.offers
 
-                                           join itof in entity.itemsOffers on off.offerId equals itof.offerId // itemsOffers and offers 
+                    var offerslist = (from off in entity.offers
 
-                                           //  join iu in entity.itemsUnits on itof.iuId  equals  iu.itemUnitId //itemsUnits and itemsOffers
-                                           join iu in entity.itemsUnits on itof.iuId equals iu.itemUnitId
-                                           //from un in entity.units
-                                           select new ItemSalePurModel()
-                                           {
-                                               itemId = iu.itemId,
-                                               itemUnitId = itof.iuId,
-                                               offerName = off.name,
-                                               offerId = off.offerId,
-                                               discountValue = off.discountValue,
-                                               isNew = 0,
-                                               isOffer = 1,
-                                               isActiveOffer = off.isActive,
-                                               startDate = off.startDate,
-                                               endDate = off.endDate,
-                                               unitId = iu.unitId,
-                                               itemCount = itof.quantity,
-                                               price = iu.price,
-                                               discountType = off.discountType,
-                                               desPrice = iu.price,
-                                               defaultSale = iu.defaultSale,
-                                               used = itof.used,
-                                               forAgent = off.forAgents,
+                                      join itof in entity.itemsOffers on off.offerId equals itof.offerId // itemsOffers and offers 
 
-                                           }).Where(IO => IO.isActiveOffer == 1 && IO.forAgent == "pb" && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0 
-                                                        && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1 && IO.itemCount > IO.used).Distinct().ToList();
+                                      //  join iu in entity.itemsUnits on itof.iuId  equals  iu.itemUnitId //itemsUnits and itemsOffers
+                                      join iu in entity.itemsUnits on itof.iuId equals iu.itemUnitId
+                                      //from un in entity.units
+                                      select new ItemSalePurModel()
+                                      {
+                                          itemId = iu.itemId,
+                                          itemUnitId = itof.iuId,
+                                          offerName = off.name,
+                                          offerId = off.offerId,
+                                          discountValue = off.discountValue,
+                                          isNew = 0,
+                                          isOffer = 1,
+                                          isActiveOffer = off.isActive,
+                                          startDate = off.startDate,
+                                          endDate = off.endDate,
+                                          unitId = iu.unitId,
+                                          itemCount = itof.quantity,
+                                          price = iu.price,
+                                          discountType = off.discountType,
+                                          desPrice = iu.price,
+                                          defaultSale = iu.defaultSale,
+                                          used = itof.used,
+                                          forAgent = off.forAgents,
+
+                                      }).Where(IO => IO.isActiveOffer == 1 && IO.forAgent == "pb" && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0
+                                                   && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1 && IO.itemCount > IO.used).Distinct().ToList();
+
+                    var membershipOffers = (from off in entity.offers
+                                            join mo in entity.membershipsOffers.Where(x => x.membershipId == membershipId) on off.offerId equals mo.offerId
+
+                                            join itof in entity.itemsOffers on off.offerId equals itof.offerId // itemsOffers and offers 
+
+                                            //  join iu in entity.itemsUnits on itof.iuId  equals  iu.itemUnitId //itemsUnits and itemsOffers
+                                            join iu in entity.itemsUnits on itof.iuId equals iu.itemUnitId
+                                            //from un in entity.units
+                                            select new ItemSalePurModel()
+                                            {
+                                                itemId = iu.itemId,
+                                                itemUnitId = itof.iuId,
+                                                offerName = off.name,
+                                                offerId = off.offerId,
+                                                discountValue = off.discountValue,
+                                                isNew = 0,
+                                                isOffer = 1,
+                                                isActiveOffer = off.isActive,
+                                                startDate = off.startDate,
+                                                endDate = off.endDate,
+                                                unitId = iu.unitId,
+                                                itemCount = itof.quantity,
+                                                price = iu.price,
+                                                discountType = off.discountType,
+                                                desPrice = iu.price,
+                                                defaultSale = iu.defaultSale,
+                                                used = itof.used,
+                                                forAgent = off.forAgents,
+
+                                            }).Where(IO => IO.isActiveOffer == 1 && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0
+                                                         && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1 && IO.itemCount > IO.used).Distinct().ToList();
+
+                    // return membershipOffers.Count.ToString();
+                    offerslist.AddRange(membershipOffers);
+
                     #endregion
+
                     for (int i = 0; i < itemsList.Count; i++)
                     {
                         itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].priceTax) / 100;
@@ -600,7 +646,8 @@ namespace POS_Server.Controllers
                             itemsList[i].isNew = 1;
                         }
 
-                        foreach (var itofflist in itemsofferslist)
+                        decimal totaldis = 0;
+                        foreach (var itofflist in offerslist)
                         {
 
 
@@ -635,9 +682,28 @@ namespace POS_Server.Controllers
                                 itemsList[i].avgPurchasePrice = itemsList[i].avgPurchasePrice;
                                 itemsList[i].discountType = itofflist.discountType;
                                 itemsList[i].discountValue = itofflist.discountValue;
+
+                                if (itofflist.used == null)
+                                    itofflist.used = 0;
+
+                                if (itemsList[i].itemCount >= (itofflist.itemCount - itofflist.used))
+                                    itemsList[i].itemCount = (itofflist.itemCount - itofflist.used);
+
+                                if (itemsList[i].discountType == "1") // value
+                                {
+
+                                    totaldis = totaldis + (decimal)itemsList[i].discountValue;
+                                }
+                                else if (itemsList[i].discountType == "2") // percent
+                                {
+
+                                    totaldis = totaldis + Calc.percentValue(itemsList[i].price, itemsList[i].discountValue);
+
+                                }
                             }
                         }
-
+                        itemsList[i].price = (decimal)itemsList[i].price - totaldis;
+                        itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].taxes / 100);
                     }
 
 
