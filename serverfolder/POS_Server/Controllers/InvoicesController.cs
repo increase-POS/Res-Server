@@ -2735,8 +2735,6 @@ namespace POS_Server.Controllers
                 var invoiceEntity = entity.Set<invoices>();
                 if (newObject.invoiceId == 0)
                 {
-                    if (newObject.shippingCostDiscount == null)
-                        newObject.shippingCostDiscount = 0;
                     if (newObject.invType == "s")
                     {
                         ProgramInfo programInfo = new ProgramInfo();
