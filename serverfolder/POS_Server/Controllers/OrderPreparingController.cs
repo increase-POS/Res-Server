@@ -822,6 +822,7 @@ namespace POS_Server.Controllers
                         #endregion
                         newObject.orderPreparingId = 0;
                         int orderId = savePreparingOrder(newObject);
+                        message = orderId.ToString();
                         if (orderId > 0)
                         {
                             List<itemOrderPreparing> orderItem = new List<itemOrderPreparing>();
