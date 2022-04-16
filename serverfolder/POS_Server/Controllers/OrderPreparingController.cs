@@ -96,8 +96,8 @@ namespace POS_Server.Controllers
             }
         }
         [HttpPost]
-        [Route("GetPreparingOrdersWithStatus")]
-        public string GetPreparingOrdersWithStatus(string token)
+        [Route("GetKitchenPreparingOrders")]
+        public string GetKitchenPreparingOrders(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -136,17 +136,49 @@ namespace POS_Server.Controllers
                 {
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        var searchPredicate = PredicateBuilder.New<orderPreparing>();
-                        searchPredicate = searchPredicate.And(x => x.invoices.branchId == branchId);
+                        #region search predicate
+                        var searchPredicate = PredicateBuilder.New<invoices>();
+                        searchPredicate = searchPredicate.And(x => x.branchId == branchId);
 
                         if(duration > 0)
                         {
                             DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-duration));
-                            searchPredicate = searchPredicate.And(x => x.createDate >= dt);
+                            searchPredicate = searchPredicate.And(x => x.updateDate >= dt);
                            // return dt.ToString();
                         }
+                        #endregion
+                        var invoices = entity.invoices.Where(searchPredicate)
+                                                   .Select(x => new InvoiceModel()
+                                                   {
+                                                       invNumber = x.invNumber,
+                                                       invoiceId = x.invoiceId,
+                                                       orderTime = x.orderTime,
+                                                       agentName = x.agents.name,
+                                                   }).ToList();
 
-                        var prepOrders = (from o in entity.orderPreparing.Where(searchPredicate)
+
+                        List<OrderPreparingModel> finalRrepOrders = new List<OrderPreparingModel>();
+                        foreach (InvoiceModel inv in invoices)
+                        {
+
+                            #region get invoice tables
+                            var tables = (from t in entity.tables.Where(x => x.isActive == 1)
+                                          join it in entity.invoiceTables.Where(x => x.invoiceId == inv.invoiceId) on t.tableId equals it.tableId
+                                          select new TableModel()
+                                          {
+                                              tableId = t.tableId,
+                                              name = t.name,
+                                          }).ToList();
+                            string tablesNames = "";
+                            foreach (TableModel tabl in tables)
+                            {
+                                if (tablesNames == "")
+                                    tablesNames += tabl.name;
+                                else tablesNames += ", " + tabl.name;
+                            }                          
+                            #endregion
+
+                           var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == inv.invoiceId)
                                           join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
                                           where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
                                           select new OrderPreparingModel()
@@ -186,59 +218,69 @@ namespace POS_Server.Controllers
                         #region get orders according to status
                         if (statusStr != "")
                             prepOrders = prepOrders.Where(x => statusL.Contains(x.status)).OrderBy(x => x.orderNum).ToList();
-                        #endregion
+                            #endregion
 
-                        foreach (OrderPreparingModel o in prepOrders)
-                        {
-                            int index = 1;
-                            #region preparing time from menu list
-                            if (o.status == "Listed")
+                            decimal longestPreparingTime = 0;
+                            foreach (OrderPreparingModel o in prepOrders)
                             {
-                                var orderItemUnits = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId).Select(x => x.itemUnitId).ToList();
-                                o.preparingTime = entity.menuSettings.Where(x => orderItemUnits.Contains(x.itemUnitId)).Select(x => x.preparingTime).Max();
-                            }
-                            #endregion
-                            #region get invoice tables
-                            var tables = ( from t in entity.tables.Where(x => x.isActive == 1)
-                                           join it in entity.invoiceTables.Where(x => x.invoiceId == o.invoiceId) on t.tableId equals it.tableId
-                                           select new TableModel() {
-                                               tableId = t.tableId,
-                                               name = t.name,
-                                           }).ToList();
-                            string tablesNames = "";
-                            foreach (TableModel tabl in tables)
-                            {
-                                if (tablesNames == "")
-                                    tablesNames += tabl.name;
-                                else tablesNames += ", " + tabl.name;
-                            }
-                            o.tables = tablesNames;
-                            #endregion
-                            #region calculate remaining time
-                            if (o.preparingTime != null)
-                            {
-                                DateTime createDate = (DateTime)o.createDate;
-                                createDate = createDate.AddMinutes((double)o.preparingTime);
+                                
+                                #region preparing time from menu list
+                                if (o.status == "Listed")
+                                {
+                                    var orderItemUnits = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId).Select(x => x.itemUnitId).ToList();
+                                    o.preparingTime = entity.menuSettings.Where(x => orderItemUnits.Contains(x.itemUnitId)).Select(x => x.preparingTime).Max();
+                                }
+                                #endregion
+
+                                #region invoice tables
+                                o.tables = tablesNames;
+                                #endregion
                                
-                                if (createDate > DateTime.Now && o.status !="Listed")
+                                #region calculate remaining time
+                                if (o.preparingTime != null)
                                 {
-                                    TimeSpan remainingTime =  createDate - DateTime.Now ;
-                                    o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                    DateTime createDate = (DateTime)o.createDate;
+                                    createDate = createDate.AddMinutes((double)o.preparingTime);
+
+                                    if (createDate > DateTime.Now && o.status != "Listed")
+                                    {
+                                        TimeSpan remainingTime = createDate - DateTime.Now;
+                                        o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                    }
+                                    else
+                                    {
+                                        o.remainingTime = 0;
+                                    }
                                 }
-                                else 
+                                #endregion
+
+                                // set sequence num to items
+                                int index = 1;
+                                foreach (itemOrderPreparingModel item in o.items)
                                 {
-                                    o.remainingTime = 0;
+                                    item.sequence = index;
+                                    index++;
                                 }
+
+                                #region get longest preparing time
+                                if(inv.orderTime != null && longestPreparingTime <  o.preparingTime)
+                                {
+                                    longestPreparingTime = (decimal)o.preparingTime;
+
+                                }
+                                #endregion
                             }
-                            #endregion
-                            // set sequence num to items
-                            foreach (itemOrderPreparingModel item in o.items)
+
+                            if (inv.orderTime == null)// add all invoice orders to result
+                                finalRrepOrders.AddRange(prepOrders);
+                            else
                             {
-                                item.sequence = index;
-                                index++;                               
+                                DateTime dt = Convert.ToDateTime(DateTime.Now.AddMinutes((double)longestPreparingTime));
+                                if (dt >= inv.orderTime) // add only in time orders
+                                    finalRrepOrders.AddRange(prepOrders);
                             }
                         }
-                        return TokenManager.GenerateToken(prepOrders);
+                        return TokenManager.GenerateToken(finalRrepOrders);
                     }
                 }
                 catch
