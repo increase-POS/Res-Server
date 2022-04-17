@@ -21,8 +21,8 @@ namespace POS_Server.Controllers
         [Route("Get")]
         public string Get(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -56,17 +56,20 @@ var strP = TokenManager.GetPrincipal(token);
                          discountValue = c.discountValue,
                          discountType = c.discountType,
                          couponCode = x.code,
+                         name = x.name,
+                         forAgents = x.forAgents,
                      }).ToList();
                             return TokenManager.GenerateToken(couponsInvoicesList);
                 }
             }
         }
+
         [HttpPost]
         [Route("GetOriginal")]
         public string GetOriginal(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -84,7 +87,8 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                 var couponsInvoicesList = (from c in entity.couponsInvoices
+
+                    var couponsInvoicesList = (from c in entity.couponsInvoices
                      where c.InvoiceId == invoiceId 
                      join b in entity.coupons on c.couponId equals b.cId into lj
                      from x in lj.DefaultIfEmpty()
@@ -103,17 +107,18 @@ var strP = TokenManager.GetPrincipal(token);
                          couponCode = x.code,
                      }).ToList();
                    
-                            return TokenManager.GenerateToken(couponsInvoicesList);
+                    return TokenManager.GenerateToken(couponsInvoicesList);
                 }
             }
         }
+
         // GET api/<controller>  Get couponsInvoices By ID 
         [HttpPost]
         [Route("GetByID")]
         public string GetByID(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
-var strP = TokenManager.GetPrincipal(token);
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -152,9 +157,9 @@ var strP = TokenManager.GetPrincipal(token);
         [Route("Save")]
         public string Save(string token)
         {
-token = TokenManager.readToken(HttpContext.Current.Request);
+            token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "";
-var strP = TokenManager.GetPrincipal(token);
+            var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
                 return TokenManager.GenerateToken(strP);
@@ -197,7 +202,7 @@ var strP = TokenManager.GetPrincipal(token);
                         {
                             foreach (couponsInvoices coupon  in Object)
                             {
-                                //coupon.userId = userId;
+                                coupon.InvoiceId = invoiceId;
                                 if (coupon.createDate == null)
                                 {
                                     coupon.createDate = DateTime.Now;
@@ -243,6 +248,7 @@ var strP = TokenManager.GetPrincipal(token);
                             {
                                 ci.discountType =c.discountType;
                                 ci.discountValue = c.discountValue;
+                                ci.forAgents = c.forAgents;
                                 ci.updateDate = DateTime.Now;
                             }
                             entity.SaveChanges();

@@ -716,7 +716,8 @@ namespace POS_Server.Controllers
                                            reservationId = rs.reservationId,
                                            waiterId = rs.waiterId,
                                            tax = rs.tax,
-                                           tables = (from it in entity.invoiceTables.Where(x => x.invoiceId == rs.invoiceId && x.isActive == 1)
+                                            membershipId = rs.membershipId,
+                                            tables = (from it in entity.invoiceTables.Where(x => x.invoiceId == rs.invoiceId && x.isActive == 1)
                                                      join ts in entity.tables on it.tableId equals ts.tableId
                                                      select new TableModel()
                                                      {

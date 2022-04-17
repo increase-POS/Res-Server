@@ -20,6 +20,8 @@ namespace POS_Server.Models
         public string itemSerial { get; set; }
         public Nullable<int> inventoryItemLocId { get; set; }
         public Nullable<int> offerId { get; set; }
+        public string forAgents { get; set; }
+
         public decimal profit { get; set; }
         public decimal purchasePrice { get; set; }
         public string cause { get; set; }

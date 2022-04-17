@@ -892,6 +892,7 @@ namespace POS_Server.Controllers
                                             shippingCostDiscount = b.shippingCostDiscount,
                                             realShippingCost = b.realShippingCost,
                                             orderTime = b.orderTime,
+                                            membershipId = b.membershipId,
                                             tables = (from it in entity.invoiceTables.Where(y => y.invoiceId == b.invoiceId && y.isActive == 1)
                                                       join ts in entity.tables on it.tableId equals ts.tableId
                                                       select new TableModel()
@@ -2813,6 +2814,7 @@ namespace POS_Server.Controllers
                     tmpInvoice.reservationId = newObject.reservationId;
                     tmpInvoice.waiterId = newObject.waiterId;
                     tmpInvoice.orderTime = newObject.orderTime;
+                    tmpInvoice.membershipId = newObject.membershipId;
                     entity.SaveChanges();
                     res = tmpInvoice.invoiceId;
                     return res;

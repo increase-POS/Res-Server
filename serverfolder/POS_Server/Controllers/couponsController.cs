@@ -179,44 +179,52 @@ namespace POS_Server.Controllers
                    })
                    .ToList();
                     #endregion
-                    #region memberShip Coupons
-                    var memberShipcoupons =(from c in entity.coupons.Where(x => (x.remainQ > 0 || x.quantity == 0) && (x.startDate <= DateTime.Now || x.startDate == null)
-                                                            && (x.endDate >= DateTime.Now || x.endDate == null) && x.isActive == 1)
-                                            join cm in entity.couponsMemberships.Where(x => x.membershipId == memberShipId) on c.cId equals cm.cId
-                                            join M in entity.memberships.Where(x => x.membershipId == memberShipId) on cm.membershipId equals M.membershipId
-                                            join CSH in entity.agentMembershipCash on M.membershipId equals CSH.membershipId into CS
-                                            from JCS in CS.DefaultIfEmpty()
-                                            where ( M.isActive == 1 &&
-                                    (M.subscriptionType == "f" ||
-                                    (M.subscriptionType == "o" && JCS.cashTransId > 0)
-                                    || ((JCS.subscriptionType == "m" || JCS.subscriptionType == "y") && JCS.cashTransId > 0 && JCS.endDate >= dtnow )))
 
-                                            select new CouponModel
-                                           {
-                                               cId = c.cId,
-                                               name = c.name,
-                                               code = c.code,
-                                               isActive = c.isActive,
-                                               discountType = c.discountType,
-                                               discountValue = c.discountValue,
-                                               startDate = c.startDate,
-                                               endDate = c.endDate,
-                                               notes = c.notes,
-                                               quantity = c.quantity,
-                                               remainQ = c.remainQ,
-                                               invMin = c.invMin,
-                                               invMax = c.invMax,
-                                               createDate = c.createDate,
-                                               updateDate = c.updateDate,
-                                               createUserId = c.createUserId,
-                                               updateUserId = c.updateUserId,
-                                               barcode = c.barcode,
-                                               forAgents = c.forAgents,
-                                           }).ToList();
+                    #region memberShip Coupons
+                    var publicCouponIds = couponsList.Select(x => x.cId).ToList();
+
+                    var memberShipcoupons = (from c in entity.coupons.Where(x => (x.remainQ > 0 || x.quantity == 0) && (x.startDate <= DateTime.Now || x.startDate == null)
+                                                             && (x.endDate >= DateTime.Now || x.endDate == null) && x.isActive == 1
+                                                             && !publicCouponIds.Contains(x.cId))
+                                             join cm in entity.couponsMemberships.Where(x => x.membershipId == memberShipId) on c.cId equals cm.cId
+                                             join M in entity.memberships.Where(x => x.membershipId == memberShipId) on cm.membershipId equals M.membershipId
+                                             join CSH in entity.agentMembershipCash on M.membershipId equals CSH.membershipId into CS
+                                             from JCS in CS.DefaultIfEmpty()
+                                             where (M.isActive == 1 &&
+                                     (M.subscriptionType == "f" ||
+                                     (M.subscriptionType == "o" && JCS.cashTransId > 0)
+                                     || ((JCS.subscriptionType == "m" || JCS.subscriptionType == "y") && JCS.cashTransId > 0 && JCS.endDate >= dtnow)))
+
+                                             select new CouponModel
+                                             {
+                                                 cId = c.cId,
+                                                 name = c.name,
+                                                 code = c.code,
+                                                 isActive = c.isActive,
+                                                 discountType = c.discountType,
+                                                 discountValue = c.discountValue,
+                                                 startDate = c.startDate,
+                                                 endDate = c.endDate,
+                                                 notes = c.notes,
+                                                 quantity = c.quantity,
+                                                 remainQ = c.remainQ,
+                                                 invMin = c.invMin,
+                                                 invMax = c.invMax,
+                                                 createDate = c.createDate,
+                                                 updateDate = c.updateDate,
+                                                 createUserId = c.createUserId,
+                                                 updateUserId = c.updateUserId,
+                                                 barcode = c.barcode,
+                                                 forAgents = c.forAgents,
+                                             }).ToList();
                     #endregion
+
+
+
 
                     //merge tow list
                     couponsList.AddRange(memberShipcoupons);
+
                     return TokenManager.GenerateToken(couponsList.Distinct());
                 }
             }

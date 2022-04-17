@@ -58,6 +58,7 @@ namespace POS_Server.Models
         public Nullable<int> waiterId { get; set; }
         public Nullable<System.DateTime> orderTime { get; set; }
         public decimal shippingCostDiscount { get; set; }
+        public Nullable<int> membershipId { get; set; }
 
 
         public IEnumerable<TableModel> tables { get; set; }
@@ -74,6 +75,7 @@ namespace POS_Server.Models
         public Nullable<int> updateUserId { get; set; }
         public Nullable<decimal> discountValue { get; set; }
         public Nullable<byte> discountType { get; set; }
+        public string forAgents { get; set; }
 
         public string couponCode { get; set; }
         public string name { get; set; }
