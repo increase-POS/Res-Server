@@ -70,7 +70,10 @@ namespace POS_Server.Controllers
                             #region calculate remaining time
                             if (o.preparingTime != null)
                             {
-                                DateTime createDate = (DateTime)o.createDate;
+                               // DateTime createDate = (DateTime)o.updateDate;
+                                DateTime createDate = (DateTime)entity.orderPreparingStatus
+                                                                   .Where(x => x.orderPreparingId == o.orderPreparingId && x.status == "Preparing")
+                                                                   .Select(x => x.createDate).SingleOrDefault();
                                 createDate = createDate.AddMinutes((double)o.preparingTime);
 
                                 if (createDate > DateTime.Now)
@@ -83,6 +86,11 @@ namespace POS_Server.Controllers
                                     o.remainingTime = 0;
 
                                 }
+                            }
+                            if (o.status == "Listed")
+                            {
+                                var orderItemUnits = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId).Select(x => x.itemUnitId).ToList();
+                                o.remainingTime = (decimal) entity.menuSettings.Where(x => orderItemUnits.Contains(x.itemUnitId)).Select(x => x.preparingTime).Max();
                             }
                             #endregion
                         }
@@ -239,18 +247,26 @@ namespace POS_Server.Controllers
                                 #region calculate remaining time
                                 if (o.preparingTime != null)
                                 {
-                                    DateTime createDate = (DateTime)o.createDate;
-                                    createDate = createDate.AddMinutes((double)o.preparingTime);
-
-                                    if (createDate > DateTime.Now && o.status != "Listed")
+                                    
+                                    if(o.status == "Listed")
                                     {
-                                        TimeSpan remainingTime = createDate - DateTime.Now;
-                                        o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                        o.remainingTime = (decimal)o.preparingTime;
                                     }
                                     else
                                     {
-                                        o.remainingTime = 0;
+                                        //DateTime createDate = (DateTime)o.updateDate;
+                                        DateTime createDate =(DateTime) entity.orderPreparingStatus
+                                                                    .Where(x => x.orderPreparingId == o.orderPreparingId && x.status == "Preparing")
+                                                                    .Select(x => x.createDate).SingleOrDefault();
+
+                                        createDate = createDate.AddMinutes((double)o.preparingTime);
+                                        if (createDate > DateTime.Now)
+                                        {
+                                            TimeSpan remainingTime = createDate - DateTime.Now;
+                                            o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                        }
                                     }
+          
                                 }
                                 #endregion
 
@@ -1035,7 +1051,14 @@ namespace POS_Server.Controllers
                 }
 
                 try
-                {                   
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var order = entity.orderPreparing.Find(status.orderPreparingId);
+                        order.updateDate = DateTime.Now;
+                        order.updateUserId = status.createUserId;
+                        entity.SaveChanges();
+                    }
                     message = saveInvoiceStatus(status, (int)status.orderPreparingId);
                 }
                 catch
