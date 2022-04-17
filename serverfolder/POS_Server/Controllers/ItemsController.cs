@@ -596,7 +596,7 @@ namespace POS_Server.Controllers
                                           used = itof.used,
                                           forAgent = off.forAgents,
 
-                                      }).Where(IO => IO.isActiveOffer == 1 && IO.forAgent == "pb" && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0
+                                      }).Where(IO => IO.isActive == 1 && IO.isActiveOffer == 1 && IO.forAgent == "pb" && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0
                                                    && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1 && IO.itemCount > IO.used).Distinct().ToList();
 
                     var membershipOffers = (from off in entity.offers
@@ -628,7 +628,7 @@ namespace POS_Server.Controllers
                                                 used = itof.used,
                                                 forAgent = off.forAgents,
 
-                                            }).Where(IO => IO.isActiveOffer == 1 && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0
+                                            }).Where(IO => IO.isActive == 1 && IO.isActiveOffer == 1 && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0
                                                          && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1 && IO.itemCount > IO.used).Distinct().ToList();
 
                     // return membershipOffers.Count.ToString();
@@ -675,6 +675,7 @@ namespace POS_Server.Controllers
                                 itemsList[i].itemUnitId = itofflist.itemUnitId;
                                 itemsList[i].offerId = itofflist.offerId;
                                 itemsList[i].isActiveOffer = itofflist.isActiveOffer;
+                                itemsList[i].forAgent = itofflist.forAgent;
 
                                 itemsList[i].price = itofflist.price;
                                 itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].taxes / 100);
