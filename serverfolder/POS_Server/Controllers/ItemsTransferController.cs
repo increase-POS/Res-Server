@@ -76,6 +76,7 @@ namespace POS_Server.Controllers
                                                 itemSerial = t.itemSerial,
                                                 itemType = i.type,
                                                 offerId = t.offerId,
+                                                forAgents = t.forAgents,
                                             })
                                             .ToList();
 
