@@ -595,7 +595,7 @@ namespace POS_Server.Controllers
                         searchPredicate = searchPredicate.And(x => x.branchId == branchId);
 
                         searchPredicate = searchPredicate.And(x => x.invType =="ts" || x.invType == "ss");
-                        searchPredicate = searchPredicate.And(x => x.shipUserId != null);
+                        searchPredicate = searchPredicate.And(x => x.shippingCompanyId != null);
 
 
                         var invoices =(from x in entity.invoices.Where(searchPredicate)
