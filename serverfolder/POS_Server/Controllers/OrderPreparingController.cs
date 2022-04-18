@@ -505,7 +505,7 @@ namespace POS_Server.Controllers
                                                   status = s.status,
                                               }).ToList();
 
-
+                            //string status = "";
                             foreach (OrderPreparingModel o in prepOrders)
                             {
                                 #region get invoice tables
@@ -532,14 +532,19 @@ namespace POS_Server.Controllers
                                     inv.status = "Listed";
                                     break;
                                 }
-                                inv.status = "Ready";
+                                else if (o.status == "Ready")
+                                    inv.status = "Ready";
+                                else
+                                    inv.status = "";
+                               // status += inv.status;
                                 #endregion
 
                             }
-
+                            //return status;
                         }
 
-                        
+                        List<string> statusLst = new List<string>() { "Listed", "Preparing","Ready"};
+                        invoices = invoices.Where(x => statusLst.Contains(x.status)).ToList();
                         return TokenManager.GenerateToken(invoices);
                     }
                 }
@@ -1012,6 +1017,106 @@ namespace POS_Server.Controllers
                             string res = saveInvoiceStatus(status, orderId);
                             if (res == "0")
                                 message = "0";
+                        }
+                        #endregion
+                    }
+                }
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+        [HttpPost]
+        [Route("finishInvoiceOrders")]
+        public string finishInvoiceOrders(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int invoiceId = 0;
+                int userId = 0;
+                orderPreparingStatus status = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceId")
+                    {
+                        invoiceId = int.Parse(c.Value);
+                    }
+                    else if(c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                }
+
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var inv = entity.invoices.Find(invoiceId);
+
+                        #region edit orders status
+                        var orders = (from o in entity.orderPreparing.Where(x => x.invoiceId == invoiceId)
+                                      join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                      where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                      select new OrderPreparingModel()
+                                      {
+                                          orderPreparingId = o.orderPreparingId,
+                                          status = s.status,
+                                      }).ToList();
+
+                        foreach (OrderPreparingModel o in orders)
+                        {
+                            int orderId = o.orderPreparingId;
+
+                            var statusObject = new orderPreparingStatus()
+                            {
+                                orderPreparingId = orderId,
+                                isActive = 1,
+                                createUserId = userId,
+                                updateUserId = userId,
+                                updateDate = DateTime.Now,
+                                createDate = DateTime.Now,
+                                 
+                            };
+                            switch (o.status)
+                            {
+                                case "Listed":
+                                    statusObject.status = "Preparing";
+                                    entity.orderPreparingStatus.Add(statusObject);
+                                    entity.SaveChanges();
+
+                                    statusObject.status = "Ready";
+                                    entity.orderPreparingStatus.Add(statusObject);
+                                    entity.SaveChanges();
+                                    break;
+                                case "Preparing":
+                                    statusObject.status = "Ready";
+                                    entity.orderPreparingStatus.Add(statusObject);
+                                    entity.SaveChanges();
+                                    break;
+
+                            }
+                            if(inv.shipUserId != null)
+                            {
+                                statusObject.status = "Collected";
+                            }
+                            else
+                            {
+                                statusObject.status = "Done";
+                            }
+                            entity.orderPreparingStatus.Add(statusObject);
+
+                            entity.SaveChanges();
+                            message = "1";
                         }
                         #endregion
                     }
