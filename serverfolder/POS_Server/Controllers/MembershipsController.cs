@@ -859,7 +859,7 @@ namespace POS_Server.Controllers
                         {
 
                             row.agentMembershipcashobj = row.agentMembershipcashobjList.LastOrDefault();
-                            if (row.subscriptionType != "f" || row.agentMembershipcashobj != null)
+                            if (row.subscriptionType != "f" && row.agentMembershipcashobj != null)
                             {
                                 row.endDate = row.agentMembershipcashobj.endDate;
                             }
