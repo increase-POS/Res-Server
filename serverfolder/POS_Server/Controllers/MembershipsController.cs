@@ -780,6 +780,7 @@ namespace POS_Server.Controllers
                 try
                 {
                     DateTime dtnow = DateTime.Now;
+
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -787,8 +788,8 @@ namespace POS_Server.Controllers
                         var List1 = (from M in entity.memberships.Where(x => x.isActive == 1)
                                      join A in entity.agents on M.membershipId equals A.membershipId
                                      join S in entity.subscriptionFees on M.membershipId equals S.membershipId into SU
-                                     join CSH in entity.agentMembershipCash on M.membershipId equals CSH.membershipId into CS
-                                     from JCS in CS.DefaultIfEmpty()
+                                     // join CSH in entity.agentMembershipCash on M.membershipId equals CSH.membershipId into CS
+                                     //  from JCS in CS.DefaultIfEmpty()
                                      from JSU in SU.DefaultIfEmpty()
                                          //where (agentId == A.agentId && M.isActive == 1 &&
                                          //(M.subscriptionType == "f" ||
@@ -800,16 +801,40 @@ namespace POS_Server.Controllers
                                          //  transNum = JCTR.transNum,
                                          //transType = JCTR.transType,
                                          // agentMembershipsId = AM.agentMembershipsId,
-                                        // agentMembershipCashId = A.agentMembershipCash.Where(x => x.agentId==agentId && M.membershipId==x.membershipId).ToList().LastOrDefault().agentMembershipCashId,
-                                       agentMembershipCashId = JCS.agentMembershipCashId,
+                                         // agentMembershipCashId = A.agentMembershipCash.Where(x => x.agentId==agentId && M.membershipId==x.membershipId).ToList().LastOrDefault().agentMembershipCashId,
+
+
+                                         //agentMembershipCashId = JCS.agentMembershipCashId,
+                                         agentMembershipcashobjList = A.agentMembershipCash.Where(x => x.agentId == agentId).OrderBy(x => x.updateDate).
+                                     Select(x => new AgentMembershipCashModel
+                                     {
+                                         agentMembershipCashId = x.agentMembershipCashId,
+                                         subscriptionFeesId = x.subscriptionFeesId,
+                                         cashTransId = x.cashTransId,
+                                         membershipId = x.membershipId,
+                                         agentId = x.agentId,
+                                         startDate = x.startDate,
+                                         endDate = x.endDate,
+                                         notes = x.notes,
+                                         updateUserId = x.updateUserId,
+                                         isActive = x.isActive,
+                                         createDate = x.createDate,
+                                         updateDate = x.updateDate,
+                                         createUserId = x.createUserId,
+                                         subscriptionType = x.subscriptionType,
+                                         total = x.total,
+                                         monthsCount = x.monthsCount,
+
+                                     }).ToList(),
+
                                          subscriptionFeesId = JSU.subscriptionFeesId,
-                                         cashTransId = JCS.cashTransId,
+                                         //  cashTransId = JCS.cashTransId,
                                          membershipId = M.membershipId,
                                          isFreeDelivery = M.isFreeDelivery,
                                          deliveryDiscountPercent = M.deliveryDiscountPercent,
-                                         // agentId = G.agentId,
-                                         startDate = JCS.startDate,
-                                         endDate = JCS.endDate,
+                                        agentId = A.agentId,
+                                         //startDate = JCS.startDate,
+                                         //endDate = JCS.endDate,
 
                                          Amount = JSU.Amount,
                                          membershipName = M.name,
@@ -817,41 +842,65 @@ namespace POS_Server.Controllers
                                          membershipisActive = M.isActive,
                                          monthsCount = JSU.monthsCount,
                                          subscriptionType = M.subscriptionType,
-                                         updateDate = JCS.updateDate,
-                                         createDate = JCS.createDate,
-                                         cashsubscriptionType = JCS.subscriptionType,
+                                         //updateDate = JCS.updateDate,
+                                         //createDate = JCS.createDate,
+                                         //cashsubscriptionType = JCS.subscriptionType,
+
                                          invoicesClassesCount = M.invoicesClassMemberships.Where(X => X.membershipId == M.membershipId).ToList().Count(),
                                          offersCount = M.membershipsOffers.Where(x => x.membershipId == M.membershipId).ToList().Count(),
-                                         cachpayrowCount = entity.agentMembershipCash.Where(X => X.agentId == agentId).Count(),
+
+                                         //cachpayrowCount = entity.agentMembershipCash.Where(X => X.agentId == agentId).Count(),
                                      }
-                                    ).OrderBy(X => X.createDate).ToList();
+                                    )
+                                    //.OrderBy(X => X.createDate)
+                                    .ToList();
 
                         foreach (AgenttoPayCashModel row in List1)
                         {
+
+                            row.agentMembershipcashobj = row.agentMembershipcashobjList.LastOrDefault();
+                            if (row.subscriptionType != "f" || row.agentMembershipcashobj != null)
+                            {
+                                row.endDate = row.agentMembershipcashobj.endDate;
+                            }
+                            //    row.endDate = row.agentMembershipcashobj==null?null:row.agentMembershipcashobj.endDate;
 
                             if (row.membershipisActive == 0)
                             {
                                 row.membershipStatus = "notactive";
 
-                            }
-                            else if (row.subscriptionType == "o" && (!(row.cashTransId > 0) || row.cachpayrowCount == 0))
+                            }else if (row.subscriptionType == "f")
                             {
+                                row.membershipStatus = "valid";
+                            }
+                            else if ((row.subscriptionType == "o" || row.subscriptionType == "y" || row.subscriptionType == "m") && (row.agentMembershipcashobjList.Count() == 0))
+                            {
+                                // //no cash record
                                 row.membershipStatus = "notpayed";
                             }
-                            else if ((row.subscriptionType == "m" || row.subscriptionType == "y") && (!(row.cashTransId > 0)|| row.cachpayrowCount == 0))
+
+                            else if (row.agentMembershipcashobj != null && (row.agentMembershipcashobj.membershipId != row.membershipId))
                             {
+                                //membership changed
                                 row.membershipStatus = "notpayed";
-
-
                             }
-                            else if ((row.subscriptionType == "m" || row.subscriptionType == "y") && !(row.endDate >= dtnow))
-                            {
-                                row.membershipStatus = "expired";
-                            }
-                            else
-                            {
-                                if ((row.subscriptionType == "m" || row.subscriptionType == "y") && (row.cashTransId > 0) && !(row.endDate >= dtnow))
+                            else if (row.agentMembershipcashobj != null && (row.agentMembershipcashobj.membershipId == row.membershipId))
+                            {    //membership not changed and subscriptionType changed
+                                if (
+                              ((row.agentMembershipcashobj.subscriptionType == "m" || row.agentMembershipcashobj.subscriptionType == "y") && (row.subscriptionType == "o"))
+                                || ((row.agentMembershipcashobj.subscriptionType == "o") && (row.subscriptionType == "y" || row.subscriptionType == "m"))
+                                )
                                 {
+                                    row.membershipStatus = "notpayed";
+                                }
+                                else if (row.subscriptionType == "o" && row.agentMembershipcashobjList.Count()>0)
+                                {
+                                    //subscriptionType =o and not changed and  payed 
+                                    row.membershipStatus = "valid";
+                                }
+                                else if ((row.subscriptionType == "m" || row.subscriptionType == "y") && !(row.agentMembershipcashobj.endDate >= dtnow) )
+                                {
+                                    //subscriptionType =y or m  and not changed and  payed and  endDate < dtnow
                                     row.membershipStatus = "expired";
                                 }
                                 else
@@ -859,8 +908,37 @@ namespace POS_Server.Controllers
                                     row.membershipStatus = "valid";
                                 }
 
+
+                               // row.membershipStatus = "notpayed";
                             }
-                           
+
+                            //else if (row.subscriptionType == "o" && (!(row.cashTransId > 0) || row.cachpayrowCount == 0))
+                            //{
+                            //    row.membershipStatus = "notpayed";
+                            //}
+                            //else if ((row.subscriptionType == "m" || row.subscriptionType == "y") && (!(row.cashTransId > 0) || row.cachpayrowCount == 0))
+                            //{
+                            //    row.membershipStatus = "notpayed";
+
+
+                            //}
+                            //else if ((row.subscriptionType == "m" || row.subscriptionType == "y") && !(row.endDate >= dtnow))
+                            //{
+                            //    row.membershipStatus = "expired";
+                            //}
+                            //else
+                            //{
+                            //    if ((row.subscriptionType == "m" || row.subscriptionType == "y") && (row.cashTransId > 0) && !(row.endDate >= dtnow))
+                            //    {
+                            //        row.membershipStatus = "expired";
+                            //    }
+                            //    else
+                            //    {
+                            //        row.membershipStatus = "valid";
+                            //    }
+
+                            //}
+
 
                             row.couponsCount = entity.couponsMemberships.Where(x => x.membershipId == row.membershipId).Count();
 
@@ -870,6 +948,8 @@ namespace POS_Server.Controllers
                         return TokenManager.GenerateToken(List);
 
                     }
+
+
                 }
                 catch (Exception ex)
                 {
