@@ -1216,9 +1216,11 @@ namespace POS_Server.Controllers
             }
             else
             {
+                #region params
                 string invType = "";
                 int branchCreatorId = 0;
                 int branchId = 0;
+                int duration = 0;
                 List<string> invTypeL = new List<string>();
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1239,8 +1241,12 @@ namespace POS_Server.Controllers
                     {
                         branchId = int.Parse(c.Value);
                     }
+                    else if (c.Type == "duration")
+                    {
+                        duration = int.Parse(c.Value);
+                    }
                 }
-
+                #endregion
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var searchPredicate = PredicateBuilder.New<invoices>();
@@ -1249,6 +1255,12 @@ namespace POS_Server.Controllers
 
                     if (branchId != 0)
                         searchPredicate = searchPredicate.Or(inv => inv.branchId == branchId && inv.isActive == true && invTypeL.Contains(inv.invType));
+
+                    if (duration > 0)
+                    {
+                        DateTime dt = Convert.ToDateTime(DateTime.Today.AddDays(-duration).ToShortDateString());
+                        searchPredicate = searchPredicate.And(inv => inv.updateDate >= dt);
+                    }
 
                     var invoicesList = (from b in entity.invoices.Where(searchPredicate)
                                         join l in entity.branches on b.branchId equals l.branchId into lj
@@ -1530,9 +1542,11 @@ namespace POS_Server.Controllers
             }
             else
             {
+                #region params
                 string invType = "";
                 int branchCreatorId = 0;
                 int branchId = 0;
+                int duration = 0;
                 List<string> invTypeL = new List<string>();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -1552,7 +1566,12 @@ namespace POS_Server.Controllers
                     {
                         branchId = int.Parse(c.Value);
                     }
+                    else if (c.Type == "duration")
+                    {
+                        duration = int.Parse(c.Value);
+                    }
                 }
+                #endregion
 
                 using (incposdbEntities entity = new incposdbEntities())
                 {
@@ -1564,46 +1583,18 @@ namespace POS_Server.Controllers
                     if (branchId != 0)
                         searchPredicate = searchPredicate.Or(inv => inv.branchId == branchId && inv.isActive == true && invTypeL.Contains(inv.invType));
 
-                    var invoicesCount = (from b in entity.invoices.Where(searchPredicate)
-                                        join l in entity.branches on b.branchId equals l.branchId into lj
-                                        from x in lj.DefaultIfEmpty()
+                    if (duration > 0)
+                    {
+                        DateTime dt = Convert.ToDateTime(DateTime.Today.AddDays(-duration).ToShortDateString());
+                        searchPredicate = searchPredicate.And(inv => inv.updateDate >= dt);
+                    }
+
+                    var invoicesCount = (from b in entity.invoices.Where(searchPredicate)                                        
                                         select new InvoiceModel()
                                         {
                                             invoiceId = b.invoiceId,
                                             invNumber = b.invNumber,
-                                            agentId = b.agentId,
-                                            invType = b.invType,
-                                            total = b.total,
-                                            totalNet = b.totalNet,
-                                            paid = b.paid,
-                                            deserved = b.deserved,
-                                            deservedDate = b.deservedDate,
-                                            invDate = b.invDate,
-                                            invoiceMainId = b.invoiceMainId,
-                                            invCase = b.invCase,
-                                            invTime = b.invTime,
-                                            notes = b.notes,
-                                            vendorInvNum = b.vendorInvNum,
-                                            vendorInvDate = b.vendorInvDate,
-                                            createUserId = b.createUserId,
-                                            updateDate = b.updateDate,
-                                            updateUserId = b.updateUserId,
-                                            branchId = b.branchId,
-                                            discountValue = b.discountValue,
-                                            discountType = b.discountType,
-                                            tax = b.tax,
-                                            taxtype = b.taxtype,
-                                            name = b.name,
-                                            isApproved = b.isApproved,
-                                            branchName = x.name,
-                                            branchCreatorId = b.branchCreatorId,
-                                            shippingCompanyId = b.shippingCompanyId,
-                                            shipUserId = b.shipUserId,
-                                            userId = b.userId,
-                                            manualDiscountType = b.manualDiscountType,
-                                            manualDiscountValue = b.manualDiscountValue,
-                                        })
-                    .ToList().Count;
+                                        }).ToList().Count;
                    
                     return TokenManager.GenerateToken(invoicesCount);
                 }
