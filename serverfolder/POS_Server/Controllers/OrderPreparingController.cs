@@ -974,8 +974,10 @@ namespace POS_Server.Controllers
             }
             else
             {
+                #region params
                 int invoiceId = 0;
                 int shipUserId = 0;
+                int shippingCompanyId = 0;
                 string statusObject = "";
                 orderPreparingStatus status = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -989,6 +991,10 @@ namespace POS_Server.Controllers
                     {
                         shipUserId = int.Parse(c.Value);
                     }
+                    else if(c.Type == "shippingCompanyId")
+                    {
+                        shippingCompanyId = int.Parse(c.Value);
+                    }
                     else if (c.Type == "statusObject")
                     {
                         statusObject = c.Value.Replace("\\", string.Empty);
@@ -996,14 +1002,15 @@ namespace POS_Server.Controllers
                         status = JsonConvert.DeserializeObject<orderPreparingStatus>(statusObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
                     }
                 }
-
+                #endregion
                 try
                 {
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        #region edit shipUserId
+                        #region edit shipping info
                         var inv = entity.invoices.Find(invoiceId);
                         inv.shipUserId = shipUserId;
+                        inv.shippingCompanyId = shippingCompanyId;
                         inv.updateDate = DateTime.Now;
                         entity.SaveChanges();
                         #endregion
