@@ -607,6 +607,7 @@ namespace POS_Server.Controllers
                                            invoiceId = x.invoiceId,
                                            shipUserId = x.shipUserId,
                                            shipUserName = y.name,
+                                           shipUserLastName = y.lastname,
                                            shippingCompanyId = x.shippingCompanyId,
                                            shippingCompanyName = x.shippingCompanies.name,
                                            orderTime = x.orderTime,
