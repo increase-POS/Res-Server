@@ -979,7 +979,7 @@ namespace POS_Server.Controllers
             {
                 #region params
                 int invoiceId = 0;
-                int shipUserId = 0;
+                int? shipUserId = 0;
                 int shippingCompanyId = 0;
                 string statusObject = "";
                 orderPreparingStatus status = null;
@@ -992,7 +992,14 @@ namespace POS_Server.Controllers
                     }
                     else if(c.Type == "shipUserId")
                     {
-                        shipUserId = int.Parse(c.Value);
+                        try
+                        {
+                            shipUserId = int.Parse(c.Value);
+                        }
+                        catch
+                        {
+                            shipUserId = null;
+                        }
                     }
                     else if(c.Type == "shippingCompanyId")
                     {
