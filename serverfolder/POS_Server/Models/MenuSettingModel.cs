@@ -18,7 +18,7 @@ namespace POS_Server.Models
         public Nullable<bool> wed { get; set; }
         public Nullable<bool> thur { get; set; }
         public Nullable<bool> fri { get; set; }
-        public Nullable<int> preparingTime { get; set; }
+        public Nullable<decimal> preparingTime { get; set; }
         public Nullable<byte> isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
