@@ -4295,7 +4295,7 @@ else
                                 membershipId = I.membershipId,
                                 membershipsName = I.memberships.name,
                                 membershipsCode = I.memberships.code,
-                                invoiceClassDiscountList = entity.invoiceClassDiscount.Where(X => X.invoiceId == I.invoiceId).Select(X => new
+                                invoiceClassDiscountList = entity.invoiceClassDiscount.Where(X => X.invoiceId == I.invoiceId  ).Select(X => new
                                 {
                                     invClassDiscountId = X.invClassDiscountId,
                                     invoiceId = X.invoiceId,
@@ -4303,7 +4303,7 @@ else
                                     discountType = X.discountType,
                                     discountValue = X.discountValue,
                                 }).ToList(),
-                                couponsInvoicesList = entity.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).Select(X => new
+                                couponsInvoicesList = entity.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId && X.forAgents== "pr").Select(X => new
                                 {
                                     couponId = X.couponId,
                                     id = X.id,
@@ -4312,9 +4312,10 @@ else
                                     discountValue = X.discountValue,
                                     forAgents = X.forAgents,
 
+
                                 }).ToList(),
 
-                                itemsTransferList = entity.itemsTransfer.Where(X => X.invoiceId == I.invoiceId).Select(X => new
+                                itemsTransferList = entity.itemsTransfer.Where(X => X.invoiceId == I.invoiceId && X.offerId>0 && X.forAgents == "pr").Select(X => new
                                 {
                                     itemsTransId = X.itemsTransId,
 
@@ -4345,7 +4346,11 @@ else
                                 }).ToList(),
 
                             }).ToList();
+                         
+                        foreach ( var row in invListm)
+                        {
 
+                        }
                         return TokenManager.GenerateToken(invListm);
 
                     }
