@@ -1048,7 +1048,8 @@ namespace POS_Server.Controllers
                     int cashTransId = 0;
                     DateTime lastenddate = DateTime.Now;
                     DateTime DTNow = DateTime.Now;
-                    CashTransferController cashcntrlr = new CashTransferController();
+                    DateTime tmp;
+                   CashTransferController cashcntrlr = new CashTransferController();
                     AgenttoPayCashModel LastAgentmcash = new AgenttoPayCashModel();
                     subscriptionFees subscriptionmodel = new subscriptionFees();
                     LastAgentmcash = GetLastAgentmcash(newObject);
@@ -1091,6 +1092,7 @@ namespace POS_Server.Controllers
 
 
                                     newObject.endDate = lastenddate.AddMonths((int)newObject.monthsCount);
+                             
                                 }
                                 else if (newObject.subscriptionType == "y")
                                 {
@@ -1164,7 +1166,17 @@ namespace POS_Server.Controllers
                             //   newObject.endDate = DTNow.AddMonths(2);
                         }
                     }
+                    if (newObject.subscriptionType == "o")
+                    {
 
+                        
+                        newObject.endDate = DTNow;
+                    }
+                   
+                    
+                    tmp = (DateTime)newObject.endDate;
+                    tmp =    tmp.AddDays(-1);
+                    newObject.endDate = tmp.Date;
                     ////////////////////////////////////////////////////////
                     //save cash trans 
                     cashTransId = cashcntrlr.Save(cashTransferObject);
