@@ -4317,7 +4317,7 @@ else
                                     forAgents = X.forAgents,
                                     couponCode = X.coupons.code,
                                     name = X.coupons.name,
-                                    finalDiscount = X.discountType == 2 ? (X.discountValue / 100) * (I.total) : X.discountValue,
+                                    finalDiscount = (decimal)X.discountType == 2 ? (X.discountValue / 100) * (I.total) : X.discountValue,
                     }).ToList(),
 
                                 itemsTransferList = entity.itemsTransfer.Where(X => X.invoiceId == I.invoiceId && X.offerId > 0 && X.forAgents == "pr").Select(X => new ItemTransferModel
@@ -4349,14 +4349,13 @@ else
                                     forAgents = X.forAgents,
                                     offerCode = X.offers.code,
                                     offerName = X.offers.name,
-                                    finalDiscount= X.offerType == 2 ? ((X.offerValue / 100) * (X.itemUnitPrice)) * X.quantity : X.offerValue * X.quantity,
+                                    finalDiscount= (decimal)X.offerType == 2 ? ((X.offerValue / 100) * (X.itemUnitPrice)) * X.quantity : X.offerValue * X.quantity,
                                 }).ToList(),
 
-                                invclassDiscount = (decimal)0,
-                                couponDiscount = (decimal)0,
-                                offerDiscount = (decimal)0,
-
-                                totalDiscount = (decimal)0,
+                                invclassDiscount = 0,
+                                couponDiscount =  0,
+                                offerDiscount =  0,
+                                totalDiscount =  0,
 
                             }).ToList();
                         //     discountValue = ((I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * (I.total - I.shippingCost)) : 0))
@@ -4364,14 +4363,12 @@ else
 
                         foreach (var row in invListm)
                         {
-
                             row.invclassDiscount = (decimal)row.invoiceClassDiscountList.Sum(X => X.discountType == 2 ? (X.discountValue / 100) * (row.total) : X.discountValue);
                             row.couponDiscount = (decimal)row.CouponInvoiceList.Sum(X => X.discountType == 2 ? (X.discountValue / 100) * (row.total) : X.discountValue);
                             row.offerDiscount = (decimal)row.itemsTransferList.Sum(X => X.offerType == 2 ? ((X.offerValue / 100) * (X.itemUnitPrice)) * X.quantity : X.offerValue * X.quantity);
                             row.totalDiscount = row.invclassDiscount + row.couponDiscount + row.offerDiscount;
                         }
                         return TokenManager.GenerateToken(invListm);
-
                     }
 
                 }

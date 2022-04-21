@@ -1176,7 +1176,7 @@ namespace POS_Server.Controllers
                     
                     tmp = (DateTime)newObject.endDate;
                     tmp =    tmp.AddDays(-1);
-                    newObject.endDate = tmp.Date;
+                    newObject.endDate = tmp.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
                     ////////////////////////////////////////////////////////
                     //save cash trans 
                     cashTransId = cashcntrlr.Save(cashTransferObject);
