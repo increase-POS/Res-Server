@@ -80,5 +80,6 @@ namespace POS_Server.Models
 
         public string couponCode { get; set; }
         public string name { get; set; }
+        public Nullable<decimal> finalDiscount { get; set; }
     }
 }

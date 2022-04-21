@@ -4304,18 +4304,21 @@ else
                                     invClassId = (int)X.invClassId,
                                     discountType = X.discountType,
                                     discountValue = X.discountValue,
+                                    finalDiscount=(decimal)  X.discountType == 2 ? (X.discountValue / 100) * (I.total) : X.discountValue
                                 }).ToList(),
                                 CouponInvoiceList = entity.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId && X.forAgents == "pr").Select(X => new CouponInvoiceModel
                                 {
                                     couponId = X.couponId,
+
                                     id = X.id,
                                     InvoiceId = X.InvoiceId,
                                     discountType = X.discountType,
                                     discountValue = X.discountValue,
                                     forAgents = X.forAgents,
-
-
-                                }).ToList(),
+                                    couponCode = X.coupons.code,
+                                    name = X.coupons.name,
+                                    finalDiscount = X.discountType == 2 ? (X.discountValue / 100) * (I.total) : X.discountValue,
+                    }).ToList(),
 
                                 itemsTransferList = entity.itemsTransfer.Where(X => X.invoiceId == I.invoiceId && X.offerId > 0 && X.forAgents == "pr").Select(X => new ItemTransferModel
                                 {
@@ -4346,6 +4349,7 @@ else
                                     forAgents = X.forAgents,
                                     offerCode = X.offers.code,
                                     offerName = X.offers.name,
+                                    finalDiscount= X.offerType == 2 ? ((X.offerValue / 100) * (X.itemUnitPrice)) * X.quantity : X.offerValue * X.quantity,
                                 }).ToList(),
 
                                 invclassDiscount = (decimal)0,

@@ -26,6 +26,7 @@ namespace POS_Server.Models
         public string name { get; set; }
         public int invClassDiscountId { get; set; }
         public Nullable<int> invoiceId { get; set; }
-        
+        public Nullable<decimal> finalDiscount { get; set; }
+
     }
 }

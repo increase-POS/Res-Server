@@ -52,6 +52,7 @@ namespace POS_Server.Models
         public Nullable<decimal>  offerType { get; set; }
         public string offerCode { get; set; }
         public string offerName { get; set; }
+        public Nullable<decimal> finalDiscount { get; set; }
 
     }
 }
