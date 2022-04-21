@@ -46,6 +46,12 @@ namespace POS_Server.Models
 
         public string itemType { get; set; }
 
-     
+        public Nullable<decimal> itemTax { get; set; }
+        public Nullable<decimal> itemUnitPrice { get; set; }
+        public Nullable<decimal> offerValue { get; set; }
+        public Nullable<decimal>  offerType { get; set; }
+        public string offerCode { get; set; }
+        public string offerName { get; set; }
+
     }
 }
