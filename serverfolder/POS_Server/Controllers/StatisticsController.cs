@@ -1956,7 +1956,7 @@ else
                                         from JIMM in JIM.DefaultIfEmpty()
                                         from JAA in JA.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
-                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb")
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb"  || I.invType == "ts" || I.invType == "ss")
 
                                         select new
                                         {
@@ -2250,7 +2250,7 @@ else
                                         from JIMM in JIM.DefaultIfEmpty()
                                         from JAA in JA.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
-                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb")
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb"||I.invType == "s" || I.invType == "ts" || I.invType == "ss")
 
                                         select new
                                         {
@@ -2295,14 +2295,14 @@ else
 
                                             agentCode = JAA.code,
                                             //
-                                            agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb")) ?
+                                            agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"||   I.invType == "ts" || I.invType == "ss")) ?
                                             "unknown" : JAA.name,
 
 
                                             //   agentType = JAA.type,
-                                            agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"))
+                                            agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"|| I.invType == "ts" || I.invType == "ss"))
                                             ? "c" : JAA.type,
-                                            agentId = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"))
+                                            agentId = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
                                             ? 0 : I.agentId,
 
 
@@ -2312,7 +2312,7 @@ else
                                             uuserName = JUPUS.name,
                                             uuserLast = JUPUS.lastname,
                                             uUserAccName = JUPUS.username,
-                                            agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb")) ?
+                                            agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")) ?
                                             "unknown" : JAA.company,
 
 
@@ -2569,14 +2569,14 @@ else
 
                                             agentCode = JAA.code,
                                             //
-                                            agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb")) ?
+                                            agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss" || I.invType == "ts" || I.invType == "ss")) ?
                                             "unknown" : JAA.name,
 
 
                                             //   agentType = JAA.type,
-                                            agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"))
+                                            agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
                                             ? "c" : JAA.type,
-                                            agentId = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"))
+                                            agentId = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
                                             ? 0 : I.agentId,
 
 
@@ -2586,7 +2586,7 @@ else
                                             uuserName = JUPUS.name,
                                             uuserLast = JUPUS.lastname,
                                             uUserAccName = JUPUS.username,
-                                            agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb")) ?
+                                            agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")) ?
                                             "unknown" : JAA.company,
 
 
@@ -2840,14 +2840,14 @@ else
 
                                             agentCode = JAA.code,
                                             //
-                                            agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb")) ?
+                                            agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")) ?
                                             "unknown" : JAA.name,
 
 
                                             //   agentType = JAA.type,
-                                            agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"))
+                                            agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
                                             ? "c" : JAA.type,
-                                            agentId = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"))
+                                            agentId = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
                                             ? 0 : I.agentId,
 
 
@@ -2857,7 +2857,7 @@ else
                                             uuserName = JUPUS.name,
                                             uuserLast = JUPUS.lastname,
                                             uUserAccName = JUPUS.username,
-                                            agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb")) ?
+                                            agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")) ?
                                             "unknown" : JAA.company,
 
 
@@ -3116,14 +3116,14 @@ else
 
                                             agentCode = JAA.code,
                                             //
-                                            agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb")) ?
+                                            agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")) ?
                                             "unknown" : JAA.name,
 
 
                                             //   agentType = JAA.type,
-                                            agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"))
+                                            agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
                                             ? "c" : JAA.type,
-                                            agentId = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"))
+                                            agentId = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
                                             ? 0 : I.agentId,
 
 
@@ -3133,7 +3133,7 @@ else
                                             uuserName = JUPUS.name,
                                             uuserLast = JUPUS.lastname,
                                             uUserAccName = JUPUS.username,
-                                            agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb")) ?
+                                            agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")) ?
                                             "unknown" : JAA.company,
 
 
@@ -3353,7 +3353,7 @@ else
                                         from JIMM in JIM.DefaultIfEmpty()
                                         from JAA in JA.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
-                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb")
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")
                                         select new
                                         {
                                             //coupon
@@ -3652,7 +3652,7 @@ else
                                         from JIMM in JIM.DefaultIfEmpty()
                                         from JAA in JA.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
-                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb")
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")
                                         orderby IT.itemsTransId
                                         select new
                                         {
@@ -4060,7 +4060,7 @@ else
 
                                         from JAA in JA.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
-                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb")
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")
 
                                         select new
                                         {
@@ -4290,7 +4290,7 @@ else
                                 uuserName = JUPUS.name,
                                 uuserLast = JUPUS.lastname,
                                 uUserAccName = JUPUS.username,
-                                agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb")) ?
+                                agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")) ?
                                 "unknown" : JAA.company,
 
                                 membershipId = I.membershipId,
@@ -7610,7 +7610,7 @@ else
                                         from JBCC in JBC.DefaultIfEmpty()
                                         where (brIds.Contains(JBCC.branchId)) && (I.invType == "sd" || I.invType == "s"
                                         || I.invType == "sbd" || I.invType == "sd" || I.invType == "ord" || I.invType == "or"
-                                        || I.invType == "q" || I.invType == "qd")
+                                        || I.invType == "q" || I.invType == "qd" || I.invType == "ts" || I.invType == "ss")
                                         // && calc.changeDateformat(I.updateDate, "yyyy-MM-dd")== calc.changeDateformat(date, "yyyy-MM-dd")
                                         //&& DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0
                                         //    && DateTime.Compare((DateTime)calc.changeDateformat(I.updateDate, "yyyy-MM-dd"), (DateTime)calc.changeDateformat(date, "yyyy-MM-dd")) >= 0
@@ -8428,8 +8428,8 @@ else
                                                                          // from JIMM in JIM.DefaultIfEmpty()
                                                                      from JAA in JA.DefaultIfEmpty()
                                                                      from JBCC in JBC.DefaultIfEmpty()
-                                                                     where (brIds.Contains(JBCC.branchId)) && (I.invType == "s")
-
+                                                                     where (brIds.Contains(JBCC.branchId)) && (I.invType == "s"|| I.invType == "ts" || I.invType == "ss")
+                                                                    
                                                                      select new ItemUnitInvoiceProfitModel
                                                                      {
 
@@ -8646,7 +8646,7 @@ else
                                                                          // from JIMM in JIM.DefaultIfEmpty()
                                                                      from JAA in JA.DefaultIfEmpty()
                                                                      from JBCC in JBC.DefaultIfEmpty()
-                                                                     where (brIds.Contains(JBCC.branchId)) && (I.invType == "s")
+                                                                     where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "ts" || I.invType == "ss")
 
                                                                      select new ItemUnitInvoiceProfitModel
                                                                      {
@@ -8917,7 +8917,7 @@ else
                                                                          // from JIMM in JIM.DefaultIfEmpty()
                                                                      from JAA in JA.DefaultIfEmpty()
                                                                      from JBCC in JBC.DefaultIfEmpty()
-                                                                     where (brIds.Contains(JBCC.branchId)) && (I.invType == "s")
+                                                                     where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "ts" || I.invType == "ss")
 
                                                                      select new ItemUnitInvoiceProfitModel
                                                                      {
