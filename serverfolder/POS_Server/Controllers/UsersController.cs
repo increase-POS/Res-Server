@@ -519,13 +519,13 @@ namespace POS_Server.Controllers
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var residentSecId = entity.agents.Where(x => x.agentId == customerId).Select(x => x.residentSecId).SingleOrDefault();
-
+                    
                     List<UserModel> usersList = new List<UserModel>();
 
                     if (residentSecId != null)
                     {
                         usersList = (from u in entity.users.Where(u => u.userId != 1 && u.isActive == 1 && u.driverIsAvailable == 1)
-                                     join su in entity.residentialSectorsUsers on u.userId equals su.userId
+                                     join su in entity.residentialSectorsUsers.Where(x => x.residentSecId == residentSecId) on u.userId equals su.userId
                                      select new UserModel
                                      {
                                          userId = u.userId,
@@ -552,7 +552,7 @@ namespace POS_Server.Controllers
                                      })
                         .Distinct().ToList();
                     }
-
+               
                     if (usersList.Count == 0)
                     {
                         usersList = entity.users.Where(u => u.userId != 1 && u.isActive == 1 && u.job == job && u.driverIsAvailable == 1)
