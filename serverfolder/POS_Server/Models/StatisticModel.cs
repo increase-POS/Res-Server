@@ -10,6 +10,7 @@ namespace POS_Server.Models
     {
         public int orderPreparingId { get; set; }
         public string orderNum { get; set; }
+        public Nullable<System.DateTime> orderTime { get; set; }
         public Nullable<int> invoiceId { get; set; }
         public string notes { get; set; }
         public Nullable<decimal> preparingTime { get; set; }
@@ -46,7 +47,33 @@ namespace POS_Server.Models
         public string tagName { get; set; }
         public Nullable<System.DateTime> listedDate { get; set; }
 
+        public string shipUserName { get; set; }
+        public string shipUserLastName { get; set; }
+        public string shippingCompanyName { get; set; }
+        public Nullable<int> shipUserId { get; set; }
+        //   agentId
+        public Nullable<int> agentId { get; set; }
+        public string agentName { get; set; }
+        public string agentCompany { get; set; }
+        public string agentType { get; set; }
+        public string agentCode { get; set; }
+        public  List<orderPreparingStatusModel> orderStatusList { get; set; }
+        public decimal orderDuration { get; set; }
 
+
+
+
+    }
+    public class orderPreparingStatusModel
+    {
+        public int orderStatusId { get; set; }
+        public Nullable<int> orderPreparingId { get; set; }
+        public string status { get; set; }
+        public Nullable<System.DateTime> createDate { get; set; }
+        public Nullable<System.DateTime> updateDate { get; set; }
+    
+        public string notes { get; set; }
+  
     }
 
     public class ItemUnitInvoiceProfitModel

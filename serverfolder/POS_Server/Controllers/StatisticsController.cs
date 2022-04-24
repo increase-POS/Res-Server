@@ -1956,7 +1956,7 @@ else
                                         from JIMM in JIM.DefaultIfEmpty()
                                         from JAA in JA.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
-                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb"  || I.invType == "ts" || I.invType == "ss")
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")
 
                                         select new
                                         {
@@ -2250,7 +2250,7 @@ else
                                         from JIMM in JIM.DefaultIfEmpty()
                                         from JAA in JA.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
-                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb"||I.invType == "s" || I.invType == "ts" || I.invType == "ss")
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "sb" || I.invType == "s" || I.invType == "ts" || I.invType == "ss")
 
                                         select new
                                         {
@@ -2295,12 +2295,12 @@ else
 
                                             agentCode = JAA.code,
                                             //
-                                            agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"||   I.invType == "ts" || I.invType == "ss")) ?
+                                            agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")) ?
                                             "unknown" : JAA.name,
 
 
                                             //   agentType = JAA.type,
-                                            agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb"|| I.invType == "ts" || I.invType == "ss"))
+                                            agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
                                             ? "c" : JAA.type,
                                             agentId = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
                                             ? 0 : I.agentId,
@@ -4304,7 +4304,7 @@ else
                                     invClassId = (int)X.invClassId,
                                     discountType = X.discountType,
                                     discountValue = X.discountValue,
-                                    finalDiscount=(decimal)  X.discountType == 2 ? (X.discountValue / 100) * (I.total) : X.discountValue
+                                    finalDiscount = (decimal)X.discountType == 2 ? (X.discountValue / 100) * (I.total) : X.discountValue
                                 }).ToList(),
                                 CouponInvoiceList = entity.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId && X.forAgents == "pr").Select(X => new CouponInvoiceModel
                                 {
@@ -4318,7 +4318,7 @@ else
                                     couponCode = X.coupons.code,
                                     name = X.coupons.name,
                                     finalDiscount = (decimal)X.discountType == 2 ? (X.discountValue / 100) * (I.total) : X.discountValue,
-                    }).ToList(),
+                                }).ToList(),
 
                                 itemsTransferList = entity.itemsTransfer.Where(X => X.invoiceId == I.invoiceId && X.offerId > 0 && X.forAgents == "pr").Select(X => new ItemTransferModel
                                 {
@@ -4349,13 +4349,13 @@ else
                                     forAgents = X.forAgents,
                                     offerCode = X.offers.code,
                                     offerName = X.offers.name,
-                                    finalDiscount= (decimal)X.offerType == 2 ? ((X.offerValue / 100) * (X.itemUnitPrice)) * X.quantity : X.offerValue * X.quantity,
+                                    finalDiscount = (decimal)X.offerType == 2 ? ((X.offerValue / 100) * (X.itemUnitPrice)) * X.quantity : X.offerValue * X.quantity,
                                 }).ToList(),
 
                                 invclassDiscount = 0,
-                                couponDiscount =  0,
-                                offerDiscount =  0,
-                                totalDiscount =  0,
+                                couponDiscount = 0,
+                                offerDiscount = 0,
+                                totalDiscount = 0,
 
                             }).ToList();
                         //     discountValue = ((I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * (I.total - I.shippingCost)) : 0))
@@ -8428,8 +8428,8 @@ else
                                                                          // from JIMM in JIM.DefaultIfEmpty()
                                                                      from JAA in JA.DefaultIfEmpty()
                                                                      from JBCC in JBC.DefaultIfEmpty()
-                                                                     where (brIds.Contains(JBCC.branchId)) && (I.invType == "s"|| I.invType == "ts" || I.invType == "ss")
-                                                                    
+                                                                     where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "ts" || I.invType == "ss")
+
                                                                      select new ItemUnitInvoiceProfitModel
                                                                      {
 
@@ -9869,7 +9869,172 @@ else
         }
 
         #endregion
+        #region delivery
+        [HttpPost]
+        [Route("GetDelivery")]
+        public string GetDelivery(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
 
+
+                int mainBranchId = 0;
+                int userId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "mainBranchId")
+                    {
+                        mainBranchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                }
+                #endregion
+                try
+                {
+
+                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<OrderPreparingSTSModel> invoices = new List<OrderPreparingSTSModel>();
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        //var searchPredicate = PredicateBuilder.New<invoices>();
+                        //searchPredicate = searchPredicate.And(x => x.branchId == branchId);
+
+                        //searchPredicate = searchPredicate.And(x => x.invType == "ts" || x.invType == "ss");
+                        //searchPredicate = searchPredicate.And(x => x.shippingCompanyId != null);
+
+
+                         invoices = (from x in entity.invoices
+                                        join o in entity.orderPreparing on x.invoiceId equals o.invoiceId
+                                        join ag in entity.agents on x.agentId equals ag.agentId into gj
+                                        join u in entity.users on x.shipUserId equals u.userId into lj
+                                        from y in lj.DefaultIfEmpty()
+                                        from g in gj.DefaultIfEmpty()
+                                        where (brIds.Contains((int)x.branchId) && x.shippingCompanyId != null
+                                        && (x.invType == "ts" || x.invType == "ss"))
+                                        select new OrderPreparingSTSModel()// InvoiceModel()//
+                                                                           //   OrderPreparingSTSModel
+                                        {
+                                            invNumber = x.invNumber,
+                                            invoiceId = x.invoiceId,
+                                            shipUserId = x.shipUserId,
+                                            shipUserName = y.name,
+                                            shipUserLastName = y.lastname,
+                                            shippingCompanyId = x.shippingCompanyId,
+                                            shippingCompanyName = x.shippingCompanies.name,
+                                            
+                                            orderTime = x.orderTime,//
+                                            orderPreparingId = o.orderPreparingId,
+                                            orderNum = o.orderNum,
+                                            createDate = o.createDate,
+                                            createUserId = o.createUserId,
+
+                                            agentId = x.agentId,
+                                            agentName = g.name,
+                                            agentCompany = g.company,
+                                            agentType = g.type,
+                                            agentCode = g.code,
+
+                                            orderStatusList=entity.orderPreparingStatus.Where(X=>X.orderPreparingId==o.orderPreparingId && (X.status== "InTheWay" || X.status == "Done")).Select(X=> new orderPreparingStatusModel {
+                                                status=X.status,
+                                                createDate=X.createDate,
+                                                updateDate=X.updateDate,
+                                                orderPreparingId=X.orderPreparingId,
+                                                orderStatusId=X.orderStatusId,
+
+                                            }).OrderBy(X=>X.createDate).ToList(),
+
+                                           orderDuration=0,
+                                        }).ToList();
+
+                        invoices = invoices.Where(X => X.orderStatusList.LastOrDefault().status == "Done").ToList();
+                        foreach (OrderPreparingSTSModel row in invoices)
+                        {
+                            if (row.orderStatusList != null)
+                            {
+
+                                TimeSpan tmp =(TimeSpan)(row.orderStatusList.LastOrDefault().createDate -  row.orderStatusList.FirstOrDefault().createDate);
+                                row.orderDuration = (decimal)tmp.TotalMinutes;
+
+
+                            }
+                           
+                        }
+                        //o.status == "Done"
+                        //foreach (InvoiceModel inv in invoices)
+                        //{
+                        //    var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == inv.invoiceId)
+                        //                      join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                        //                      where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                        //                      select new OrderPreparingModel()
+                        //                      {
+                        //                          orderPreparingId = o.orderPreparingId,
+                        //                          invoiceId = o.invoiceId,
+                        //                          notes = o.notes,
+                        //                          orderNum = o.orderNum,
+                        //                          createDate = o.createDate,
+                        //                          createUserId = o.createUserId,
+                        //                          invNum = o.invoices.invNumber,
+                        //                          status = s.status,
+                        //                      }).ToList();
+
+
+                        //    foreach (OrderPreparingModel o in prepOrders)
+                        //    {
+                        //        #region set inv status
+                        //        if (o.status == "Collected")
+                        //        {
+                        //            inv.status = "Collected";
+                        //            break;
+                        //        }
+                        //        else if (o.status == "InTheWay")
+                        //        {
+                        //            inv.status = "InTheWay";
+                        //            break;
+                        //        }
+                        //        else if (o.status == "Done")
+                        //        {
+                        //            inv.status = "Done";
+                        //            break;
+                        //        }
+                        //        else if (o.status == "Listed" || o.status == "Preparing")
+                        //        {
+                        //            inv.status = "Listed";
+                        //            break;
+                        //        }
+                        //        else
+                        //            inv.status = "Ready";
+                        //        #endregion
+
+                        //    }
+
+                        //}
+
+                        //#region get orders according to status
+                        //if (statusStr != "")
+                        //    invoices = invoices.Where(x => statusL.Contains(x.status)).OrderBy(x => x.invNumber).ToList();
+                        //#endregion
+
+                        return TokenManager.GenerateToken(invoices);
+                    }
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+        #endregion
 
     }
 }
