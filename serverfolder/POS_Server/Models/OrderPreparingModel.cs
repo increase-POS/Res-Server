@@ -28,6 +28,8 @@ namespace POS_Server.Models
         public decimal remainingTime { get; set; }
         public string tables { get; set; }
         public string waiter { get; set; }
+        public Nullable<System.DateTime> preparingStatusDate { get; set; }
+
         //invoice
         public string invNum { get; set; }
         public string invType { get; set; }

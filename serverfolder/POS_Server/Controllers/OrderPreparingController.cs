@@ -243,32 +243,42 @@ namespace POS_Server.Controllers
                                 #region invoice tables
                                 o.tables = tablesNames;
                                 #endregion
-                               
-                                #region calculate remaining time
-                                if (o.preparingTime != null)
-                                {
-                                    
-                                    if(o.status == "Listed")
-                                    {
-                                        o.remainingTime = (decimal)o.preparingTime;
-                                    }
-                                    else
-                                    {
-                                        //DateTime createDate = (DateTime)o.updateDate;
-                                        DateTime createDate =(DateTime) entity.orderPreparingStatus
-                                                                    .Where(x => x.orderPreparingId == o.orderPreparingId && x.status == "Preparing")
-                                                                    .Select(x => x.createDate).SingleOrDefault();
 
-                                        createDate = createDate.AddMinutes((double)o.preparingTime);
-                                        if (createDate > DateTime.Now)
-                                        {
-                                            TimeSpan remainingTime = createDate - DateTime.Now;
-                                            o.remainingTime = (decimal)remainingTime.TotalMinutes;
-                                        }
-                                    }
-          
+                                #region preparing status date
+                                if (o.status == "Listed")
+                                    o.preparingStatusDate = null;
+                                else
+                                {
+                                    DateTime createDate = (DateTime)entity.orderPreparingStatus
+                                                                   .Where(x => x.orderPreparingId == o.orderPreparingId && x.status == "Preparing")
+                                                                   .Select(x => x.createDate).SingleOrDefault();
+                                    o.preparingStatusDate = (DateTime)createDate;
                                 }
                                 #endregion
+                                //#region calculate remaining time
+                                //if (o.preparingTime != null)
+                                //{
+                                    
+                                //    if(o.status == "Listed")
+                                //    {
+                                //        o.remainingTime = (decimal)o.preparingTime;
+                                //    }
+                                //    else
+                                //    {
+                                //        DateTime createDate = (DateTime)entity.orderPreparingStatus
+                                //                                    .Where(x => x.orderPreparingId == o.orderPreparingId && x.status == "Preparing")
+                                //                                    .Select(x => x.createDate).SingleOrDefault();
+
+                                //        createDate = createDate.AddMinutes((double)o.preparingTime);
+                                //        if (createDate > DateTime.Now)
+                                //        {
+                                //            TimeSpan remainingTime = createDate - DateTime.Now;
+                                //            o.remainingTime = (decimal)remainingTime.TotalMinutes;
+                                //        }
+                                //    }
+          
+                                //}
+                                //#endregion
 
                                 // set sequence num to items
                                 int index = 1;
@@ -1011,6 +1021,7 @@ namespace POS_Server.Controllers
                         statusObject = statusObject.Trim('"');
                         status = JsonConvert.DeserializeObject<orderPreparingStatus>(statusObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
                     }
+
                 }
                 #endregion
                 try
