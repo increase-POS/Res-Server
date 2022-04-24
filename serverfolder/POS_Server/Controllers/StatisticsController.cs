@@ -9904,7 +9904,7 @@ else
                 {
 
                     List<int> brIds = AllowedBranchsId(mainBranchId, userId);
-                    List<OrderPreparingSTSModel> invoices = new List<OrderPreparingSTSModel>();
+                    List<OrderPreparingSTSModel> invoices =new List<OrderPreparingSTSModel>();
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         //var searchPredicate = PredicateBuilder.New<invoices>();
@@ -9932,44 +9932,38 @@ else
                                             shipUserLastName = y.lastname,
                                             shippingCompanyId = x.shippingCompanyId,
                                             shippingCompanyName = x.shippingCompanies.name,
-                                            
+                                            invType=x.invType,
+
                                             orderTime = x.orderTime,//
                                             orderPreparingId = o.orderPreparingId,
                                             orderNum = o.orderNum,
                                             createDate = o.createDate,
                                             createUserId = o.createUserId,
-
+                                            
                                             agentId = x.agentId,
                                             agentName = g.name,
                                             agentCompany = g.company,
                                             agentType = g.type,
                                             agentCode = g.code,
 
-                                            orderStatusList=entity.orderPreparingStatus.Where(X=>X.orderPreparingId==o.orderPreparingId && (X.status== "InTheWay" || X.status == "Done")).Select(X=> new orderPreparingStatusModel {
-                                                status=X.status,
-                                                createDate=X.createDate,
-                                                updateDate=X.updateDate,
-                                                orderPreparingId=X.orderPreparingId,
-                                                orderStatusId=X.orderStatusId,
+                                            branchId=x.branchId,
+                                            branchName=x.branches.name,
 
-                                            }).OrderBy(X=>X.createDate).ToList(),
+                                            orderStatusList = entity.orderPreparingStatus.Where(X => X.orderPreparingId == o.orderPreparingId && (X.status == "InTheWay" || X.status == "Done")).Select(X => new orderPreparingStatusModel
+                                            {
+                                                status = X.status,
+                                                createDate = X.createDate,
+                                                updateDate = X.updateDate,
+                                                orderPreparingId = X.orderPreparingId,
+                                                orderStatusId = X.orderStatusId,
 
-                                           orderDuration=0,
+                                            }).OrderBy(X => X.createDate).ToList(),
+
+                                            orderDuration =0,
                                         }).ToList();
 
-                        invoices = invoices.Where(X => X.orderStatusList.LastOrDefault().status == "Done").ToList();
-                        foreach (OrderPreparingSTSModel row in invoices)
-                        {
-                            if (row.orderStatusList != null)
-                            {
-
-                                TimeSpan tmp =(TimeSpan)(row.orderStatusList.LastOrDefault().createDate -  row.orderStatusList.FirstOrDefault().createDate);
-                                row.orderDuration = (decimal)tmp.TotalMinutes;
-
-
-                            }
-                           
-                        }
+                    
+                       
                         //o.status == "Done"
                         //foreach (InvoiceModel inv in invoices)
                         //{
@@ -10025,12 +10019,35 @@ else
                         //    invoices = invoices.Where(x => statusL.Contains(x.status)).OrderBy(x => x.invNumber).ToList();
                         //#endregion
 
-                        return TokenManager.GenerateToken(invoices);
+                       
                     }
+                invoices = invoices.Where(X => X.orderStatusList.LastOrDefault()!=null? X.orderStatusList.LastOrDefault().status == "Done":false).ToList();
+                    if (invoices != null )
+                    {
+                        if(invoices.Count() > 0)
+                        {
+
+                        
+                        foreach (OrderPreparingSTSModel row  in invoices.ToList())
+                        {
+                            if (row.orderStatusList != null)
+                            {
+
+                                TimeSpan tmp = (TimeSpan)(row.orderStatusList.LastOrDefault().createDate - row.orderStatusList.FirstOrDefault().createDate);
+                                row.orderDuration = (decimal)tmp.TotalMinutes;
+
+
+                            }
+
+                        }
+                        }
+                    }
+                    return TokenManager.GenerateToken(invoices);
                 }
-                catch
+                catch(Exception ex)
                 {
-                    return TokenManager.GenerateToken("0");
+                    return TokenManager.GenerateToken(ex.ToString());
+                   // return TokenManager.GenerateToken("0");
                 }
             }
         }
