@@ -4258,6 +4258,7 @@ else
                                 updateUserId = I.updateUserId,
                                 branchId = I.branchId,
                                 discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
+
                                 discountType = I.discountType,
                                 tax = I.tax,
                                 //  name= I.name,
@@ -4356,13 +4357,39 @@ else
                                 couponDiscount = 0,
                                 offerDiscount = 0,
                                 totalDiscount = 0,
+                                subscriptionType = I.memberships.subscriptionType,
+                                agentMembershipcashobjList = entity.agentMembershipCash.Where(x =>
+                                 x.agentId == I.agentId && I.membershipId == x.membershipId && I.memberships.subscriptionType == x.subscriptionType).Select(x => new AgentMembershipCashModel() {
+                                     agentMembershipCashId = x.agentMembershipCashId,
+                                     subscriptionFeesId = x.subscriptionFeesId,
+                                     cashTransId = x.cashTransId,
+                                     membershipId = x.membershipId,
+                                     agentId = x.agentId,
+                                     startDate = x.startDate,
+                                     endDate = x.endDate,
+                                     notes = x.notes,
+                                     updateUserId = x.updateUserId,
+                                     isActive = x.isActive,
+                                     createDate = x.createDate,
+                                     updateDate = x.updateDate,
+                                     createUserId = x.createUserId,
+                                     subscriptionType = x.subscriptionType,
+                                     total = x.total,
+                                     monthsCount = x.monthsCount,
 
+                                 }).ToList(),
+                               // endDate,
                             }).ToList();
-                        //     discountValue = ((I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * (I.total - I.shippingCost)) : 0))
-                        //  +((I.manualDiscountType == "1" || I.manualDiscountType == null) ? I.manualDiscountValue : (I.manualDiscountType == "2" ? ((I.manualDiscountValue / 100) * (I.total - I.shippingCost)) : 0))
+                       
+                        //      var tmplist=   entity.agentMembershipCash.Where(x => x.agentId == row.agentId && row.membershipId == x.membershipId && row.subscriptionType == x.subscriptionType).OrderBy(x => x.updateDate).
+                       // Select(x => new { x.endDate }).ToList();
 
                         foreach (var row in invListm)
                         {
+                            
+                             //var tmplist=   entity.agentMembershipCash.Where(x => x.agentId == row.agentId && row.membershipId == x.membershipId && row.subscriptionType == x.subscriptionType).OrderBy(x => x.updateDate).
+                             //   Select(x => new { x.endDate }).ToList();
+                            row.endDate = row.agentMembershipcashobjList.ToList()!=null && row.agentMembershipcashobjList.ToList().Count()>0 ? row.agentMembershipcashobjList.ToList().LastOrDefault().endDate :null;
                             row.invclassDiscount = (decimal)row.invoiceClassDiscountList.Sum(X => X.discountType == 2 ? (X.discountValue / 100) * (row.total) : X.discountValue);
                             row.couponDiscount = (decimal)row.CouponInvoiceList.Sum(X => X.discountType == 2 ? (X.discountValue / 100) * (row.total) : X.discountValue);
                             row.offerDiscount = (decimal)row.itemsTransferList.Sum(X => X.offerType == 2 ? ((X.offerValue / 100) * (X.itemUnitPrice)) * X.quantity : X.offerValue * X.quantity);
