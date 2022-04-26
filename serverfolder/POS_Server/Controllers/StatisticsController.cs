@@ -4395,6 +4395,7 @@ else
                             row.offerDiscount = (decimal)row.itemsTransferList.Sum(X => X.offerType == 2 ? ((X.offerValue / 100) * (X.itemUnitPrice)) * X.quantity : X.offerValue * X.quantity);
                             row.totalDiscount = row.invclassDiscount + row.couponDiscount + row.offerDiscount;
                         }
+                        invListm = invListm.Where(X => X.totalDiscount > 0).ToList();
                         return TokenManager.GenerateToken(invListm);
                     }
 
