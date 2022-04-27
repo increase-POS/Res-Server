@@ -38,5 +38,12 @@ namespace POS_Server.Models
         public string saleSizeValue { get; set; }
         public string docSizeValue { get; set; }
 
+        public Nullable<int> kitchenPrinterId { get; set; }
+        public Nullable<int> kitchenPapersizeId { get; set; }
+        public string kitchenPrinter { get; set; }
+        public string kitchenPapersize { get; set; }
+        public string kitchenprintFor { get; set; }
+        public string kitchenSizeValue { get; set; }
+
     }
 }
