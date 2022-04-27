@@ -1319,8 +1319,8 @@ namespace POS_Server.Controllers
         }
 
         [HttpPost]
-        [Route("getInvoicesToReturn")]
-        public string getInvoicesToReturn(string token)
+        [Route("GetInvoicesByBarcodeAndUser")]
+        public string GetInvoicesByBarcodeAndUser(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -1330,78 +1330,165 @@ namespace POS_Server.Controllers
             }
             else
             {
-                string invType = "";
+                BranchesController bc = new BranchesController();
+                string invNum = "";
+                int branchId = 0;
                 int userId = 0;
-                List<string> invTypeL = new List<string>();
-
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
-                    if (c.Type == "invType")
+                    if (c.Type == "invNum")
                     {
-                        invType = c.Value;
-                        string[] invTypeArray = invType.Split(',');
-                        foreach (string s in invTypeArray)
-                            invTypeL.Add(s.Trim());
+                        invNum = c.Value;
+                    }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
                         userId = int.Parse(c.Value);
                     }
                 }
-
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var branches = (from S in entity.branchesUsers
-                                              join B in entity.branches on S.branchId equals B.branchId into JB
-                                              join U in entity.users on S.userId equals U.userId into JU
-                                              from JBB in JB.DefaultIfEmpty()
-                                              from JUU in JU.DefaultIfEmpty()
-                                              where S.userId == userId
-                                    select JBB.branchId).ToList();
+                    //get user branches permission
+                    var branches = bc.BrListByBranchandUser(branchId, userId);
+                    List<int> branchesIds = new List<int>();
+                    for (int i = 0; i < branches.Count; i++)
+                        branchesIds.Add(branches[i].branchId);
 
-                    var searchPredicate = PredicateBuilder.New<invoices>();
-                    searchPredicate = searchPredicate.Or(inv => branches.Contains((int)inv.branchId) && inv.isActive == true && invTypeL.Contains(inv.invType));
+                    var invoice = (from b in entity.invoices.Where(b => b.invNumber == invNum && branchesIds.Contains((int)b.branchId))
+                                   join l in entity.branches on b.branchId equals l.branchId into lj
+                                   from x in lj.DefaultIfEmpty()
+                                   select new InvoiceModel()
+                                   {
+                                       invoiceId = b.invoiceId,
+                                       invNumber = b.invNumber,
+                                       agentId = b.agentId,
+                                       invType = b.invType,
+                                       total = b.total,
+                                       totalNet = b.totalNet,
+                                       paid = b.paid,
+                                       deserved = b.deserved,
+                                       deservedDate = b.deservedDate,
+                                       invDate = b.invDate,
+                                       invoiceMainId = b.invoiceMainId,
+                                       invCase = b.invCase,
+                                       invTime = b.invTime,
+                                       notes = b.notes,
+                                       vendorInvNum = b.vendorInvNum,
+                                       vendorInvDate = b.vendorInvDate,
+                                       createUserId = b.createUserId,
+                                       updateDate = b.updateDate,
+                                       updateUserId = b.updateUserId,
+                                       branchId = b.branchId,
+                                       discountValue = b.discountValue,
+                                       discountType = b.discountType,
+                                       tax = b.tax,
+                                       taxtype = b.taxtype,
+                                       name = b.name,
+                                       isApproved = b.isApproved,
+                                       branchName = x.name,
+                                       branchCreatorId = b.branchCreatorId,
+                                       shippingCompanyId = b.shippingCompanyId,
+                                       shipUserId = b.shipUserId,
+                                       userId = b.userId,
+                                       manualDiscountType = b.manualDiscountType,
+                                       manualDiscountValue = b.manualDiscountValue,
+                                       realShippingCost = b.realShippingCost,
+                                       shippingCost = b.shippingCost,
+                                   })
 
-                    var invoicesList = (from b in entity.invoices.Where(searchPredicate)
-                                        join l in entity.branches on b.branchId equals l.branchId into lj
-                                        from x in lj.DefaultIfEmpty()
-                                        select new InvoiceModel()
-                                        {
-                                            invoiceId = b.invoiceId,
-                                            invNumber = b.invNumber,
-                                            agentId = b.agentId,
-                                            invType = b.invType,
-                                            total = b.total,
-                                            totalNet = b.totalNet,
-                                            vendorInvNum = b.vendorInvNum,
-                                            vendorInvDate = b.vendorInvDate,
-                                            branchId = b.branchId,
-                                            discountType = b.discountType,
-                                            tax = b.tax,
-                                            taxtype = b.taxtype,
-                                            name = b.name,
-                                            isApproved = b.isApproved,
-                                            branchName = x.name,
-                                            branchCreatorId = b.branchCreatorId,
-                                            userId = b.userId,
-                                            cashReturn = b.cashReturn,
-                                            
-                                        })
-                    .ToList();
-                    if (invoicesList != null)
-                    {
-                        for (int i = 0; i < invoicesList.Count; i++)
-                        {
-                            int invoiceId = invoicesList[i].invoiceId;
-                            int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
-                            invoicesList[i].itemsCount = itemCount;
-                        }
-                    }
-                    return TokenManager.GenerateToken(invoicesList);
+                           .FirstOrDefault();
+                    return TokenManager.GenerateToken(invoice);
                 }
             }
         }
+        //[HttpPost]
+        //[Route("getInvoicesToReturn")]
+        //public string getInvoicesToReturn(string token)
+        //{
+        //    token = TokenManager.readToken(HttpContext.Current.Request);
+        //    var strP = TokenManager.GetPrincipal(token);
+        //    if (strP != "0") //invalid authorization
+        //    {
+        //        return TokenManager.GenerateToken(strP);
+        //    }
+        //    else
+        //    {
+        //        string invType = "";
+        //        int userId = 0;
+        //        List<string> invTypeL = new List<string>();
+
+        //        IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+        //        foreach (Claim c in claims)
+        //        {
+        //            if (c.Type == "invType")
+        //            {
+        //                invType = c.Value;
+        //                string[] invTypeArray = invType.Split(',');
+        //                foreach (string s in invTypeArray)
+        //                    invTypeL.Add(s.Trim());
+        //            }
+        //            else if (c.Type == "userId")
+        //            {
+        //                userId = int.Parse(c.Value);
+        //            }
+        //        }
+
+        //        using (incposdbEntities entity = new incposdbEntities())
+        //        {
+        //            var branches = (from S in entity.branchesUsers
+        //                                      join B in entity.branches on S.branchId equals B.branchId into JB
+        //                                      join U in entity.users on S.userId equals U.userId into JU
+        //                                      from JBB in JB.DefaultIfEmpty()
+        //                                      from JUU in JU.DefaultIfEmpty()
+        //                                      where S.userId == userId
+        //                            select JBB.branchId).ToList();
+
+        //            var searchPredicate = PredicateBuilder.New<invoices>();
+        //            searchPredicate = searchPredicate.Or(inv => branches.Contains((int)inv.branchId) && inv.isActive == true && invTypeL.Contains(inv.invType));
+
+        //            var invoicesList = (from b in entity.invoices.Where(searchPredicate)
+        //                                join l in entity.branches on b.branchId equals l.branchId into lj
+        //                                from x in lj.DefaultIfEmpty()
+        //                                select new InvoiceModel()
+        //                                {
+        //                                    invoiceId = b.invoiceId,
+        //                                    invNumber = b.invNumber,
+        //                                    agentId = b.agentId,
+        //                                    invType = b.invType,
+        //                                    total = b.total,
+        //                                    totalNet = b.totalNet,
+        //                                    vendorInvNum = b.vendorInvNum,
+        //                                    vendorInvDate = b.vendorInvDate,
+        //                                    branchId = b.branchId,
+        //                                    discountType = b.discountType,
+        //                                    tax = b.tax,
+        //                                    taxtype = b.taxtype,
+        //                                    name = b.name,
+        //                                    isApproved = b.isApproved,
+        //                                    branchName = x.name,
+        //                                    branchCreatorId = b.branchCreatorId,
+        //                                    userId = b.userId,
+        //                                    cashReturn = b.cashReturn,
+                                            
+        //                                })
+        //            .ToList();
+        //            if (invoicesList != null)
+        //            {
+        //                for (int i = 0; i < invoicesList.Count; i++)
+        //                {
+        //                    int invoiceId = invoicesList[i].invoiceId;
+        //                    int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+        //                    invoicesList[i].itemsCount = itemCount;
+        //                }
+        //            }
+        //            return TokenManager.GenerateToken(invoicesList);
+        //        }
+        //    }
+        //}
 
         [HttpPost]
         [Route("getUnHandeldOrders")]
