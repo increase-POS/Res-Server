@@ -19,6 +19,7 @@ namespace POS_Server
         {
             this.posSetting = new HashSet<posSetting>();
             this.posSetting1 = new HashSet<posSetting>();
+            this.posSetting2 = new HashSet<posSetting>();
         }
     
         public int printerId { get; set; }
@@ -35,5 +36,7 @@ namespace POS_Server
         public virtual ICollection<posSetting> posSetting1 { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<posSetting> posSetting2 { get; set; }
     }
 }

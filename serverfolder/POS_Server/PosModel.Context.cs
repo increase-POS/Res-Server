@@ -26,7 +26,6 @@ namespace POS_Server
         }
     
         public virtual DbSet<agentMembershipCash> agentMembershipCash { get; set; }
-        public virtual DbSet<agentMemberships> agentMemberships { get; set; }
         public virtual DbSet<agents> agents { get; set; }
         public virtual DbSet<banks> banks { get; set; }
         public virtual DbSet<bondes> bondes { get; set; }
@@ -50,12 +49,14 @@ namespace POS_Server
         public virtual DbSet<hallSections> hallSections { get; set; }
         public virtual DbSet<Inventory> Inventory { get; set; }
         public virtual DbSet<inventoryItemLocation> inventoryItemLocation { get; set; }
+        public virtual DbSet<invoiceClassDiscount> invoiceClassDiscount { get; set; }
         public virtual DbSet<invoiceOrder> invoiceOrder { get; set; }
         public virtual DbSet<invoices> invoices { get; set; }
         public virtual DbSet<invoicesClass> invoicesClass { get; set; }
         public virtual DbSet<invoicesClassMemberships> invoicesClassMemberships { get; set; }
         public virtual DbSet<invoiceStatus> invoiceStatus { get; set; }
         public virtual DbSet<invoiceTables> invoiceTables { get; set; }
+        public virtual DbSet<itemOrderPreparing> itemOrderPreparing { get; set; }
         public virtual DbSet<items> items { get; set; }
         public virtual DbSet<itemsLocations> itemsLocations { get; set; }
         public virtual DbSet<itemsMaterials> itemsMaterials { get; set; }
@@ -75,6 +76,8 @@ namespace POS_Server
         public virtual DbSet<notificationUser> notificationUser { get; set; }
         public virtual DbSet<objects> objects { get; set; }
         public virtual DbSet<offers> offers { get; set; }
+        public virtual DbSet<orderPreparing> orderPreparing { get; set; }
+        public virtual DbSet<orderPreparingStatus> orderPreparingStatus { get; set; }
         public virtual DbSet<packages> packages { get; set; }
         public virtual DbSet<paperSize> paperSize { get; set; }
         public virtual DbSet<Points> Points { get; set; }

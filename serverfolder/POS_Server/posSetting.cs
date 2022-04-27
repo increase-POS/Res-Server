@@ -27,6 +27,8 @@ namespace POS_Server
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<int> createUserId { get; set; }
         public Nullable<int> updateUserId { get; set; }
+        public Nullable<int> kitchenPrinterId { get; set; }
+        public Nullable<int> kitchenPapersizeId { get; set; }
     
         public virtual paperSize paperSize { get; set; }
         public virtual pos pos { get; set; }
@@ -35,5 +37,7 @@ namespace POS_Server
         public virtual printers printers1 { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }
+        public virtual paperSize paperSize1 { get; set; }
+        public virtual printers printers2 { get; set; }
     }
 }

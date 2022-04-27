@@ -280,7 +280,6 @@
     <Compile Include="Controllers\HallSectionController.cs" />
     <Compile Include="Controllers\membershipsOffersController.cs" />
     <Compile Include="Controllers\invoicesClassMembershipsController.cs" />
-    <Compile Include="Controllers\OrderPreparingController.cs" />
     <Compile Include="Controllers\ResidentialSectorsUsersController.cs" />
     <Compile Include="Controllers\subscriptionFeesController.cs" />
     <Compile Include="Controllers\invoicesClassController.cs" />

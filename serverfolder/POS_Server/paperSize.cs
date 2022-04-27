@@ -18,6 +18,7 @@ namespace POS_Server
         public paperSize()
         {
             this.posSetting = new HashSet<posSetting>();
+            this.posSetting1 = new HashSet<posSetting>();
         }
     
         public int sizeId { get; set; }
@@ -27,5 +28,7 @@ namespace POS_Server
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<posSetting> posSetting { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<posSetting> posSetting1 { get; set; }
     }
 }
