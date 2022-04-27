@@ -1688,82 +1688,117 @@ namespace POS_Server.Controllers
             }
             else
             {
-                string invType = "";
-                string status = "";
+                #region params
                 int shipUserId = 0;
-                List<string> invTypeL = new List<string>();
+ 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
-                    if (c.Type == "invType")
-                    {
-                        invType = c.Value;
-                        string[] invTypeArray = invType.Split(',');
-                        foreach (string s in invTypeArray)
-                            invTypeL.Add(s.Trim());
-                    }
-                    else if (c.Type == "status")
-                    {
-                        status = c.Value;
-                    }
-                    else if (c.Type == "userId")
+                    if (c.Type == "userId")
                     {
                         shipUserId = int.Parse(c.Value);
                     }
                 }
-
+                #endregion
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var invoicesList = (from b in entity.invoices.Where(x => invTypeL.Contains(x.invType) && x.shipUserId == shipUserId && x.isActive == true)
-                                        join s in entity.invoiceStatus on b.invoiceId equals s.invoiceId
-                                        where (s.status == status && s.invStatusId == entity.invoiceStatus.Where(x => x.invoiceId == b.invoiceId).Max(x => x.invStatusId))
-                                        select new InvoiceModel()
-                                        {
-                                            invoiceId = b.invoiceId,
-                                            invNumber = b.invNumber,
-                                            agentId = b.agentId,
-                                            invType = b.invType,
-                                            total = b.total,
-                                            totalNet = b.totalNet,
-                                            paid = b.paid,
-                                            deserved = b.deserved,
-                                            deservedDate = b.deservedDate,
-                                            invDate = b.invDate,
-                                            invoiceMainId = b.invoiceMainId,
-                                            invCase = b.invCase,
-                                            invTime = b.invTime,
-                                            notes = b.notes,
-                                            vendorInvNum = b.vendorInvNum,
-                                            vendorInvDate = b.vendorInvDate,
-                                            createUserId = b.createUserId,
-                                            updateDate = b.updateDate,
-                                            updateUserId = b.updateUserId,
-                                            branchId = b.branchId,
-                                            discountValue = b.discountValue,
-                                            discountType = b.discountType,
-                                            tax = b.tax,
-                                            taxtype = b.taxtype,
-                                            name = b.name,
-                                            isApproved = b.isApproved,
-                                            branchCreatorId = b.branchCreatorId,
-                                            shippingCompanyId = b.shippingCompanyId,
-                                            shipUserId = b.shipUserId,
-                                            userId = b.userId,
-                                            manualDiscountType = b.manualDiscountType,
-                                            manualDiscountValue = b.manualDiscountValue,
-                                        })
-                    .ToList();
-                    if (invoicesList != null)
+                    var searchPredicate = PredicateBuilder.New<invoices>();
+
+                    searchPredicate = searchPredicate.And(x => x.invType == "ts" || x.invType == "ss");
+                    searchPredicate = searchPredicate.And(x => x.shipUserId == shipUserId);
+
+
+                    var invoices = (from b in entity.invoices.Where(searchPredicate)
+                                    join u in entity.users on b.shipUserId equals u.userId into lj
+                                    from y in lj.DefaultIfEmpty()
+                                    select new InvoiceModel()
+                                    {
+                                        invoiceId = b.invoiceId,
+                                        invNumber = b.invNumber,
+                                        agentId = b.agentId,
+                                        agentName = b.agents.name,
+                                        invType = b.invType,
+                                        total = b.total,
+                                        totalNet = b.totalNet,
+                                        paid = b.paid,
+                                        deserved = b.deserved,
+                                        deservedDate = b.deservedDate,
+                                        invDate = b.invDate,
+                                        invoiceMainId = b.invoiceMainId,
+                                        invCase = b.invCase,
+                                        invTime = b.invTime,
+                                        notes = b.notes,
+                                        vendorInvNum = b.vendorInvNum,
+                                        vendorInvDate = b.vendorInvDate,
+                                        createUserId = b.createUserId,
+                                        updateDate = b.updateDate,
+                                        updateUserId = b.updateUserId,
+                                        branchId = b.branchId,
+                                        discountValue = b.discountValue,
+                                        discountType = b.discountType,
+                                        tax = b.tax,
+                                        taxtype = b.taxtype,
+                                        name = b.name,
+                                        isApproved = b.isApproved,
+                                        branchCreatorId = b.branchCreatorId,
+                                        shippingCompanyId = b.shippingCompanyId,
+                                        shipUserId = b.shipUserId,
+                                        userId = b.userId,
+                                        manualDiscountType = b.manualDiscountType,
+                                        manualDiscountValue = b.manualDiscountValue,
+                                    }).ToList();
+
+
+                    foreach (InvoiceModel inv in invoices)
                     {
-                        for (int i = 0; i < invoicesList.Count; i++)
+                        var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == inv.invoiceId)
+                                          join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                          where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                          select new OrderPreparingModel()
+                                          {
+                                              orderPreparingId = o.orderPreparingId,
+                                              status = s.status,
+                                          }).ToList();
+
+
+                        foreach (OrderPreparingModel o in prepOrders)
                         {
-                            int invoiceId = invoicesList[i].invoiceId;
-                            int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
-                            invoicesList[i].itemsCount = itemCount;
+                            #region set inv status
+                            if (o.status == "Collected")
+                            {
+                                inv.status = "Collected";
+                                break;
+                            }
+                            else if (o.status == "InTheWay")
+                            {
+                                inv.status = "InTheWay";
+                                break;
+                            }
+                            else if (o.status == "Done")
+                            {
+                                inv.status = "Done";
+                                break;
+                            }
+                            else if (o.status == "Listed" || o.status == "Preparing")
+                            {
+                                inv.status = "Listed";
+                                break;
+                            }
+                            else
+                                inv.status = "Ready";
+                            #endregion
+
                         }
+                        var itemList = entity.itemsTransfer.Where(x => x.invoiceId == inv.invoiceId).ToList();
+                        inv.itemsCount = itemList.Count;
                     }
-                  
-                    return TokenManager.GenerateToken(invoicesList);
+
+                    #region get orders according to status
+                    invoices = invoices.Where(x => x.status == "Ready").ToList();
+                    #endregion
+
+                                 
+                    return TokenManager.GenerateToken(invoices);
                 }
             }
         }
@@ -1780,72 +1815,87 @@ namespace POS_Server.Controllers
             }
             else
             {
-                string invType = "";
-                string status = "";
+                #region params
                 int shipUserId = 0;
-                List<string> invTypeL = new List<string>();
+
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
-                    if (c.Type == "invType")
-                    {
-                        invType = c.Value;
-                        string[] invTypeArray = invType.Split(',');
-                        foreach (string s in invTypeArray)
-                            invTypeL.Add(s.Trim());
-                    }
-                    else if (c.Type == "status")
-                    {
-                        status = c.Value;
-                    }
-                    else if (c.Type == "userId")
+                    if (c.Type == "userId")
                     {
                         shipUserId = int.Parse(c.Value);
                     }
                 }
-
+                #endregion
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var invoicesCount = (from b in entity.invoices.Where(x => invTypeL.Contains(x.invType) && x.shipUserId == shipUserId && x.isActive == true)
-                                        join s in entity.invoiceStatus on b.invoiceId equals s.invoiceId
-                                        where (s.status == status && s.invStatusId == entity.invoiceStatus.Where(x => x.invoiceId == b.invoiceId).Max(x => x.invStatusId))
-                                        select new InvoiceModel()
-                                        {
-                                            invoiceId = b.invoiceId,
-                                            invNumber = b.invNumber,
-                                            agentId = b.agentId,
-                                            invType = b.invType,
-                                            total = b.total,
-                                            totalNet = b.totalNet,
-                                            paid = b.paid,
-                                            deserved = b.deserved,
-                                            deservedDate = b.deservedDate,
-                                            invDate = b.invDate,
-                                            invoiceMainId = b.invoiceMainId,
-                                            invCase = b.invCase,
-                                            invTime = b.invTime,
-                                            notes = b.notes,
-                                            vendorInvNum = b.vendorInvNum,
-                                            vendorInvDate = b.vendorInvDate,
-                                            createUserId = b.createUserId,
-                                            updateDate = b.updateDate,
-                                            updateUserId = b.updateUserId,
-                                            branchId = b.branchId,
-                                            discountValue = b.discountValue,
-                                            discountType = b.discountType,
-                                            tax = b.tax,
-                                            taxtype = b.taxtype,
-                                            name = b.name,
-                                            isApproved = b.isApproved,
-                                            branchCreatorId = b.branchCreatorId,
-                                            shippingCompanyId = b.shippingCompanyId,
-                                            shipUserId = b.shipUserId,
-                                            userId = b.userId,
-                                            manualDiscountType = b.manualDiscountType,
-                                            manualDiscountValue = b.manualDiscountValue,
-                                        })
-                    .ToList().Count;
-                  
+                    var searchPredicate = PredicateBuilder.New<invoices>();
+
+                    searchPredicate = searchPredicate.And(x => x.invType == "ts" || x.invType == "ss");
+                    searchPredicate = searchPredicate.And(x => x.shipUserId == shipUserId);
+
+
+                    var invoices = (from x in entity.invoices.Where(searchPredicate)
+                                    join u in entity.users on x.shipUserId equals u.userId into lj
+                                    from y in lj.DefaultIfEmpty()
+                                    select new InvoiceModel()
+                                    {
+                                        invNumber = x.invNumber,
+                                        invoiceId = x.invoiceId,
+                                        shipUserId = x.shipUserId,
+                                        shipUserName = y.name,
+                                        shipUserLastName = y.lastname,
+                                        shippingCompanyId = x.shippingCompanyId,
+                                        shippingCompanyName = x.shippingCompanies.name,
+                                        orderTime = x.orderTime,
+                                    }).ToList();
+
+
+                    foreach (InvoiceModel inv in invoices)
+                    {
+                        var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == inv.invoiceId)
+                                          join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                          where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                          select new OrderPreparingModel()
+                                          {
+                                              orderPreparingId = o.orderPreparingId,
+                                              status = s.status,
+                                          }).ToList();
+
+
+                        foreach (OrderPreparingModel o in prepOrders)
+                        {
+                            #region set inv status
+                            if (o.status == "Collected")
+                            {
+                                inv.status = "Collected";
+                                break;
+                            }
+                            else if (o.status == "InTheWay")
+                            {
+                                inv.status = "InTheWay";
+                                break;
+                            }
+                            else if (o.status == "Done")
+                            {
+                                inv.status = "Done";
+                                break;
+                            }
+                            else if (o.status == "Listed" || o.status == "Preparing")
+                            {
+                                inv.status = "Listed";
+                                break;
+                            }
+                            else
+                                inv.status = "Ready";
+                            #endregion
+
+                        }
+
+                    }
+
+                    var invoicesCount = invoices.Where(x => x.status == "Ready").Count();
+
                     return TokenManager.GenerateToken(invoicesCount);
                 }
             }
