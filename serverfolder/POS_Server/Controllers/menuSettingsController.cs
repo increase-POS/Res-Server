@@ -96,6 +96,7 @@ namespace POS_Server.Controllers
                             tmpObject.preparingTime = Object.preparingTime;
                             tmpObject.sat = Object.sat;
                             tmpObject.sun = Object.sun;
+                            tmpObject.mon = Object.mon;
                             tmpObject.tues = Object.tues;
                             tmpObject.wed = Object.wed;
                             tmpObject.thur = Object.thur;
