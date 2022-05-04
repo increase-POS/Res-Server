@@ -4411,6 +4411,191 @@ else
 
         }
 
+        [HttpPost]
+        [Route("GetInvoiceClass")]
+        public string GetInvoiceClass(string token)
+        {
+
+            // public ResponseVM GetPurinv(string token)
+
+            //int mainBranchId, int userId
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int mainBranchId = 0;
+                int userId = 0;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "mainBranchId")
+                    {
+                        mainBranchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+
+                }
+
+                // DateTime cmpdate = DateTime.Now.AddDays(newdays);
+                try
+                {
+                    List<SalesMembership> invListm = new List<SalesMembership>();
+                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+
+                        invListm = (
+                            from I in entity.invoices
+
+                            join B in entity.branches on I.branchId equals B.branchId into JB
+                            //join BC in entity.branches on I.branchId equals BC.branchId into JBC
+                            join A in entity.agents on I.agentId equals A.agentId into JA
+                            join U in entity.users on I.createUserId equals U.userId into JU
+                            join UPUSR in entity.users on I.updateUserId equals UPUSR.userId into JUPUSR
+                            //join IM in entity.invoices on I.invoiceMainId equals IM.invoiceId into JIM
+                            join P in entity.pos on I.posId equals P.posId into JP
+                            join IC in entity.invoiceClassDiscount on I.invoiceId equals IC.invoiceId  
+                            from JBB in JB.DefaultIfEmpty()
+                            from JPP in JP.DefaultIfEmpty()
+                            from JUU in JU.DefaultIfEmpty()
+                            from JUPUS in JUPUSR.DefaultIfEmpty()
+                                //from JIMM in JIM.DefaultIfEmpty()
+                            from JAA in JA.DefaultIfEmpty()
+                                //from JBCC in JBC.DefaultIfEmpty()
+                            where (brIds.Contains(JBB.branchId)) && (I.invType == "s" || I.invType == "sb"
+                            || I.invType == "ts" || I.invType == "ss") && (I.membershipId != null)
+
+                            select new SalesMembership
+                            {
+
+                                invoiceId = I.invoiceId,
+                                // count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
+                                invNumber = I.invNumber,
+
+                                posId = I.posId,
+                                invType = I.invType,
+                                total = I.total,
+                                totalNet = I.totalNet,
+                                paid = I.paid,
+                                deserved = I.deserved,
+                                deservedDate = I.deservedDate,
+                                invDate = I.invDate,
+                                invoiceMainId = I.invoiceMainId,
+                                invCase = I.invCase,
+                                invTime = I.invTime,
+                                notes = I.notes,
+                                vendorInvNum = I.vendorInvNum,
+                                vendorInvDate = I.vendorInvDate,
+                                createUserId = I.createUserId,
+                                updateDate = I.updateDate,
+                                updateUserId = I.updateUserId,
+                                branchId = I.branchId,
+                                discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
+
+                                discountType = I.discountType,
+                                tax = I.tax,
+                                //  name= I.name,
+                                isApproved = I.isApproved,
+
+                                //
+                                //I.branchCreatorId,
+                                //     branchCreatorName = JBCC.name,
+                                //
+                                branchName = JBB.name,
+                                posName = JPP.name,
+                                posCode = JPP.code,
+
+                                agentCode = JAA.code,
+                                //
+                                agentName = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")) ?
+                                "unknown" : JAA.name,
+
+
+                                //   agentType = JAA.type,
+                                agentType = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
+                                ? "c" : JAA.type,
+                                agentId = ((JAA.name == null || JAA.name == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss"))
+                                ? 0 : I.agentId,
+
+
+                                //cuserName = JUU.name,
+                                //cuserLast = JUU.lastname,
+                                //cUserAccName = JUU.username,
+                                uuserName = JUPUS.name,
+                                uuserLast = JUPUS.lastname,
+                                uUserAccName = JUPUS.username,
+                                agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb" || I.invType == "ts" || I.invType == "ss")) ?
+                                "unknown" : JAA.company,
+
+                                membershipId = I.membershipId,
+                                membershipsName = I.memberships.name,
+                                membershipsCode = I.memberships.code,
+                                //invoiceClassDiscountList = entity.invoiceClassDiscount.Where(X => X.invoiceId == I.invoiceId).Select(X => new invoicesClassModel
+                                //{
+                                //    name = X.invoicesClass.name,
+                                //    invClassDiscountId = X.invClassDiscountId,
+                                //    invoiceId = X.invoiceId,
+                                //    invClassId = (int)X.invClassId,
+                                //    discountType = X.discountType,
+                                //    discountValue = X.discountValue,
+                                //    finalDiscount = (decimal)X.discountType == 2 ? (X.discountValue / 100) * (I.total) : X.discountValue
+                                //}).ToList(),
+
+                               invClassDiscountId=IC.invClassDiscountId,
+                               invClassdiscountType=IC.discountType,
+                                invClassdiscountValue = IC.discountValue,
+                                invoicesClassName=IC.invoicesClass.name,
+                                invClassId=IC.invClassId,
+                                finalDiscount= (decimal)IC.discountType == 2 ? (IC.discountValue / 100) * (I.total) : IC.discountValue,
+
+
+                                invclassDiscount = 0,
+                                couponDiscount = 0,
+                                offerDiscount = 0,
+                                totalDiscount = 0,
+                                subscriptionType = I.memberships.subscriptionType,
+                               
+                                // endDate,
+                            }).ToList();
+
+                        //      var tmplist=   entity.agentMembershipCash.Where(x => x.agentId == row.agentId && row.membershipId == x.membershipId && row.subscriptionType == x.subscriptionType).OrderBy(x => x.updateDate).
+                        // Select(x => new { x.endDate }).ToList();
+
+                        //foreach (var row in invListm)
+                        //{
+
+                        //    //var tmplist=   entity.agentMembershipCash.Where(x => x.agentId == row.agentId && row.membershipId == x.membershipId && row.subscriptionType == x.subscriptionType).OrderBy(x => x.updateDate).
+                        //    //   Select(x => new { x.endDate }).ToList();
+                        //  //  row.endDate = row.agentMembershipcashobjList.ToList() != null && row.agentMembershipcashobjList.ToList().Count() > 0 ? row.agentMembershipcashobjList.ToList().LastOrDefault().endDate : null;
+                        //    row.invclassDiscount = (decimal)row.invoiceClassDiscountList.Sum(X => X.discountType == 2 ? (X.discountValue / 100) * (row.total) : X.discountValue);
+                        //    row.couponDiscount = (decimal)row.CouponInvoiceList.Sum(X => X.discountType == 2 ? (X.discountValue / 100) * (row.total) : X.discountValue);
+                        //    row.offerDiscount = (decimal)row.itemsTransferList.Sum(X => X.offerType == 2 ? ((X.offerValue / 100) * (X.itemUnitPrice)) * X.quantity : X.offerValue * X.quantity);
+                        //    row.totalDiscount = row.invclassDiscount + row.couponDiscount + row.offerDiscount;
+                        //}
+                        //invListm = invListm.Where(X => X.totalDiscount > 0).ToList();
+                        return TokenManager.GenerateToken(invListm);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    //return TokenManager.GenerateToken("0");
+                    return TokenManager.GenerateToken(ex.ToString());
+                }
+
+            }
+
+
+        }
+
 
         #endregion
 

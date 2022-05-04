@@ -57,7 +57,7 @@ namespace POS_Server.Models
         public string agentCompany { get; set; }
         public string agentType { get; set; }
         public string agentCode { get; set; }
-        public  List<orderPreparingStatusModel> orderStatusList { get; set; }
+        public List<orderPreparingStatusModel> orderStatusList { get; set; }
         public decimal orderDuration { get; set; }
 
 
@@ -71,9 +71,9 @@ namespace POS_Server.Models
         public string status { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-    
+
         public string notes { get; set; }
-  
+
     }
 
     public class ItemUnitInvoiceProfitModel
@@ -538,8 +538,6 @@ namespace POS_Server.Models
         public Nullable<int> membershipId { get; set; }
         public string membershipsCode { get; set; }
         public string membershipsName { get; set; }
-
-
         public List<CouponInvoiceModel> CouponInvoiceList { get; set; }
         public List<ItemTransferModel> itemsTransferList { get; set; }
         public List<invoicesClassModel> invoiceClassDiscountList { get; set; }
@@ -552,6 +550,15 @@ namespace POS_Server.Models
         public string subscriptionType { get; set; }
         public AgentMembershipCashModel agentMembershipcashobj { get; set; }
         public List<AgentMembershipCashModel> agentMembershipcashobjList { get; set; }
+
+        public string invoicesClassName { get; set; }
+        public Nullable<int> invClassDiscountId { get; set; }
+
+        public Nullable<int> invClassId { get; set; }
+        public byte invClassdiscountType { get; set; }
+        public decimal invClassdiscountValue { get; set; }
+        public decimal finalDiscount { get; set; }
+
     }
 
 }
