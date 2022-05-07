@@ -2914,6 +2914,8 @@ namespace POS_Server.Controllers
 
                                 typesList.Add("pb");
                                 typesList.Add("s");
+                                typesList.Add("ts");
+                                typesList.Add("ss");
                                 break;
                         }
                         //    cashTransfer cashTr = JsonConvert.DeserializeObject<cashTransfer>(cashTransfer, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
@@ -3328,6 +3330,8 @@ namespace POS_Server.Controllers
 
                                 typesList.Add("pb");
                                 typesList.Add("s");
+                                typesList.Add("ts");
+                                typesList.Add("ss");
                                 break;
                         }
                         using (incposdbEntities entity = new incposdbEntities())
@@ -3802,6 +3806,8 @@ namespace POS_Server.Controllers
 
                                 typesList.Add("pb");
                                 typesList.Add("s");
+                                typesList.Add("ts");
+                                typesList.Add("ss");
                                 break;
                         }
                         using (incposdbEntities entity = new incposdbEntities())

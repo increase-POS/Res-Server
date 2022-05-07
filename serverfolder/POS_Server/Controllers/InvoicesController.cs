@@ -2024,6 +2024,8 @@ namespace POS_Server.Controllers
                 {
                     typesList.Add("pb");
                     typesList.Add("s");
+                    typesList.Add("ts");
+                    typesList.Add("ss");
                 }
                 else if (type.Equals("pay"))
                 {
@@ -2211,6 +2213,8 @@ namespace POS_Server.Controllers
                 {
                     typesList.Add("pb");
                     typesList.Add("s");
+                    typesList.Add("ts");
+                    typesList.Add("ss");
                 }
                 else if (type.Equals("pay"))
                 {
@@ -2309,6 +2313,8 @@ namespace POS_Server.Controllers
                 {
                     typesList.Add("pb");
                     typesList.Add("s");
+                    typesList.Add("ss");
+                    typesList.Add("ts");
                 }
                 else if (type.Equals("pay"))
                 {
