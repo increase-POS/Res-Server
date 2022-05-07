@@ -1352,5 +1352,99 @@ namespace POS_Server.Controllers
             }
             return lastNum;
         }
+
+        [HttpPost]
+        [Route("GetOrdersByInvoiceId")]
+        public string GetOrdersByInvoiceId(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int invoiceId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceId")
+                    {
+                        invoiceId = int.Parse(c.Value);
+                    }
+                }
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == invoiceId)
+                                          join i in entity.itemOrderPreparing on o.orderPreparingId equals i.orderPreparingId
+                                         // join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                          join INV in entity.invoices on o.invoiceId equals INV.invoiceId
+                                          join WT in entity.users on INV.waiterId equals WT.userId into JWT
+                                          from W in JWT.DefaultIfEmpty()
+                                              //join ITB in entity.invoiceTables on INV.invoiceId equals ITB.invoiceId into JITB
+
+                                              //from TABL in JITB.DefaultIfEmpty()
+                                              //   where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+
+                                          select new OrderPreparingModel()
+                                          {
+                                              orderPreparingId = o.orderPreparingId,
+                                              invoiceId = o.invoiceId,
+                                              notes = o.notes,
+                                              orderNum = o.orderNum,
+                                              preparingTime = o.preparingTime,
+                                              updateDate = o.updateDate,
+                                              updateUserId = o.updateUserId,
+                                              createDate = o.createDate,
+                                              createUserId = o.createUserId,
+                                              itemName = i.itemsUnits.items.name,
+                                              quantity = (int)i.quantity,
+                                             // status = s.status,
+                                              itemUnitId = i.itemUnitId,
+                                              waiter=W.name+" "+W.lastname,
+                                              invType=INV.invType,
+                                              invNum=INV.invNumber,
+                                              branchId=INV.branchId,
+                                              branchName=INV.branches.name,
+                                              invDate=   INV.invDate,
+                                              invTime=  INV.invTime,
+                                          }).OrderBy(x => x.orderNum).ToList();
+
+                     //   int index = 1;
+                        foreach (OrderPreparingModel o in prepOrders)
+                        {
+                             
+
+                                #region get invoice tables
+                                var tables = (from t in entity.tables.Where(x => x.isActive == 1)
+                                              join it in entity.invoiceTables.Where(x => x.invoiceId == o.invoiceId) on t.tableId equals it.tableId
+                                              select new TableModel()
+                                              {
+                                                  tableId = t.tableId,
+                                                  name = t.name,
+                                              }).ToList();
+                                string tablesNames = "";
+                                foreach (TableModel tabl in tables)
+                                {
+                                    if (tablesNames == "")
+                                        tablesNames += tabl.name;
+                                    else tablesNames += ", " + tabl.name;
+                                }
+                            o.tables = tablesNames;
+                            #endregion
+
+                        }
+                        return TokenManager.GenerateToken(prepOrders);
+                    }
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
     }
 }

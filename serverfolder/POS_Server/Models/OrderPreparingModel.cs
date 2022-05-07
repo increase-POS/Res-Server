@@ -35,7 +35,13 @@ namespace POS_Server.Models
         public string invType { get; set; }
         public Nullable<int> shippingCompanyId { get; set; }
 
+
         public List<itemOrderPreparingModel> items { get; set; }
+        public Nullable<int> branchId { get; set; }
+        public string branchName { get; set; }
+        public Nullable<System.DateTime> invDate { get; set; }
+        public Nullable<System.TimeSpan> invTime { get; set; }
+
     }
     public class itemOrderPreparingModel
     {
