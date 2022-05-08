@@ -1923,18 +1923,20 @@ namespace POS_Server.Controllers
                     }
                 }
                 List<string> statusL = new List<string>();
-                statusL.Add("tr");
-                statusL.Add("rc");
+                //statusL.Add("tr");
+                //statusL.Add("rc");
+                statusL.Add("InTheWay");
+                statusL.Add("Done");
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     var invoicesList = (from b in entity.invoices.Where(x => x.invType == "s" && x.branchCreatorId == branchId && x.shipUserId != null && x.isActive == true)
-                                        join s in entity.invoiceStatus on b.invoiceId equals s.invoiceId
+                                        join s in entity.orderPreparingStatus on b.invoiceId equals s.orderPreparing.invoiceId
                                         join u in entity.users on b.shipUserId equals u.userId into lj
                                         from y in lj.DefaultIfEmpty()
-                                        where (statusL.Contains(s.status) && s.invStatusId == entity.invoiceStatus.Where(x => x.invoiceId == b.invoiceId).Max(x => x.invStatusId))
+                                        where (statusL.Contains(s.status) && s.orderStatusId == entity.invoiceStatus.Where(x => x.invoiceId == b.invoiceId).Max(x => x.invStatusId))
                                         select new InvoiceModel()
                                         {
-                                            invStatusId = s.invStatusId,
+                                            invStatusId = s.orderStatusId,
                                             invoiceId = b.invoiceId,
                                             invNumber = b.invNumber,
                                             agentId = b.agentId,
