@@ -2087,7 +2087,7 @@ namespace POS_Server.Controllers
                         {
                             int invoiceId = inv.invoiceId;
 
-                            var statusObj = entity.invoiceStatus.Where(x => x.invoiceId == invoiceId && x.status == "rc").FirstOrDefault();
+                            var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
 
                             if (statusObj != null)
                             {
