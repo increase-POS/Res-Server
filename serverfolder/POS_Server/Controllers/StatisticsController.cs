@@ -4072,8 +4072,8 @@ else
                                             //Oquantity = IUO.quantity,
                                             Ocode = O.code,//*
                                             OisActive = O.isActive,
-                                            OdiscountType = O.discountType,//*
-                                            OdiscountValue = O.discountValue,//*
+                                            OdiscountType = IT.offerType,//*
+                                            OdiscountValue = IT.offerValue,//*
                                             OstartDate = O.startDate,
                                             OendDate = O.endDate,
                                             OcreateDate = O.createDate,
@@ -4146,7 +4146,7 @@ else
 
                                             subTotal = (IT.price * IT.quantity),//*
                                             // couponTotalValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * I.total) : 0),
-                                            offerTotalValue = (O.discountType == "1" || O.discountType == null) ? (O.discountValue * (IT.quantity)) : (O.discountType == "2" ? ((O.discountValue / 100) * (IT.price * IT.quantity)) : 0),
+                                            offerTotalValue = (IT.offerType == 1 || IT.offerType == null) ? (IT.offerValue * (IT.quantity)) : (IT.offerType == 2 ? ((IT.offerValue / 100) * (IT.itemUnitPrice * IT.quantity)) : 0),
 
                                         }).ToList();
 
