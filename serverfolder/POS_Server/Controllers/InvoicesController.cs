@@ -1932,11 +1932,12 @@ namespace POS_Server.Controllers
                     //var invoicesList = (from b in entity.invoices.Where(x => x.invType == "s" && x.branchCreatorId == branchId && x.shipUserId != null && x.isActive == true)
                     var invoicesList = (from b in entity.invoices.Where(x => (x.invType == "s" || x.invType == "ts" || x.invType == "ss") && x.branchCreatorId == branchId && x.shipUserId != null && x.isActive == true)
                                         //join s in entity.invoiceStatus on b.invoiceId equals s.invoiceId
-                                        join s in entity.orderPreparingStatus on b.invoiceId equals s.orderPreparing.invoiceId
+                                        join op in entity.orderPreparing on b.invoiceId equals op.invoiceId
+                                        join s in entity.orderPreparingStatus on op.orderPreparingId equals s.orderPreparingId
                                         join u in entity.users on b.shipUserId equals u.userId into lj
                                         from y in lj.DefaultIfEmpty()
                                         //where (statusL.Contains(s.status) && s.invStatusId == entity.invoiceStatus.Where(x => x.invoiceId == b.invoiceId).Max(x => x.invStatusId))
-                                        where (statusL.Contains(s.status) && s.orderStatusId == entity.invoiceStatus.Where(x => x.invoiceId == b.invoiceId).Max(x => x.invStatusId))
+                                        where (statusL.Contains(s.status) && s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == b.invoiceId).Max(x => x.orderStatusId))
                                         select new InvoiceModel()
                                         {
                                             //invStatusId = s.invStatusId,
