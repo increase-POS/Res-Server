@@ -1977,6 +1977,11 @@ namespace POS_Server.Controllers
                                             userId = b.userId,
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
+                                            shippingCost = b.shippingCost,
+                                            realShippingCost = b.realShippingCost,
+                                            payStatus = b.deserved == 0 ? "payed" : (b.deserved == b.totalNet ? "unpayed" : "partpayed"),
+                                            branchCreatorName = entity.branches.Where(X => X.branchId == b.branchCreatorId).FirstOrDefault().name,
+
                                         })
                     .ToList();
                     if (invoicesList != null)
