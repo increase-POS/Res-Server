@@ -46,21 +46,21 @@ namespace POS_Server.Controllers
                                           join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
                                           where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
                                           select new OrderPreparingModel()
-                                             {
-                                                 orderPreparingId = o.orderPreparingId,
-                                                 invoiceId = o.invoiceId,
-                                                 notes = o.notes,
-                                                 orderNum = o.orderNum,
-                                                preparingTime =o.preparingTime,
-                                                 updateDate = o.updateDate,
-                                                 updateUserId = o.updateUserId,
-                                                createDate = o.createDate,
-                                                createUserId= o.createUserId,
-                                                itemName = i.itemsUnits.items.name,
-                                                quantity= (int)i.quantity,
-                                                status = s.status,
-                                                itemUnitId = i.itemUnitId,
-                                             }).OrderBy(x => x.orderNum).ToList();
+                                          {
+                                              orderPreparingId = o.orderPreparingId,
+                                              invoiceId = o.invoiceId,
+                                              notes = o.notes,
+                                              orderNum = o.orderNum,
+                                              preparingTime = o.preparingTime,
+                                              updateDate = o.updateDate,
+                                              updateUserId = o.updateUserId,
+                                              createDate = o.createDate,
+                                              createUserId = o.createUserId,
+                                              itemName = i.itemsUnits.items.name,
+                                              quantity = (int)i.quantity,
+                                              status = s.status,
+                                              itemUnitId = i.itemUnitId,
+                                          }).OrderBy(x => x.orderNum).ToList();
 
                         int index = 1;
                         foreach (OrderPreparingModel o in prepOrders)
@@ -127,7 +127,7 @@ namespace POS_Server.Controllers
             else
             {
                 #region params
-                string statusStr = "";               
+                string statusStr = "";
                 List<string> statusL = new List<string>();
                 int branchId = 0;
                 int duration = 0;
@@ -143,11 +143,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId =int.Parse(c.Value);
+                        branchId = int.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
-                        duration =int.Parse(c.Value);
+                        duration = int.Parse(c.Value);
                     }
                 }
                 #endregion
@@ -159,11 +159,11 @@ namespace POS_Server.Controllers
                         var searchPredicate = PredicateBuilder.New<invoices>();
                         searchPredicate = searchPredicate.And(x => x.branchId == branchId);
 
-                        if(duration > 0)
+                        if (duration > 0)
                         {
                             DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-duration));
                             searchPredicate = searchPredicate.And(x => x.updateDate >= dt);
-                           // return dt.ToString();
+                            // return dt.ToString();
                         }
                         #endregion
                         var invoices = entity.invoices.Where(searchPredicate)
@@ -194,55 +194,55 @@ namespace POS_Server.Controllers
                                 if (tablesNames == "")
                                     tablesNames += tabl.name;
                                 else tablesNames += ", " + tabl.name;
-                            }                          
+                            }
                             #endregion
 
-                           var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == inv.invoiceId)
-                                          join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
-                                          where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
-                                          select new OrderPreparingModel()
-                                             {
-                                                 orderPreparingId = o.orderPreparingId,
-                                                 invoiceId = o.invoiceId,
-                                                 notes = o.notes,
-                                                 orderNum = o.orderNum,
-                                                preparingTime =o.preparingTime,
-                                                 updateDate = o.updateDate,
-                                                 updateUserId = o.updateUserId,
-                                                createDate = o.createDate,
-                                                createUserId= o.createUserId,
-                                                invNum= o.invoices.invNumber,
-                                                invType= o.invoices.invType,
-                                                shippingCompanyId = o.invoices.shippingCompanyId,
-                                              waiter = entity.users.Where(x => x.userId == o.invoices.waiterId).Select(x => x.name).FirstOrDefault(),
-                                                items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
-                                                                                .Select(x => new itemOrderPreparingModel()
-                                                                                {
-                                                                                    itemOrderId = x.itemOrderId,
-                                                                                    itemName = x.itemsUnits.items.name,
-                                                                                    itemId = x.itemsUnits.items.itemId,
-                                                                                    itemUnitId = x.itemUnitId,
-                                                                                    quantity= x.quantity,
-                                                                                    createDate = x.createDate,
-                                                                                    updateDate = x.updateDate,
-                                                                                    createUserId = x.createUserId,
-                                                                                    updateUserId = x.updateUserId,
-                                                                                    categoryId =x.itemsUnits.items.categories.categoryId,
-                                                                                    categoryName = x.itemsUnits.items.categories.name,
+                            var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == inv.invoiceId)
+                                              join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                              where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                              select new OrderPreparingModel()
+                                              {
+                                                  orderPreparingId = o.orderPreparingId,
+                                                  invoiceId = o.invoiceId,
+                                                  notes = o.notes,
+                                                  orderNum = o.orderNum,
+                                                  preparingTime = o.preparingTime,
+                                                  updateDate = o.updateDate,
+                                                  updateUserId = o.updateUserId,
+                                                  createDate = o.createDate,
+                                                  createUserId = o.createUserId,
+                                                  invNum = o.invoices.invNumber,
+                                                  invType = o.invoices.invType,
+                                                  shippingCompanyId = o.invoices.shippingCompanyId,
+                                                  waiter = entity.users.Where(x => x.userId == o.invoices.waiterId).Select(x => x.name).FirstOrDefault(),
+                                                  items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
+                                                                                    .Select(x => new itemOrderPreparingModel()
+                                                                                    {
+                                                                                        itemOrderId = x.itemOrderId,
+                                                                                        itemName = x.itemsUnits.items.name,
+                                                                                        itemId = x.itemsUnits.items.itemId,
+                                                                                        itemUnitId = x.itemUnitId,
+                                                                                        quantity = x.quantity,
+                                                                                        createDate = x.createDate,
+                                                                                        updateDate = x.updateDate,
+                                                                                        createUserId = x.createUserId,
+                                                                                        updateUserId = x.updateUserId,
+                                                                                        categoryId = x.itemsUnits.items.categories.categoryId,
+                                                                                        categoryName = x.itemsUnits.items.categories.name,
 
-                                                                                }).ToList(),
-                                                status = s.status,
-                                             }).ToList();
+                                                                                    }).ToList(),
+                                                  status = s.status,
+                                              }).ToList();
 
-                        #region get orders according to status
-                        if (statusStr != "")
-                            prepOrders = prepOrders.Where(x => statusL.Contains(x.status)).OrderBy(x => x.orderNum).ToList();
+                            #region get orders according to status
+                            if (statusStr != "")
+                                prepOrders = prepOrders.Where(x => statusL.Contains(x.status)).OrderBy(x => x.orderNum).ToList();
                             #endregion
 
                             decimal longestPreparingTime = 0;
                             foreach (OrderPreparingModel o in prepOrders)
                             {
-                                
+
                                 #region preparing time from menu list
                                 if (o.status == "Listed")
                                 {
@@ -269,7 +269,7 @@ namespace POS_Server.Controllers
                                 //#region calculate remaining time
                                 //if (o.preparingTime != null)
                                 //{
-                                    
+
                                 //    if(o.status == "Listed")
                                 //    {
                                 //        o.remainingTime = (decimal)o.preparingTime;
@@ -287,7 +287,7 @@ namespace POS_Server.Controllers
                                 //            o.remainingTime = (decimal)remainingTime.TotalMinutes;
                                 //        }
                                 //    }
-          
+
                                 //}
                                 //#endregion
 
@@ -300,7 +300,7 @@ namespace POS_Server.Controllers
                                 }
 
                                 #region get longest preparing time
-                                if(inv.orderTime != null && longestPreparingTime <  o.preparingTime)
+                                if (inv.orderTime != null && longestPreparingTime < o.preparingTime)
                                 {
                                     longestPreparingTime = (decimal)o.preparingTime;
 
@@ -340,7 +340,7 @@ namespace POS_Server.Controllers
             else
             {
                 #region params
-                string statusStr = "";               
+                string statusStr = "";
                 List<string> statusL = new List<string>();
                 int branchId = 0;
                 int duration = 0;
@@ -356,11 +356,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId =int.Parse(c.Value);
+                        branchId = int.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
-                        duration =int.Parse(c.Value);
+                        duration = int.Parse(c.Value);
                     }
                 }
                 #endregion
@@ -371,7 +371,7 @@ namespace POS_Server.Controllers
                         var searchPredicate = PredicateBuilder.New<orderPreparing>();
                         searchPredicate = searchPredicate.And(x => x.invoices.branchId == branchId);
 
-                        if(duration > 0)
+                        if (duration > 0)
                         {
                             DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-duration));
                             searchPredicate = searchPredicate.And(x => x.createDate >= dt);
@@ -383,36 +383,36 @@ namespace POS_Server.Controllers
                                           join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
                                           where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
                                           select new OrderPreparingModel()
-                                             {
-                                                 orderPreparingId = o.orderPreparingId,
-                                                 invoiceId = o.invoiceId,
-                                                 notes = o.notes,
-                                                 orderNum = o.orderNum,
-                                                preparingTime =o.preparingTime,
-                                                 updateDate = o.updateDate,
-                                                 updateUserId = o.updateUserId,
-                                                createDate = o.createDate,
-                                                createUserId= o.createUserId,
-                                                invNum= o.invoices.invNumber,
+                                          {
+                                              orderPreparingId = o.orderPreparingId,
+                                              invoiceId = o.invoiceId,
+                                              notes = o.notes,
+                                              orderNum = o.orderNum,
+                                              preparingTime = o.preparingTime,
+                                              updateDate = o.updateDate,
+                                              updateUserId = o.updateUserId,
+                                              createDate = o.createDate,
+                                              createUserId = o.createUserId,
+                                              invNum = o.invoices.invNumber,
                                               waiter = entity.users.Where(x => x.userId == o.invoices.waiterId).Select(x => x.name).FirstOrDefault(),
-                                                items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
+                                              items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
                                                                                 .Select(x => new itemOrderPreparingModel()
                                                                                 {
                                                                                     itemOrderId = x.itemOrderId,
                                                                                     itemName = x.itemsUnits.items.name,
                                                                                     itemId = x.itemsUnits.items.itemId,
                                                                                     itemUnitId = x.itemUnitId,
-                                                                                    quantity= x.quantity,
+                                                                                    quantity = x.quantity,
                                                                                     createDate = x.createDate,
                                                                                     updateDate = x.updateDate,
                                                                                     createUserId = x.createUserId,
                                                                                     updateUserId = x.updateUserId,
-                                                                                    categoryId =x.itemsUnits.items.categories.categoryId,
+                                                                                    categoryId = x.itemsUnits.items.categories.categoryId,
                                                                                     categoryName = x.itemsUnits.items.categories.name,
 
                                                                                 }).ToList(),
-                                                status = s.status,
-                                             }).ToList();
+                                              status = s.status,
+                                          }).ToList();
 
                         #region get orders according to status
                         if (statusStr != "")
@@ -471,15 +471,15 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId =int.Parse(c.Value);
+                        branchId = int.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
-                        duration =int.Parse(c.Value);
+                        duration = int.Parse(c.Value);
                     }
                     else if (c.Type == "type")
                     {
-                        type =c.Value;
+                        type = c.Value;
                     }
                 }
                 #endregion
@@ -490,25 +490,26 @@ namespace POS_Server.Controllers
                         var searchPredicate = PredicateBuilder.New<invoices>();
                         searchPredicate = searchPredicate.And(x => x.branchId == branchId);
 
-                        searchPredicate = searchPredicate.And(x => x.invType ==type);
-                        if(duration > 0)
+                        searchPredicate = searchPredicate.And(x => x.invType == type);
+                        if (duration > 0)
                         {
                             DateTime dt = Convert.ToDateTime(DateTime.Now.AddHours(-duration));
                             searchPredicate = searchPredicate.And(x => x.invDate >= dt);
                         }
 
                         var invoices = entity.invoices.Where(searchPredicate)
-                                                    .Select(x => new InvoiceModel() {
-                                                    invNumber = x.invNumber,                                                  
-                                                    invoiceId= x.invoiceId,
-                                                    shippingCompanyName = x.shippingCompanies.name,
-                                                    agentName = x.agents.name,
+                                                    .Select(x => new InvoiceModel()
+                                                    {
+                                                        invNumber = x.invNumber,
+                                                        invoiceId = x.invoiceId,
+                                                        shippingCompanyName = x.shippingCompanies.name,
+                                                        agentName = x.agents.name,
                                                     }).ToList();
 
 
-                        foreach(InvoiceModel inv in invoices)
+                        foreach (InvoiceModel inv in invoices)
                         {
-                            var prepOrders = (from o in entity.orderPreparing.Where(x=> x.invoiceId == inv.invoiceId)
+                            var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == inv.invoiceId)
                                               join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
                                               where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
                                               select new OrderPreparingModel()
@@ -557,14 +558,14 @@ namespace POS_Server.Controllers
                                     inv.status = "Ready";
                                 else
                                     inv.status = "";
-                               // status += inv.status;
+                                // status += inv.status;
                                 #endregion
 
                             }
                             //return status;
                         }
 
-                        List<string> statusLst = new List<string>() { "Listed", "Preparing","Ready"};
+                        List<string> statusLst = new List<string>() { "Listed", "Preparing", "Ready" };
                         invoices = invoices.Where(x => statusLst.Contains(x.status)).ToList();
                         return TokenManager.GenerateToken(invoices);
                     }
@@ -597,7 +598,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId =int.Parse(c.Value);
+                        branchId = int.Parse(c.Value);
                     }
                     else if (c.Type == "status")
                     {
@@ -615,29 +616,29 @@ namespace POS_Server.Controllers
                         var searchPredicate = PredicateBuilder.New<invoices>();
                         searchPredicate = searchPredicate.And(x => x.branchId == branchId);
 
-                        searchPredicate = searchPredicate.And(x => x.invType =="ts" || x.invType == "ss");
+                        searchPredicate = searchPredicate.And(x => x.invType == "ts" || x.invType == "ss");
                         searchPredicate = searchPredicate.And(x => x.shippingCompanyId != null);
 
 
-                        var invoices =(from x in entity.invoices.Where(searchPredicate)
-                                       join u in entity.users on x.shipUserId equals u.userId into lj
-                                       from y in lj.DefaultIfEmpty()
-                                       select new InvoiceModel()
-                                       {
-                                           invNumber = x.invNumber,
-                                           invoiceId = x.invoiceId,
-                                           shipUserId = x.shipUserId,
-                                           shipUserName = y.name,
-                                           shipUserLastName = y.lastname,
-                                           shippingCompanyId = x.shippingCompanyId,
-                                           shippingCompanyName = x.shippingCompanies.name,
-                                           orderTime = x.orderTime,
-                                       }).ToList();
+                        var invoices = (from x in entity.invoices.Where(searchPredicate)
+                                        join u in entity.users on x.shipUserId equals u.userId into lj
+                                        from y in lj.DefaultIfEmpty()
+                                        select new InvoiceModel()
+                                        {
+                                            invNumber = x.invNumber,
+                                            invoiceId = x.invoiceId,
+                                            shipUserId = x.shipUserId,
+                                            shipUserName = y.name,
+                                            shipUserLastName = y.lastname,
+                                            shippingCompanyId = x.shippingCompanyId,
+                                            shippingCompanyName = x.shippingCompanies.name,
+                                            orderTime = x.orderTime,
+                                        }).ToList();
 
 
-                        foreach(InvoiceModel inv in invoices)
+                        foreach (InvoiceModel inv in invoices)
                         {
-                            var prepOrders = (from o in entity.orderPreparing.Where(x=> x.invoiceId == inv.invoiceId)
+                            var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == inv.invoiceId)
                                               join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
                                               where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
                                               select new OrderPreparingModel()
@@ -698,7 +699,7 @@ namespace POS_Server.Controllers
                 }
             }
         }
-         [HttpPost]
+        [HttpPost]
         [Route("GetCountHallOrders")]
         public string GetCountHallOrders(string token)
         {
@@ -711,7 +712,7 @@ namespace POS_Server.Controllers
             else
             {
                 #region params
-                string statusStr = "";               
+                string statusStr = "";
                 List<string> statusL = new List<string>();
                 int branchId = 0;
                 int duration = 0;
@@ -727,7 +728,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId =int.Parse(c.Value);
+                        branchId = int.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
@@ -754,17 +755,17 @@ namespace POS_Server.Controllers
                                           join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
                                           where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
                                           select new OrderPreparingModel()
-                                             {
-                                                 orderPreparingId = o.orderPreparingId,
-                                                status = s.status,
-                                             }).ToList();
+                                          {
+                                              orderPreparingId = o.orderPreparingId,
+                                              status = s.status,
+                                          }).ToList();
 
                         #region get orders according to status
                         if (statusStr != "")
                             prepOrders = prepOrders.Where(x => statusL.Contains(x.status)).OrderBy(x => x.orderNum).ToList();
                         #endregion
 
-                        
+
                         return TokenManager.GenerateToken(prepOrders.Count());
                     }
                 }
@@ -898,7 +899,7 @@ namespace POS_Server.Controllers
                     foreach (itemOrderPreparing item in items)
                     {
                         #region orderNum
-                        
+
                         var orderNum = GetLastNumOfOrder("ko", branchId);
                         orderNum++;
                         string strSeq = orderNum.ToString();
@@ -925,7 +926,7 @@ namespace POS_Server.Controllers
                             }
                         }
                     }
-                    
+
                 }
                 catch
                 {
@@ -973,7 +974,7 @@ namespace POS_Server.Controllers
                     int orderId = savePreparingOrder(newObject);
                     if (orderId > 0)
                     {
-                       string res = saveInvoiceStatus(status, orderId);
+                        string res = saveInvoiceStatus(status, orderId);
                         if (res == "0")
                             message = "0";
                     }
@@ -1011,7 +1012,7 @@ namespace POS_Server.Controllers
                     {
                         invoiceId = int.Parse(c.Value);
                     }
-                    else if(c.Type == "shipUserId")
+                    else if (c.Type == "shipUserId")
                     {
                         try
                         {
@@ -1022,7 +1023,7 @@ namespace POS_Server.Controllers
                             shipUserId = null;
                         }
                     }
-                    else if(c.Type == "shippingCompanyId")
+                    else if (c.Type == "shippingCompanyId")
                     {
                         shippingCompanyId = int.Parse(c.Value);
                     }
@@ -1050,7 +1051,7 @@ namespace POS_Server.Controllers
                         #region edit orders status
                         var orders = entity.orderPreparing.Where(x => x.invoiceId == invoiceId).ToList();
 
-                        foreach(orderPreparing o in orders)
+                        foreach (orderPreparing o in orders)
                         {
                             int orderId = o.orderPreparingId;
                             string res = saveInvoiceStatus(status, orderId);
@@ -1090,7 +1091,7 @@ namespace POS_Server.Controllers
                     {
                         invoiceId = int.Parse(c.Value);
                     }
-                    else if(c.Type == "userId")
+                    else if (c.Type == "userId")
                     {
                         userId = int.Parse(c.Value);
                     }
@@ -1124,7 +1125,7 @@ namespace POS_Server.Controllers
                                 updateUserId = userId,
                                 updateDate = DateTime.Now,
                                 createDate = DateTime.Now,
-                                 
+
                             };
                             switch (o.status)
                             {
@@ -1144,7 +1145,7 @@ namespace POS_Server.Controllers
                                     break;
 
                             }
-                            if(inv.shipUserId != null)
+                            if (inv.shipUserId != null)
                             {
                                 statusObject.status = "Collected";
                             }
@@ -1227,7 +1228,7 @@ namespace POS_Server.Controllers
                     tmpInvoice = entity.orderPreparing.Add(newObject);
                     entity.SaveChanges();
                     res = tmpInvoice.orderPreparingId;
-                  
+
                 }
                 else
                 {
@@ -1236,7 +1237,7 @@ namespace POS_Server.Controllers
                     tmpInvoice.notes = newObject.notes;
                     tmpInvoice.preparingTime = newObject.preparingTime;
                     tmpInvoice.updateDate = DateTime.Now;
-                    tmpInvoice.updateUserId = newObject.updateUserId;                   
+                    tmpInvoice.updateUserId = newObject.updateUserId;
                     entity.SaveChanges();
                     res = tmpInvoice.orderPreparingId;
                 }
@@ -1293,7 +1294,7 @@ namespace POS_Server.Controllers
                     statusObject.createDate = statusObject.updateDate = DateTime.Now;
                     entity.orderPreparingStatus.Add(statusObject);
                     entity.SaveChanges();
-                    message = statusObject.orderStatusId.ToString();                   
+                    message = statusObject.orderStatusId.ToString();
                 }
             }
             catch { message = "0"; }
@@ -1326,7 +1327,7 @@ namespace POS_Server.Controllers
                     }
                 }
 
-                int lastNum = GetLastNumOfOrder(orderCode,branchId);               
+                int lastNum = GetLastNumOfOrder(orderCode, branchId);
                 return TokenManager.GenerateToken(lastNum);
             }
         }
@@ -1380,7 +1381,7 @@ namespace POS_Server.Controllers
                     {
                         var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == invoiceId)
                                           join i in entity.itemOrderPreparing on o.orderPreparingId equals i.orderPreparingId
-                                         // join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                          // join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
                                           join INV in entity.invoices on o.invoiceId equals INV.invoiceId
                                           join WT in entity.users on INV.waiterId equals WT.userId into JWT
                                           from W in JWT.DefaultIfEmpty()
@@ -1402,37 +1403,42 @@ namespace POS_Server.Controllers
                                               createUserId = o.createUserId,
                                               itemName = i.itemsUnits.items.name,
                                               quantity = (int)i.quantity,
-                                             // status = s.status,
+                                              // status = s.status,
                                               itemUnitId = i.itemUnitId,
-                                              waiter=W.name+" "+W.lastname,
-                                              invType=INV.invType,
-                                              invNum=INV.invNumber,
-                                              branchId=INV.branchId,
-                                              branchName=INV.branches.name,
-                                              invDate=   INV.invDate,
-                                              invTime=  INV.invTime,
-                                          }).OrderBy(x => x.orderNum).ToList();
+                                              waiter = W.name + " " + W.lastname,
+                                              invType = INV.invType,
+                                              invNum = INV.invNumber,
+                                              branchId = INV.branchId,
+                                              branchName = INV.branches.name,
+                                              invDate = INV.invDate,
+                                              invTime = INV.invTime,
+                                              categoryId = i.itemsUnits.items.categoryId,
+                                              categoryCode = i.itemsUnits.items.categories.categoryCode,
+                                              categoryName = i.itemsUnits.items.categories.name,
 
-                     //   int index = 1;
+
+                                          }).OrderBy(x =>new { x.categoryId,x.orderPreparingId}).ToList();
+
+                        //   int index = 1;
                         foreach (OrderPreparingModel o in prepOrders)
                         {
-                             
 
-                                #region get invoice tables
-                                var tables = (from t in entity.tables.Where(x => x.isActive == 1)
-                                              join it in entity.invoiceTables.Where(x => x.invoiceId == o.invoiceId) on t.tableId equals it.tableId
-                                              select new TableModel()
-                                              {
-                                                  tableId = t.tableId,
-                                                  name = t.name,
-                                              }).ToList();
-                                string tablesNames = "";
-                                foreach (TableModel tabl in tables)
-                                {
-                                    if (tablesNames == "")
-                                        tablesNames += tabl.name;
-                                    else tablesNames += ", " + tabl.name;
-                                }
+
+                            #region get invoice tables
+                            var tables = (from t in entity.tables.Where(x => x.isActive == 1)
+                                          join it in entity.invoiceTables.Where(x => x.invoiceId == o.invoiceId) on t.tableId equals it.tableId
+                                          select new TableModel()
+                                          {
+                                              tableId = t.tableId,
+                                              name = t.name,
+                                          }).ToList();
+                            string tablesNames = "";
+                            foreach (TableModel tabl in tables)
+                            {
+                                if (tablesNames == "")
+                                    tablesNames += tabl.name;
+                                else tablesNames += ", " + tabl.name;
+                            }
                             o.tables = tablesNames;
                             #endregion
 
