@@ -707,6 +707,12 @@ namespace POS_Server.Controllers
                         }
                         itemsList[i].price = (decimal)itemsList[i].price - totaldis;
                         itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].taxes / 100);
+
+                        if(itemsList[i].price < 0)
+                        {
+                            itemsList[i].price = 0;
+                            itemsList[i].priceTax = 0;
+                        }
                     }
 
 
