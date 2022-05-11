@@ -2031,6 +2031,8 @@ else
                                             uUserAccName = JUPUS.username,
                                             agentCompany = JAA.company,
                                             subTotal = (IT.price * IT.quantity),
+                                            categoryName= ITEM.categories.name,
+                                            categoryId = ITEM.categoryId,
                                             //username
 
                                             //  I.invoiceId,
