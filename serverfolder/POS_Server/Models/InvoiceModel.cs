@@ -64,6 +64,12 @@ namespace POS_Server.Models
 
         public IEnumerable<TableModel> tables { get; set; }
         public string payStatus { get; set; }
+        // agent 
+        public string agentAddress { get; set; }
+        public string agentMobile { get; set; }
+        public string agentResSectorsName { get; set; }
+
+
     }
 
     public class CouponInvoiceModel

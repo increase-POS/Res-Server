@@ -633,6 +633,11 @@ namespace POS_Server.Controllers
                                             shippingCompanyId = x.shippingCompanyId,
                                             shippingCompanyName = x.shippingCompanies.name,
                                             orderTime = x.orderTime,
+                                            //agent
+                                            agentName = x.agents.name,
+                                            agentAddress = x.agents.address,
+                                            agentMobile= x.agents.mobile,
+                                            agentResSectorsName=  x.agents.residentialSectors.name,
                                         }).ToList();
 
 
@@ -1415,7 +1420,7 @@ namespace POS_Server.Controllers
                                               categoryId = i.itemsUnits.items.categoryId,
                                               categoryCode = i.itemsUnits.items.categories.categoryCode,
                                               categoryName = i.itemsUnits.items.categories.name,
-
+                                              
 
                                           }).OrderBy(x =>new { x.categoryId,x.orderPreparingId}).ToList();
 
