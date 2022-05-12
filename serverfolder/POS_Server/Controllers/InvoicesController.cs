@@ -3147,6 +3147,7 @@ namespace POS_Server.Controllers
             else
             {
                 int invoiceId = 0;
+                int? reservationId = null;
                 int userId = 0;
                 string tablesObject = "";
                 List<tables> tables = null;
@@ -3156,6 +3157,17 @@ namespace POS_Server.Controllers
                     if (c.Type == "invoiceId")
                     {
                         invoiceId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "reservationId")
+                    {
+                        try
+                        {
+                            reservationId = int.Parse(c.Value);
+                        }
+                        catch
+                        {
+                            reservationId = null;
+                        }
                     }
                     else if (c.Type == "userId")
                     {
@@ -3171,14 +3183,43 @@ namespace POS_Server.Controllers
 
                 try
                 {
+                    reservations reservation = new reservations();
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var invTables = entity.invoiceTables.Where(x => x.invoiceId == invoiceId).ToList();
                         entity.invoiceTables.RemoveRange(invTables);
                         entity.SaveChanges();
+
+                        if(reservationId !=null)
+                        {
+                            reservation = entity.reservations.Find(reservationId);
+                            var resTables = entity.tablesReservations.Where(x => x.reservationId == reservationId).ToList();
+                            entity.tablesReservations.RemoveRange(resTables);
+                            entity.SaveChanges();
+
+                        }
                     }
 
                     message = saveInvoiceTables(tables, invoiceId, userId);
+                    if (reservationId != null)
+                    {
+                        using (incposdbEntities entity = new incposdbEntities())
+                        {
+                            foreach (tables tbl in tables)
+                            {
+                                tablesReservations tableR = new tablesReservations();
+                                tableR.tableId = tbl.tableId;
+                                tableR.reservationId = (long)reservationId;
+                                tableR.createUserId = userId;
+                                tableR.updateUserId = userId;
+                                tableR.createDate = tableR.updateDate = DateTime.Now;
+                                tableR.isActive = 1;
+
+                                entity.tablesReservations.Add(tableR);
+                            }
+                            entity.SaveChanges();
+                        }
+                    }
                 }
                 catch
                 {
