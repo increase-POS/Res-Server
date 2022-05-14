@@ -7801,6 +7801,8 @@ else
                 // DateTime cmpdate = DateTime.Now.AddDays(newdays);
                 try
                 {
+                    DateTime dt = Convert.ToDateTime(DateTime.Today.AddDays(-2).ToShortDateString());
+                    DateTime dt1 = Convert.ToDateTime(DateTime.Today.AddDays(-1).ToShortDateString());
                     Calculate calc = new Calculate();
                     List<int> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
@@ -7899,6 +7901,20 @@ else
 
                                             //  I.invoiceId,
                                             //    JBB.name
+                                            archived = ((DateTime)I.updateDate >=
+                                            ((I.invType == "sd" || I.invType == "sbd" || I.invType == "sd" || I.invType == "ord" || I.invType == "qd") ? dt : dt1)) ? 0 : 1,
+                                            //username
+
+                                            //  I.invoiceId,
+                                            //    JBB.name
+                                            processType = entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").ToList().Count() > 0 ?
+                                            entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").ToList().Count() > 1
+                                            ? "multiple" :
+                                            entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().processType == "card" ?
+                                             entity.cards.Where(C => C.cardId == entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().cardId).FirstOrDefault().name
+                                             : entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().processType
+                                             : "balance",
+
                                         }).ToList();
 
                         invListm = invListm.Where(X => DateTime.Compare((DateTime)calc.changeDateformat(X.updateDate, "yyyy-MM-dd"), (DateTime)calc.changeDateformat(date, "yyyy-MM-dd")) == 0).ToList();
