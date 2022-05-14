@@ -82,4 +82,41 @@ namespace POS_Server.Models
 
 
     }
+
+    public class BranchInvoicedata
+    {
+
+        public int invoiceId { get; set; }
+        public string invType { get; set; }
+        public Nullable<System.DateTime> invDate { get; set; }
+        public Nullable<int> branchCreatorId { get; set; }
+        public string branchCreatorName { get; set; }
+
+    }
+    public class BranchInvoiceCount
+    {
+
+       
+        public   DateTime fromDate { get; set; }
+        public DateTime toDate { get; set; }
+        public Nullable<int> branchCreatorId { get; set; }
+        public string branchCreatorName { get; set; }
+        public int count { get; set; }
+        public int dateindex { get; set; }
+       
+
+    }
+    public class BestOfCount
+    {
+      public   List<BranchInvoiceCount> CountinMonthsList { get; set; }
+      public   List<BranchInvoiceCount> CountinDaysList { get; set; }
+        public List<BranchInvoiceCount> CountinHoursList { get; set; }
+
+    
+        public Nullable<int> branchCreatorId { get; set; }
+        public string branchCreatorName { get; set; }
+     
+
+
+    }
 }
