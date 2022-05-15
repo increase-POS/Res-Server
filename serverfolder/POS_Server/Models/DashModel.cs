@@ -99,8 +99,8 @@ namespace POS_Server.Models
 
         public DateTime fromDate { get; set; }
         public DateTime toDate { get; set; }
-        public Nullable<int> branchCreatorId { get; set; }
-        public string branchCreatorName { get; set; }
+        public Nullable<int> branchId { get; set; }
+        public string branchName { get; set; }
         public int count { get; set; }
         public int dateindex { get; set; }
 
@@ -113,8 +113,8 @@ namespace POS_Server.Models
         public List<BranchInvoiceCount> CountinHoursList { get; set; }
 
 
-        public Nullable<int> branchCreatorId { get; set; }
-        public string branchCreatorName { get; set; }
+        public Nullable<int> branchId { get; set; }
+        public string branchName { get; set; }
 
 
 
@@ -123,11 +123,21 @@ namespace POS_Server.Models
     public class CountByInvType
     {
         public string invType { get; set; }
-        public Nullable<int> branchCreatorId { get; set; }
-        public string branchCreatorName { get; set; }
+        public Nullable<int> branchId { get; set; }
+        public string branchName { get; set; }
         public int dhallCount { get; set; }
         public int selfCount { get; set; }
         public int tawayCount { get; set; }
+
+    }
+    public class BranchBalance
+    {
+        public string branchName { get; set; }
+        public decimal balance { get; set; }
+        public int branchId { get; set; }
+        public string branchType { get; set; }
+        public string branchCode { get; set; }
+        public byte banchIsActive { get; set; }
 
     }
 }

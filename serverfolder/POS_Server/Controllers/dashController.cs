@@ -2215,7 +2215,7 @@ namespace POS_Server.Controllers
                                             banchIsActive = b.isActive
                                         }).ToList();
 
-                        var cachlist2 = cachlist.GroupBy(X => X.branchId).Select(X => new
+                        List<BranchBalance> cachlist2 = cachlist.GroupBy(X => X.branchId).Select(X => new BranchBalance
                         {
                             branchName = X.FirstOrDefault().branchName,
                             balance = X.Sum(s => s.balance),
@@ -2227,18 +2227,33 @@ namespace POS_Server.Controllers
 
 
                         }).ToList();
-                        //List<BranchModel> allbList = GetAllbranches();
-                        //foreach (BranchModel brow in allbList)
-                        //{
-                        //var temp=    cachlist2.Where(X => X.branchId == brow.branchId).ToList();
-                        //    if ()
-                        //    {
+                        List<BranchModel> allbList = GetAllbranches();
+                        List<BranchBalance> balanceList = new List<BranchBalance>();
+                        BranchBalance balanceObj = new BranchBalance();
+                        foreach (BranchModel brow in allbList)
+                        {
+                            balanceObj = new BranchBalance();
+                            List<BranchBalance> temp = cachlist2.Where(X => X.branchId == brow.branchId).ToList();
+                            if (temp.Count > 0)
+                            {
+                                balanceObj = temp.FirstOrDefault();
 
-                        //    }
-                        //}
+                            }
+                            else
+                            {
+                                balanceObj.branchName = brow.name;
+                                balanceObj.balance = 0;
+                                balanceObj.branchId = brow.branchId;
+                                balanceObj.branchType = brow.type;
+                                balanceObj.branchCode = brow.code;
+                                balanceObj.banchIsActive = brow.isActive;
+
+                            }
+                            balanceList.Add(balanceObj);
+                        }
 
 
-                        return TokenManager.GenerateToken(cachlist2);
+                        return TokenManager.GenerateToken(balanceList);
 
                     }
 
@@ -2341,9 +2356,9 @@ namespace POS_Server.Controllers
                     {
                         List<BranchInvoicedata> templist = invbranch.Where(X => X.branchCreatorId == branchrow.branchCreatorId).ToList();
                         BestOfCount finalRow = new BestOfCount();
-                        finalRow.branchCreatorId = branchrow.branchCreatorId;
+                        finalRow.branchId = branchrow.branchCreatorId;
 
-                        finalRow.branchCreatorName = branchrow.branchCreatorName;
+                        finalRow.branchName = branchrow.branchCreatorName;
                         finalRow.CountinMonthsList = GetCountinMonths(dNow, (int)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
                         finalRow.CountinDaysList = GetCountindays(dNow, (int)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
                         finalRow.CountinHoursList = GetCountinHours(dNow, (int)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
@@ -2385,10 +2400,10 @@ namespace POS_Server.Controllers
 
             BranchInvoiceobj.fromDate = fromDate;
             BranchInvoiceobj.toDate = toDate;
-            BranchInvoiceobj.branchCreatorId = branchCreatorId;
+            BranchInvoiceobj.branchId = branchCreatorId;
             //if (Listbranch.Count() > 0)
             //{
-            BranchInvoiceobj.branchCreatorName = branchCreatorName;
+            BranchInvoiceobj.branchName = branchCreatorName;
             //}
             //else
             //{
@@ -2425,17 +2440,8 @@ namespace POS_Server.Controllers
             }
             List = List.OrderByDescending(X => X.count).ToList();
             //get 4+other
-            //List = filtertoOther(List.ToList(), Listbranch.ToList());
-            //if (List.Count > 5)
-            //{
-            //    tempList = List.Take(4).ToList();
-            //    otherObj.count = List.Skip(4).ToList().Sum(X => X.count);
-            //    otherObj.branchCreatorName = Listbranch.FirstOrDefault().branchCreatorName;
-            //    otherObj.branchCreatorId = Listbranch.FirstOrDefault().branchCreatorId;
-            //    otherObj.dateindex = 0;
-            //    tempList.Add(otherObj);
-            //    List = tempList.ToList();
-            //}
+            List = filtertoOther(List.ToList(), Listbranch.ToList());
+        
             return List;
         }
         public List<BranchInvoiceCount> filtertoOther(List<BranchInvoiceCount> AllList, List<BranchInvoicedata> Listbranch)
@@ -2447,8 +2453,8 @@ namespace POS_Server.Controllers
             {
                 tempList = AllList.Take(4).ToList();
                 otherObj.count = AllList.Skip(4).ToList().Sum(X => X.count);
-                otherObj.branchCreatorName = Listbranch.FirstOrDefault().branchCreatorName;
-                otherObj.branchCreatorId = Listbranch.FirstOrDefault().branchCreatorId;
+                otherObj.branchName = Listbranch.FirstOrDefault().branchCreatorName;
+                otherObj.branchId = Listbranch.FirstOrDefault().branchCreatorId;
                 otherObj.dateindex = 0;
                 tempList.Add(otherObj);
                 List = tempList.ToList();
@@ -2526,6 +2532,23 @@ namespace POS_Server.Controllers
             }
             else
             {
+                int mainBranchId = 0;
+                int userId = 0;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "mainBranchId")
+                    {
+                        mainBranchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+
+                }
+
                 List<CountByInvType> list = new List<CountByInvType>();
                 DateTime dNow = DateTime.Now;
                 DateTime firstofday = new DateTime(dNow.Year, dNow.Month, dNow.Day);
@@ -2533,15 +2556,15 @@ namespace POS_Server.Controllers
                 Calculate calc = new Calculate();
                 try
                 {
+                    StatisticsController sts = new StatisticsController();
+                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var invListmtmp = (from I in entity.invoices
-
                                            join BC in entity.branches on I.branchCreatorId equals BC.branchId into JBC
-
-                                           //pbw pb  sb
                                            from JBCC in JBC.DefaultIfEmpty()
-                                           where ((I.invType == "s" || I.invType == "ss" || I.invType == "ts") && (I.invDate >= firstofday && I.invDate < endofday))
+                                           where (brIds.Contains(JBCC.branchId) &&
+                                           (I.invType == "s" || I.invType == "ss" || I.invType == "ts") && (I.invDate >= firstofday && I.invDate < endofday))
                                            //   && I.updateDate==DateTime.Now())
                                            select new
                                            {
@@ -2558,8 +2581,8 @@ namespace POS_Server.Controllers
                         list = invListmtmp.GroupBy(g => g.branchCreatorId).Select(g => new CountByInvType
                         {
                             invType = g.FirstOrDefault().invType,
-                            branchCreatorId = g.FirstOrDefault().branchCreatorId,
-                            branchCreatorName = g.FirstOrDefault().branchCreatorName,
+                            branchId = g.FirstOrDefault().branchCreatorId,
+                            branchName = g.FirstOrDefault().branchCreatorName,
                             dhallCount = g.Where(i => i.invType == "s").Count(),
                             selfCount = g.Where(i => i.invType == "ss").Count(),
                             tawayCount = g.Where(i => i.invType == "ts").Count(),
@@ -2572,7 +2595,7 @@ namespace POS_Server.Controllers
                         foreach (BranchModel brow in allbList)
                         {
                             counObj = new CountByInvType();
-                            List<CountByInvType> temp = list.Where(X => X.branchCreatorId == brow.branchId).ToList();
+                            List<CountByInvType> temp = list.Where(X => X.branchId == brow.branchId).ToList();
                             if (temp.Count > 0)
                             {
                                 counObj = temp.FirstOrDefault();
@@ -2580,10 +2603,10 @@ namespace POS_Server.Controllers
                             }
                             else
                             {
-                                counObj.branchCreatorId = brow.branchId;
+                                counObj.branchId = brow.branchId;
                                 counObj.invType = "";
 
-                                counObj.branchCreatorName = brow.name;
+                                counObj.branchName = brow.name;
                                 counObj.dhallCount = 0;
                                 counObj.selfCount = 0;
                                 counObj.tawayCount = 0;
