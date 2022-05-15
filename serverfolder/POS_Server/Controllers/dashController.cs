@@ -2508,17 +2508,35 @@ namespace POS_Server.Controllers
             }
             List=  List.OrderByDescending(X=>X.count).ToList();
             //get 4+other
-            //if (List.Count>5)
+            List = filtertoOther(List.ToList(), Listbranch.ToList());
+            //if (List.Count > 5)
             //{
             //    tempList = List.Take(4).ToList();
-            //    otherObj.count = List.Skip(4).ToList().Sum(X=>X.count);
+            //    otherObj.count = List.Skip(4).ToList().Sum(X => X.count);
             //    otherObj.branchCreatorName = Listbranch.FirstOrDefault().branchCreatorName;
             //    otherObj.branchCreatorId = Listbranch.FirstOrDefault().branchCreatorId;
-            //    otherObj.dateindex=0;
-            //   tempList.Add(otherObj) ;
+            //    otherObj.dateindex = 0;
+            //    tempList.Add(otherObj);
             //    List = tempList.ToList();
             //}
             return  List;
+        }
+        public List<BranchInvoiceCount> filtertoOther(List<BranchInvoiceCount> AllList, List<BranchInvoicedata> Listbranch)
+        {
+            List<BranchInvoiceCount> List = new List<BranchInvoiceCount>();
+            BranchInvoiceCount otherObj = new BranchInvoiceCount();
+            List<BranchInvoiceCount> tempList = new List<BranchInvoiceCount>();
+            if (AllList.Count > 5)
+            {
+                tempList = AllList.Take(4).ToList();
+                otherObj.count = AllList.Skip(4).ToList().Sum(X => X.count);
+                otherObj.branchCreatorName = Listbranch.FirstOrDefault().branchCreatorName;
+                otherObj.branchCreatorId = Listbranch.FirstOrDefault().branchCreatorId;
+                otherObj.dateindex = 0;
+                tempList.Add(otherObj);
+                List = tempList.ToList();
+            }
+            return List;
         }
         public List<BranchInvoiceCount> GetCountindays(DateTime dNow, int branchCreatorId, string branchCreatorName, List<BranchInvoicedata> Listbranch)
         {
@@ -2542,6 +2560,7 @@ namespace POS_Server.Controllers
 
             }
             List = List.OrderByDescending(X => X.count).ToList();
+            List = filtertoOther(List.ToList(), Listbranch.ToList());
             return List;
           
         }
@@ -2569,6 +2588,7 @@ namespace POS_Server.Controllers
 
             }
             List = List.OrderByDescending(X => X.count).ToList();
+            List = filtertoOther(List.ToList(), Listbranch.ToList());
             return List;
          
         }

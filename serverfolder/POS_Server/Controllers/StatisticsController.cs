@@ -8166,7 +8166,11 @@ else
                                         from JAA in JA.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
                                             // where (JUPUS.userId == userId)
-                                        where (brIds.Contains(JBCC.branchId) || brIds.Contains(JPP.branches.branchId))
+                                        where (
+                                      //  (brIds.Contains(JBCC.branchId) || brIds.Contains(JPP.branches.branchId)) &&
+                                        JUU.userId== userId &&
+                                        I.invType=="s" || I.invType == "ss" || I.invType == "ts"
+                                        || I.invType == "ssd" || I.invType == "sd" || I.invType == "tsd" || I.invType == "sb" || I.invType == "sbd")
                                         select new
                                         {
 
@@ -8229,7 +8233,14 @@ else
                                             uUserAccName = JUPUS.username,
                                             agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb")) ?
                                             "unknown" : JAA.company,
-
+                                        
+                                            processType = entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").ToList().Count() > 0 ?
+                                            entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").ToList().Count() > 1
+                                            ? "multiple" :
+                                            entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().processType == "card" ?
+                                             entity.cards.Where(C => C.cardId == entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().cardId).FirstOrDefault().name
+                                             : entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().processType
+                                             : "balance",
                                             //username
 
                                             //  I.invoiceId,
