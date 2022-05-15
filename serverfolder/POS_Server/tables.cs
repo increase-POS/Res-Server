@@ -17,6 +17,7 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tables()
         {
+            this.invoiceTables = new HashSet<invoiceTables>();
             this.tablesReservations = new HashSet<tablesReservations>();
         }
     
@@ -34,8 +35,9 @@ namespace POS_Server
         public Nullable<int> updateUserId { get; set; }
     
         public virtual branches branches { get; set; }
-        public virtual branches branches1 { get; set; }
-        public virtual sections sections { get; set; }
+        public virtual hallSections hallSections { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<invoiceTables> invoiceTables { get; set; }
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }
         public virtual users users2 { get; set; }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="PosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="agentMembershipCash">
           <Key>
             <PropertyRef Name="agentMembershipCashId" />
@@ -5460,7 +5460,8 @@
             <End Role="usersLogs" EntitySet="usersLogs" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -6664,7 +6665,7 @@
           <Property Name="printfor" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="sizeValue" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="posSetting" Relationship="Self.FK_posSetting_paperSize" FromRole="paperSize" ToRole="posSetting" />
-          <NavigationProperty Name="posSetting1" Relationship="PosModel.FK_posSetting_paperSizeKitchen" FromRole="paperSize" ToRole="posSetting" />
+          <NavigationProperty Name="posSetting1" Relationship="Self.FK_posSetting_paperSizeKitchen" FromRole="paperSize" ToRole="posSetting" />
         </EntityType>
         <EntityType Name="Points">
           <Key>
@@ -6740,7 +6741,9 @@
           <Property Name="posId" Type="Int32" />
           <Property Name="saleInvPrinterId" Type="Int32" />
           <Property Name="reportPrinterId" Type="Int32" />
+          <Property Name="kitchenPrinterId" Type="Int32" />
           <Property Name="saleInvPapersizeId" Type="Int32" />
+          <Property Name="kitchenPapersizeId" Type="Int32" />
           <Property Name="posSerial" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="docPapersizeId" Type="Int32" />
           <Property Name="posDeviceCode" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
@@ -6750,16 +6753,14 @@
           <Property Name="createUserId" Type="Int32" />
           <Property Name="updateUserId" Type="Int32" />
           <NavigationProperty Name="paperSize" Relationship="Self.FK_posSetting_paperSize" FromRole="posSetting" ToRole="paperSize" />
+          <NavigationProperty Name="paperSize1" Relationship="Self.FK_posSetting_paperSizeKitchen" FromRole="posSetting" ToRole="paperSize" />
           <NavigationProperty Name="pos" Relationship="Self.FK_posSetting_pos" FromRole="posSetting" ToRole="pos" />
           <NavigationProperty Name="posSerials" Relationship="Self.FK_posSetting_posSerials" FromRole="posSetting" ToRole="posSerials" />
           <NavigationProperty Name="printers" Relationship="Self.FK_posSetting_printers" FromRole="posSetting" ToRole="printers" />
           <NavigationProperty Name="printers1" Relationship="Self.FK_posSetting_printers1" FromRole="posSetting" ToRole="printers" />
+          <NavigationProperty Name="printers2" Relationship="Self.FK_posSetting_printersKitchen" FromRole="posSetting" ToRole="printers" />
           <NavigationProperty Name="users" Relationship="Self.FK_posSetting_users" FromRole="posSetting" ToRole="users" />
           <NavigationProperty Name="users1" Relationship="Self.FK_posSetting_users1" FromRole="posSetting" ToRole="users" />
-          <Property Name="kitchenPrinterId" Type="Int32" />
-          <Property Name="kitchenPapersizeId" Type="Int32" />
-          <NavigationProperty Name="paperSize1" Relationship="PosModel.FK_posSetting_paperSizeKitchen" FromRole="posSetting" ToRole="paperSize" />
-          <NavigationProperty Name="printers2" Relationship="PosModel.FK_posSetting_printersKitchen" FromRole="posSetting" ToRole="printers" />
         </EntityType>
         <EntityType Name="posUsers">
           <Key>
@@ -6790,9 +6791,9 @@
           <Property Name="updateUserId" Type="Int32" />
           <NavigationProperty Name="posSetting" Relationship="Self.FK_posSetting_printers" FromRole="printers" ToRole="posSetting" />
           <NavigationProperty Name="posSetting1" Relationship="Self.FK_posSetting_printers1" FromRole="printers" ToRole="posSetting" />
+          <NavigationProperty Name="posSetting2" Relationship="Self.FK_posSetting_printersKitchen" FromRole="printers" ToRole="posSetting" />
           <NavigationProperty Name="users" Relationship="Self.FK_printers_users" FromRole="printers" ToRole="users" />
           <NavigationProperty Name="users1" Relationship="Self.FK_printers_users1" FromRole="printers" ToRole="users" />
-          <NavigationProperty Name="posSetting2" Relationship="PosModel.FK_posSetting_printersKitchen" FromRole="printers" ToRole="posSetting" />
         </EntityType>
         <EntityType Name="ProgramDetails">
           <Key>
@@ -9712,6 +9713,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_posSetting_paperSizeKitchen">
+          <End Role="paperSize" Type="Self.paperSize" Multiplicity="0..1" />
+          <End Role="posSetting" Type="Self.posSetting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="paperSize">
+              <PropertyRef Name="sizeId" />
+            </Principal>
+            <Dependent Role="posSetting">
+              <PropertyRef Name="kitchenPapersizeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Points_users">
           <End Role="users" Type="Self.users" Multiplicity="0..1" />
           <End Role="Points" Type="Self.Points" Multiplicity="*" />
@@ -9829,6 +9842,18 @@
             </Principal>
             <Dependent Role="posSetting">
               <PropertyRef Name="reportPrinterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_posSetting_printersKitchen">
+          <End Role="printers" Type="Self.printers" Multiplicity="0..1" />
+          <End Role="posSetting" Type="Self.posSetting" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="printers">
+              <PropertyRef Name="printerId" />
+            </Principal>
+            <Dependent Role="posSetting">
+              <PropertyRef Name="kitchenPrinterId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11184,6 +11209,10 @@
             <End Role="paperSize" EntitySet="paperSize" />
             <End Role="posSetting" EntitySet="posSetting" />
           </AssociationSet>
+          <AssociationSet Name="FK_posSetting_paperSizeKitchen" Association="Self.FK_posSetting_paperSizeKitchen">
+            <End Role="paperSize" EntitySet="paperSize" />
+            <End Role="posSetting" EntitySet="posSetting" />
+          </AssociationSet>
           <AssociationSet Name="FK_Points_users" Association="Self.FK_Points_users">
             <End Role="users" EntitySet="users" />
             <End Role="Points" EntitySet="Points" />
@@ -11221,6 +11250,10 @@
             <End Role="posSetting" EntitySet="posSetting" />
           </AssociationSet>
           <AssociationSet Name="FK_posSetting_printers1" Association="Self.FK_posSetting_printers1">
+            <End Role="printers" EntitySet="printers" />
+            <End Role="posSetting" EntitySet="posSetting" />
+          </AssociationSet>
+          <AssociationSet Name="FK_posSetting_printersKitchen" Association="Self.FK_posSetting_printersKitchen">
             <End Role="printers" EntitySet="printers" />
             <End Role="posSetting" EntitySet="posSetting" />
           </AssociationSet>
@@ -11384,39 +11417,7 @@
             <End Role="users" EntitySet="users" />
             <End Role="usersLogs" EntitySet="usersLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_posSetting_paperSizeKitchen" Association="PosModel.FK_posSetting_paperSizeKitchen">
-            <End Role="paperSize" EntitySet="paperSize" />
-            <End Role="posSetting" EntitySet="posSetting" />
-          </AssociationSet>
-          <AssociationSet Name="FK_posSetting_printersKitchen" Association="PosModel.FK_posSetting_printersKitchen">
-            <End Role="printers" EntitySet="printers" />
-            <End Role="posSetting" EntitySet="posSetting" />
-          </AssociationSet>
         </EntityContainer>
-        <Association Name="FK_posSetting_paperSizeKitchen">
-          <End Type="PosModel.paperSize" Role="paperSize" Multiplicity="0..1" />
-          <End Type="PosModel.posSetting" Role="posSetting" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="paperSize">
-              <PropertyRef Name="sizeId" />
-            </Principal>
-            <Dependent Role="posSetting">
-              <PropertyRef Name="kitchenPapersizeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_posSetting_printersKitchen">
-          <End Type="PosModel.printers" Role="printers" Multiplicity="0..1" />
-          <End Type="PosModel.posSetting" Role="posSetting" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="printers">
-              <PropertyRef Name="printerId" />
-            </Principal>
-            <Dependent Role="posSetting">
-              <PropertyRef Name="kitchenPrinterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -12465,13 +12466,13 @@
           <EntitySetMapping Name="posSetting">
             <EntityTypeMapping TypeName="PosModel.posSetting">
               <MappingFragment StoreEntitySet="posSetting">
-                <ScalarProperty Name="kitchenPapersizeId" ColumnName="kitchenPapersizeId" />
-                <ScalarProperty Name="kitchenPrinterId" ColumnName="kitchenPrinterId" />
                 <ScalarProperty Name="posSettingId" ColumnName="posSettingId" />
                 <ScalarProperty Name="posId" ColumnName="posId" />
                 <ScalarProperty Name="saleInvPrinterId" ColumnName="saleInvPrinterId" />
                 <ScalarProperty Name="reportPrinterId" ColumnName="reportPrinterId" />
+                <ScalarProperty Name="kitchenPrinterId" ColumnName="kitchenPrinterId" />
                 <ScalarProperty Name="saleInvPapersizeId" ColumnName="saleInvPapersizeId" />
+                <ScalarProperty Name="kitchenPapersizeId" ColumnName="kitchenPapersizeId" />
                 <ScalarProperty Name="posSerial" ColumnName="posSerial" />
                 <ScalarProperty Name="docPapersizeId" ColumnName="docPapersizeId" />
                 <ScalarProperty Name="posDeviceCode" ColumnName="posDeviceCode" />

@@ -17,6 +17,7 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public invoicesClass()
         {
+            this.invoiceClassDiscount = new HashSet<invoiceClassDiscount>();
             this.invoicesClassMemberships = new HashSet<invoicesClassMemberships>();
         }
     
@@ -33,6 +34,8 @@ namespace POS_Server
         public byte isActive { get; set; }
         public string name { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<invoiceClassDiscount> invoiceClassDiscount { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<invoicesClassMemberships> invoicesClassMemberships { get; set; }
     }

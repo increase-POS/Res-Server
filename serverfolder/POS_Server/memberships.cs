@@ -18,8 +18,9 @@ namespace POS_Server
         public memberships()
         {
             this.agentMembershipCash = new HashSet<agentMembershipCash>();
-            this.agentMemberships = new HashSet<agentMemberships>();
+            this.agents = new HashSet<agents>();
             this.couponsMemberships = new HashSet<couponsMemberships>();
+            this.invoices = new HashSet<invoices>();
             this.invoicesClassMemberships = new HashSet<invoicesClassMemberships>();
             this.membershipsOffers = new HashSet<membershipsOffers>();
             this.subscriptionFees = new HashSet<subscriptionFees>();
@@ -41,9 +42,11 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agentMembershipCash> agentMembershipCash { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<agentMemberships> agentMemberships { get; set; }
+        public virtual ICollection<agents> agents { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<couponsMemberships> couponsMemberships { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<invoices> invoices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<invoicesClassMemberships> invoicesClassMemberships { get; set; }
         public virtual users users { get; set; }

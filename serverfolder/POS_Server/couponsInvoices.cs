@@ -23,6 +23,7 @@ namespace POS_Server
         public Nullable<int> updateUserId { get; set; }
         public decimal discountValue { get; set; }
         public byte discountType { get; set; }
+        public string forAgents { get; set; }
     
         public virtual coupons coupons { get; set; }
         public virtual invoices invoices { get; set; }

@@ -52,7 +52,7 @@ namespace POS_Server.Models
         public string email { get; set; }
         public string address { get; set; }
         public short userisActive { get; set; }
-        public byte isOnline { get; set; }
+        public byte  isOnline { get; set; }
         public string image { get; set; }
 
     }
@@ -96,38 +96,27 @@ namespace POS_Server.Models
     public class BranchInvoiceCount
     {
 
-
-        public DateTime fromDate { get; set; }
+       
+        public   DateTime fromDate { get; set; }
         public DateTime toDate { get; set; }
         public Nullable<int> branchCreatorId { get; set; }
         public string branchCreatorName { get; set; }
         public int count { get; set; }
         public int dateindex { get; set; }
-
+       
 
     }
     public class BestOfCount
     {
-        public List<BranchInvoiceCount> CountinMonthsList { get; set; }
-        public List<BranchInvoiceCount> CountinDaysList { get; set; }
+      public   List<BranchInvoiceCount> CountinMonthsList { get; set; }
+      public   List<BranchInvoiceCount> CountinDaysList { get; set; }
         public List<BranchInvoiceCount> CountinHoursList { get; set; }
 
-
+    
         public Nullable<int> branchCreatorId { get; set; }
         public string branchCreatorName { get; set; }
+     
 
-
-
-    }
-
-    public class CountByInvType
-    {
-        public string invType { get; set; }
-        public Nullable<int> branchCreatorId { get; set; }
-        public string branchCreatorName { get; set; }
-        public int dhallCount { get; set; }
-        public int selfCount { get; set; }
-        public int tawayCount { get; set; }
 
     }
 }

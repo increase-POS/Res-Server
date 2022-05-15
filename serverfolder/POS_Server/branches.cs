@@ -21,6 +21,7 @@ namespace POS_Server
             this.branchStore = new HashSet<branchStore>();
             this.branchStore1 = new HashSet<branchStore>();
             this.error = new HashSet<error>();
+            this.hallSections = new HashSet<hallSections>();
             this.Inventory = new HashSet<Inventory>();
             this.invoices = new HashSet<invoices>();
             this.invoices1 = new HashSet<invoices>();
@@ -31,7 +32,6 @@ namespace POS_Server
             this.sections = new HashSet<sections>();
             this.sysEmails = new HashSet<sysEmails>();
             this.tables = new HashSet<tables>();
-            this.tables1 = new HashSet<tables>();
         }
     
         public int branchId { get; set; }
@@ -61,6 +61,8 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<error> error { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<hallSections> hallSections { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Inventory> Inventory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<invoices> invoices { get; set; }
@@ -80,7 +82,5 @@ namespace POS_Server
         public virtual ICollection<sysEmails> sysEmails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tables> tables { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<tables> tables1 { get; set; }
     }
 }

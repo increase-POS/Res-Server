@@ -41,6 +41,7 @@ namespace POS_Server
         public Nullable<decimal> itemUnitPrice { get; set; }
         public Nullable<decimal> offerValue { get; set; }
         public Nullable<decimal> offerType { get; set; }
+        public string forAgents { get; set; }
     
         public virtual inventoryItemLocation inventoryItemLocation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

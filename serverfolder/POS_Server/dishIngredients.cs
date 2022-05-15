@@ -14,7 +14,7 @@ namespace POS_Server
     
     public partial class dishIngredients
     {
-        public long dishIngredId { get; set; }
+        public int dishIngredId { get; set; }
         public string name { get; set; }
         public Nullable<int> itemUnitId { get; set; }
         public string notes { get; set; }

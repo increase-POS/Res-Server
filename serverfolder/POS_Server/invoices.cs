@@ -19,6 +19,7 @@ namespace POS_Server
         {
             this.cashTransfer = new HashSet<cashTransfer>();
             this.couponsInvoices = new HashSet<couponsInvoices>();
+            this.invoiceClassDiscount = new HashSet<invoiceClassDiscount>();
             this.invoiceOrder = new HashSet<invoiceOrder>();
             this.invoiceOrder1 = new HashSet<invoiceOrder>();
             this.invoices1 = new HashSet<invoices>();
@@ -26,6 +27,7 @@ namespace POS_Server
             this.invoiceTables = new HashSet<invoiceTables>();
             this.itemsLocations = new HashSet<itemsLocations>();
             this.itemsTransfer = new HashSet<itemsTransfer>();
+            this.orderPreparing = new HashSet<orderPreparing>();
         }
     
         public int invoiceId { get; set; }
@@ -71,6 +73,9 @@ namespace POS_Server
         public decimal shippingCost { get; set; }
         public decimal realShippingCost { get; set; }
         public Nullable<long> reservationId { get; set; }
+        public Nullable<System.DateTime> orderTime { get; set; }
+        public decimal shippingCostDiscount { get; set; }
+        public Nullable<int> membershipId { get; set; }
     
         public virtual agents agents { get; set; }
         public virtual branches branches { get; set; }
@@ -80,12 +85,15 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<couponsInvoices> couponsInvoices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<invoiceClassDiscount> invoiceClassDiscount { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<invoiceOrder> invoiceOrder { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<invoiceOrder> invoiceOrder1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<invoices> invoices1 { get; set; }
         public virtual invoices invoices2 { get; set; }
+        public virtual memberships memberships { get; set; }
         public virtual pos pos { get; set; }
         public virtual reservations reservations { get; set; }
         public virtual shippingCompanies shippingCompanies { get; set; }
@@ -104,5 +112,7 @@ namespace POS_Server
         public virtual ICollection<itemsLocations> itemsLocations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemsTransfer> itemsTransfer { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<orderPreparing> orderPreparing { get; set; }
     }
 }

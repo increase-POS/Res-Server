@@ -19,8 +19,6 @@ namespace POS_Server
         {
             this.agentMembershipCash = new HashSet<agentMembershipCash>();
             this.agentMembershipCash1 = new HashSet<agentMembershipCash>();
-            this.agentMemberships = new HashSet<agentMemberships>();
-            this.agentMemberships1 = new HashSet<agentMemberships>();
             this.agents = new HashSet<agents>();
             this.agents1 = new HashSet<agents>();
             this.bondes = new HashSet<bondes>();
@@ -70,6 +68,8 @@ namespace POS_Server
             this.invoiceStatus1 = new HashSet<invoiceStatus>();
             this.invoiceTables = new HashSet<invoiceTables>();
             this.invoiceTables1 = new HashSet<invoiceTables>();
+            this.itemOrderPreparing = new HashSet<itemOrderPreparing>();
+            this.itemOrderPreparing1 = new HashSet<itemOrderPreparing>();
             this.items = new HashSet<items>();
             this.items1 = new HashSet<items>();
             this.items2 = new HashSet<items>();
@@ -105,6 +105,10 @@ namespace POS_Server
             this.notificationUser = new HashSet<notificationUser>();
             this.notificationUser1 = new HashSet<notificationUser>();
             this.notificationUser2 = new HashSet<notificationUser>();
+            this.orderPreparing = new HashSet<orderPreparing>();
+            this.orderPreparing1 = new HashSet<orderPreparing>();
+            this.orderPreparingStatus = new HashSet<orderPreparingStatus>();
+            this.orderPreparingStatus1 = new HashSet<orderPreparingStatus>();
             this.packages = new HashSet<packages>();
             this.packages1 = new HashSet<packages>();
             this.Points = new HashSet<Points>();
@@ -170,15 +174,12 @@ namespace POS_Server
         public decimal balance { get; set; }
         public byte balanceType { get; set; }
         public bool isAdmin { get; set; }
+        public byte driverIsAvailable { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agentMembershipCash> agentMembershipCash { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agentMembershipCash> agentMembershipCash1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<agentMemberships> agentMemberships { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<agentMemberships> agentMemberships1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agents> agents { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -278,6 +279,10 @@ namespace POS_Server
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<invoiceTables> invoiceTables1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<itemOrderPreparing> itemOrderPreparing { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<itemOrderPreparing> itemOrderPreparing1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<items> items { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<items> items1 { get; set; }
@@ -347,6 +352,14 @@ namespace POS_Server
         public virtual ICollection<notificationUser> notificationUser1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<notificationUser> notificationUser2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<orderPreparing> orderPreparing { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<orderPreparing> orderPreparing1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<orderPreparingStatus> orderPreparingStatus { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<orderPreparingStatus> orderPreparingStatus1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<packages> packages { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

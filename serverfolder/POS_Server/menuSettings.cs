@@ -23,7 +23,7 @@ namespace POS_Server
         public bool wed { get; set; }
         public bool thur { get; set; }
         public bool fri { get; set; }
-        public Nullable<int> preparingTime { get; set; }
+        public Nullable<decimal> preparingTime { get; set; }
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
