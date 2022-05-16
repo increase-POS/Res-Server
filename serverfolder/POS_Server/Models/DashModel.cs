@@ -103,6 +103,7 @@ namespace POS_Server.Models
         public string branchName { get; set; }
         public int count { get; set; }
         public int dateindex { get; set; }
+        public string duration { get; set; }
 
 
     }

@@ -2360,12 +2360,22 @@ namespace POS_Server.Controllers
 
                         finalRow.branchName = branchrow.branchCreatorName;
                         finalRow.CountinMonthsList = GetCountinMonths(dNow, (int)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
+
                         finalRow.CountinDaysList = GetCountindays(dNow, (int)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
                         finalRow.CountinHoursList = GetCountinHours(dNow, (int)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
                         finalList.Add(finalRow);
 
 
                     }
+                    BestOfCount allRow = new BestOfCount();
+                    allRow.branchId = 0;
+
+                    allRow.branchName = "all";
+                    allRow.CountinMonthsList = GetCountinMonths(dNow, 0, allRow.branchName, invbranch);
+
+                    allRow.CountinDaysList = GetCountindays(dNow, 0, allRow.branchName, invbranch);
+                    allRow.CountinHoursList = GetCountinHours(dNow, 0, allRow.branchName, invbranch);
+                    finalList.Add(allRow);
 
 
                     //var list = invbranch.GroupBy(g => g.branchCreatorId).Select(g => new
@@ -2395,7 +2405,17 @@ namespace POS_Server.Controllers
         public BranchInvoiceCount GetCountbyBranch(int branchCreatorId, string branchCreatorName, DateTime fromDate, DateTime toDate, List<BranchInvoicedata> Listbranch, int dateindex)
         {
             BranchInvoiceCount BranchInvoiceobj = new BranchInvoiceCount();
-            Listbranch = Listbranch.Where(X => X.invDate >= fromDate && X.invDate < toDate && X.branchCreatorId == branchCreatorId).ToList();
+            if (branchCreatorId == 0)
+            {
+                Listbranch = Listbranch.Where(X => X.invDate >= fromDate && X.invDate < toDate ).ToList();
+               
+            }
+            else
+            {
+                Listbranch = Listbranch.Where(X => X.invDate >= fromDate && X.invDate < toDate && X.branchCreatorId == branchCreatorId).ToList();
+              
+            }
+            //Listbranch = Listbranch.Where(X => X.invDate >= fromDate && X.invDate < toDate && X.branchCreatorId == branchCreatorId).ToList();
             BranchInvoiceobj.count = Listbranch.Count();
 
             BranchInvoiceobj.fromDate = fromDate;
@@ -2434,7 +2454,7 @@ namespace POS_Server.Controllers
                 //fromDate = new DateTime(fromDate.Year, fromDate.Month + i, 1);
                 //toDate = new DateTime(fromDate.Year, fromDate.Month + i + 1, 1);
                 rowObj = GetCountbyBranch(branchCreatorId, branchCreatorName, fromDate, toDate, Listbranch, i + 1);
-
+                rowObj.duration = rowObj.fromDate.Month.ToString() + "/" + rowObj.fromDate.Year.ToString();
                 List.Add(rowObj);
 
             }
@@ -2456,6 +2476,7 @@ namespace POS_Server.Controllers
                 otherObj.branchName = Listbranch.FirstOrDefault().branchCreatorName;
                 otherObj.branchId = Listbranch.FirstOrDefault().branchCreatorId;
                 otherObj.dateindex = 0;
+                otherObj.duration = "other";
                 tempList.Add(otherObj);
                 List = tempList.ToList();
             }
@@ -2478,7 +2499,8 @@ namespace POS_Server.Controllers
                 //fromDate = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day + i);
                 //toDate = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day + i + 1);
                 rowObj = GetCountbyBranch(branchCreatorId, branchCreatorName, fromDate, toDate, Listbranch, i + 1);
-
+                rowObj.duration = DayOfWeekconvert(rowObj.fromDate);
+             
                 List.Add(rowObj);
 
             }
@@ -2486,6 +2508,23 @@ namespace POS_Server.Controllers
             List = filtertoOther(List.ToList(), Listbranch.ToList());
             return List;
 
+        }
+        public string  DayOfWeekconvert(DateTime Date)
+        {
+          
+         
+            switch (Date.DayOfWeek )
+            {
+                case DayOfWeek.Saturday: return "sat";
+                case DayOfWeek.Sunday: return "sun";
+                case DayOfWeek.Monday: return "mon";
+                case DayOfWeek.Tuesday: return "tues";
+                case DayOfWeek.Wednesday: return "wed";
+                case DayOfWeek.Thursday: return "thur";
+                case DayOfWeek.Friday: return "fri";
+                default: return "";
+                    //break;
+            }
         }
         public List<BranchInvoiceCount> GetCountinHours(DateTime dNow, int branchCreatorId, string branchCreatorName, List<BranchInvoicedata> Listbranch)
         {
@@ -2506,7 +2545,7 @@ namespace POS_Server.Controllers
                 //toDate = new DateTime(fromDate.Year, fromDate.Month, fromDate.Day, fromDate.Hour + i + 1, 0, 0);
 
                 rowObj = GetCountbyBranch(branchCreatorId, branchCreatorName, fromDate, toDate, Listbranch, i + 1);
-
+                rowObj.duration = rowObj.fromDate.Hour.ToString()+":"+"00";
                 List.Add(rowObj);
 
             }
