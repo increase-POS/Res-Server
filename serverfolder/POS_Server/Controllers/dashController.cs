@@ -629,7 +629,8 @@ namespace POS_Server.Controllers
                         BranchOnlineCount brow = new BranchOnlineCount();
                         brow.branchAll = allBranches;
                         brow.branchOnline = grop.Count();
-                        brow.branchOffline = allBranches - grop.Count();
+                        //brow.branchOffline = allBranches - grop.Count();
+                        brow.branchOffline = brIds.Count() - grop.Count();
                         list.Add(brow);
 
                         return TokenManager.GenerateToken(list);
