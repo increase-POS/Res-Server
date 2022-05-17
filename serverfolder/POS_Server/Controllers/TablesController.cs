@@ -550,6 +550,7 @@ namespace POS_Server.Controllers
                             branchName = br.name,
                             openedCount = tablesList.Where(x => x.branchId == br.branchId && (x.status == "opened" || x.status == "openedReserved")).ToList().Count(),
                             emptyCount = tablesList.Where(x => x.branchId == br.branchId && x.status != "opened" && x.status != "openedReserved").ToList().Count(),
+                            reservedCount = tablesList.Where(x => x.branchId == br.branchId && x.status == "reserved").ToList().Count(),
                         };
                         tablesStatistics.Add(table);
                     }

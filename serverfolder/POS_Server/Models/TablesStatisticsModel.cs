@@ -11,6 +11,8 @@ namespace POS_Server.Models
         public string branchName { get; set; }
         public int openedCount { get; set; }
         public int emptyCount { get; set; }
+        public int reservedCount { get; set; } // count for reserved but not opened tables
+
 
     }
 }
