@@ -1581,10 +1581,10 @@ namespace POS_Server.Controllers
             List<BranchInvoiceCount> List = new List<BranchInvoiceCount>();
             BranchInvoiceCount otherObj = new BranchInvoiceCount();
             List<BranchInvoiceCount> tempList = new List<BranchInvoiceCount>();
-            if (AllList.Count > 5)
+            if (AllList.Count > 6)
             {
-                tempList = AllList.Take(4).ToList();
-                otherObj.count = AllList.Skip(4).ToList().Sum(X => X.count);
+                tempList = AllList.Take(5).ToList();
+                otherObj.count = AllList.Skip(5).ToList().Sum(X => X.count);
                 otherObj.branchName = Listbranch.FirstOrDefault().branchCreatorName;
                 otherObj.branchId = Listbranch.FirstOrDefault().branchCreatorId;
                 otherObj.dateindex = 0;
