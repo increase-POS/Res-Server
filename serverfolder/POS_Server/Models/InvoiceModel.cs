@@ -69,8 +69,10 @@ namespace POS_Server.Models
         public string agentMobile { get; set; }
         public string agentResSectorsName { get; set; }
 
+        public int printedcount { get; set; }
+    public bool isOrginal { get; set; }
 
-    }
+}
 
     public class CouponInvoiceModel
     {
