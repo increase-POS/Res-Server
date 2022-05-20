@@ -2279,12 +2279,14 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             I.branchId,
-                                            discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
+                                       //     discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
                                             I.discountType,
                                             I.tax,
                                             I.name,
                                             I.isApproved,
-
+                                            discountValue=(I.couponsInvoices.Where(X=>X.InvoiceId==I.invoiceId).ToList().Count())==0?0:
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
                                             //
                                             I.branchCreatorId,
                                             branchCreatorName = JBCC.name,
@@ -2335,9 +2337,9 @@ else
                     }
 
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return TokenManager.GenerateToken("0");
+                    return TokenManager.GenerateToken(ex.ToString());
                 }
 
             }
@@ -2553,7 +2555,9 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             I.branchId,
-                                            discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
                                             I.discountType,
                                             I.tax,
                                             I.name,
@@ -2824,7 +2828,9 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             I.branchId,
-                                            discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
                                             I.discountType,
                                             I.tax,
                                             I.name,
@@ -3100,7 +3106,9 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             I.branchId,
-                                            discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
                                             I.discountType,
                                             I.tax,
                                             I.name,
@@ -3400,8 +3408,10 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             //I.branchId,
-                                            discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
-                                            couponTotalValue = (C.discountType == 1 || C.discountType == null) ? C.discountValue : (C.discountType == 2 ? ((C.discountValue / 100) * I.total) : 0),
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+                                            couponTotalValue = (C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue),
 
                                             I.discountType,
                                             I.tax,
@@ -3721,8 +3731,10 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             I.branchId,
-                                            discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
-                                            I.discountType,
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+                                           discountType="1",
                                             I.tax,
                                             I.name,
                                             I.isApproved,
@@ -4120,8 +4132,10 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             I.branchId,
-                                            discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
-                                            I.discountType,
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+                                            discountType="1",
                                             I.tax,
                                             I.name,
                                             I.isApproved,
@@ -4893,8 +4907,10 @@ else
                                             I.updateDate,
                                             //I.updateUserId,
                                             // I.branchId,
-                                            discountValue = ((I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * I.total) : 0))
-                                                                         + ((I.manualDiscountType == "1" || I.discountType == null) ? I.manualDiscountValue : (I.manualDiscountType == "2" ? ((I.manualDiscountValue / 100) * I.total) : 0)),
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+
                                             //I.discountType,
                                             //I.tax,
                                             //I.name,
@@ -5051,9 +5067,9 @@ else
                                             I.invDate,
                                             I.invType,
 
-                                            discountValue = ((I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * I.total) : 0))
-                                                                         + ((I.manualDiscountType == "1" || I.discountType == null) ? I.manualDiscountValue : (I.manualDiscountType == "2" ? ((I.manualDiscountValue / 100) * I.total) : 0))
-                                                                          ,
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
 
                                             I.isApproved,
 
@@ -5223,8 +5239,10 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             I.branchId,
-                                            discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
-                                            I.discountType,
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+                                           discountType="1",
                                             I.tax,
                                             I.name,
                                             I.isApproved,
@@ -7330,10 +7348,11 @@ else
                                                                      updateUserId = I.updateUserId,
                                                                      branchId = I.branchId,
                                                                      //calc coupon + manual discount
-                                                                     discountValue = ((I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * (I.total - I.shippingCost)) : 0))
-                                                                     + ((I.manualDiscountType == "1" || I.manualDiscountType == null) ? I.manualDiscountValue : (I.manualDiscountType == "2" ? ((I.manualDiscountValue / 100) * (I.total - I.shippingCost)) : 0))
-                                                                      ,
-                                                                     discountType = I.discountType,
+                                                                     discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+
+                                                                     discountType = "1",
                                                                      tax = I.tax,
                                                                      //  I.name,
                                                                      // I.isApproved,
@@ -7859,8 +7878,10 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             I.branchId,
-                                            discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
-                                            I.discountType,
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+                                           discountType="1",
                                             I.tax,
                                             I.name,
                                             I.isApproved,
@@ -8196,8 +8217,10 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             I.branchId,
-                                            discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
-                                            I.discountType,
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+                                            discountType="1",
                                             I.tax,
                                             I.name,
                                             I.isApproved,
@@ -8718,10 +8741,11 @@ else
                                                                          updateUserId = I.updateUserId,
                                                                          branchId = I.branchId,
                                                                          //calc coupon + manual discount
-                                                                         discountValue = ((I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * (I.total - I.shippingCost)) : 0))
-                                                                         + ((I.manualDiscountType == "1" || I.manualDiscountType == null) ? I.manualDiscountValue : (I.manualDiscountType == "2" ? ((I.manualDiscountValue / 100) * (I.total - I.shippingCost)) : 0))
-                                                                          ,
-                                                                         discountType = I.discountType,
+                                                                         discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+
+                                                                         discountType ="1",
                                                                          tax = I.tax,
                                                                          //  I.name,
                                                                          // I.isApproved,
@@ -8936,10 +8960,11 @@ else
                                                                          updateUserId = I.updateUserId,
                                                                          branchId = I.branchId,
                                                                          //calc coupon + manual discount
-                                                                         discountValue = ((I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * (I.total - I.shippingCost)) : 0))
-                                                                         + ((I.manualDiscountType == "1" || I.manualDiscountType == null) ? I.manualDiscountValue : (I.manualDiscountType == "2" ? ((I.manualDiscountValue / 100) * (I.total - I.shippingCost)) : 0))
-                                                                          ,
-                                                                         discountType = I.discountType,
+                                                                         discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+
+                                                                         discountType ="1",
                                                                          tax = I.tax,
                                                                          //  I.name,
                                                                          // I.isApproved,
@@ -9206,10 +9231,11 @@ else
                                                                          updateUserId = I.updateUserId,
                                                                          branchId = I.branchId,
                                                                          //calc coupon + manual discount
-                                                                         discountValue = ((I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? ((I.discountValue / 100) * (I.total - I.shippingCost)) : 0))
-                                                                         + ((I.manualDiscountType == "1" || I.manualDiscountType == null) ? I.manualDiscountValue : (I.manualDiscountType == "2" ? ((I.manualDiscountValue / 100) * (I.total - I.shippingCost)) : 0))
-                                                                          ,
-                                                                         discountType = I.discountType,
+                                                                         discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
+                                           (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
+                                            + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
+
+                                                                         discountType = "1",
                                                                          tax = I.tax,
                                                                          //  I.name,
                                                                          // I.isApproved,
