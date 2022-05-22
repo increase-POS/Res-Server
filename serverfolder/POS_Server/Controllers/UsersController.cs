@@ -706,7 +706,7 @@ namespace POS_Server.Controllers
                             userObj.balanceType = newObject.balanceType;
                             userObj.isOnline = newObject.isOnline;
                             userObj.driverIsAvailable = newObject.driverIsAvailable;
-                       //     userObj.groupId = newObject.groupId;
+                         userObj.groupId = newObject.groupId;
                             entity.SaveChanges().ToString();
                             message = userObj.userId.ToString();
                             return TokenManager.GenerateToken(message);
