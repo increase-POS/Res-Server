@@ -2298,18 +2298,40 @@ namespace POS_Server.Controllers
                                             manualDiscountValue = b.manualDiscountValue,
                                         }).ToList();
 
-
-                    if (invoicesList != null)
+                    //get only with rc status
+                    if (type == "feed")
                     {
-                        for (int i = 0; i < invoicesList.Count; i++)
+                        List<InvoiceModel> res = new List<InvoiceModel>();
+                        foreach (InvoiceModel inv in invoicesList)
                         {
-                            int invoiceId = invoicesList[i].invoiceId;
-                            int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
-                            invoicesList[i].itemsCount = itemCount;
-                        }
-                    }
+                            int invoiceId = inv.invoiceId;
 
-                    return TokenManager.GenerateToken(invoicesList);
+                            var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
+
+                            if (statusObj != null)
+                            {
+                                int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+                                inv.itemsCount = itemCount;
+                                res.Add(inv);
+                            }
+                        }
+                        return TokenManager.GenerateToken(res);
+                    }
+                    else
+                    {
+
+                        if (invoicesList != null)
+                        {
+                            for (int i = 0; i < invoicesList.Count; i++)
+                            {
+                                int invoiceId = invoicesList[i].invoiceId;
+                                int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+                                invoicesList[i].itemsCount = itemCount;
+                            }
+                        }
+
+                        return TokenManager.GenerateToken(invoicesList);
+                    }
                 }
             }
         }
@@ -2394,18 +2416,40 @@ namespace POS_Server.Controllers
                                             manualDiscountValue = b.manualDiscountValue,
                                         }).ToList();
 
-
-                    if (invoicesList != null)
+                    //get only with rc status
+                    if (type == "feed")
                     {
-                        for (int i = 0; i < invoicesList.Count; i++)
+                        List<InvoiceModel> res = new List<InvoiceModel>();
+                        foreach (InvoiceModel inv in invoicesList)
                         {
-                            int invoiceId = invoicesList[i].invoiceId;
-                            int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
-                            invoicesList[i].itemsCount = itemCount;
-                        }
-                    }
+                            int invoiceId = inv.invoiceId;
 
-                    return TokenManager.GenerateToken(invoicesList);
+                            var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
+
+                            if (statusObj != null)
+                            {
+                                int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+                                inv.itemsCount = itemCount;
+                                res.Add(inv);
+                            }
+                        }
+                        return TokenManager.GenerateToken(res);
+                    }
+                    else
+                    {
+
+                        if (invoicesList != null)
+                        {
+                            for (int i = 0; i < invoicesList.Count; i++)
+                            {
+                                int invoiceId = invoicesList[i].invoiceId;
+                                int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+                                invoicesList[i].itemsCount = itemCount;
+                            }
+                        }
+
+                        return TokenManager.GenerateToken(invoicesList);
+                    }
                 }
             }
         }
