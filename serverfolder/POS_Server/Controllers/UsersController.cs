@@ -286,6 +286,7 @@ namespace POS_Server.Controllers
                         balanceType = u.balanceType,
                         isAdmin = u.isAdmin,
                         driverIsAvailable = u.driverIsAvailable,
+                        groupId=u.groupId,
 
                     })
                     .ToList();
@@ -361,6 +362,7 @@ namespace POS_Server.Controllers
                        u.balanceType,
                        u.isAdmin,
                        u.driverIsAvailable,
+                       u.groupId,
                    })
                    .FirstOrDefault();
                     return TokenManager.GenerateToken(user);
@@ -467,6 +469,7 @@ namespace POS_Server.Controllers
                                          balance = u.balance,
                                          balanceType = u.balanceType,
                                          isAdmin = u.isAdmin,
+                                         groupId = u.groupId,
                                      }).ToList();
 
                     foreach (UserModel user in usersList)
@@ -549,6 +552,7 @@ namespace POS_Server.Controllers
                                          balanceType = u.balanceType,
                                          isAdmin = u.isAdmin,
                                          driverIsAvailable = u.driverIsAvailable,
+                                         groupId = u.groupId,
                                      })
                         .Distinct().ToList();
                     }
@@ -582,6 +586,7 @@ namespace POS_Server.Controllers
                             balanceType = u.balanceType,
                             isAdmin = u.isAdmin,
                             driverIsAvailable = u.driverIsAvailable,
+                            groupId = u.groupId,
                         })
                         .ToList();
                     }
@@ -701,6 +706,7 @@ namespace POS_Server.Controllers
                             userObj.balanceType = newObject.balanceType;
                             userObj.isOnline = newObject.isOnline;
                             userObj.driverIsAvailable = newObject.driverIsAvailable;
+                       //     userObj.groupId = newObject.groupId;
                             entity.SaveChanges().ToString();
                             message = userObj.userId.ToString();
                             return TokenManager.GenerateToken(message);
