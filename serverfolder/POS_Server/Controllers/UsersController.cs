@@ -63,6 +63,7 @@ namespace POS_Server.Controllers
                         balance = u.balance,
                         balanceType = u.balanceType,
                         isAdmin = u.isAdmin,
+                        groupId = u.groupId,
                         driverIsAvailable=u.driverIsAvailable,
                     })
                     .ToList();
@@ -124,6 +125,7 @@ namespace POS_Server.Controllers
                         balance = u.balance,
                         balanceType = u.balanceType,
                         isAdmin = u.isAdmin,
+                        groupId = u.groupId,
                         driverIsAvailable = u.driverIsAvailable,
                     })
                     .ToList();
@@ -206,6 +208,7 @@ namespace POS_Server.Controllers
                             balance = u.balance,
                             balanceType = u.balanceType,
                             isAdmin = u.isAdmin,
+                        groupId = u.groupId,
                             driverIsAvailable = u.driverIsAvailable,
                         })
                         .ToList();
@@ -285,8 +288,8 @@ namespace POS_Server.Controllers
                         balance = u.balance,
                         balanceType = u.balanceType,
                         isAdmin = u.isAdmin,
+                        groupId = u.groupId,
                         driverIsAvailable = u.driverIsAvailable,
-                        groupId=u.groupId,
 
                     })
                     .ToList();
