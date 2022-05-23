@@ -483,6 +483,7 @@ namespace POS_Server.Controllers
             {
                 #region params
                 string day = "";
+                int branchId = 0;
                 int membershipId = 0;
                 DateTime cmpdate = DateTime.Now.AddDays(newdays);
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -496,11 +497,15 @@ namespace POS_Server.Controllers
                     {
                         membershipId = int.Parse(c.Value);
                     }
+                    else if (c.Type == "branchId")
+                    {
+                        branchId = int.Parse(c.Value);
+                    }
                 }
                 #endregion
                 #region get day column in db
                 var searchPredicate = PredicateBuilder.New<menuSettings>();
-                searchPredicate = searchPredicate.And(x => x.isActive == 1);
+                searchPredicate = searchPredicate.And(x => x.isActive == 1 && x.branchId == branchId);
                 switch (day)
                 {
                     case "saturday":
@@ -749,7 +754,7 @@ namespace POS_Server.Controllers
                     {
                         var itemsList = (from I in entity.items.Where(x => salesTypes.Contains(x.type) && x.isActive == 1)
                                          join iu in entity.itemsUnits on I.itemId equals iu.itemId
-                                         join m in entity.menuSettings.Where(x => x.branchId == branchId) on iu.itemUnitId equals m.itemUnitId into yj
+                                         join m in entity.menuSettings.Where(x => x.branchId == branchId ) on iu.itemUnitId equals m.itemUnitId into yj
                                          from ms in yj.DefaultIfEmpty()
                                          select new MenuSettingModel()
                                          {
@@ -779,7 +784,7 @@ namespace POS_Server.Controllers
                                              itemUnitId = iu.itemUnitId,
                                              price = iu.price,
                                              priceWithService = iu.priceWithService,
-                                         })
+                                         }).Distinct()
                                        .ToList();
 
                         for (int i = 0; i < itemsList.Count; i++)
