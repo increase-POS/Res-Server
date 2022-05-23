@@ -3371,8 +3371,33 @@ namespace POS_Server.Controllers
                                                userId = b.userId
                                            }).ToList().OrderBy(b => b.deservedDate);
 
+                            List<InvoiceModel> res = new List<InvoiceModel>();
                             cashTransfer ct;
                             users user;
+                            //get only with rc status
+                            if (payType == "feed")
+                            {
+                                foreach (InvoiceModel inv in invList)
+                                {
+                                    int invoiceId = inv.invoiceId;
+
+                                    var statusObj = entity.invoiceStatus.Where(x => x.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
+
+                                    if (statusObj != null)
+                                    {
+                                        int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+                                        inv.itemsCount = itemCount;
+                                        res.Add(inv);
+
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                res.AddRange(invList);
+                            }
+                           
                             if (invList.ToList().Count > 0)
                             {
                                 switch (payType)
@@ -3520,6 +3545,8 @@ namespace POS_Server.Controllers
                     return TokenManager.GenerateToken("0");
                 }
             }
+
+            #region old
             //            var re = Request;
             //var headers = re.Headers;
             //string token = "";
@@ -3726,6 +3753,7 @@ namespace POS_Server.Controllers
             //}
             //else
             //    return Ok("false");
+            #endregion
         }
         //
 
@@ -3814,7 +3842,7 @@ namespace POS_Server.Controllers
                         {
                             //var invList = (from b in entity.invoices.Where(x => x.shippingCompanyId == shippingCompanyId && typesList.Contains(x.invType) && x.deserved > 0)
                             var invList = (from b in entity.invoices.Where(x => x.shippingCompanyId == shippingCompanyId && typesList.Contains(x.invType) && x.deserved > 0 &&
-                                                                                x.shippingCompanyId != null && x.shipUserId == null && x.agentId != null)
+                                                                                x.shippingCompanyId != null && x.shipUserId == null && x.agentId != null) 
 
                                            select new InvoiceModel()
                                            {
@@ -3849,9 +3877,33 @@ namespace POS_Server.Controllers
                                                shipUserId = b.shipUserId,
                                                userId = b.userId
                                            }).ToList().OrderBy(b => b.deservedDate);
-
+                            List<InvoiceModel> res = new List<InvoiceModel>();
                             cashTransfer ct;
                             shippingCompanies shippingCompany;
+                            //get only with rc status
+                            if (payType == "feed")
+                            {
+                                foreach (InvoiceModel inv in invList)
+                                {
+                                    int invoiceId = inv.invoiceId;
+
+                                    var statusObj = entity.invoiceStatus.Where(x => x.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
+
+                                    if (statusObj != null)
+                                    {
+                                        int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
+                                        inv.itemsCount = itemCount;
+                                        res.Add(inv);
+
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                res.AddRange(invList);
+                            }
+                           
                             if (invList.ToList().Count > 0)
                             {
                                 switch (payType)
