@@ -955,7 +955,7 @@ namespace POS_Server.Controllers
                                     join POO in entity.objects on O.parentObjectId equals POO.objectId into JP
 
                                     from PO in JP.DefaultIfEmpty()
-                                    where U.userId == userId
+                                    where (U.userId == userId && G.isActive == 1 )
                                     select new
                                     {
                                         //group object
