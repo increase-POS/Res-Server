@@ -3904,12 +3904,12 @@ namespace POS_Server.Controllers
                                 res.AddRange(invList);
                             }
                            
-                            if (invList.ToList().Count > 0)
+                            if (res.ToList().Count > 0)
                             {
                                 switch (payType)
                                 {
                                     case "feed": //get s, pb
-                                        foreach (InvoiceModel inv in invList)
+                                        foreach (InvoiceModel inv in res)
                                         {
                                             shippingCompany = entity.shippingCompanies.Find(shippingCompanyId);
 
