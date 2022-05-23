@@ -7935,6 +7935,13 @@ else
                                              entity.cards.Where(C => C.cardId == entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().cardId).FirstOrDefault().name
                                              : entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().processType
                                              : "balance",
+                                             I.shippingCompanyId,
+                                             I.shipUserId,
+                                            shippingCompanyName=   I.shippingCompanies.name,
+                                            shipUserName=  I.users4.name,
+                                            shipUserLastName= I.users4.lastname,
+
+
 
                                         }).ToList();
 
@@ -8264,6 +8271,11 @@ else
                                              entity.cards.Where(C => C.cardId == entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().cardId).FirstOrDefault().name
                                              : entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().processType
                                              : "balance",
+                                            I.shippingCompanyId,
+                                            I.shipUserId,
+                                            shippingCompanyName = I.shippingCompanies.name,
+                                            shipUserName = I.users4.name,
+                                            shipUserLastName = I.users4.lastname,
                                             //username
 
                                             //  I.invoiceId,
