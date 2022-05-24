@@ -2938,7 +2938,7 @@ namespace POS_Server.Controllers
                 var invoiceEntity = entity.Set<invoices>();
                 if (newObject.invoiceId == 0)
                 {
-                    if (newObject.invType == "s")
+                    if (newObject.invType == "s" || newObject.invType == "ss" || newObject.invType == "ts")
                     {
                         ProgramInfo programInfo = new ProgramInfo();
                         int invMaxCount = programInfo.getSaleinvCount();
@@ -3017,6 +3017,10 @@ namespace POS_Server.Controllers
                     tmpInvoice.waiterId = newObject.waiterId;
                     tmpInvoice.orderTime = newObject.orderTime;
                     tmpInvoice.membershipId = newObject.membershipId;
+
+                    if(newObject.invDate != null)
+                        tmpInvoice.invDate = newObject.invDate;
+
                     entity.SaveChanges();
                     res = tmpInvoice.invoiceId;
                     return res;
