@@ -2970,7 +2970,7 @@ namespace POS_Server.Controllers
                                 {
                                     int invoiceId = inv.invoiceId;
 
-                                    var statusObj = entity.invoiceStatus.Where(x => x.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
+                                    var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
 
                                     if (statusObj != null)
                                     {
@@ -3227,12 +3227,10 @@ namespace POS_Server.Controllers
                                             }
 
                                             entity.SaveChanges();
-                                            // return TokenManager.GenerateToken(message);
                                             break;
                                     }
                                 }
-                                return TokenManager.GenerateToken("-1");
-                                //   return Ok("-1");
+                                return TokenManager.GenerateToken("1");
                             }
                         }
 
@@ -3381,7 +3379,7 @@ namespace POS_Server.Controllers
                                 {
                                     int invoiceId = inv.invoiceId;
 
-                                    var statusObj = entity.invoiceStatus.Where(x => x.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
+                                    var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
 
                                     if (statusObj != null)
                                     {
@@ -3887,7 +3885,7 @@ namespace POS_Server.Controllers
                                 {
                                     int invoiceId = inv.invoiceId;
 
-                                    var statusObj = entity.invoiceStatus.Where(x => x.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
+                                    var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
 
                                     if (statusObj != null)
                                     {
@@ -4033,7 +4031,7 @@ namespace POS_Server.Controllers
                                     }
                                 }
                                 //  return Ok("-1");
-                                TokenManager.GenerateToken("-1");
+                                TokenManager.GenerateToken("1");
                             }
                         }
 
