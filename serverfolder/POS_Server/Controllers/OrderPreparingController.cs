@@ -633,6 +633,10 @@ namespace POS_Server.Controllers
                                             shippingCompanyId = x.shippingCompanyId,
                                             shippingCompanyName = x.shippingCompanies.name,
                                             orderTime = x.orderTime,
+                                            total = x.total,
+                                            totalNet = x.totalNet,
+                                            paid = x.paid,
+                                            deserved = x.deserved,
                                             //agent
                                             agentName = x.agents.name,
                                             agentAddress = x.agents.address,
