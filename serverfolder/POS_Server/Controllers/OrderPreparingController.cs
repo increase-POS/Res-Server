@@ -863,6 +863,7 @@ namespace POS_Server.Controllers
                 string orderObject = "";
                 string itemsObject = "";
                 string statusObject = "";
+                string statusesOfPreparingOrder = "";
                 int branchId = 0;
                 orderPreparing newObject = null;
                 List<itemOrderPreparing> items = null;
@@ -891,6 +892,10 @@ namespace POS_Server.Controllers
                     else if (c.Type == "branchId")
                     {
                         branchId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "statusesOfPreparingOrder")
+                    {
+                        statusesOfPreparingOrder = c.Value;
                     }
                 }
 
@@ -926,6 +931,44 @@ namespace POS_Server.Controllers
                             else
                             {
                                 res = saveInvoiceStatus(status, orderId);
+
+                                if (statusesOfPreparingOrder == "directlyPrint")
+                                {
+                                    #region save status = Preparing
+                                    var status1 = new orderPreparingStatus();
+                                    status1.orderPreparingId = orderId;
+                                    status1.status = "Preparing";
+                                    status1.createUserId = status.createUserId;
+
+                                    saveInvoiceStatus(status1, orderId);
+                                    #endregion
+
+                                    #region save status = Ready
+                                    status1 = new orderPreparingStatus();
+                                    status1.orderPreparingId = orderId;
+                                    status1.status = "Ready";
+                                    status1.createUserId = status.createUserId;
+
+                                    saveInvoiceStatus(status1, orderId);
+                                    #endregion
+
+                                    using (incposdbEntities entity = new incposdbEntities())
+                                    {
+                                        var invoice = entity.invoices.Find(newObject.invoiceId);
+
+                                        #region save status = Done if no shipping
+                                        if (invoice.shippingCompanyId == null)
+                                        {
+                                            status1 = new orderPreparingStatus();
+                                            status1.orderPreparingId = orderId;
+                                            status1.status = "Done";
+                                            status1.createUserId = status.createUserId;
+
+                                            saveInvoiceStatus(status1, orderId);                                          
+                                        }
+                                    }
+                                    #endregion
+                                }
                                 if (res == "0")
                                     message = "0";
                             }
