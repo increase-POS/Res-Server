@@ -3300,7 +3300,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "amount")
                     {
-                        amount = int.Parse(c.Value);
+                        amount = decimal.Parse(c.Value);
                     }
                     else if (c.Type == "payType")
                     {
@@ -3804,7 +3804,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "amount")
                     {
-                        amount = int.Parse(c.Value);
+                        amount = decimal.Parse(c.Value);
                     }
                     else if (c.Type == "payType")
                     {
