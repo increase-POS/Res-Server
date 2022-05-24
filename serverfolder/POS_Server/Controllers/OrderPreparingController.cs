@@ -620,28 +620,55 @@ namespace POS_Server.Controllers
                         searchPredicate = searchPredicate.And(x => x.shippingCompanyId != null);
 
 
-                        var invoices = (from x in entity.invoices.Where(searchPredicate)
-                                        join u in entity.users on x.shipUserId equals u.userId into lj
+                        var invoices = (from b in entity.invoices.Where(searchPredicate)
+                                        join u in entity.users on b.shipUserId equals u.userId into lj
                                         from y in lj.DefaultIfEmpty()
                                         select new InvoiceModel()
                                         {
-                                            invNumber = x.invNumber,
-                                            invoiceId = x.invoiceId,
-                                            shipUserId = x.shipUserId,
-                                            shipUserName = y.name,
-                                            shipUserLastName = y.lastname,
-                                            shippingCompanyId = x.shippingCompanyId,
-                                            shippingCompanyName = x.shippingCompanies.name,
-                                            orderTime = x.orderTime,
-                                            total = x.total,
-                                            totalNet = x.totalNet,
-                                            paid = x.paid,
-                                            deserved = x.deserved,
+                                            invoiceId = b.invoiceId,
+                                            invNumber = b.invNumber,
+                                            agentId = b.agentId,
+                                            invType = b.invType,
+                                            total = b.total,
+                                            totalNet = b.totalNet,
+                                            paid = b.paid,
+                                            deserved = b.deserved,
+                                            deservedDate = b.deservedDate,
+                                            invDate = b.invDate,
+                                            invoiceMainId = b.invoiceMainId,
+                                            invCase = b.invCase,
+                                            invTime = b.invTime,
+                                            notes = b.notes,
+                                            vendorInvNum = b.vendorInvNum,
+                                            vendorInvDate = b.vendorInvDate,
+                                            createUserId = b.createUserId,
+                                            updateDate = b.updateDate,
+                                            updateUserId = b.updateUserId,
+                                            branchId = b.branchId,
+                                            discountType = b.discountType,
+                                            discountValue = b.discountValue,
+                                            tax = b.tax,
+                                            taxtype = b.taxtype,
+                                            name = b.name,
+                                            isApproved = b.isApproved,
+                                            branchCreatorId = b.branchCreatorId,
+                                            shippingCompanyId = b.shippingCompanyId,
+                                            shipUserId = b.shipUserId,
+                                            userId = b.userId,
+                                            printedcount = b.printedcount,
+                                            isOrginal = b.isOrginal,
+                                            waiterId = b.waiterId,
+                                            shippingCost = b.shippingCost,
+                                            realShippingCost = b.realShippingCost,
+                                            reservationId = b.reservationId,
+                                            orderTime = b.orderTime,
+                                            shippingCostDiscount = b.shippingCostDiscount,
+                                            membershipId = b.membershipId,
                                             //agent
-                                            agentName = x.agents.name,
-                                            agentAddress = x.agents.address,
-                                            agentMobile= x.agents.mobile,
-                                            agentResSectorsName=  x.agents.residentialSectors.name,
+                                            agentName = b.agents.name,
+                                            agentAddress = b.agents.address,
+                                            agentMobile= b.agents.mobile,
+                                            agentResSectorsName=  b.agents.residentialSectors.name,
                                         }).ToList();
 
 
