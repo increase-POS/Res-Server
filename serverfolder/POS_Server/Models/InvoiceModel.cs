@@ -71,8 +71,9 @@ namespace POS_Server.Models
 
         public int printedcount { get; set; }
     public bool isOrginal { get; set; }
+        public string invBarcode { get; set; }
 
-}
+    }
 
     public class CouponInvoiceModel
     {

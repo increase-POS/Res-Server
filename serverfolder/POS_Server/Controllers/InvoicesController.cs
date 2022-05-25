@@ -197,6 +197,7 @@ namespace POS_Server.Controllers
                         orderTime = b.orderTime,
                         shippingCostDiscount = b.shippingCostDiscount,
                         membershipId = b.membershipId,
+                        invBarcode=  b.invBarcode,
 
                     })
                     .FirstOrDefault();
@@ -273,6 +274,7 @@ namespace POS_Server.Controllers
                         b.shippingCompanyId,
                         b.shipUserId,
                         b.userId,
+                        b.invBarcode
                     })
                     .FirstOrDefault();
 
@@ -335,6 +337,7 @@ namespace POS_Server.Controllers
                         b.shipUserId,
                         b.userId,
                         b.cashReturn,
+                        b.invBarcode
                     })
                     .FirstOrDefault();
 
@@ -410,6 +413,7 @@ namespace POS_Server.Controllers
                                              userId = b.userId,
                                              manualDiscountType = b.manualDiscountType,
                                              manualDiscountValue = b.manualDiscountValue,
+                                             invBarcode= b.invBarcode,
                                          })
 
                                .FirstOrDefault();
@@ -455,6 +459,7 @@ namespace POS_Server.Controllers
                                              userId = b.userId,
                                              manualDiscountType = b.manualDiscountType,
                                              manualDiscountValue = b.manualDiscountValue,
+                                            invBarcode=   b.invBarcode,
                                          })
 
                                .FirstOrDefault();
@@ -540,6 +545,7 @@ namespace POS_Server.Controllers
                                                 manualDiscountType = b.manualDiscountType,
                                                 manualDiscountValue = b.manualDiscountValue,
                                                 cashReturn = b.cashReturn,
+                                           invBarcode=  b.invBarcode,
                                             })
                         .ToList();
                         if (invoicesList != null)
@@ -594,6 +600,7 @@ namespace POS_Server.Controllers
                                                 userId = b.userId,
                                                 manualDiscountType = b.manualDiscountType,
                                                 manualDiscountValue = b.manualDiscountValue,
+                                             invBarcode= b.invBarcode,
                                             })
                         .ToList();
                         if (invoicesList != null)
@@ -690,6 +697,7 @@ namespace POS_Server.Controllers
                                             cashReturn = b.cashReturn,
                                             shippingCost = b.shippingCost,
                                             realShippingCost = b.realShippingCost,
+                                           invBarcode= b.invBarcode,
                                         }).ToList();
                     if (invoicesList != null)
                     {
@@ -790,6 +798,7 @@ namespace POS_Server.Controllers
                                             cashReturn = b.cashReturn,
                                             shippingCost = b.shippingCost,
                                             realShippingCost = b.realShippingCost,
+                                            invBarcode= b.invBarcode,
                                         })
                     .ToList();
                     if (invoicesList != null)
@@ -917,6 +926,7 @@ namespace POS_Server.Controllers
                                             realShippingCost = b.realShippingCost,
                                             orderTime = b.orderTime,
                                             membershipId = b.membershipId,
+                                           invBarcode= b.invBarcode,
                                             tables = (from it in entity.invoiceTables.Where(y => y.invoiceId == b.invoiceId && y.isActive == 1)
                                                       join ts in entity.tables on it.tableId equals ts.tableId
                                                       select new TableModel()
@@ -928,6 +938,7 @@ namespace POS_Server.Controllers
                                                           createUserId = ts.createUserId,
                                                           updateUserId = ts.updateUserId,
                                                       }).ToList(),
+
                                         })
                     .ToList();
 
@@ -1046,6 +1057,7 @@ namespace POS_Server.Controllers
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
                                             cashReturn = b.cashReturn,
+                                           invBarcode= b.invBarcode,
                                         })
                     .ToList();
 
@@ -1221,6 +1233,7 @@ namespace POS_Server.Controllers
                                              userId = b.userId,
                                              manualDiscountType = b.manualDiscountType,
                                              manualDiscountValue = b.manualDiscountValue,
+                                            invBarcode= b.invBarcode,
                                          }).ToList().Count;
 
                     return TokenManager.GenerateToken(invoicesCount);
@@ -1325,6 +1338,7 @@ namespace POS_Server.Controllers
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
                                             cashReturn = b.cashReturn,
+                                            invBarcode = b.invBarcode,
                                         })
                     .ToList();
                     if (invoicesList != null)
@@ -1422,6 +1436,7 @@ namespace POS_Server.Controllers
                                        manualDiscountValue = b.manualDiscountValue,
                                        realShippingCost = b.realShippingCost,
                                        shippingCost = b.shippingCost,
+                                       invBarcode = b.invBarcode,
                                    })
 
                            .FirstOrDefault();
@@ -1770,6 +1785,7 @@ namespace POS_Server.Controllers
                                         userId = b.userId,
                                         manualDiscountType = b.manualDiscountType,
                                         manualDiscountValue = b.manualDiscountValue,
+                                        invBarcode = b.invBarcode,
                                     }).ToList();
 
 
@@ -2005,7 +2021,7 @@ namespace POS_Server.Controllers
                                             realShippingCost = b.realShippingCost,
                                             payStatus = b.deserved == 0 ? "payed" : (b.deserved == b.totalNet ? "unpayed" : "partpayed"),
                                             branchCreatorName = entity.branches.Where(X => X.branchId == b.branchCreatorId).FirstOrDefault().name,
-
+                                            invBarcode = b.invBarcode,
                                         })
                     .ToList();
                     if (invoicesList != null)
@@ -2112,6 +2128,7 @@ namespace POS_Server.Controllers
                                             manualDiscountValue = b.manualDiscountValue,
                                             realShippingCost = b.realShippingCost,
                                             shippingCost = b.shippingCost,
+                                            invBarcode = b.invBarcode,
                                         }).ToList();
 
 
@@ -2206,6 +2223,7 @@ namespace POS_Server.Controllers
                                             shipUserId = b.shipUserId,
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
+                                            invBarcode = b.invBarcode,
                                         }).ToList();
 
                     return TokenManager.GenerateToken(invoicesList);
@@ -2296,6 +2314,7 @@ namespace POS_Server.Controllers
                                             shipUserId = b.shipUserId,
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
+                                            invBarcode = b.invBarcode,
                                         }).ToList();
 
                     //get only with rc status
@@ -2414,6 +2433,7 @@ namespace POS_Server.Controllers
                                             userId = b.userId,
                                             manualDiscountType = b.manualDiscountType,
                                             manualDiscountValue = b.manualDiscountValue,
+                                            invBarcode = b.invBarcode,
                                         }).ToList();
 
                     //get only with rc status
@@ -2528,6 +2548,7 @@ namespace POS_Server.Controllers
                                                 manualDiscountType = b.manualDiscountType,
                                                 manualDiscountValue = b.manualDiscountValue,
                                                 cashReturn = b.cashReturn,
+                                                invBarcode = b.invBarcode,
                                             }).ToList();
 
 
@@ -2583,6 +2604,7 @@ namespace POS_Server.Controllers
                                                 userId = b.userId,
                                                 manualDiscountType = b.manualDiscountType,
                                                 manualDiscountValue = b.manualDiscountValue,
+                                                invBarcode = b.invBarcode,
                                             }).ToList();
 
 
@@ -3910,6 +3932,7 @@ namespace POS_Server.Controllers
                                         updateUserId = b.updateUserId,
                                         isApproved = b.isApproved,
                                         branchId = b.branchId,
+                                        invBarcode = b.invBarcode,
                                     })
                 .ToList();
                 if (invoicesList != null)

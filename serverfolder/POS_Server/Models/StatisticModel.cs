@@ -43,6 +43,8 @@ namespace POS_Server.Models
         public string categoryName { get; set; }
         public Nullable<decimal> realDuration { get; set; }
         public string invNumber { get; set; }
+        public string invBarcode { get; set; }
+
         public Nullable<int> tagId { get; set; }
         public string tagName { get; set; }
         public Nullable<System.DateTime> listedDate { get; set; }
@@ -102,6 +104,7 @@ namespace POS_Server.Models
         public string ITUpdateuserAccNam { get; set; }
         public int invoiceId { get; set; }
         public string invNumber { get; set; }
+        public string invBarcode { get; set; }
         public Nullable<int> agentId { get; set; }
         public Nullable<int> posId { get; set; }
         public string invType { get; set; }
@@ -244,6 +247,7 @@ namespace POS_Server.Models
         public Nullable<decimal> subTotalNotax { get; set; }//سعر العناصر قبل الضريبة Price
         public Nullable<decimal> itemUnitTaxwithQTY { get; set; }//قيم الضريبة للعناصر
         public string invNumber { get; set; }//رقم الفاتورة//item
+        public string invBarcode { get; set; }//barcode الفاتورة//item
         public Nullable<System.DateTime> IupdateDate { get; set; }//تاريخ الفاتورة//item
 
         public Nullable<decimal> ItemTaxes { get; set; }//نسبة ضريبة العنصر
@@ -474,7 +478,7 @@ namespace POS_Server.Models
         public int invoiceId { get; set; }
         public string invNumber { get; set; }
 
-
+        public string invBarcode { get; set; }
         public string invType { get; set; }
         public string discountType { get; set; }
 

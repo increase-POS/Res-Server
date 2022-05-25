@@ -415,6 +415,7 @@ namespace POS_Server.Controllers
                                         {
                                             I.invoiceId,
                                             I.invNumber,
+                                           I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -709,6 +710,7 @@ namespace POS_Server.Controllers
                                             ITUpdateuserAccName = ITUPUSER.username,
                                             I.invoiceId,
                                             I.invNumber,
+                                           I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -1018,6 +1020,7 @@ namespace POS_Server.Controllers
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
+                                            I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -1986,6 +1989,7 @@ else
                                             ITUpdateuserAccName = ITUPUSER.username,
                                             I.invoiceId,
                                             I.invNumber,
+                                         I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -2260,7 +2264,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-
+                                         I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -2536,7 +2540,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-
+                                            I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -2809,7 +2813,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-
+                                          I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -3087,7 +3091,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-
+                                             I.invBarcode,                                          
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -3389,6 +3393,7 @@ else
 
                                             I.invoiceId,
                                             I.invNumber,//*
+                                            I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -3712,6 +3717,7 @@ else
                                             ITUpdateuserAccName = ITUPUSER.username,
                                             I.invoiceId,
                                             I.invNumber,
+                                          I.invBarcode,                                         
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -4113,6 +4119,7 @@ else
 
                                             I.invoiceId,
                                             I.invNumber,//*
+                                            I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -4254,7 +4261,7 @@ else
                                 invoiceId = I.invoiceId,
                                 // count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                 invNumber = I.invNumber,
-
+                                invBarcode = I.invBarcode,
                                 posId = I.posId,
                                 invType = I.invType,
                                 total = I.total,
@@ -4495,7 +4502,7 @@ else
                                 invoiceId = I.invoiceId,
                                 // count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                 invNumber = I.invNumber,
-
+                                invBarcode = I.invBarcode,
                                 posId = I.posId,
                                 invType = I.invType,
                                 total = I.total,
@@ -4888,7 +4895,7 @@ else
                                             // UpdateuserAccName = ITUPUSER.username,
                                             I.invoiceId,
                                             I.invNumber,
-
+                                        I.invBarcode,                                            
                                             //I.posId,
                                             I.invType,
                                             //I.total,
@@ -5064,6 +5071,7 @@ else
                                             I.updateDate,
                                             I.invoiceId,
                                             I.invNumber,
+                                           I.invBarcode,
                                             I.invDate,
                                             I.invType,
 
@@ -5220,6 +5228,7 @@ else
                                             UpdateuserAccName = ITUPUSER.username,
                                             I.invoiceId,
                                             I.invNumber,
+                                          I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -5746,7 +5755,7 @@ else
 
                                             I.invoiceId,
                                             I.invNumber,
-
+                                              I.invBarcode,
                                             //I.posId,
                                             //I.invType,
                                             //I.total,
@@ -6972,6 +6981,7 @@ else
                                             shippingCompaniesBType = (byte?)jshh.balanceType,/////////////////
 
                                             invNumber = jinvv.invNumber,//yasmine
+                                            invBarcode =jinvv.invBarcode,
                                             bondNumber = jbbo.number,//yasmine
 
                                             invShippingCompanyId = jinvv.shippingCompanyId,
@@ -7326,6 +7336,7 @@ else
 
                                                                      invoiceId = I.invoiceId,
                                                                      invNumber = I.invNumber,
+                                                                     invBarcode = I.invBarcode,
                                                                      agentId = I.agentId,
                                                                      posId = I.posId,
                                                                      invType = I.invType,
@@ -7859,7 +7870,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-
+                                           I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -8048,7 +8059,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-
+                                             I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -8205,7 +8216,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-
+                                            I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -8733,6 +8744,7 @@ else
 
                                                                          invoiceId = I.invoiceId,
                                                                          invNumber = I.invNumber,
+                                                                         invBarcode = I.invBarcode,                                                         
                                                                          agentId = I.agentId,
                                                                          posId = I.posId,
                                                                          invType = I.invType,
@@ -8952,6 +8964,7 @@ else
 
                                                                          invoiceId = I.invoiceId,
                                                                          invNumber = I.invNumber,
+                                                                         invBarcode = I.invBarcode,
                                                                          agentId = I.agentId,
                                                                          posId = I.posId,
                                                                          invType = I.invType,
@@ -9070,6 +9083,7 @@ else
                             invoiceId = G.FirstOrDefault().invoiceId,
 
                             invNumber = G.FirstOrDefault().invNumber,
+                            invBarcode = G.FirstOrDefault().invBarcode,
                             agentId = G.FirstOrDefault().agentId,
                             posId = G.FirstOrDefault().posId,
                             invType = G.FirstOrDefault().invType,
@@ -9223,6 +9237,7 @@ else
 
                                                                          invoiceId = I.invoiceId,
                                                                          invNumber = I.invNumber,
+                                                                         invBarcode = I.invBarcode,
                                                                          agentId = I.agentId,
                                                                          posId = I.posId,
                                                                          invType = I.invType,
@@ -9542,6 +9557,7 @@ else
                                                                         categoryId = i.itemsUnits.items.categoryId,
                                                                         categoryName = i.itemsUnits.items.categories.name,
                                                                         invNumber = o.invoices.invNumber,
+                                                                        invBarcode = o.invoices.invBarcode,
                                                                         tagId = i.itemsUnits.items.tagId,
                                                                         tagName = i.itemsUnits.items.tags.tagName,
                                                                         listedDate = entity.orderPreparingStatus.Where(X => X.orderPreparingId == o.orderPreparingId).OrderBy(X => X.orderStatusId).Select(X => X.createDate).FirstOrDefault().Value,
@@ -9663,7 +9679,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-
+                                         I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             //I.total,
@@ -9816,6 +9832,7 @@ else
 
                                             I.invoiceId,
                                             I.invNumber,
+                                        I.invBarcode,
                                             //I.agentId,
                                             I.posId,
                                             I.invType,
@@ -9946,7 +9963,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-
+                                            I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             //I.total,
@@ -10096,6 +10113,7 @@ else
 
                                             I.invoiceId,
                                             I.invNumber,
+                                             I.invBarcode,
                                             //I.agentId,
                                             I.posId,
                                             I.invType,
@@ -10206,6 +10224,7 @@ else
                                                                            //   OrderPreparingSTSModel
                                         {
                                             invNumber = x.invNumber,
+                                            invBarcode = x.invBarcode,
                                             invoiceId = x.invoiceId,
                                             shipUserId = x.shipUserId,
                                             shipUserName = y.name,
