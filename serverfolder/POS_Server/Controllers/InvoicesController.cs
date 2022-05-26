@@ -3039,6 +3039,7 @@ namespace POS_Server.Controllers
                     tmpInvoice.waiterId = newObject.waiterId;
                     tmpInvoice.orderTime = newObject.orderTime;
                     tmpInvoice.membershipId = newObject.membershipId;
+                    tmpInvoice.invBarcode = newObject.invBarcode;
 
                     if(newObject.invDate != null)
                         tmpInvoice.invDate = newObject.invDate;
