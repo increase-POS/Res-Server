@@ -246,8 +246,11 @@ namespace POS_Server.Controllers
                                 #region preparing time from menu list
                                 if (o.status == "Listed")
                                 {
-                                    var orderItemUnits = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId).Select(x => x.itemUnitId).ToList();
-                                    o.preparingTime = entity.menuSettings.Where(x => orderItemUnits.Contains(x.itemUnitId)).Select(x => x.preparingTime).Max();
+                                    if (o.preparingTime == null || o.preparingTime == 0)
+                                    {
+                                        var orderItemUnits = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId).Select(x => x.itemUnitId).ToList();
+                                        o.preparingTime = entity.menuSettings.Where(x => orderItemUnits.Contains(x.itemUnitId)).Select(x => x.preparingTime).Max();
+                                    }
                                 }
                                 #endregion
 
@@ -1018,8 +1021,70 @@ namespace POS_Server.Controllers
             }
         }
         [HttpPost]
-        [Route("EditOrderAndStatus")]
-        public string EditOrderAndStatus(string token)
+        [Route("EditPreparingOrdersPrepTime")]
+        public string EditPreparingOrdersPrepTime(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string orderObject = "";
+
+                decimal preparingTime = 0;
+                int userId = 0;
+                List<orderPreparing> preparingOrders = new List<orderPreparing>();
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "orderObject")
+                    {
+                        orderObject = c.Value.Replace("\\", string.Empty);
+                        orderObject = orderObject.Trim('"');
+                        preparingOrders = JsonConvert.DeserializeObject<List<orderPreparing>>(orderObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }                  
+                    else if (c.Type == "preparingTime")
+                    {
+                        preparingTime = decimal.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                }
+
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        foreach (orderPreparing or in preparingOrders)
+                        {
+
+                            var order = entity.orderPreparing.Find(or.orderPreparingId);
+                            order.preparingTime = preparingTime;
+                            order.updateDate = DateTime.Now;
+                            order.updateUserId = userId;
+                        }
+
+                        entity.SaveChanges();
+                    }
+
+                }
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+        [HttpPost]
+        [Route("EditOrderListAndStatus")]
+        public string EditOrderListAndStatus(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "1";
@@ -1032,7 +1097,7 @@ namespace POS_Server.Controllers
             {
                 string orderObject = "";
                 string statusObject = "";
-                orderPreparing newObject = null;
+                List<orderPreparing> preparingOrders = null;
                 orderPreparingStatus status = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -1041,7 +1106,7 @@ namespace POS_Server.Controllers
                     {
                         orderObject = c.Value.Replace("\\", string.Empty);
                         orderObject = orderObject.Trim('"');
-                        newObject = JsonConvert.DeserializeObject<orderPreparing>(orderObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                        preparingOrders = JsonConvert.DeserializeObject<List<orderPreparing>>(orderObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
                     }
                     else if (c.Type == "statusObject")
                     {
@@ -1053,12 +1118,15 @@ namespace POS_Server.Controllers
 
                 try
                 {
-                    int orderId = savePreparingOrder(newObject);
-                    if (orderId > 0)
+                    foreach (orderPreparing or in preparingOrders)
                     {
-                        string res = saveInvoiceStatus(status, orderId);
-                        if (res == "0")
-                            message = "0";
+                        int orderId = savePreparingOrder(or);
+                        if (orderId > 0)
+                        {
+                            string res = saveInvoiceStatus(status, orderId);
+                            if (res == "0")
+                                message = "0";
+                        }
                     }
                 }
                 catch
@@ -1350,6 +1418,67 @@ namespace POS_Server.Controllers
                         entity.SaveChanges();
                     }
                     message = saveInvoiceStatus(status, (int)status.orderPreparingId);
+                }
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+
+        [HttpPost]
+        [Route("updateListOrdersStatus")]
+        public string updateListOrdersStatus(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string statusObject = "";
+                string ordersObject = "";
+
+                orderPreparingStatus status = null;
+                List<orderPreparing> preparingOrders = new List<orderPreparing>(); ;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "statusObject")
+                    {
+                        statusObject = c.Value.Replace("\\", string.Empty);
+                        statusObject = statusObject.Trim('"');
+                        status = JsonConvert.DeserializeObject<orderPreparingStatus>(statusObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                    else if (c.Type == "preparingOrders")
+                    {
+                        ordersObject = c.Value.Replace("\\", string.Empty);
+                        ordersObject = ordersObject.Trim('"');
+                        preparingOrders = JsonConvert.DeserializeObject<List<orderPreparing>>(ordersObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
+
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        foreach(orderPreparing or in preparingOrders)
+                        {
+                            var order = entity.orderPreparing.Find(or.orderPreparingId);
+
+                            order.updateDate = DateTime.Now;
+                            order.updateUserId = status.createUserId;
+                            entity.SaveChanges();
+
+                            message = saveInvoiceStatus(status, or.orderPreparingId);
+                        }
+                                              
+                    }
+                   
                 }
                 catch
                 {
