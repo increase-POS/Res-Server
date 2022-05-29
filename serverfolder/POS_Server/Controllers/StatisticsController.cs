@@ -4863,7 +4863,7 @@ else
                                         from JBCC in JBC.DefaultIfEmpty()
 
                                         where (brIds.Contains(JBCC.branchId) || brIds.Contains(JBB.branchId))
-                                        && (I.invType == "p" || I.invType == "sb" || I.invType == "s" || I.invType == "pb")// exw
+                                        && (I.invType == "p" ||  I.invType == "s" || I.invType == "pb")// exw
                                         && ITEM.type != "sr"
                                         select new
                                         {
