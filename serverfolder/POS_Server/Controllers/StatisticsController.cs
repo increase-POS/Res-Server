@@ -4795,7 +4795,7 @@ else
 
 
 
-        // حركة الاصناف الخارجية -مع العملاء والموردين
+        // حركة الاصناف الخارجية -مع الموردين
         [HttpPost]
         [Route("GetExternalMov")]
         public string GetExternalMov(string token)
@@ -4863,7 +4863,7 @@ else
                                         from JBCC in JBC.DefaultIfEmpty()
 
                                         where (brIds.Contains(JBCC.branchId) || brIds.Contains(JBB.branchId))
-                                        && (I.invType == "p" ||  I.invType == "s" || I.invType == "pb")// exw
+                                        && (I.invType == "p"  || I.invType == "pb")// exw
                                         && ITEM.type != "sr"
                                         select new
                                         {
@@ -7479,7 +7479,7 @@ else
                                                                      //  I.paid,
                                                                      // I.deserved,
                                                                      //I.deservedDate,
-                                                                     // I.invDate,
+                                                                     invDate= I.invDate,
                                                                      //  I.invoiceMainId,
                                                                      // I.invCase,
                                                                      //  I.invTime,
@@ -8885,7 +8885,7 @@ else
                                                                          //  I.paid,
                                                                          // I.deserved,
                                                                          //I.deservedDate,
-                                                                         // I.invDate,
+                                                                         invDate= I.invDate,
                                                                          //  I.invoiceMainId,
                                                                          // I.invCase,
                                                                          //  I.invTime,
@@ -9105,7 +9105,7 @@ else
                                                                          //  I.paid,
                                                                          // I.deserved,
                                                                          //I.deservedDate,
-                                                                         // I.invDate,
+                                                                         invDate= I.invDate,
                                                                          //  I.invoiceMainId,
                                                                          // I.invCase,
                                                                          //  I.invTime,
@@ -9154,7 +9154,7 @@ else
                                                                          itemType = ITEM.type,
                                                                          //(ITEM.taxes *IU.price/100) = tax value
                                                                          //username
-
+                                                                         //ITUpdateuserAccNam.invdate
                                                                          //  I.invoiceId,
                                                                          //    JBB.name
 
@@ -9221,7 +9221,7 @@ else
                             invType = G.FirstOrDefault().invType,
                             total = G.FirstOrDefault().total,
                             totalNet = G.FirstOrDefault().totalNet,
-
+                            invDate = G.FirstOrDefault().invDate,
                             updateDate = G.FirstOrDefault().updateDate,
                             updateUserId = G.FirstOrDefault().updateUserId,
                             branchId = G.FirstOrDefault().branchId,
@@ -9378,7 +9378,7 @@ else
                                                                          //  I.paid,
                                                                          // I.deserved,
                                                                          //I.deservedDate,
-                                                                         // I.invDate,
+                                                                         //I.invDate,
                                                                          //  I.invoiceMainId,
                                                                          // I.invCase,
                                                                          //  I.invTime,
@@ -9824,7 +9824,8 @@ else
                                             I.invCase,
                                             I.invTime,
                                             I.notes,
-                                            //I.vendorInvNum,//I.vendorInvDate,
+                                            //I.vendorInvNum,
+                                            //I.vendorInvDate,
                                             I.createUserId,
                                             I.updateDate,
                                             I.updateUserId,

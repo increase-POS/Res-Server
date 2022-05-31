@@ -112,6 +112,8 @@ namespace POS_Server.Models
         public Nullable<decimal> totalNet { get; set; }
 
         public Nullable<System.DateTime> updateDate { get; set; }
+        public Nullable<System.DateTime> invDate { get; set; }
+        
         public Nullable<int> updateUserId { get; set; }
         public Nullable<int> branchId { get; set; }
         public Nullable<decimal> discountValue { get; set; }
@@ -153,7 +155,8 @@ namespace POS_Server.Models
     public class ItemTransferInvoiceTax
     {// new properties
         public Nullable<System.DateTime> updateDate { get; set; }
-
+       
+        
         public string agentCompany { get; set; }
 
         // ItemTransfer
