@@ -647,7 +647,8 @@ var strP = TokenManager.GetPrincipal(token);
                                    select new PosModel()
                                    {
                                        posId = p.posId,
-                                       name = p.name,                                      
+                                       name = p.name,  
+                                       branchId = p.branchId,
                                    }).ToList();
    
                     return TokenManager.GenerateToken(posList);
