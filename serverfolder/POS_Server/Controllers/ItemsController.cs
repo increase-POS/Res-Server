@@ -483,6 +483,7 @@ namespace POS_Server.Controllers
             {
                 #region params
                 string day = "";
+                string invType = "";
                 int branchId = 0;
                 int membershipId = 0;
                 DateTime cmpdate = DateTime.Now.AddDays(newdays);
@@ -492,6 +493,10 @@ namespace POS_Server.Controllers
                     if (c.Type == "day")
                     {
                         day = c.Value;
+                    }
+                    else if (c.Type == "invType")
+                    {
+                        invType = c.Value;
                     }
                     else if (c.Type == "membershipId")
                     {
@@ -595,6 +600,7 @@ namespace POS_Server.Controllers
                                           unitId = iu.unitId,
                                           itemCount = itof.quantity,
                                           price = iu.price,
+                                          priceWithService = iu.priceWithService,
                                           discountType = off.discountType,
                                           desPrice = iu.price,
                                           defaultSale = iu.defaultSale,
@@ -628,6 +634,7 @@ namespace POS_Server.Controllers
                                                 unitId = iu.unitId,
                                                 itemCount = itof.quantity,
                                                 price = iu.price,
+                                                priceWithService = iu.priceWithService,
                                                 discountType = off.discountType,
                                                 desPrice = iu.price,
                                                 defaultSale = iu.defaultSale,
@@ -645,7 +652,12 @@ namespace POS_Server.Controllers
 
                     for (int i = 0; i < itemsList.Count; i++)
                     {
-                        itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].priceTax) / 100;
+                        if (invType == "diningHall")
+                        {
+                            itemsList[i].price = itemsList[i].priceWithService;
+                        }
+
+                       itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].priceTax) / 100;
                         // is new
                         int res = DateTime.Compare((DateTime)itemsList[i].createDate, cmpdate);
                         if (res >= 0)
@@ -684,9 +696,13 @@ namespace POS_Server.Controllers
                                 itemsList[i].isActiveOffer = itofflist.isActiveOffer;
                                 itemsList[i].forAgent = itofflist.forAgent;
 
+                                if (invType == "diningHall")
+                                {
+                                    itofflist.price = itofflist.priceWithService;
+                                }
+
                                 itemsList[i].price = itofflist.price;
                                 itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].taxes / 100);
-
                                 itemsList[i].avgPurchasePrice = itemsList[i].avgPurchasePrice;
                                 itemsList[i].discountType = itofflist.discountType;
                                 itemsList[i].discountValue = itofflist.discountValue;
