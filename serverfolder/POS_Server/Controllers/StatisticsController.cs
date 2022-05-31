@@ -7053,7 +7053,7 @@ else
                                         from jbbo in jbo.DefaultIfEmpty()
                                         from jshh in jsh.DefaultIfEmpty()
                                         from jinvv in jinv.DefaultIfEmpty()//yasmine
-                                        where (C.processType != "balance" && (C.side == "c" || C.side == "v" || C.side == "b" || C.side == "u" || C.side == "sh" || C.side == "bnd"))//( C.transType == "p" && C.side==Side)
+                                        where (C.processType != "balance" && (C.side == "c" || C.side == "v" || C.side == "b" || C.side == "u" || C.side == "sh" || C.side == "bnd" || C.side == "mb"))//( C.transType == "p" && C.side==Side)
 
                                         //&& (brIds.Contains(jpp.branches.branchId) || brIds.Contains(jpcc.branches.branchId))
 
@@ -9824,8 +9824,7 @@ else
                                             I.invCase,
                                             I.invTime,
                                             I.notes,
-                                            //I.vendorInvNum,
-                                            //I.vendorInvDate,
+                                            //I.vendorInvNum,//I.vendorInvDate,
                                             I.createUserId,
                                             I.updateDate,
                                             I.updateUserId,
