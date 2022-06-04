@@ -45,6 +45,8 @@ namespace POS_Server.Models
         public Nullable<int> categoryId { get; set; }
         public string categoryCode { get; set; }
         public string categoryName { get; set; }
+        //sections
+        public string sectionTable { get; set; }
 
     }
     public class itemOrderPreparingModel

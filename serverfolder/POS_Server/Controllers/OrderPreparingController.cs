@@ -1689,14 +1689,15 @@ namespace POS_Server.Controllers
                                               categoryId = i.itemsUnits.items.categoryId,
                                               categoryCode = i.itemsUnits.items.categories.categoryCode,
                                               categoryName = i.itemsUnits.items.categories.name,
-                                              
+                                          
 
-                                          }).OrderBy(x =>new { x.categoryId,x.orderPreparingId}).ToList();
+                    }).OrderBy(x =>new { x.categoryId,x.orderPreparingId}).ToList();
 
                         //   int index = 1;
                         foreach (OrderPreparingModel o in prepOrders)
                         {
 
+                       
 
                             #region get invoice tables
                             var tables = (from t in entity.tables.Where(x => x.isActive == 1)
@@ -1705,15 +1706,25 @@ namespace POS_Server.Controllers
                                           {
                                               tableId = t.tableId,
                                               name = t.name,
+                                              sectionName = t.hallSections.name,
+                                              sectionId = t.hallSections.sectionId,
                                           }).ToList();
                             string tablesNames = "";
+                            string sectables = "";
                             foreach (TableModel tabl in tables)
                             {
+                              
                                 if (tablesNames == "")
-                                    tablesNames += tabl.name;
+                                    tablesNames += tabl.name ;
                                 else tablesNames += ", " + tabl.name;
+
+                                if (sectables == "")
+                                    sectables += (tabl.sectionId == null ? "-" : tabl.sectionName) + "/" + tabl.name;
+                                else sectables += ", " + (tabl.sectionId == null ? "-" : tabl.sectionName) + "/" + tabl.name;
                             }
                             o.tables = tablesNames;
+                            o.sectionTable = sectables;
+
                             #endregion
 
                         }
