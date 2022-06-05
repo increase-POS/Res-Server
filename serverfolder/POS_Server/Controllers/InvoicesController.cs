@@ -198,8 +198,9 @@ namespace POS_Server.Controllers
                         shippingCostDiscount = b.shippingCostDiscount,
                         membershipId = b.membershipId,
                         invBarcode=  b.invBarcode,
+                        itemsCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count,
 
-                    })
+                })
                     .FirstOrDefault();
                     var dis = entity.couponsInvoices.Where(C => C.InvoiceId == invoiceId).Select(C => new
                     {
@@ -215,6 +216,8 @@ namespace POS_Server.Controllers
                     banksList.discountValue = (banksList.discountType =="2" ? banksList.discountValue * banksList.total / 100 : banksList.discountValue)
                         + dis.Sum(C=>C.discountType==2?(C.discountValue* banksList.total/100):C.discountValue);
                     banksList.discountType = "1";
+
+
                     return TokenManager.GenerateToken(banksList);
                 }
             }
