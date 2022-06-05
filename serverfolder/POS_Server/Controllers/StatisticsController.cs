@@ -7040,7 +7040,7 @@ else
                                         join u in entity.users on C.userId equals u.userId into ju
                                         join uc in entity.users on C.updateUserId equals uc.userId into juc
                                         join cr in entity.cards on C.cardId equals cr.cardId into jcr
-                                        join bo in entity.bondes on C.bondId equals bo.bondId into jbo
+                                       // join bo in entity.bondes on C.bondId equals bo.bondId into jbo
                                         join sh in entity.shippingCompanies on C.shippingCompanyId equals sh.shippingCompanyId into jsh
                                         join inv in entity.invoices on C.invId equals inv.invoiceId into jinv//yasmine
                                         from jbb in jb.DefaultIfEmpty()
@@ -7050,7 +7050,7 @@ else
                                         from jpcc in jpcr.DefaultIfEmpty()
                                         from jucc in juc.DefaultIfEmpty()
                                         from jcrd in jcr.DefaultIfEmpty()
-                                        from jbbo in jbo.DefaultIfEmpty()
+                                      //  from jbbo in jbo.DefaultIfEmpty()
                                         from jshh in jsh.DefaultIfEmpty()
                                         from jinvv in jinv.DefaultIfEmpty()//yasmine
                                         where (C.processType != "balance" && (C.side == "c" || C.side == "v" || C.side == "b" || C.side == "u" || C.side == "sh" || C.side == "bnd" || C.side == "mb"))//( C.transType == "p" && C.side==Side)
@@ -7098,7 +7098,7 @@ else
                                             //*createUserJob = jucc.job,
                                             cardName = jcrd.name,
                                             //*bondDeserveDate = jbbo.deserveDate,
-                                            bondIsRecieved = (byte?)jbbo.isRecieved,////////////////////////
+                                           // bondIsRecieved = (byte?)jbbo.isRecieved,////////////////////////
 
                                             //*agentCompany = jaa.company,
                                             shippingCompanyId = C.shippingCompanyId,
@@ -7114,10 +7114,11 @@ else
 
                                             invNumber = jinvv.invNumber,//yasmine
                                             invBarcode =jinvv.invBarcode,
-                                            bondNumber = jbbo.number,//yasmine
+                                            //  bondNumber = jbbo.number,//yasmine
 
-                                            invShippingCompanyId = jinvv.shippingCompanyId,
-                                            // invShippingCompanyName = jinvv.name,
+                                            invShippingCompanyId = C.invId == null ? C.shippingCompanyId : jinvv.shippingCompanyId,
+                                            invShippingCompanyName = C.invId == null ? C.shippingCompanies.name : jinvv.shippingCompanies.name,
+
                                             jinvv.shipUserId,
 
                                             //invAgentId = jinvv.agentId,
@@ -7126,7 +7127,7 @@ else
                                             invAgentId = C.invId == null ? C.agentId : jinvv.agentId,
                                             invAgentName = C.invId == null ? jaa.name : jinvv.agents.name,
 
-                                            invShippingCompanyName = jinvv.shippingCompanies.name,
+                                         
 
 
                                         }).ToList();
