@@ -623,6 +623,7 @@
     <NavigationProperty Name="itemsLocations" Relationship="Self.FK_itemsLocations_invoices" FromRole="invoices" ToRole="itemsLocations" />
     <NavigationProperty Name="itemsTransfer" Relationship="Self.FK_itemsTransfer_invoices" FromRole="invoices" ToRole="itemsTransfer" />
     <NavigationProperty Name="orderPreparing" Relationship="Self.FK_orderPreparing_invoices" FromRole="invoices" ToRole="orderPreparing" />
+    <Property Name="invBarcode" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="invoicesClass">
     <Key>

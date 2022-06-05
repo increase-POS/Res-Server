@@ -76,6 +76,7 @@ namespace POS_Server
         public Nullable<System.DateTime> orderTime { get; set; }
         public decimal shippingCostDiscount { get; set; }
         public Nullable<int> membershipId { get; set; }
+        public string invBarcode { get; set; }
     
         public virtual agents agents { get; set; }
         public virtual branches branches { get; set; }

@@ -467,6 +467,7 @@
     <EntitySetMapping Name="invoices">
       <EntityTypeMapping TypeName="PosModel.invoices">
         <MappingFragment StoreEntitySet="invoices">
+          <ScalarProperty Name="invBarcode" ColumnName="invBarcode" />
           <ScalarProperty Name="invoiceId" ColumnName="invoiceId" />
           <ScalarProperty Name="invNumber" ColumnName="invNumber" />
           <ScalarProperty Name="agentId" ColumnName="agentId" />

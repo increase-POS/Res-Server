@@ -487,6 +487,7 @@
     <Property Name="orderTime" Type="datetime2" Precision="7" />
     <Property Name="shippingCostDiscount" Type="decimal" Precision="20" Scale="3" Nullable="false" />
     <Property Name="membershipId" Type="int" />
+    <Property Name="invBarcode" Type="nvarchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="invoicesClass">
     <Key>
