@@ -36,7 +36,7 @@ namespace POS_Server.Controllers
                 {
                     ProgramDetailsModel packrow = new ProgramDetailsModel();
                     packrow = getCurrentInfo();
-                
+
                     return TokenManager.GenerateToken(packrow);
                 }
                 catch
@@ -54,7 +54,7 @@ namespace POS_Server.Controllers
         {
             //string Object
             string message = "";
- 
+
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
@@ -63,58 +63,64 @@ namespace POS_Server.Controllers
             }
             else
             {
-               
+
                 bool isOnlineServer = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "isOnlineServer")
                     {
-                        isOnlineServer = bool.Parse( c.Value) ;
-                      
+                        isOnlineServer = bool.Parse(c.Value);
+
                     }
                 }
-                    
-                    try
-                    {
-                
+
+                try
+                {
+
                     using (incposdbEntities entity = new incposdbEntities())
-                        {
-
-                            var locationEntity = entity.Set<ProgramDetails>();
-
-                      var  packsl = entity.ProgramDetails.ToList();
-
-                      var  packs = packsl.FirstOrDefault();
-                        packs.isOnlineServer = isOnlineServer;
-                                entity.SaveChanges();
-                                message = packs.id.ToString();
- 
-                           
-                            //  entity.SaveChanges();
-                        }
-                        return TokenManager.GenerateToken(message);
-
-                    }
-                    catch
                     {
-                        message = "0";
-                        return TokenManager.GenerateToken(message);
-                    }
 
+                        var locationEntity = entity.Set<ProgramDetails>();
+
+                        var packsl = entity.ProgramDetails.ToList();
+
+                        var packs = packsl.FirstOrDefault();
+                        packs.isOnlineServer = isOnlineServer;
+                        entity.SaveChanges();
+                        message = packs.id.ToString();
+
+
+                        //  entity.SaveChanges();
+                    }
+                    return TokenManager.GenerateToken(message);
 
                 }
+                catch
+                {
+                    message = "0";
+                    return TokenManager.GenerateToken(message);
+                }
 
-               
 
-          
-     
+            }
+
+
+
+
+
         }
+
         public ProgramDetailsModel getCurrentInfo()
-        {       
-            ProgramDetailsModel packs = new ProgramDetailsModel();      
+        {
+
+            ProgramDetailsModel packs = new ProgramDetailsModel();
+
+
             using (incposdbEntities entity = new incposdbEntities())
-            {         
+            {
+
+
                 packs = (from p in entity.ProgramDetails
                              //  join p in entity.posSetting on S.id equals p.posSerialId
                          select new ProgramDetailsModel
@@ -133,15 +139,15 @@ namespace POS_Server.Controllers
                              customerServerCode = p.customerServerCode,
                              expireDate = p.expireDate,
                              isOnlineServer = p.isOnlineServer,
-                             
+
                              updateDate = p.updateDate,
                              isLimitDate = (p.isLimitDate == true) ? true : false,
-                        
-                           
+
+
                              isActive = p.isActive,
-                             packageName=p.packageName,
-                             versionName=p.versionName,
-                             packageNumber=p.packageNumber,
+                             packageName = p.packageName,
+                             versionName = p.versionName,
+                             packageNumber = p.packageNumber,
                              customerName = p.customerName,
                              customerLastName = p.customerLastName,
                              agentName = p.agentName,
@@ -149,14 +155,14 @@ namespace POS_Server.Controllers
                              agentAccountName = p.agentAccountName,
                          }).FirstOrDefault();
 
-                packs.posCountNow=  entity.pos.Count();
+                packs.posCountNow = entity.pos.Count();
 
                 packs.branchCountNow = entity.branches.Where(x => x.type == "b").Count();
 
-                packs.storeCountNow= entity.branches.Where(x => x.type == "s").Count();
+                packs.storeCountNow = entity.branches.Where(x => x.type == "s").Count();
                 packs.userCountNow = entity.users.Count();
-                packs.vendorCountNow  = entity.agents.Where(x => x.type =="v").Count();
-                packs.customerCountNow= entity.agents.Where(x => x.type == "c").Count();
+                packs.vendorCountNow = entity.agents.Where(x => x.type == "v").Count();
+                packs.customerCountNow = entity.agents.Where(x => x.type == "c").Count();
                 packs.itemCountNow = entity.items.Count();
 
                 packs.saleinvCountNow = getSalesInvCountInMonth();
@@ -181,10 +187,10 @@ namespace POS_Server.Controllers
 
 
                 packs = entity.ProgramDetails.ToList().FirstOrDefault();
-                             //  join p in entity.posSetting on S.id equals p.posSerialId
-                       
+                //  join p in entity.posSetting on S.id equals p.posSerialId
 
-           
+
+
 
             }
 
@@ -212,14 +218,14 @@ namespace POS_Server.Controllers
         public int getSalesInvCountInMonth()
         {
             int invCount = 0;
-            
+
             using (incposdbEntities entity = new incposdbEntities())
             {
                 var expireDate = entity.ProgramDetails.Select(x => x.expireDate).Single();
-                int expireDay = Convert.ToDateTime(expireDate).Day;               
+                int expireDay = Convert.ToDateTime(expireDate).Day;
                 int currentMonth = DateTime.Now.Month;
                 int currentYear = DateTime.Now.Year;
-                int currentMonthDays =  DateTime.DaysInMonth(currentYear, currentMonth);
+                int currentMonthDays = DateTime.DaysInMonth(currentYear, currentMonth);
 
                 if (expireDay > currentMonthDays)
                     expireDay = currentMonthDays;
@@ -227,13 +233,92 @@ namespace POS_Server.Controllers
                 DateTime compairDate1 = compaireDate2.AddMonths(-1);
 
                 // get sales imvoice count between compaireDate1 and compairDate2
-                invCount = entity.invoices.Where(x => x.invType == "s" && x.updateDate >= compairDate1 && x.updateDate < compaireDate2).Count();
+                invCount = entity.invoices.Where(x => (x.invType == "s"|| x.invType == "ts" || x.invType == "ss" )&& x.invDate >= compairDate1 && x.invDate < compaireDate2).Count();
 
             }
             return invCount;
         }
 
 
+        [HttpPost]
+        [Route("getRemainDayes")]
+        public async Task<string> getRemainDayes(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                try
+                {
+                    ProgramDetails packrow = new ProgramDetails();
+                    packrow = getCurrentProgDetail();
+                    daysremain daysModel = new daysremain();
+                    int days = 0;
+
+                    if (packrow.expireDate == null)
+                    {
+                        daysModel.expirestate = "n";
+                        daysModel.days = 0;
+                        return TokenManager.GenerateToken(daysModel);//not regester  =>no alert
+                    }
+                    DateTime expiredate = (DateTime)packrow.expireDate;
+                    DateTime nowdate = DateTime.Now;
+                    TimeSpan diffdate = expiredate - nowdate;
+
+                    days = diffdate.Days;
+
+
+                    // diffdate.Hours;
+                    if (packrow.isLimitDate == false)
+                    {
+                        daysModel.expirestate = "u";
+                        daysModel.days = 0;
+                        return TokenManager.GenerateToken(daysModel);//unlimited=> no alert
+
+                    }
+                    else
+                    {
+                        // daysModel.hours = diffdate.Hours;
+                        daysModel.expirestate = "e";
+                        daysModel.days = days;
+                        if (days == 0)
+                        {
+                            daysModel.hours = diffdate.Hours;
+                            if (daysModel.hours == 0)
+                            {
+                                daysModel.minute = diffdate.Minutes;
+
+                            }
+                            //  daysModel.hours = diffdate.Hours;
+                        }
+
+
+                        //if (days > 10 )
+                        // {
+                        //     return TokenManager.GenerateToken("-2");// no alert
+                        //     //return TokenManager.GenerateToken(days.ToString());// no alert
+                        // }
+                        // else
+                        // {
+
+                        return TokenManager.GenerateToken(daysModel);//show alert with days
+                        //}
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    //  return TokenManager.GenerateToken("0");
+                    return TokenManager.GenerateToken(ex.ToString());
+                }
+
+
+            }
+        }
 
     }
 }
