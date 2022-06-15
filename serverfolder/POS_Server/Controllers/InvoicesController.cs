@@ -2953,7 +2953,7 @@ namespace POS_Server.Controllers
                 return TokenManager.GenerateToken(message);
             }
         }
-        private int saveInvoice(invoices newObject)
+        public int saveInvoice(invoices newObject)
         {
             int res = 0;
             invoices tmpInvoice;
