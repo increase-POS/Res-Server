@@ -29,6 +29,6 @@ namespace POS_Server.Models
         public string isExceed { get; set; }
         public IEnumerable<TableModel> tables { get; set; }
 
-
+        public int sequence { get; set; }
     }
 }
