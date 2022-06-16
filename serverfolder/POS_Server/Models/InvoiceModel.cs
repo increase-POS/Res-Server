@@ -73,6 +73,7 @@ namespace POS_Server.Models
     public bool isOrginal { get; set; }
         public string invBarcode { get; set; }
 
+        public int sequence { get; set; }
     }
 
     public class CouponInvoiceModel
