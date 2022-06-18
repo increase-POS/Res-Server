@@ -220,7 +220,7 @@ namespace POS_Server.Controllers
                              verName = p.versionName,
                              packageNumber = p.packageNumber,
                              packageName = p.packageName,
-
+                             isDemo = p.isDemo,
 
                          }).FirstOrDefault();
             }
@@ -288,6 +288,7 @@ namespace POS_Server.Controllers
                              agentLastName = p.agentLastName,
                              agentAccountName = p.agentAccountName,
                              packageName = p.packageName,
+                             isDemo = p.isDemo,
                          }).FirstOrDefault();
             }
             sd.packageSend = packs;
@@ -407,6 +408,8 @@ namespace POS_Server.Controllers
 
                             tmpObject.isServerActivated = newObject.isServerActivated;
                             tmpObject.activatedate = newObject.activatedate;
+                            tmpObject.isDemo = newObject.isDemo;
+                         
 
 
                         }
@@ -1396,7 +1399,7 @@ namespace POS_Server.Controllers
                     {
                         skey = c.Value;
                     }
-                 
+
 
                 }
                 packagesSend ps = new packagesSend();
@@ -1537,7 +1540,7 @@ namespace POS_Server.Controllers
                                     (
                                     packuserfile.pocrDate == packState.pocrDate && packuserfile.poId == packState.poId
                                     && packState.isServerActivated == false && packuserfile.isServerActivated == true
-                                    && packState.expireDate== packuserfile.bookDate)
+                                    && packState.expireDate == packuserfile.bookDate)
                                     )
                                 {
 
@@ -1633,7 +1636,7 @@ namespace POS_Server.Controllers
                                     packuserfile.pocrDate == packState.pocrDate && packuserfile.poId == packState.poId
                                     && packState.isServerActivated == false && packuserfile.isServerActivated == true
                                     && packState.expireDate == packuserfile.bookDate)
-                                            ) 
+                                            )
                                             {
                                                 //make changes
                                                 // if(pack.isActive==1 && prog.isActive==1 && ver.isActive==1){
@@ -1718,7 +1721,7 @@ namespace POS_Server.Controllers
                                                 //    package.activatedate;
                                                 //}
 
-                                               // package.customerServerCode = customerServerCode;
+                                                // package.customerServerCode = customerServerCode;
                                                 package.totalsalesInvCount = 0;
 
                                                 //   package.canRenew = false;

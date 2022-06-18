@@ -51,7 +51,7 @@ namespace POS_Server.Models
         public string agentAccountName { get; set; }//5- Agent AccountName
         public string agentLastName { get; set; }//5- Agent LastName
 
-
+        public string isDemo { get; set; }
     }
    
 }
