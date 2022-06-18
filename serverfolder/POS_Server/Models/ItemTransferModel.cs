@@ -54,5 +54,6 @@ namespace POS_Server.Models
         public string offerName { get; set; }
         public Nullable<decimal> finalDiscount { get; set; }
 
+        public int sequence { get; set; }
     }
 }
