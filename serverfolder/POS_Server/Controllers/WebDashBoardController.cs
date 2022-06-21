@@ -1,4 +1,6 @@
 ﻿using LinqKit;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using POS_Server.Models;
 using POS_Server.Models.VM;
 using System;
@@ -33,8 +35,8 @@ namespace POS_Server.Controllers
                 #region params
                 int branchId = 0;
                 int userId = 0;
-                //DateTime nowDT = DateTime.Parse( DateTime.Now.ToString().Split(' ')[0]);
-                DateTime nowDT =  DateTime.Now;
+                DateTime nowDT = DateTime.Parse( DateTime.Now.ToString().Split(' ')[0]);
+                //DateTime nowDT =  DateTime.Now;
                 DateTime dt = Convert.ToDateTime(DateTime.Today.AddHours(-24));
                 //DateTime? endDate = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -138,7 +140,7 @@ namespace POS_Server.Controllers
                         var resSearchPredicate = PredicateBuilder.New<reservations>();
 
                         resSearchPredicate = resSearchPredicate.And(x => x.isActive == 1 && (x.status == null || x.status == "confirm"));
-                        resSearchPredicate = resSearchPredicate.And(x => x.reservationTime >= nowDT);
+                        resSearchPredicate = resSearchPredicate.And(x => DbFunctions.TruncateTime(x.reservationTime) == nowDT);
                         //resSearchPredicate = resSearchPredicate.And(x => x.reservationTime >= dt && x.reservationTime <= nowDT);
 
                         if (branchId != 0)
@@ -442,7 +444,7 @@ namespace POS_Server.Controllers
  
                 List<string> invTypeL = new List<string>();
 
-                DateTime nowDT = DateTime.Now;
+                DateTime nowDT = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -462,7 +464,7 @@ namespace POS_Server.Controllers
                     var resSearchPredicate = PredicateBuilder.New<reservations>();
 
                     resSearchPredicate = resSearchPredicate.And(x => x.isActive == 1 && (x.status == null || x.status == "confirm"));
-                    resSearchPredicate = resSearchPredicate.And(x => x.reservationTime >= nowDT);
+                    resSearchPredicate = resSearchPredicate.And(x => DbFunctions.TruncateTime(x.reservationTime) == nowDT);
 
                     if (branchId != 0)
                         resSearchPredicate = resSearchPredicate.And(x => x.branchId == branchId);
@@ -508,18 +510,9 @@ namespace POS_Server.Controllers
             }
         }
 
-
-
-
-
-
-
-
-
-
         [HttpPost]
-        [Route("GetCustomerPayments")]
-        public string GetCustomerPayments(string token)
+        [Route("getReservtionById")]
+        public string getReservtionById(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -530,101 +523,60 @@ namespace POS_Server.Controllers
             else
             {
                 #region params
-                int agentId = 0;
+                int reservationId = 0;
+
+
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
-                    if (c.Type == "agentId")
+                     if (c.Type == "reservationId")
                     {
-                        agentId = int.Parse(c.Value);
+                        reservationId = int.Parse(c.Value);
                     }
                 }
                 #endregion
-                try
+                using (incposdbEntities entity = new incposdbEntities())
                 {
-                    using (incposdbEntities entity = new incposdbEntities())
-                    {
 
-                        List<CashTransferModel> cachlist = (from C in entity.cashTransfer.Where(x => x.agentId == agentId)
-                                                            join b in entity.banks on C.bankId equals b.bankId into jb
-                                                            join a in entity.agents on C.agentId equals a.agentId into ja
-                                                            join p in entity.pos on C.posId equals p.posId into jp
-                                                            join pc in entity.pos on C.posIdCreator equals pc.posId into jpcr
-                                                            join u in entity.users on C.userId equals u.userId into ju
-                                                            join uc in entity.users on C.updateUserId equals uc.userId into juc
-                                                            join cr in entity.cards on C.cardId equals cr.cardId into jcr
-                                                            join bo in entity.bondes on C.bondId equals bo.bondId into jbo
-                                                            from jbb in jb.DefaultIfEmpty()
-                                                            from jaa in ja.DefaultIfEmpty()
-                                                            from jpp in jp.DefaultIfEmpty()
-                                                            from juu in ju.DefaultIfEmpty()
-                                                            from jpcc in jpcr.DefaultIfEmpty()
-                                                            from jucc in juc.DefaultIfEmpty()
-                                                            from jcrd in jcr.DefaultIfEmpty()
-                                                            from jbbo in jbo.DefaultIfEmpty()
-                                                            where (C.transType == "p" && C.processType != "balance" && C.processType != "inv")
-                                                            //&&  (brIds.Contains(jpp.branches.branchId) || brIds.Contains(jpcc.branches.branchId))
+                    var reservation = (from rs in entity.reservations.Where(x => x.reservationId == reservationId)
+                                        select new ReservationModel()
+                                        {
+                                        reservationId = rs.reservationId,
+                                        code = rs.code,
+                                        branchId = rs.branchId,
+                                        customerId = rs.customerId,
+                                        reservationDate = rs.reservationDate,
+                                        reservationTime = rs.reservationTime,
+                                        endTime = rs.endTime,
+                                        personsCount = rs.personsCount,
+                                        notes = rs.notes,
+                                        createUserId = rs.createUserId,
+                                        updateUserId = rs.updateUserId,
+                                        createDate = rs.createDate,
+                                        updateDate = rs.updateDate,
+                                        isActive = rs.isActive,
+                                        status = rs.status,
+                                        tables= (from tr in rs.tablesReservations.Where(x => x.reservationId == rs.reservationId)
+                                                 join ts in entity.tables on tr.tableId equals ts.tableId
+                                                 select new TableModel()
+                                                 {
+                                                     tableId = ts.tableId,
+                                                     name = ts.name,
+                                                     personsCount = ts.personsCount,
+                                                     canDelete = false,
+                                                     isActive = ts.isActive
+                                                 }).ToList(),
+                                        }).FirstOrDefault();
 
-                                                            //( C.transType == "p" && C.side==Side)
-                                                            select new CashTransferModel()
-                                                            {
-                                                                //*cashTransId = C.cashTransId,
-                                                                transType = C.transType,
-                                                                //*posId = C.posId,
-                                                                userId = C.userId,
-                                                                agentId = C.agentId,
-                                                                //*invId = C.invId,
-                                                                transNum = C.transNum,
-                                                                //*createDate = C.createDate,
-                                                                updateDate = C.updateDate,
-                                                                cash = C.cash,
-                                                                //*updateUserId = C.updateUserId,
-                                                                //*createUserId = C.createUserId,
-                                                                //*notes = C.notes,
-                                                                //*posIdCreator = C.posIdCreator,
-                                                                isConfirm = C.isConfirm,
-                                                                //*cashTransIdSource = C.cashTransIdSource,
-                                                                side = C.side,
 
-                                                                //*docName = C.docName,
-                                                                //*docNum = C.docNum,
-                                                                //*docImage = C.docImage,
-                                                                bankId = C.bankId,
-                                                                bankName = jbb.name,
-                                                                agentName = jaa.name,
-
-                                                                userAcc = juu.username,// side =u
-
-                                                                processType = C.processType,
-
-                                                                usersLName = juu.lastname,// side =u
-
-                                                                updateUserAcc = jucc.username,
-                                                                //*createUserJob = jucc.job,
-                                                                cardName = jcrd.name,
-                                                                agentCompany = jaa.company,
-                                                                shippingCompanyId = C.shippingCompanyId,
-                                                                shippingCompanyName = C.shippingCompanies.name,
-
-                                                            }).ToList();
-
-                        return TokenManager.GenerateToken(cachlist);
-
-                    }
-
+                    return TokenManager.GenerateToken(reservation);
                 }
-                catch
-                {
-                    return TokenManager.GenerateToken("0");
-                }
-
             }
-
         }
 
         [HttpPost]
-        [Route("getCustomerDeliverdOrders")]
-        public string getCustomerDeliverdOrders(string token)
+        [Route("getReservationTables")]
+        public string getReservationTables(string token)
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -634,28 +586,174 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int agentId = 0;
+                #region params
+                int reservationId = 0;
+
+
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
-                    if (c.Type == "agentId")
+                     if (c.Type == "reservationId")
                     {
-                        agentId = int.Parse(c.Value);
+                        reservationId = int.Parse(c.Value);
                     }
                 }
-                List<string> statusL = new List<string>();
-                //statusL.Add("tr");
-                statusL.Add("rc");
+                #endregion
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    var invoicesList = (from b in entity.invoices.Where(x => x.invType == "s" && x.agentId == agentId && x.shippingCompanyId != null && x.isActive == true)
-                                        join s in entity.invoiceStatus on b.invoiceId equals s.invoiceId
+
+                    var tables = (from tr in entity.tablesReservations.Where(x => x.reservationId == reservationId)
+                                  join ts in entity.tables on tr.tableId equals ts.tableId
+                                  select new TableModel()
+                                  {
+                                      tableId = ts.tableId,
+                                      name = ts.name,
+                                      personsCount = ts.personsCount,
+                                      canDelete = false,
+                                      isActive = ts.isActive
+                                  }).ToList();
+
+
+                    return TokenManager.GenerateToken(tables);
+                }
+            }
+        }
+
+
+        [HttpPost]
+        [Route("confirmReservation")]
+        public string confirmReservation(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
+                int reservationId = 0;
+                int userId = 0;
+                string invoiceObject = "";
+                invoices newObject = null;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "reservationId")
+                    {
+                        reservationId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                    if (c.Type == "invoiceObject")
+                    {
+                        invoiceObject = c.Value.Replace("\\", string.Empty);
+                        invoiceObject = invoiceObject.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<invoices>(invoiceObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
+                #endregion
+                using (incposdbEntities entity = new incposdbEntities())
+                {                   
+                    #region edit reservation status
+                    var res = entity.reservations.Find(reservationId);
+                    res.status = "confirm";
+                    res.updateUserId = userId;
+                    res.updateDate = DateTime.Now;
+                    entity.SaveChanges();
+                    #endregion
+                    #region createInvoice and tables
+                    InvoicesController ic = new InvoicesController();
+                    int invoiceId = ic.saveInvoice(newObject);
+                    if(invoiceId > 0)
+                    {
+                        var tables = (from tr in entity.tablesReservations.Where(x => x.reservationId == reservationId)
+                                      join ts in entity.tables on tr.tableId equals ts.tableId
+                                      select new TableModel()
+                                      {
+                                          tableId = ts.tableId,
+                                          name = ts.name,
+                                          personsCount = ts.personsCount,
+                                          isActive = ts.isActive,
+                                          
+                                      }).ToList();
+
+                        foreach(TableModel t in tables)
+                        {
+                            invoiceTables tr = new invoiceTables();
+
+                            var tableEntity = entity.Set<tablesReservations>();
+
+                            tr.invoiceId = invoiceId;
+                            tr.tableId = t.tableId;
+                            tr.createDate = DateTime.Now;
+                            tr.updateDate = DateTime.Now;
+                            tr.isActive = 1;
+                            tr.updateUserId = userId;
+                            tr.createUserId = userId;
+
+                            tr = entity.invoiceTables.Add(tr);
+                            entity.SaveChanges();
+                        }
+                    }
+                    #endregion
+                    return TokenManager.GenerateToken("1");
+                }
+            }
+        }
+
+
+        [HttpPost]
+        [Route("GetOrdersWithDelivery")]
+        public string GetOrdersWithDelivery(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
+                string statusStr = "";
+                List<string> statusL = new List<string>();
+                int userId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "status")
+                    {
+                        statusStr = c.Value;
+                        string[] statusArray = statusStr.Split(',');
+                        foreach (string s in statusArray)
+                            statusL.Add(s.Trim());
+                    }
+                }
+                #endregion
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var searchPredicate = PredicateBuilder.New<invoices>();
+
+                        searchPredicate = searchPredicate.And(x => x.invType == "ts" || x.invType == "ss");
+                        searchPredicate = searchPredicate.And(x => x.shipUserId == userId && x.deserved >0);
+
+
+                        var invoices = (from b in entity.invoices.Where(searchPredicate)
                                         join u in entity.users on b.shipUserId equals u.userId into lj
                                         from y in lj.DefaultIfEmpty()
-                                        where (statusL.Contains(s.status) && s.invStatusId == entity.invoiceStatus.Where(x => x.invoiceId == b.invoiceId).Max(x => x.invStatusId))
                                         select new InvoiceModel()
                                         {
-                                            invStatusId = s.invStatusId,
                                             invoiceId = b.invoiceId,
                                             invNumber = b.invNumber,
                                             agentId = b.agentId,
@@ -676,97 +774,98 @@ namespace POS_Server.Controllers
                                             updateDate = b.updateDate,
                                             updateUserId = b.updateUserId,
                                             branchId = b.branchId,
-                                            discountValue = b.discountValue,
                                             discountType = b.discountType,
+                                            discountValue = b.discountValue,
                                             tax = b.tax,
                                             taxtype = b.taxtype,
                                             name = b.name,
                                             isApproved = b.isApproved,
                                             branchCreatorId = b.branchCreatorId,
                                             shippingCompanyId = b.shippingCompanyId,
-                                            shipUserId = b.shipUserId,
-
-                                            agentName = b.agents.name,
-                                            shipUserName = y.name + " " + y.lastname,
                                             shippingCompanyName = b.shippingCompanies.name,
-                                            status = s.status,
+                                            shipUserId = b.shipUserId,
+                                            shipUserName = y.name,
+                                            shipUserLastName = y.lastname,
                                             userId = b.userId,
-                                            manualDiscountType = b.manualDiscountType,
-                                            manualDiscountValue = b.manualDiscountValue,
+                                            printedcount = b.printedcount,
+                                            isOrginal = b.isOrginal,
+                                            waiterId = b.waiterId,
                                             shippingCost = b.shippingCost,
                                             realShippingCost = b.realShippingCost,
-                                            payStatus = b.deserved == 0 ? "payed" : (b.deserved == b.totalNet ? "unpayed" : "partpayed"),
-                                            branchCreatorName = entity.branches.Where(X => X.branchId == b.branchCreatorId).FirstOrDefault().name,
+                                            reservationId = b.reservationId,
+                                            orderTime = b.orderTime,
+                                            shippingCostDiscount = b.shippingCostDiscount,
+                                            membershipId = b.membershipId,
+                                            //agent
+                                            agentName = b.agents.name,
+                                            agentAddress = b.agents.address,
+                                            agentMobile = b.agents.mobile,
+                                            agentResSectorsName = b.agents.residentialSectors.name,
+                                            itemsCount = entity.itemsTransfer.Where(x => x.invoiceId == b.invoiceId).Count(),
+                                        }).ToList();
 
-                                        })
-                    .ToList();
 
-                    return TokenManager.GenerateToken(invoicesList);
-                }
-            }
-        }
-
-        [HttpPost]
-        [Route("GetStockInfo")]
-        public string GetStockInfo(string token)
-        {
-            //int branchId string token
-            token = TokenManager.readToken(HttpContext.Current.Request);
-            var strP = TokenManager.GetPrincipal(token);
-            if (strP != "0") //invalid authorization
-            {
-                return TokenManager.GenerateToken(strP);
-            }
-            else
-            {
-                int branchId = 0;
-                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
-                foreach (Claim c in claims)
-                {
-                    if (c.Type == "branchId")
-                    {
-                        branchId = int.Parse(c.Value);
-                    }
-                }
-
-                try
-                {
-                    using (incposdbEntities entity = new incposdbEntities())
-                    {
-                        var searchPredicate = PredicateBuilder.New<sections>();
-                        searchPredicate = searchPredicate.And(x => true);
-                        if (branchId != 0)
-                            searchPredicate = searchPredicate.And(x => x.branchId == branchId);
-
-                        var itemsUnitsList = (from b in entity.itemsLocations
-                                              where b.quantity > 0 && b.invoiceId == null
-                                              join u in entity.itemsUnits on b.itemUnitId equals u.itemUnitId
-                                              join i in entity.items on u.itemId equals i.itemId
-                                              join l in entity.locations on b.locationId equals l.locationId
-                                              join s in entity.sections.Where(searchPredicate) on l.sectionId equals s.sectionId
-
-                                              select new ItemLocationModel
+                        foreach (InvoiceModel inv in invoices)
+                        {
+                            var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == inv.invoiceId)
+                                              join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                              where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                              select new OrderPreparingModel()
                                               {
-                                                  quantity = b.quantity,
-                                                  itemName = i.name,
-                                                  unitName = u.units.name,
+                                                  orderPreparingId = o.orderPreparingId,
+                                                  invoiceId = o.invoiceId,
+                                                  notes = o.notes,
+                                                  orderNum = o.orderNum,
+                                                  createDate = o.createDate,
+                                                  createUserId = o.createUserId,
+                                                  invNum = o.invoices.invNumber,
+                                                  status = s.status,
                                               }).ToList();
 
-                        var res = itemsUnitsList.GroupBy(x => new { x.itemName, x.unitName })
-                                                .Select(x => new ItemLocationModel()
-                                                {
-                                                    itemName = x.FirstOrDefault().itemName,
-                                                    unitName = x.FirstOrDefault().unitName,
-                                                    quantity = x.Sum(a => a.quantity)
-                                                }).ToList();
 
-                        int sequence = 1;
-                        foreach (ItemLocationModel it in res)
-                        {
-                            it.sequence = sequence;
-                            sequence++;
+                            foreach (OrderPreparingModel o in prepOrders)
+                            {
+                                #region set inv status
+                                if (o.status == "Collected")
+                                {
+                                    inv.status = "Collected";
+                                    break;
+                                }
+                                else if (o.status == "InTheWay")
+                                {
+                                    inv.status = "InTheWay";
+                                    break;
+                                }
+                                else if (o.status == "Done")
+                                {
+                                    inv.status = "Done";
+                                    break;
+                                }
+                                else if (o.status == "Listed" || o.status == "Preparing")
+                                {
+                                    inv.status = "Listed";
+                                    break;
+                                }
+                                else
+                                    inv.status = "Ready";
+                                #endregion
+
+                            }
+
                         }
-                        return TokenManager.GenerateToken(res);
+
+                        #region get orders according to status
+                        if (statusStr != "")
+                            invoices = invoices.Where(x => statusL.Contains(x.status)).OrderBy(x => x.invNumber).ToList();
+                        #endregion
+
+                        int seq = 1;
+                        foreach(var inv in invoices)
+                        {
+                            inv.sequence = seq;
+                            seq++;
+                        }
+                        return TokenManager.GenerateToken(invoices);
                     }
                 }
                 catch
@@ -775,6 +874,479 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+
+        [HttpPost]
+        [Route("EditInvoiceOrdersStatus")]
+        public string EditInvoiceOrdersStatus(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
+                int invoiceId = 0;
+                string statusObject = "";
+                orderPreparingStatus status = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceId")
+                    {
+                        invoiceId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "statusObject")
+                    {
+                        statusObject = c.Value.Replace("\\", string.Empty);
+                        statusObject = statusObject.Trim('"');
+                        status = JsonConvert.DeserializeObject<orderPreparingStatus>(statusObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+
+                }
+                #endregion
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        #region edit orders status
+                        var orders = entity.orderPreparing.Where(x => x.invoiceId == invoiceId).ToList();
+
+                        foreach (orderPreparing o in orders)
+                        {
+                            int orderId = o.orderPreparingId;
+                            string res = saveInvoiceStatus(status, orderId);
+                            if (res == "0")
+                                message = "0";
+                        }
+                        #endregion
+                    }
+                }
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+
+        private string saveInvoiceStatus(orderPreparingStatus statusObject, int preparingOrderId)
+        {
+            string message = "0";
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    statusObject.orderPreparingId = preparingOrderId;
+                    statusObject.isActive = 1;
+                    statusObject.updateUserId = statusObject.createUserId;
+                    statusObject.createDate = statusObject.updateDate = DateTime.Now;
+                    entity.orderPreparingStatus.Add(statusObject);
+                    entity.SaveChanges();
+                    message = statusObject.orderStatusId.ToString();
+                }
+            }
+            catch { message = "0"; }
+            return message;
+        }
+
+        [HttpPost]
+        [Route("GetPreparingOrderDetails")]
+        public string GetPreparingOrderDetails(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
+                int orderId = 0;
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "orderId")
+                    {
+                        orderId = int.Parse(c.Value);
+                    }
+                }
+                #endregion
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {                          
+                        var prepOrder = (from o in entity.orderPreparing.Where(x => x.orderPreparingId == orderId)
+                                            join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                            where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                            select new OrderPreparingModel()
+                                            {
+                                                orderPreparingId = o.orderPreparingId,
+                                                invoiceId = o.invoiceId,
+                                                notes = o.notes,
+                                                orderNum = o.orderNum,
+                                                preparingTime = o.preparingTime,
+                                                updateDate = o.updateDate,
+                                                updateUserId = o.updateUserId,
+                                                createDate = o.createDate,
+                                                createUserId = o.createUserId,
+                                                invNum = o.invoices.invNumber,
+                                                invType = o.invoices.invType,
+                                                shippingCompanyId = o.invoices.shippingCompanyId,
+                                                waiter = entity.users.Where(x => x.userId == o.invoices.waiterId).Select(x => x.name).FirstOrDefault(),
+                                                items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
+                                                                                .Select(x => new itemOrderPreparingModel()
+                                                                                {
+                                                                                    itemOrderId = x.itemOrderId,
+                                                                                    itemName = x.itemsUnits.items.name,
+                                                                                    itemId = x.itemsUnits.items.itemId,
+                                                                                    itemUnitId = x.itemUnitId,
+                                                                                    quantity = x.quantity,
+                                                                                    createDate = x.createDate,
+                                                                                    updateDate = x.updateDate,
+                                                                                    createUserId = x.createUserId,
+                                                                                    updateUserId = x.updateUserId,
+                                                                                    categoryId = x.itemsUnits.items.categories.categoryId,
+                                                                                    categoryName = x.itemsUnits.items.categories.name,
+
+                                                                                }).ToList(),
+                                                status = s.status,
+                                            }).FirstOrDefault();
+
+    
+                            #region preparing time from menu list
+                            if (prepOrder.status == "Listed")
+                            {
+                                if (prepOrder.preparingTime == null || prepOrder.preparingTime == 0)
+                                {
+                                    var orderItemUnits = entity.itemOrderPreparing.Where(x => x.orderPreparingId == prepOrder.orderPreparingId).Select(x => x.itemUnitId).ToList();
+                            prepOrder.preparingTime = entity.menuSettings.Where(x => orderItemUnits.Contains(x.itemUnitId)).Select(x => x.preparingTime).Max();
+                                }
+                            }
+                            #endregion
+
+
+                            #region get invoice tables
+                            var tables = (from t in entity.tables.Where(x => x.isActive == 1)
+                                          join it in entity.invoiceTables.Where(x => x.invoiceId == prepOrder.invoiceId) on t.tableId equals it.tableId
+                                          select new TableModel()
+                                          {
+                                              tableId = t.tableId,
+                                              name = t.name,
+                                          }).ToList();
+                            string tablesNames = "";
+                            foreach (TableModel tabl in tables)
+                            {
+                                if (tablesNames == "")
+                                    tablesNames += tabl.name;
+                                else tablesNames += ", " + tabl.name;
+                            }
+                        prepOrder.tables = tablesNames;
+                            #endregion
+
+                                #region preparing status date
+                                if (prepOrder.status == "Listed")
+                            prepOrder.preparingStatusDate = null;
+                                else
+                                {
+                                    DateTime createDate = (DateTime)entity.orderPreparingStatus
+                                                                   .Where(x => x.orderPreparingId == prepOrder.orderPreparingId && x.status == "Preparing")
+                                                                   .Select(x => x.createDate).SingleOrDefault();
+                            prepOrder.preparingStatusDate = (DateTime)createDate;
+                                }
+                                #endregion
+                               
+                        // set sequence num to items
+                        int index = 1;
+                        foreach (itemOrderPreparingModel item in prepOrder.items)
+                        {
+                            item.sequence = index;
+                            index++;
+                        }                              
+
+                        return TokenManager.GenerateToken(prepOrder);
+                    }
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+
+        [HttpPost]
+        [Route("EditPreparingOrdersPrepTime")]
+        public string EditPreparingOrdersPrepTime(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                int orderId = 0;
+                decimal preparingTime = 0;
+                int userId = 0;
+                string notes = "";
+                List<orderPreparing> preparingOrders = new List<orderPreparing>();
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "orderId")
+                    {
+                        orderId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "preparingTime")
+                    {
+                        preparingTime = decimal.Parse(c.Value);
+                    }
+                    else if (c.Type == "notes")
+                    {
+                        notes = c.Value;
+                    }
+                    else if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+                }
+
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+
+                        var order = entity.orderPreparing.Find(orderId);
+                        order.preparingTime = preparingTime;
+                        order.notes = notes;
+                        order.updateDate = DateTime.Now;
+                        order.updateUserId = userId;
+
+                        entity.SaveChanges();
+                    }
+
+                }
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+
+        [HttpPost]
+        [Route("EditOrderStatus")]
+        public string EditOrderStatus(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "1";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
+                int orderId = 0;
+                string statusObject = "";
+                orderPreparingStatus status = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "orderId")
+                    {
+                        orderId = int.Parse(c.Value);
+                    }
+                    else if (c.Type == "statusObject")
+                    {
+                        statusObject = c.Value.Replace("\\", string.Empty);
+                        statusObject = statusObject.Trim('"');
+                        status = JsonConvert.DeserializeObject<orderPreparingStatus>(statusObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+
+                }
+                #endregion
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        #region edit orders status
+
+                        string res = saveInvoiceStatus(status, orderId);
+                        if (res == "0")
+                            message = "0";
+                        #endregion
+                    }
+                }
+                catch
+                {
+                    message = "0";
+                }
+                return TokenManager.GenerateToken(message);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("GetPermissions")]
+        public string GetPermissions(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
+                int userId = 0;
+                string dashBoardPermission = "dashboard";
+                string salesPermission = "diningHall";
+                string reservationPermission = "reservationsUpdate_update";
+                string kitchenPermission = "preparingOrders";
+                string deliveryJob = "deliveryEmployee";
+
+                string result = "";
+
+                JArray jArray = new JArray();
+
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "userId")
+                    {
+                        userId = int.Parse(c.Value);
+                    }
+
+                }
+                #endregion
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    result += "{";
+                    #region dashBoard Permission
+                    var groupObjects = (from GO in entity.groupObject
+                                        where GO.showOb == 1 && GO.objects.name.Contains(dashBoardPermission)
+                                        join U in entity.users on GO.groupId equals U.groupId
+                                        where U.userId == userId
+                                        select new
+                                        {
+                                            GO.id,
+                                            GO.showOb,
+                                        }).FirstOrDefault();
+
+                    result += "showDashBoard:";
+                    if (groupObjects != null)
+                    {
+                        result += "true,";
+                    }
+                    else
+                    {
+                        result += "false,";
+                    }
+                    #endregion  
+                    #region sales Permission
+                    groupObjects = (from GO in entity.groupObject
+                                    where GO.showOb == 1 && GO.objects.name.Contains(salesPermission)
+                                    join U in entity.users on GO.groupId equals U.groupId
+                                    where U.userId == userId
+                                    select new
+                                    {
+                                        GO.id,
+                                        GO.showOb,
+                                    }).FirstOrDefault();
+
+                    result += "showSales:";
+                    if (groupObjects != null)
+                    {
+                        result += "true,";
+                    }
+                    else
+                    {
+                        result += "false,";
+                    }
+                    #endregion  
+                    #region reservations Permission
+                    groupObjects = (from GO in entity.groupObject
+                                    where GO.showOb == 1 && GO.objects.name.Contains(reservationPermission)
+                                    join U in entity.users on GO.groupId equals U.groupId
+                                    where U.userId == userId
+                                    select new
+                                    {
+                                        GO.id,
+                                        GO.showOb,
+                                    }).FirstOrDefault();
+
+                    result += "showReservations:";
+                    if (groupObjects != null)
+                    {
+                        result += "true,";
+                    }
+                    else
+                    {
+                        result += "false,";
+                    }
+                    #endregion 
+                    #region kitchen Permission
+                    groupObjects = (from GO in entity.groupObject
+                                    where GO.showOb == 1 && GO.objects.name.Contains(kitchenPermission) 
+                                    join U in entity.users on GO.groupId equals U.groupId
+                                    where U.userId == userId
+                                    select new
+                                    {
+                                        GO.id,
+                                        GO.showOb,
+                                    }).FirstOrDefault();
+
+                    result += "showKitchen:";
+                    if (groupObjects != null)
+                    {
+                        result += "true,";
+                    }
+                    else
+                    {
+                        result += "false,";
+                    }
+                    #endregion
+                    #region delivery Permission
+                    var deliverUser = (from u in entity.users.Where(u => u.userId == userId && u.isActive == 1 && u.driverIsAvailable == 1)                          
+                                 select new UserModel
+                                 {
+                                     userId = u.userId,
+                                     username = u.username,
+                                 }).FirstOrDefault();
+
+                    result += "showDelivery:";
+                    if (deliverUser != null)
+                    {
+                        result += "true";
+                    }
+                    else
+                    {
+                        result += "false";
+                    }
+
+                    #endregion
+                    result += "}";
+                    return TokenManager.GenerateToken(result);
+
+                }
+
+            }
+
+        }
+
 
         [HttpPost]
         [Route("getUserDeliverOrders")]
