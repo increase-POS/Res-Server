@@ -119,7 +119,7 @@ namespace POS_Server.Controllers
 
                         foreach (TableModel table in tablesList)
                         {                    
-                            int tableId = table.tableId;
+                            long tableId = table.tableId;
 
 
                             var searchPredicate1 = PredicateBuilder.New<invoiceTables>();
@@ -668,7 +668,7 @@ namespace POS_Server.Controllers
                     #endregion
                     #region createInvoice and tables
                     InvoicesController ic = new InvoicesController();
-                    int invoiceId = ic.saveInvoice(newObject);
+                    long invoiceId = ic.saveInvoice(newObject);
                     if(invoiceId > 0)
                     {
                         var tables = (from tr in entity.tablesReservations.Where(x => x.reservationId == reservationId)
@@ -918,7 +918,7 @@ namespace POS_Server.Controllers
 
                         foreach (orderPreparing o in orders)
                         {
-                            int orderId = o.orderPreparingId;
+                            long orderId = o.orderPreparingId;
                             string res = saveInvoiceStatus(status, orderId);
                             if (res == "0")
                                 message = "0";
@@ -934,7 +934,7 @@ namespace POS_Server.Controllers
             }
         }
 
-        private string saveInvoiceStatus(orderPreparingStatus statusObject, int preparingOrderId)
+        private string saveInvoiceStatus(orderPreparingStatus statusObject, long preparingOrderId)
         {
             string message = "0";
             try
