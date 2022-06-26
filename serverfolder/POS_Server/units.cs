@@ -23,15 +23,15 @@ namespace POS_Server
             this.itemsUnits = new HashSet<itemsUnits>();
         }
     
-        public int unitId { get; set; }
+        public long unitId { get; set; }
         public string name { get; set; }
         public short isSmallest { get; set; }
-        public Nullable<int> smallestId { get; set; }
+        public Nullable<long> smallestId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> parentid { get; set; }
+        public Nullable<long> parentid { get; set; }
         public byte isActive { get; set; }
         public string notes { get; set; }
     
