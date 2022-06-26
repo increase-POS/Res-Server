@@ -20,7 +20,7 @@ namespace POS_Server
             this.agents = new HashSet<agents>();
         }
     
-        public int pointId { get; set; }
+        public long pointId { get; set; }
         public decimal Cash { get; set; }
         public int CashPoints { get; set; }
         public int invoiceCount { get; set; }
@@ -32,10 +32,10 @@ namespace POS_Server
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
-        public Nullable<int> agentId { get; set; }
+        public Nullable<long> agentId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<agents> agents { get; set; }

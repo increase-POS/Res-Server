@@ -22,13 +22,13 @@ namespace POS_Server
             this.posSetting2 = new HashSet<posSetting>();
         }
     
-        public int printerId { get; set; }
+        public long printerId { get; set; }
         public string name { get; set; }
         public string printFor { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<posSetting> posSetting { get; set; }

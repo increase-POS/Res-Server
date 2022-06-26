@@ -22,18 +22,18 @@ namespace POS_Server.Controllers
     public class StatisticsController : ApiController
     {
 
-        public List<int> AllowedBranchsId(int mainBranchId, int userId)
+        public List<long> AllowedBranchsId(long mainBranchId, long userId)
         {
             BranchesController branchc = new BranchesController();
             List<branches> branchesList = new List<branches>();
             branchesList = branchc.BrListByBranchandUser(mainBranchId, userId);
-            List<int> bridlist = new List<int>();
+            List<long> bridlist = new List<long>();
             // Calculate calc = new Calculate();
             bridlist.AddRange(branchesList.Select(x => x.branchId).ToList());
             return bridlist;
         }
 
-        private decimal getupValues(int miniuId, int maxiuId, int itemId)
+        private decimal getupValues(long miniuId, long maxiuId, long itemId)
         {
             decimal val = 1;
             using (incposdbEntities entity = new incposdbEntities())
@@ -56,13 +56,13 @@ namespace POS_Server.Controllers
             }
             return val;
         }
-        private decimal getItemSubUnitAmount(int itemUnitId, int branchId)
+        private decimal getItemSubUnitAmount(long itemUnitId, long branchId)
         {
             decimal amount = 0;
-            int subUnit = 0;
-            int itemId = 0;
-            int nextunitID = 0;
-            int nextIUid = 0;
+            long subUnit = 0;
+            long itemId = 0;
+            long nextunitID = 0;
+            long nextIUid = 0;
             decimal vale = 0;
             if (itemUnitId > 0)
             {
@@ -96,16 +96,16 @@ namespace POS_Server.Controllers
                             amount += Convert.ToDecimal(itemInLocs[i].quantity);
                         }
 
-                        vale = getupValues(itemUnitId, nextunit.itemUnitId, (int)nextunit.itemId);
+                        vale = getupValues(itemUnitId, nextunit.itemUnitId, (long)nextunit.itemId);
                         amount = amount * vale;
 
                         var itemunit = entity.itemsUnits.Where(x => x.itemUnitId == itemUnitId).Select(x => new { x.itemUnitId, x.subUnitId, x.itemId, x.unitValue, x.unitId }).FirstOrDefault();
                         if (itemunit != null)
                         {
 
-                            subUnit = (int)itemunit.unitId;
-                            itemId = (int)itemunit.itemId;
-                            nextunitID = (int)itemunit.subUnitId;
+                            subUnit = (long)itemunit.unitId;
+                            itemId = (long)itemunit.itemId;
+                            nextunitID = (long)itemunit.subUnitId;
 
                         }
 
@@ -146,7 +146,7 @@ namespace POS_Server.Controllers
             }
         }
 
-        private int getItemUnitAmount(int itemUnitId, int branchId)
+        private int getItemUnitAmount(long itemUnitId, long branchId)
         {
 
             int amount = 0;
@@ -188,7 +188,7 @@ namespace POS_Server.Controllers
         // item quantity in location GetItemQtyInBranches()
         //        [HttpPost]
         //        [Route("GetItemQtyInBranches")]
-        //        public IHttpActionResult GetItemQtyInBranches(int itemId, int UnitId, string BranchType)
+        //        public IHttpActionResult GetItemQtyInBranches(long itemId, int UnitId, string BranchType)
         //        {
         //           
         //            
@@ -347,7 +347,7 @@ namespace POS_Server.Controllers
         [Route("GetPurinv")]
         public string GetPurinv(string token)
         {
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -359,19 +359,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -379,7 +379,7 @@ namespace POS_Server.Controllers
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -498,7 +498,7 @@ namespace POS_Server.Controllers
 
             //            if (valid) // APIKey is valid
             //            {
-            //                List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+            //                List<long> brIds = AllowedBranchsId(mainBranchId, userId);
             //                using (incposdbEntities entity = new incposdbEntities())
             //                {
             //                    var invListm = (from I in entity.invoices
@@ -622,7 +622,7 @@ namespace POS_Server.Controllers
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -634,19 +634,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -654,7 +654,7 @@ namespace POS_Server.Controllers
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -789,7 +789,7 @@ namespace POS_Server.Controllers
 
                 //            if (valid) // APIKey is valid
                 //            {
-                //                List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                //                List<long> brIds = AllowedBranchsId(mainBranchId, userId);
 
                 //                using (incposdbEntities entity = new incposdbEntities())
                 //                {
@@ -956,7 +956,7 @@ namespace POS_Server.Controllers
         {
 
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -968,19 +968,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -990,7 +990,7 @@ namespace POS_Server.Controllers
                 {
                     DateTime dt = Convert.ToDateTime(DateTime.Today.AddDays(-2).ToShortDateString());
                     DateTime dt1 = Convert.ToDateTime(DateTime.Today.AddDays(-1).ToShortDateString());
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -1899,7 +1899,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -1911,19 +1911,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -1931,7 +1931,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -2071,7 +2071,7 @@ else
 
             //if (valid) // APIKey is valid
             //{
-            //    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+            //    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
 
             //    using (incposdbEntities entity = new incposdbEntities())
             //    {
@@ -2203,7 +2203,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -2215,19 +2215,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -2235,7 +2235,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -2360,7 +2360,7 @@ else
 
             //if (valid) // APIKey is valid
             //{
-            //    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+            //    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
 
             //    using (incposdbEntities entity = new incposdbEntities())
             //    {
@@ -2479,7 +2479,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -2491,19 +2491,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -2511,7 +2511,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -2635,7 +2635,7 @@ else
 
             //if (valid) // APIKey is valid
             //{
-            //    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+            //    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
 
             //    using (incposdbEntities entity = new incposdbEntities())
             //    {
@@ -2752,7 +2752,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -2764,19 +2764,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -2784,7 +2784,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -2909,7 +2909,7 @@ else
 
             //if (valid) // APIKey is valid
             //{
-            //    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+            //    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
 
             //    using (incposdbEntities entity = new incposdbEntities())
             //    {
@@ -3030,7 +3030,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -3042,19 +3042,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -3062,7 +3062,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -3187,7 +3187,7 @@ else
 
             //if (valid) // APIKey is valid
             //{
-            //    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+            //    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
 
             //    using (incposdbEntities entity = new incposdbEntities())
             //    {
@@ -3313,7 +3313,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -3325,19 +3325,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -3345,7 +3345,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -3476,7 +3476,7 @@ else
 
             //if (valid) // APIKey is valid
             //{
-            //    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+            //    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
 
             //    using (incposdbEntities entity = new incposdbEntities())
             //    {
@@ -3604,7 +3604,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -3616,19 +3616,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -3636,7 +3636,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -3772,7 +3772,7 @@ else
                                         }).ToList();
 
                         /*
-                            public int offerId { get; set; }
+                            public long offerId { get; set; }
                                 public string name { get; set; }
                                 public string code { get; set; }
                                 public Nullable<byte> isActive { get; set; }
@@ -3782,8 +3782,8 @@ else
                                 public Nullable<System.DateTime> endDate { get; set; }
                                 public Nullable<System.DateTime> createDate { get; set; }
                                 public Nullable<System.DateTime> updateDate { get; set; }
-                                public Nullable<int> createUserId { get; set; }
-                                public Nullable<int> updateUserId { get; set; }
+                                public Nullable<long> createUserId { get; set; }
+                                public Nullable<long> updateUserId { get; set; }
                                 public string notes { get; set; }
 
     offerId
@@ -3830,7 +3830,7 @@ else
 
             //            if (valid) // APIKey is valid
             //            {
-            //                List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+            //                List<long> brIds = AllowedBranchsId(mainBranchId, userId);
 
             //                using (incposdbEntities entity = new incposdbEntities())
             //                {
@@ -3963,7 +3963,7 @@ else
             //                                    }).ToList();
 
             //                    /*
-            //                        public int offerId { get; set; }
+            //                        public long offerId { get; set; }
             //                            public string name { get; set; }
             //                            public string code { get; set; }
             //                            public Nullable<byte> isActive { get; set; }
@@ -3973,8 +3973,8 @@ else
             //                            public Nullable<System.DateTime> endDate { get; set; }
             //                            public Nullable<System.DateTime> createDate { get; set; }
             //                            public Nullable<System.DateTime> updateDate { get; set; }
-            //                            public Nullable<int> createUserId { get; set; }
-            //                            public Nullable<int> updateUserId { get; set; }
+            //                            public Nullable<long> createUserId { get; set; }
+            //                            public Nullable<long> updateUserId { get; set; }
             //                            public string notes { get; set; }
 
             //offerId
@@ -4016,7 +4016,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -4028,19 +4028,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -4048,7 +4048,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -4200,7 +4200,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
@@ -4209,19 +4209,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -4230,7 +4230,7 @@ else
                 try
                 {
                     List<SalesMembership> invListm = new List<SalesMembership>();
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -4325,7 +4325,7 @@ else
                                     name = X.invoicesClass.name,
                                     invClassDiscountId = X.invClassDiscountId,
                                     invoiceId = X.invoiceId,
-                                    invClassId = (int)X.invClassId,
+                                    invClassId = (long)X.invClassId,
                                     discountType = X.discountType,
                                     discountValue = X.discountValue,
                                     finalDiscount = (decimal)X.discountType == 2 ? (X.discountValue / 100) * (I.total) : X.discountValue
@@ -4441,7 +4441,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
@@ -4450,19 +4450,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -4471,7 +4471,7 @@ else
                 try
                 {
                     List<SalesMembership> invListm = new List<SalesMembership>();
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -4633,7 +4633,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -4643,19 +4643,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -4663,7 +4663,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var invListm = (from L in entity.locations
@@ -4802,7 +4802,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -4814,19 +4814,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -4834,7 +4834,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var invListm = (from IT in entity.itemsTransfer
@@ -4989,7 +4989,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -5001,19 +5001,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -5021,7 +5021,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var invListm = (from IT in entity.itemsTransfer
@@ -5135,7 +5135,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -5147,19 +5147,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -5167,7 +5167,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var invListm = (from IT in entity.itemsTransfer
@@ -5364,7 +5364,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -5376,19 +5376,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -5396,7 +5396,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -5499,7 +5499,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -5511,19 +5511,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -5531,7 +5531,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -5641,7 +5641,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -5653,19 +5653,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -5673,7 +5673,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -5810,7 +5810,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -5822,19 +5822,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -5842,7 +5842,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -5961,7 +5961,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -5973,19 +5973,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -5993,7 +5993,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -6120,7 +6120,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -6138,11 +6138,11 @@ else
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -6150,7 +6150,7 @@ else
                 try
                 {
 
-                    //   List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    //   List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -6269,7 +6269,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -6281,19 +6281,19 @@ else
             }
             else
             {
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -6301,7 +6301,7 @@ else
                 try
                 {
 
-                    // List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    // List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         List<CashTransferModel> cachlist = (from C in entity.cashTransfer
@@ -6419,7 +6419,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -6431,19 +6431,19 @@ else
             }
             else
             {
-                //    int mainBranchId = 0;
-                //    int userId = 0;
+                //    long mainBranchId = 0;
+                //    long userId = 0;
 
                 //    IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //    foreach (Claim c in claims)
                 //    {
                 //        if (c.Type == "mainBranchId")
                 //        {
-                //            mainBranchId = int.Parse(c.Value);
+                //            mainBranchId = long.Parse(c.Value);
                 //        }
                 //        else if (c.Type == "userId")
                 //        {
-                //            userId = int.Parse(c.Value);
+                //            userId = long.Parse(c.Value);
                 //        }
 
                 //}
@@ -6451,7 +6451,7 @@ else
                 try
                 {
 
-                    //  List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    //  List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -6559,7 +6559,7 @@ else
 
             //if (valid)
             //{
-            //    //  List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+            //    //  List<long> brIds = AllowedBranchsId(mainBranchId, userId);
             //    using (incposdbEntities entity = new incposdbEntities())
             //    {
 
@@ -6655,7 +6655,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -6667,19 +6667,19 @@ else
             }
             else
             {
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -6687,7 +6687,7 @@ else
                 try
                 {
 
-                    //  List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    //  List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -6712,8 +6712,8 @@ else
                                         from jbbo in jbo.DefaultIfEmpty()
                                         where (C.isConfirm == 1 && C.side == "p"
                                         && (C.transType == "d" ?
-                                        entity.cashTransfer.Where(x2 => x2.cashTransId == (int)C.cashTransIdSource).FirstOrDefault().isConfirm == 1 :
-                                        entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().isConfirm == 1
+                                        entity.cashTransfer.Where(x2 => x2.cashTransId == (long)C.cashTransIdSource).FirstOrDefault().isConfirm == 1 :
+                                        entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().isConfirm == 1
                                         ))
                                         //  && (brIds.Contains(jpp.branches.branchId) || brIds.Contains(jpcc.branches.branchId))
 
@@ -6787,16 +6787,16 @@ else
 
 
                                             fromposId = C.transType == "p" ? C.posId : (C.transType == "d" ? C.cashTransfer2.posId :
-                                             entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().posId
+                                             entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().posId
                                             ),
                                             fromposName = C.transType == "p" ? jpp.name : (C.transType == "d" ? C.cashTransfer2.pos.name :
-                                            entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().pos.name
+                                            entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().pos.name
                                            ),
                                             frombranchId = C.transType == "p" ? C.pos.branchId : C.transType == "d" ? C.cashTransfer2.pos.branchId :
-                                             entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().pos.branchId
+                                             entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().pos.branchId
                                            ,
                                             frombranchName = C.transType == "p" ? C.pos.branches.name : C.transType == "d" ? C.cashTransfer2.pos.branches.name :
-                                             entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().pos.branches.name
+                                             entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().pos.branches.name
                                           ,
 
 
@@ -6804,16 +6804,16 @@ else
 
 
                                             toposId = C.transType == "d" ? C.posId : (C.transType == "d" ? C.cashTransfer2.posId :
-                                             entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().posId
+                                             entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().posId
                                             ),
                                             toposName = C.transType == "d" ? jpp.name : (C.transType == "d" ? C.cashTransfer2.pos.name :
-                                            entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().pos.name
+                                            entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().pos.name
                                            ),
                                             tobranchId = C.transType == "d" ? C.pos.branchId : C.transType == "d" ? C.cashTransfer2.pos.branchId :
-                                             entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().pos.branchId
+                                             entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().pos.branchId
                                            ,
                                             tobranchName = C.transType == "d" ? C.pos.branches.name : C.transType == "d" ? C.cashTransfer2.pos.branches.name :
-                                             entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().pos.branches.name
+                                             entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().pos.branches.name
                                           ,
 
                                         }).ToList();
@@ -6997,7 +6997,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -7007,19 +7007,19 @@ else
             }
             else
             {
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -7027,7 +7027,7 @@ else
                 try
                 {
 
-                    //List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    //List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -7170,7 +7170,7 @@ else
 
 
 
-        public List<CashTransferModel> Getpostransmodel(int cashTransId)
+        public List<CashTransferModel> Getpostransmodel(long cashTransId)
         {
 
             string side = "p";
@@ -7225,7 +7225,7 @@ else
                 // one row mean type=d
                 if (cachlist.Count == 1)
                 {
-                    int? pullposcashtransid = cachlist.First().cashTransIdSource;
+                    long? pullposcashtransid = cachlist.First().cashTransIdSource;
 
                     //
                     var cachadd = (from C in entity.cashTransfer
@@ -7293,7 +7293,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -7305,19 +7305,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -7325,7 +7325,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -7381,7 +7381,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -7393,19 +7393,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 InvoicesController invoice = new InvoicesController();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -7413,7 +7413,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -7626,18 +7626,18 @@ else
             else
             {
 
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
 
@@ -7647,7 +7647,7 @@ else
                 try
                 {
                     List<POSOpenCloseModel> cachlist = new List<POSOpenCloseModel>();
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         cachlist = (from C in entity.cashTransfer
@@ -7680,7 +7680,7 @@ else
                                         openDate = null,
                                         openCash = null,
                                         //  }).Where(C => (C.transType == "c" || C.transType == "o")  ).ToList();
-                                    }).Where(C => (C.transType == "c" || C.transType == "o") && (brIds.Contains((int)C.branchId))).ToList();
+                                    }).Where(C => (C.transType == "c" || C.transType == "o") && (brIds.Contains((long)C.branchId))).ToList();
 
                         //  List<POSOpenCloseModel> closelist = cachlist.Where(C => C.transType == "c").ToList();
 
@@ -7752,19 +7752,19 @@ else
             }
             else
             {
-                int openCashTransId = 0;
-                int closeCashTransId = 0;
+                long openCashTransId = 0;
+                long closeCashTransId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "openCashTransId")//openid
                     {
-                        openCashTransId = int.Parse(c.Value);
+                        openCashTransId = long.Parse(c.Value);
                     }
                     else if (c.Type == "closeCashTransId")//closeid
                     {
-                        closeCashTransId = int.Parse(c.Value);
+                        closeCashTransId = long.Parse(c.Value);
                     }
 
                 }
@@ -7929,7 +7929,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId(int mainBranchId, int userId, DateTime? date
+            //long mainBranchId, long userId(long mainBranchId, long userId, DateTime? date
 
 
 
@@ -7941,19 +7941,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 DateTime? date = new DateTime?();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "date")
                     {
@@ -7967,7 +7967,7 @@ else
                     DateTime dt = Convert.ToDateTime(DateTime.Today.AddDays(-2).ToShortDateString());
                     DateTime dt1 = Convert.ToDateTime(DateTime.Today.AddDays(-1).ToShortDateString());
                     Calculate calc = new Calculate();
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -8116,9 +8116,9 @@ else
         [Route("GetPurdailyinvoice")]
         public string GetPurdailyinvoice(string token)//,DateTime? date
         {
-            // public ResponseVM GetPurinv(string token)(int mainBranchId, int userId, DateTime? date)
+            // public ResponseVM GetPurinv(string token)(long mainBranchId, long userId, DateTime? date)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -8130,19 +8130,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 DateTime? date = new DateTime?();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "date")
                     {
@@ -8154,7 +8154,7 @@ else
                 try
                 {
                     Calculate calc = new Calculate();
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -8283,7 +8283,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -8295,19 +8295,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -8315,7 +8315,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -8452,7 +8452,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -8464,19 +8464,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -8484,7 +8484,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -8511,8 +8511,8 @@ else
                                         where (C.processType == "cash" ||
                                      (C.isConfirm == 1 && C.side == "p"
                                        && (C.transType == "d" ?
-                                       entity.cashTransfer.Where(x2 => x2.cashTransId == (int)C.cashTransIdSource).FirstOrDefault().isConfirm == 1 :
-                                       entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().isConfirm == 1
+                                       entity.cashTransfer.Where(x2 => x2.cashTransId == (long)C.cashTransIdSource).FirstOrDefault().isConfirm == 1 :
+                                       entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().isConfirm == 1
                                        ))) && (brIds.Contains(jpp.branches.branchId) || brIds.Contains(jpcc.branches.branchId))
                                         select new
                                         {
@@ -8617,7 +8617,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -8629,19 +8629,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -8649,7 +8649,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -8676,8 +8676,8 @@ else
                                         where ((C.processType == "cash" ||
                                      (C.isConfirm == 1 && C.side == "p"
                                        && (C.transType == "d" ?
-                                       entity.cashTransfer.Where(x2 => x2.cashTransId == (int)C.cashTransIdSource).FirstOrDefault().isConfirm == 1 :
-                                       entity.cashTransfer.Where(x2 => C.cashTransId == (int)x2.cashTransIdSource).FirstOrDefault().isConfirm == 1
+                                       entity.cashTransfer.Where(x2 => x2.cashTransId == (long)C.cashTransIdSource).FirstOrDefault().isConfirm == 1 :
+                                       entity.cashTransfer.Where(x2 => C.cashTransId == (long)x2.cashTransIdSource).FirstOrDefault().isConfirm == 1
                                        ))) && (brIds.Contains(jpp.branches.branchId) || brIds.Contains(jpcc.branches.branchId)))
 
 
@@ -8787,7 +8787,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -8799,30 +8799,30 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 InvoicesController invoice = new InvoicesController();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
                 // DateTime cmpdate = DateTime.Now.AddDays(newdays);
-                int ITitemUnitId = 0;
-                int ITitemId = 0;
+                long ITitemUnitId = 0;
+                long ITitemId = 0;
                 decimal? avgPurchasePrice = 0;
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -8958,7 +8958,7 @@ else
                             }
                             else
                             {
-                                unitpurchasePrice = AvgPurPrice((int)row.ITitemUnitId, (int)row.ITitemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice);
+                                unitpurchasePrice = AvgPurPrice((long)row.ITitemUnitId, (long)row.ITitemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice);
 
                             }
 
@@ -9008,7 +9008,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -9020,19 +9020,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 InvoicesController invoice = new InvoicesController();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -9042,7 +9042,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -9172,11 +9172,11 @@ else
                             //
                             if (row.itemType == "p")
                             {
-                                unitpurchasePrice = AvgPackagePurPrice((int)row.ITitemUnitId);
+                                unitpurchasePrice = AvgPackagePurPrice((long)row.ITitemUnitId);
                             }
                             else
                             {
-                                unitpurchasePrice = AvgPurPrice((int)row.ITitemUnitId, (int)row.ITitemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice);
+                                unitpurchasePrice = AvgPurPrice((long)row.ITitemUnitId, (long)row.ITitemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice);
 
                             }
 
@@ -9282,7 +9282,7 @@ else
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -9292,8 +9292,8 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 InvoicesController invoice = new InvoicesController();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -9301,11 +9301,11 @@ else
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
 
@@ -9316,7 +9316,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -9445,11 +9445,11 @@ else
                             //
                             if (row.itemType == "p")
                             {
-                                unitpurchasePrice = AvgPackagePurPrice((int)row.ITitemUnitId);
+                                unitpurchasePrice = AvgPackagePurPrice((long)row.ITitemUnitId);
                             }
                             else
                             {
-                                unitpurchasePrice = AvgPurPrice((int)row.ITitemUnitId, (int)row.ITitemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice);
+                                unitpurchasePrice = AvgPurPrice((long)row.ITitemUnitId, (long)row.ITitemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice);
 
                             }
                             row.purchasePrice = (decimal)row.ITquantity * unitpurchasePrice;
@@ -9538,7 +9538,7 @@ else
 
         }
 
-        public decimal AvgPackagePurPrice(int parentIUId)
+        public decimal AvgPackagePurPrice(long parentIUId)
         {
             PackageController pctrlr = new PackageController();
             decimal avgtotal = 0;
@@ -9548,11 +9548,11 @@ else
             {
                 if (row.type == "p")
                 {
-                    avgtotal += AvgPackagePurPrice((int)row.childIUId);
+                    avgtotal += AvgPackagePurPrice((long)row.childIUId);
                 }
                 else
                 {
-                    avgtotal += AvgPurPrice((int)row.childIUId, (int)row.citemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice) * row.quantity;
+                    avgtotal += AvgPurPrice((long)row.childIUId, (long)row.citemId, row.avgPurchasePrice == null ? 0 : row.avgPurchasePrice) * row.quantity;
 
                 }
             }
@@ -9580,7 +9580,7 @@ else
         //    return avgtotal;
 
         //}
-        public decimal AvgPurPrice(int itemUnitId, int itemId, decimal? smallavgprice)
+        public decimal AvgPurPrice(long itemUnitId, long itemId, decimal? smallavgprice)
         {
 
 
@@ -9593,7 +9593,7 @@ else
 
 
                 var smallestUnitId = (from iu in entity.itemsUnits
-                                      where (itemUnits.Contains((int)iu.itemUnitId) && iu.unitId == iu.subUnitId)
+                                      where (itemUnits.Contains((long)iu.itemUnitId) && iu.unitId == iu.subUnitId)
                                       select iu.itemUnitId).FirstOrDefault();
 
 
@@ -9608,9 +9608,9 @@ else
 
 
         }
-        private int getUpperUnitValue(int itemUnitId, int basicItemUnitId)
+        private long getUpperUnitValue(long itemUnitId, long basicItemUnitId)
         {
-            int unitValue = 0;
+            long unitValue = 0;
             using (incposdbEntities entity = new incposdbEntities())
             {
 
@@ -9620,7 +9620,7 @@ else
                 if (upperUnit == null)
                     return 1;
                 if (upperUnit.itemUnitId == basicItemUnitId)
-                    return (int)upperUnit.unitValue;
+                    return (long)upperUnit.unitValue;
                 else
                     unitValue *= getUpperUnitValue(upperUnit.itemUnitId, basicItemUnitId);
                 return unitValue;
@@ -9643,9 +9643,9 @@ else
             }
             else
             {
-                //  int invoiceId = 0;
-                int mainBranchId = 0;
-                int userId = 0;
+                //  long invoiceId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -9653,22 +9653,22 @@ else
 
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 try
                 {
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         List<OrderPreparingSTSModel> prepOrders1 = (from o in entity.orderPreparing
                                                                     join i in entity.itemOrderPreparing on o.orderPreparingId equals i.orderPreparingId
                                                                     join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
-                                                                    where (brIds.Contains((int)o.invoices.branchId)) && (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+                                                                    where (brIds.Contains((long)o.invoices.branchId)) && (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
                                                                     select new OrderPreparingSTSModel()
                                                                     {
 
@@ -9753,7 +9753,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -9765,19 +9765,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -9785,7 +9785,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -9885,7 +9885,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -9895,19 +9895,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -9915,7 +9915,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -10037,7 +10037,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
 
 
@@ -10049,19 +10049,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -10069,7 +10069,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -10169,7 +10169,7 @@ else
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId
+            //long mainBranchId, long userId
 
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -10179,19 +10179,19 @@ else
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -10199,7 +10199,7 @@ else
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -10316,25 +10316,25 @@ else
                 #region params
 
 
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 #endregion
                 try
                 {
 
-                    List<int> brIds = AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = AllowedBranchsId(mainBranchId, userId);
                     List<OrderPreparingSTSModel> invoices =new List<OrderPreparingSTSModel>();
                     using (incposdbEntities entity = new incposdbEntities())
                     {
@@ -10351,7 +10351,7 @@ else
                                         join u in entity.users on x.shipUserId equals u.userId into lj
                                         from y in lj.DefaultIfEmpty()
                                         from g in gj.DefaultIfEmpty()
-                                        where (brIds.Contains((int)x.branchId) && x.shippingCompanyId != null
+                                        where (brIds.Contains((long)x.branchId) && x.shippingCompanyId != null
                                         && (x.invType == "ts" || x.invType == "ss"))
                                         select new OrderPreparingSTSModel()// InvoiceModel()//
                                                                            //   OrderPreparingSTSModel

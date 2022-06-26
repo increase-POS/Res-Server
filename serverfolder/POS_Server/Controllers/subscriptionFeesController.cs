@@ -55,7 +55,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (List[i].isActive == 1)
                             {
-                                int subscriptionFeesId = (int)List[i].subscriptionFeesId;
+                                long subscriptionFeesId = (long)List[i].subscriptionFeesId;
                                 var items5 = entity.agentMembershipCash.Where(x => x.subscriptionFeesId == subscriptionFeesId).Select(b => new { b.agentMembershipCashId }).FirstOrDefault();
 
                                 if (items5 is null)
@@ -72,14 +72,14 @@ namespace POS_Server.Controllers
         }
         /*
    public int subscriptionFeesId { get; set; }
-        public Nullable<int> subscriptionFeesId { get; set; }
+        public Nullable<long> subscriptionFeesId { get; set; }
         public int monthsCount { get; set; }
         public decimal Amount { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
          * */
         [HttpPost]
@@ -94,13 +94,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int subscriptionFeesId = 0;
+                long subscriptionFeesId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        subscriptionFeesId = int.Parse(c.Value);
+                        subscriptionFeesId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -157,12 +157,12 @@ namespace POS_Server.Controllers
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 try
@@ -229,19 +229,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int subscriptionFeesId = 0;
-                int userId = 0;
+                long subscriptionFeesId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        subscriptionFeesId = int.Parse(c.Value);
+                        subscriptionFeesId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -290,24 +290,24 @@ namespace POS_Server.Controllers
         }
 
 
-        public int Save(subscriptionFees newObject)
+        public long Save(subscriptionFees newObject)
         {
 
-            int message = 0;
+            long message = 0;
 
             if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.updateUserId = id;
             }
             if (newObject.createUserId == 0 || newObject.createUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.createUserId = id;
             }
             if (newObject.membershipId == 0 || newObject.membershipId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.membershipId = id;
             }
             try
@@ -361,9 +361,9 @@ namespace POS_Server.Controllers
 
         }
 
-        public int DeleteByMembershipId(int membershipId)
+        public long DeleteByMembershipId(long membershipId)
         {
-            int message = 0;
+            long message = 0;
             List<subscriptionFees> items = null;
             // delete old invoice items
             try
@@ -389,7 +389,7 @@ namespace POS_Server.Controllers
 
         }
 
-        public subscriptionFees GetById(int subscriptionFeesId)
+        public subscriptionFees GetById(long subscriptionFeesId)
         {
             subscriptionFees item = new subscriptionFees();
             try

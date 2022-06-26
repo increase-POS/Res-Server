@@ -7,14 +7,14 @@ namespace POS_Server.Models
 {
     public class MembershipsModel
     {
-        public int membershipId { get; set; }
+        public long membershipId { get; set; }
         public string name { get; set; }
        
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
         public string subscriptionType { get; set; }
         public string code { get; set; }

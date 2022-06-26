@@ -13,7 +13,7 @@ namespace POS_Server.Controllers
     {
         [HttpPost]
         [Route("SetSession")]
-        public IHttpActionResult SetSession(int userId)
+        public IHttpActionResult SetSession(long userId)
         {
             HttpContext.Current.Session["userId"] = userId;
             return Ok();

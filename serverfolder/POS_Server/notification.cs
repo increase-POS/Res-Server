@@ -20,7 +20,7 @@ namespace POS_Server
             this.notificationUser = new HashSet<notificationUser>();
         }
     
-        public int notId { get; set; }
+        public long notId { get; set; }
         public string title { get; set; }
         public string ncontent { get; set; }
         public string side { get; set; }
@@ -28,8 +28,8 @@ namespace POS_Server
         public string path { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
     
         public virtual users users { get; set; }

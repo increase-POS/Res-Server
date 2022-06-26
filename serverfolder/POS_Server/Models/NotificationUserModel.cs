@@ -7,15 +7,15 @@ namespace POS_Server.Models
 {
     public class NotificationUserModel
     {
-        public int notUserId { get; set; }
-        public Nullable<int> notId { get; set; }
-        public Nullable<int> userId { get; set; }
+        public long notUserId { get; set; }
+        public Nullable<long> notId { get; set; }
+        public Nullable<long> userId { get; set; }
         public bool isRead { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
-        public Nullable<int> posId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
+        public Nullable<long> posId { get; set; }
 
 
      

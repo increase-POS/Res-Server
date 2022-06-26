@@ -77,13 +77,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemUnitId = 0;
+                long itemUnitId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        itemUnitId = int.Parse(c.Value);
+                        itemUnitId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -124,13 +124,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemUnitId = 0;
+                long itemUnitId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemUnitId")
                     {
-                        itemUnitId = int.Parse(c.Value);
+                        itemUnitId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -159,13 +159,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int dishIngredId = 0;
+                long dishIngredId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        dishIngredId = int.Parse(c.Value);
+                        dishIngredId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -221,17 +221,17 @@ namespace POS_Server.Controllers
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 if (newObject.itemUnitId == 0 || newObject.itemUnitId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.itemUnitId = id;
                 }
                 try
@@ -278,19 +278,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int dishIngredId = 0;
-                int userId = 0;
+                long dishIngredId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        dishIngredId = int.Parse(c.Value);
+                        dishIngredId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

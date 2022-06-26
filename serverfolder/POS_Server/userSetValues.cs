@@ -14,14 +14,14 @@ namespace POS_Server
     
     public partial class userSetValues
     {
-        public int id { get; set; }
-        public Nullable<int> userId { get; set; }
-        public Nullable<int> valId { get; set; }
+        public long id { get; set; }
+        public Nullable<long> userId { get; set; }
+        public Nullable<long> valId { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual setValues setValues { get; set; }
         public virtual users users { get; set; }

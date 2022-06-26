@@ -9,19 +9,19 @@ namespace POS_Server.Models
     {
 
 
-        public int agentMembershipCashId { get; set; }
-        public Nullable<int> subscriptionFeesId { get; set; }
-        public Nullable<int> cashTransId { get; set; }
-        public Nullable<int> membershipId { get; set; }
-        public Nullable<int> agentId { get; set; }
+        public long agentMembershipCashId { get; set; }
+        public Nullable<long> subscriptionFeesId { get; set; }
+        public Nullable<long> cashTransId { get; set; }
+        public Nullable<long> membershipId { get; set; }
+        public Nullable<long> agentId { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
         public string notes { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
         public string subscriptionType { get; set; }
 
 
@@ -45,7 +45,7 @@ namespace POS_Server.Models
         public decimal discountValue { get; set; }
         public decimal total { get; set; }
         public string processType { get; set; }
-        public Nullable<int> cardId { get; set; }
+        public Nullable<long> cardId { get; set; }
         public string cardName { get; set; }
         public string docNum { get; set; }
 
@@ -55,20 +55,20 @@ namespace POS_Server.Models
 
 
    
-        public Nullable<int> agentMembershipCashId { get; set; }
-        public Nullable<int> subscriptionFeesId { get; set; }
-        public Nullable<int> cashTransId { get; set; }
-        public Nullable<int> membershipId { get; set; }
-        public Nullable<int> agentId { get; set; }
+        public Nullable<long> agentMembershipCashId { get; set; }
+        public Nullable<long> subscriptionFeesId { get; set; }
+        public Nullable<long> cashTransId { get; set; }
+        public Nullable<long> membershipId { get; set; }
+        public Nullable<long> agentId { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
-        //public Nullable<int> updateUserId { get; set; }
+        //public Nullable<long> updateUserId { get; set; }
         //public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
-        //public Nullable<int> createUserId { get; set; }
+        //public Nullable<long> createUserId { get; set; }
         public decimal Amount { get; set; }
-        public Nullable<int> pointId { get; set; }
+        public Nullable<long> pointId { get; set; }
         public string agentName { get; set; }
         public string agentcode { get; set; }
         public string agentcompany { get; set; }
@@ -88,7 +88,7 @@ namespace POS_Server.Models
         public string agentpayType { get; set; }
         public bool agentcanReserve { get; set; }
         public string agentdisallowReason { get; set; }
-        public Nullable<int> agentresidentSecId { get; set; }
+        public Nullable<long> agentresidentSecId { get; set; }
         public string agentGPSAddress { get; set; }
 
         public string membershipName { get; set; }
@@ -120,8 +120,8 @@ namespace POS_Server.Models
 
     }
     /*
-     * public int agentId { get; set; }
-        public Nullable<int> pointId { get; set; }
+     * public long agentId { get; set; }
+        public Nullable<long> pointId { get; set; }
         public string name { get; set; }
         public string code { get; set; }
         public string company { get; set; }
@@ -136,8 +136,8 @@ namespace POS_Server.Models
         public byte balanceType { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public string notes { get; set; }
         public byte isActive { get; set; }
         public string fax { get; set; }
@@ -146,7 +146,7 @@ namespace POS_Server.Models
         public string payType { get; set; }
         public bool canReserve { get; set; }
         public string disallowReason { get; set; }
-        public Nullable<int> residentSecId { get; set; }
+        public Nullable<long> residentSecId { get; set; }
         public string GPSAddress { get; set; }
      * */
 }

@@ -20,7 +20,7 @@ namespace POS_Server
             this.cashTransfer = new HashSet<cashTransfer>();
         }
     
-        public int bankId { get; set; }
+        public long bankId { get; set; }
         public string name { get; set; }
         public string phone { get; set; }
         public string mobile { get; set; }
@@ -29,8 +29,8 @@ namespace POS_Server
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

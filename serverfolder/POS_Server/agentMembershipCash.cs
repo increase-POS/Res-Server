@@ -14,18 +14,18 @@ namespace POS_Server
     
     public partial class agentMembershipCash
     {
-        public int agentMembershipCashId { get; set; }
-        public Nullable<int> subscriptionFeesId { get; set; }
-        public Nullable<int> cashTransId { get; set; }
-        public Nullable<int> membershipId { get; set; }
-        public Nullable<int> agentId { get; set; }
+        public long agentMembershipCashId { get; set; }
+        public Nullable<long> subscriptionFeesId { get; set; }
+        public Nullable<long> cashTransId { get; set; }
+        public Nullable<long> membershipId { get; set; }
+        public Nullable<long> agentId { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
         public string notes { get; set; }
         public string subscriptionType { get; set; }
         public Nullable<int> monthsCount { get; set; }

@@ -36,19 +36,19 @@ namespace POS_Server.Controllers
                 {
                    // bool canDelete = false;
 
-                    //int mainBranchId = 0;
-                    //int userId = 0;
+                    //long mainBranchId = 0;
+                    //long userId = 0;
 
                     //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                     //foreach (Claim c in claims)
                     //{
                     //    if (c.Type == "mainBranchId")
                     //    {
-                    //        mainBranchId = int.Parse(c.Value);
+                    //        mainBranchId = long.Parse(c.Value);
                     //    }
                     //    else if (c.Type == "userId")
                     //    {
-                    //        userId = int.Parse(c.Value);
+                    //        userId = long.Parse(c.Value);
                     //    }
 
                     //}
@@ -186,7 +186,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int Id = 0;
+                long Id = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -194,7 +194,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "Id")
                     {
-                        Id = int.Parse(c.Value);
+                        Id = long.Parse(c.Value);
                     }
 
 
@@ -240,7 +240,7 @@ namespace POS_Server.Controllers
                 //var re = Request;
                 //var headers = re.Headers;
                 //string token = "";
-                //int cId = 0;
+                //long cId = 0;
                 //if (headers.Contains("APIKey"))
                 //{
                 //    token = headers.GetValues("APIKey").First();
@@ -333,25 +333,25 @@ namespace POS_Server.Controllers
 
                         if (newObject.groupId == 0 || newObject.groupId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.groupId = id;
                         }
 
                         if (newObject.objectId == 0 || newObject.objectId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.objectId = id;
                         }
 
 
                         if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.updateUserId = id;
                         }
                         if (newObject.createUserId == 0 || newObject.createUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.createUserId = id;
                         }
                         using (incposdbEntities entity = new incposdbEntities())
@@ -434,25 +434,25 @@ namespace POS_Server.Controllers
 
             //        if (Object.groupId == 0 || Object.groupId == null)
             //        {
-            //            Nullable<int> id = null;
+            //            Nullable<long> id = null;
             //            Object.groupId = id;
             //        }
 
             //        if (Object.objectId == 0 || Object.objectId == null)
             //        {
-            //            Nullable<int> id = null;
+            //            Nullable<long> id = null;
             //            Object.objectId = id;
             //        }
 
 
             //        if (Object.updateUserId == 0 || Object.updateUserId == null)
             //        {
-            //            Nullable<int> id = null;
+            //            Nullable<long> id = null;
             //            Object.updateUserId = id;
             //        }
             //        if (Object.createUserId == 0 || Object.createUserId == null)
             //        {
-            //            Nullable<int> id = null;
+            //            Nullable<long> id = null;
             //            Object.createUserId = id;
             //        }
             //        using (incposdbEntities entity = new incposdbEntities())
@@ -512,7 +512,7 @@ namespace POS_Server.Controllers
         public string Delete( string token)
         {
 
-            //int Id, int userId, bool final
+            //long Id, long userId, bool final
             string message = "";
 
 
@@ -525,8 +525,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int Id = 0;
-                int userId = 0;
+                long Id = 0;
+                long userId = 0;
                 bool final = false;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -534,11 +534,11 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "Id")
                     {
-                        Id = int.Parse(c.Value);
+                        Id = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -679,7 +679,7 @@ namespace POS_Server.Controllers
                 List<groupObject> newListObj = new List<groupObject>();
                 string newlist = "";
 
-                int userId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -693,7 +693,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
 
@@ -792,7 +792,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int groupId = 0;
+                long groupId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -800,7 +800,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "groupId")
                     {
-                        groupId = int.Parse(c.Value);
+                        groupId = long.Parse(c.Value);
                     }
 
 
@@ -917,7 +917,7 @@ namespace POS_Server.Controllers
         public string GetUserpermission(string token)
         {
 
-            //public string GetByGroupId(string token)int userId
+            //public string GetByGroupId(string token)long userId
             //{
 
 
@@ -929,7 +929,7 @@ namespace POS_Server.Controllers
             }
                 else
                 {
-                    int userId = 0;
+                    long userId = 0;
 
 
                     IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -937,7 +937,7 @@ namespace POS_Server.Controllers
                     {
                         if (c.Type == "userId")
                         {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                         }
 
 

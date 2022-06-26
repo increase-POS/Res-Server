@@ -14,14 +14,14 @@ namespace POS_Server
     
     public partial class serials
     {
-        public int serialId { get; set; }
-        public Nullable<int> itemId { get; set; }
+        public long serialId { get; set; }
+        public Nullable<long> itemId { get; set; }
         public string serialNum { get; set; }
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual items items { get; set; }
         public virtual users users { get; set; }

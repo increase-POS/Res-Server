@@ -16,7 +16,7 @@ namespace POS_Server.Controllers
     [RoutePrefix("api/Units")]
     public class UnitsController : ApiController
     {
-        List<int> unitsIds = new List<int>();
+        List<long> unitsIds = new List<long>();
         // GET api/<controller>
         [HttpPost]
         [Route("Get")]
@@ -35,7 +35,7 @@ var strP = TokenManager.GetPrincipal(token);
                 {
                     var unitsList = (from u in entity.units
                                      join b in entity.units
-                                      on new { UnitModel = u.smallestId } equals new { UnitModel = (int?)b.unitId } into lj
+                                      on new { UnitModel = u.smallestId } equals new { UnitModel = (long?)b.unitId } into lj
                                      from x in lj.DefaultIfEmpty()
                                      select new UnitModel()
                                      {
@@ -43,7 +43,7 @@ var strP = TokenManager.GetPrincipal(token);
                                          name = u.name,
                                          isSmallest = u.isSmallest,
                                          smallestUnit = x.name,
-                                         parentid = u.parentid,
+                                        parentid = u.parentid,
                                          smallestId = u.smallestId,
                                          notes = u.notes,
                                          createDate = u.createDate,
@@ -60,7 +60,7 @@ var strP = TokenManager.GetPrincipal(token);
                             canDelete = false;
                             if (unitsList[i].isActive == 1)
                             {
-                                int unitId = (int)unitsList[i].unitId;
+                                long unitId = (long)unitsList[i].unitId;
                                 var itemsL = entity.items.Where(x => x.minUnitId == unitId).Select(b => new { b.itemId }).ToList();
                                 var itemsMatL = entity.itemsMaterials.Where(x => x.unitId == unitId).Select(x => new { x.itemMatId }).FirstOrDefault();
                                 var itemsUnitL = entity.itemsUnits.Where(x => x.unitId == unitId).Select(x => new { x.itemUnitId }).FirstOrDefault();
@@ -135,17 +135,17 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int itemId = 0;
-                int unitId = 0;
+                long itemId = 0;
+                long unitId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                     } else if (c.Type == "unitId")
                     {
-                        unitId = int.Parse(c.Value);
+                        unitId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -161,7 +161,7 @@ var strP = TokenManager.GetPrincipal(token);
                       })
                      .ToList();
 
-                    unitsIds = new List<int>();
+                    unitsIds = new List<long>();
 
                     var result = Recursive(unitsList, unitId);
 
@@ -180,7 +180,7 @@ var strP = TokenManager.GetPrincipal(token);
                                      updateUserId = u.updateUserId,
                                      isActive = u.isActive,
 
-                                 }).Where(p => !unitsIds.Contains((int)p.unitId)).ToList();
+                                 }).Where(p => !unitsIds.Contains((long)p.unitId)).ToList();
                     return TokenManager.GenerateToken(units);
                 }
             }
@@ -233,13 +233,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int unitId = 0;
+                long unitId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        unitId = int.Parse(c.Value);
+                        unitId = long.Parse(c.Value);
                     }
                    
                 }
@@ -352,19 +352,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int unitId = 0;
-                int userId = 0;
+                long unitId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        unitId = int.Parse(c.Value);
+                        unitId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -414,7 +414,7 @@ var strP = TokenManager.GetPrincipal(token);
          }
 
 
-        public IEnumerable<itemsUnits> Recursive(List<itemsUnits> unitsList, int smallLevelid)
+        public IEnumerable<itemsUnits> Recursive(List<itemsUnits> unitsList, long smallLevelid)
         {
             List<itemsUnits> inner = new List<itemsUnits>();
 

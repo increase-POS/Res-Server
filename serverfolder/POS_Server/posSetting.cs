@@ -14,21 +14,21 @@ namespace POS_Server
     
     public partial class posSetting
     {
-        public int posSettingId { get; set; }
-        public Nullable<int> posId { get; set; }
-        public Nullable<int> saleInvPrinterId { get; set; }
-        public Nullable<int> reportPrinterId { get; set; }
-        public Nullable<int> kitchenPrinterId { get; set; }
-        public Nullable<int> saleInvPapersizeId { get; set; }
-        public Nullable<int> kitchenPapersizeId { get; set; }
+        public long posSettingId { get; set; }
+        public Nullable<long> posId { get; set; }
+        public Nullable<long> saleInvPrinterId { get; set; }
+        public Nullable<long> reportPrinterId { get; set; }
+        public Nullable<long> kitchenPrinterId { get; set; }
+        public Nullable<long> saleInvPapersizeId { get; set; }
+        public Nullable<long> kitchenPapersizeId { get; set; }
         public string posSerial { get; set; }
-        public Nullable<int> docPapersizeId { get; set; }
+        public Nullable<long> docPapersizeId { get; set; }
         public string posDeviceCode { get; set; }
-        public Nullable<int> posSerialId { get; set; }
+        public Nullable<long> posSerialId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual paperSize paperSize { get; set; }
         public virtual paperSize paperSize1 { get; set; }

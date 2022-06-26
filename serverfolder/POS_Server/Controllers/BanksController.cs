@@ -57,7 +57,7 @@ var strP = TokenManager.GetPrincipal(token);
                             canDelete = false;
                             if (banksList[i].isActive == 1)
                             {
-                                int bankId = (int)banksList[i].bankId;
+                                long bankId = (long)banksList[i].bankId;
                                 var operationsL = entity.cashTransfer.Where(x => x.bankId == bankId).Select(b => new { b.cashTransId }).FirstOrDefault();
 
                                 if (operationsL is null)
@@ -85,13 +85,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int bankId = 0;
+                long bankId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        bankId = int.Parse(c.Value);
+                        bankId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -148,12 +148,12 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 try
@@ -212,19 +212,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int bankId = 0;
-                int userId = 0;
+                long bankId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        bankId = int.Parse(c.Value);
+                        bankId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

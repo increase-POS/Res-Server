@@ -58,7 +58,7 @@ var strP = TokenManager.GetPrincipal(token);
                         {
                             if (sectionList[i].isActive == 1)
                             {
-                                int sectionId = (int)sectionList[i].sectionId;
+                                long sectionId = (long)sectionList[i].sectionId;
                                 var LocationL = entity.locations.Where(x => x.sectionId == sectionId).Select(b => new { b.locationId }).FirstOrDefault();
                                 //var itemsTransferL = entity.itemsTransfer.Where(x => x.locationIdNew == locationId || x.locationIdOld == locationId).Select(x => new { x.itemsTransId }).FirstOrDefault();
                                
@@ -86,13 +86,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -124,7 +124,7 @@ var strP = TokenManager.GetPrincipal(token);
                         {
                             if (sectionList[i].isActive == 1)
                             {
-                                int sectionId = (int)sectionList[i].sectionId;
+                                long sectionId = (long)sectionList[i].sectionId;
                                 var LocationL = entity.locations.Where(x => x.sectionId == sectionId).Select(b => new { b.locationId }).FirstOrDefault();
                                 //var itemsTransferL = entity.itemsTransfer.Where(x => x.locationIdNew == locationId || x.locationIdOld == locationId).Select(x => new { x.itemsTransId }).FirstOrDefault();
                                
@@ -152,13 +152,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int sectionId = 0;
+                long sectionId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        sectionId = int.Parse(c.Value);
+                        sectionId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -215,17 +215,17 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 if (newObject.branchId == 0 || newObject.branchId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.branchId = id;
                 }
                 try
@@ -280,19 +280,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int sectionId = 0;
-                int userId = 0;
+                long sectionId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        sectionId = int.Parse(c.Value);
+                        sectionId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

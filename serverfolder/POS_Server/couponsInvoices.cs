@@ -14,13 +14,13 @@ namespace POS_Server
     
     public partial class couponsInvoices
     {
-        public int id { get; set; }
-        public Nullable<int> couponId { get; set; }
-        public Nullable<int> InvoiceId { get; set; }
+        public long id { get; set; }
+        public Nullable<long> couponId { get; set; }
+        public Nullable<long> InvoiceId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public decimal discountValue { get; set; }
         public byte discountType { get; set; }
         public string forAgents { get; set; }

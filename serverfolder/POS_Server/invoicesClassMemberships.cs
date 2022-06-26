@@ -14,14 +14,14 @@ namespace POS_Server
     
     public partial class invoicesClassMemberships
     {
-        public int invClassMemberId { get; set; }
-        public Nullable<int> membershipId { get; set; }
-        public Nullable<int> invClassId { get; set; }
+        public long invClassMemberId { get; set; }
+        public Nullable<long> membershipId { get; set; }
+        public Nullable<long> invClassId { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual invoicesClass invoicesClass { get; set; }
         public virtual memberships memberships { get; set; }

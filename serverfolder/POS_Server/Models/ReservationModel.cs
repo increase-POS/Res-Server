@@ -9,10 +9,10 @@ namespace POS_Server.Models
     {
         public long reservationId { get; set; }
         public string code { get; set; }
-        public Nullable<int> customerId { get; set; }
+        public Nullable<long> customerId { get; set; }
         public string customerName { get; set; }
 
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> branchId { get; set; }
         public Nullable<System.DateTime> reservationDate { get; set; }
         public Nullable<System.DateTime> reservationTime { get; set; }
         public Nullable<int> personsCount { get; set; }
@@ -21,8 +21,8 @@ namespace POS_Server.Models
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public Nullable<System.DateTime> endTime { get; set; }
 
 

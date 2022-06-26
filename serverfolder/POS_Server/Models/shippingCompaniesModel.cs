@@ -7,7 +7,7 @@ namespace POS_Server.Models
 {
     public class ShippingCompaniesModel
     {
-        public int shippingCompanyId { get; set; }
+        public long shippingCompanyId { get; set; }
         public string name { get; set; }
         public decimal realDeliveryCost { get; set; }
         public decimal deliveryCost { get; set; }
@@ -15,8 +15,8 @@ namespace POS_Server.Models
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
         public decimal balance { get; set; }
         public byte balanceType { get; set; }

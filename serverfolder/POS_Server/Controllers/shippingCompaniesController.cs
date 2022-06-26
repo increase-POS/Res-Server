@@ -64,7 +64,7 @@ var strP = TokenManager.GetPrincipal(token);
                         {
                             if (List[i].isActive == 1)
                             {
-                                int shippingCompanyId = (int)List[i].shippingCompanyId;
+                                long shippingCompanyId = (long)List[i].shippingCompanyId;
                                 var itemsI = entity.invoices.Where(x => x.shippingCompanyId == shippingCompanyId).Select(b => new { b.invoiceId }).FirstOrDefault();
 
                                 if ((itemsI is null))
@@ -151,13 +151,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int shippingCompanyId = 0;
+                long shippingCompanyId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        shippingCompanyId = int.Parse(c.Value);
+                        shippingCompanyId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -223,12 +223,12 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
 
@@ -297,19 +297,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int shippingCompanyId = 0;
-                int userId = 0;
+                long shippingCompanyId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        shippingCompanyId = int.Parse(c.Value);
+                        shippingCompanyId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

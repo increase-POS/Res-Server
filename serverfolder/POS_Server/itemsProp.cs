@@ -14,13 +14,13 @@ namespace POS_Server
     
     public partial class itemsProp
     {
-        public int itemPropId { get; set; }
-        public Nullable<int> propertyItemId { get; set; }
-        public Nullable<int> itemId { get; set; }
+        public long itemPropId { get; set; }
+        public Nullable<long> propertyItemId { get; set; }
+        public Nullable<long> itemId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual items items { get; set; }
         public virtual propertiesItems propertiesItems { get; set; }

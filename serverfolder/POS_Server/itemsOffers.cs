@@ -14,13 +14,13 @@ namespace POS_Server
     
     public partial class itemsOffers
     {
-        public int ioId { get; set; }
-        public Nullable<int> iuId { get; set; }
-        public Nullable<int> offerId { get; set; }
+        public long ioId { get; set; }
+        public Nullable<long> iuId { get; set; }
+        public Nullable<long> offerId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public int quantity { get; set; }
         public int used { get; set; }
     

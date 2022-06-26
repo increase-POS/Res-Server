@@ -103,13 +103,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -186,13 +186,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int cId = 0;
+                long cId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        cId = int.Parse(c.Value);
+                        cId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -250,23 +250,23 @@ var strP = TokenManager.GetPrincipal(token);
                 {
                     if (Object.branchId == 0 || Object.branchId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         Object.branchId = id;
                     }
 
                     if (Object.storeId == 0 || Object.storeId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         Object.storeId = id;
                     }
                     if (Object.updateUserId == 0 || Object.updateUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         Object.updateUserId = id;
                     }
                     if (Object.createUserId == 0 || Object.createUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         Object.createUserId = id;
                     }
                     using (incposdbEntities entity = new incposdbEntities())
@@ -331,8 +331,8 @@ var strP = TokenManager.GetPrincipal(token);
 
                 string branchStoreObject = "";
                 List<branchStore> newListObj = null;
-                int branchId = 0;
-                int userId = 0;
+                long branchId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -345,11 +345,11 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else   if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 if (newListObj != null)
@@ -372,22 +372,22 @@ var strP = TokenManager.GetPrincipal(token);
                     {
                         if (newListObj[i].updateUserId == 0 || newListObj[i].updateUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newListObj[i].updateUserId = id;
                         }
                         if (newListObj[i].createUserId == 0 || newListObj[i].createUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newListObj[i].createUserId = id;
                         }
                         if (newListObj[i].branchId == 0 || newListObj[i].branchId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newListObj[i].branchId = id;
                         }
                         if (newListObj[i].storeId == 0 || newListObj[i].storeId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newListObj[i].storeId = id;
                         }
                         var branchEntity = entity.Set<branchStore>();
@@ -432,19 +432,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int Id = 0;
-                int userId = 0;
+                long Id = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        Id = int.Parse(c.Value);
+                        Id = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

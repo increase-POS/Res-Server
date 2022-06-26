@@ -64,14 +64,14 @@ namespace POS_Server.Controllers
             }
         }
         /*
-    public int id { get; set; }
-        public Nullable<int> residentSecId { get; set; }
-        public Nullable<int> userId { get; set; }
+    public long id { get; set; }
+        public Nullable<long> residentSecId { get; set; }
+        public Nullable<long> userId { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
          * */
         [HttpPost]
         [Route("GetById")]
@@ -85,13 +85,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int id = 0;
+                long id = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        id = int.Parse(c.Value);
+                        id = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -148,22 +148,22 @@ namespace POS_Server.Controllers
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 if (newObject.residentSecId == 0 || newObject.residentSecId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.residentSecId = id;
                 }
                 if (newObject.userId == 0 || newObject.userId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.userId = id;
                 }
                 try
@@ -229,19 +229,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int id = 0;
-                int userId = 0;
+                long id = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        id = int.Parse(c.Value);
+                        id = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -304,8 +304,8 @@ namespace POS_Server.Controllers
             {
                 string strObject = "";
                 List<residentialSectorsUsers> newListObj = null;
-                int userId = 0;
-                int updateUserId = 0;
+                long userId = 0;
+                long updateUserId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -318,12 +318,12 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else
                   if (c.Type == "updateUserId")
                     {
-                        updateUserId = int.Parse(c.Value);
+                        updateUserId = long.Parse(c.Value);
                     }
                 }
 
@@ -354,22 +354,22 @@ namespace POS_Server.Controllers
                         {
                             if (newListObj[i].updateUserId == 0 || newListObj[i].updateUserId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].updateUserId = id;
                             }
                             if (newListObj[i].createUserId == 0 || newListObj[i].createUserId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].createUserId = id;
                             }
                             if (newListObj[i].residentSecId == 0 || newListObj[i].residentSecId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].residentSecId = id;
                             }
                             if (newListObj[i].userId == 0 || newListObj[i].userId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].userId = id;
                             }
                             var branchEntity = entity.Set<residentialSectorsUsers>();

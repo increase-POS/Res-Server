@@ -70,7 +70,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (List[i].isActive == 1)
                             {
-                                int membershipId = (int)List[i].membershipId;
+                                long membershipId = (long)List[i].membershipId;
                                 //var itemsI = entity.agentMemberships.Where(x => x.membershipId == membershipId).Select(b => new { b.agentMembershipsId }).FirstOrDefault();
                                 var items2 = entity.subscriptionFees.Where(x => x.membershipId == membershipId).Select(b => new { b.subscriptionFeesId }).FirstOrDefault();
                                 var items3 = entity.couponsMemberships.Where(x => x.membershipId == membershipId).Select(b => new { b.couponMembershipId }).FirstOrDefault();
@@ -104,13 +104,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int membershipId = 0;
+                long membershipId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        membershipId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -168,12 +168,12 @@ namespace POS_Server.Controllers
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 try
@@ -240,19 +240,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int membershipId = 0;
-                int userId = 0;
+                long membershipId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        membershipId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -301,20 +301,20 @@ namespace POS_Server.Controllers
         }
 
 
-        public int Save(memberships newObject)
+        public long Save(memberships newObject)
         {
-            int message = 0;
+            long message = 0;
 
 
 
             if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.updateUserId = id;
             }
             if (newObject.createUserId == 0 || newObject.createUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.createUserId = id;
             }
             try
@@ -381,8 +381,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int res = 0;
-                int subres = 0;
+                long res = 0;
+                long subres = 0;
                 string membershipId = "";
                 MembershipsModel newObjectModel = null;
 
@@ -538,7 +538,7 @@ namespace POS_Server.Controllers
                                 }
                                 else
                                 {
-                                    int delres = 0;
+                                    long delres = 0;
                                     delres = subscCntrller.DeleteByMembershipId(newObjectModel.membershipId);
 
                                     //the old not like new
@@ -640,13 +640,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int agentId = 0;
+                long agentId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        agentId = int.Parse(c.Value);
+                        agentId = long.Parse(c.Value);
                     }
                 }
                 try
@@ -768,13 +768,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int agentId = 0;
+                long agentId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        agentId = int.Parse(c.Value);
+                        agentId = long.Parse(c.Value);
                     }
                 }
                 try

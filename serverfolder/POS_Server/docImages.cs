@@ -14,7 +14,7 @@ namespace POS_Server
     
     public partial class docImages
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string docName { get; set; }
         public string docnum { get; set; }
         public string image { get; set; }
@@ -22,9 +22,9 @@ namespace POS_Server
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
-        public Nullable<int> tableId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
+        public Nullable<long> tableId { get; set; }
     
         public virtual users users { get; set; }
         public virtual users users1 { get; set; }

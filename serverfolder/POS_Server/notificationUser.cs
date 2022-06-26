@@ -14,15 +14,15 @@ namespace POS_Server
     
     public partial class notificationUser
     {
-        public int notUserId { get; set; }
-        public Nullable<int> notId { get; set; }
-        public Nullable<int> userId { get; set; }
+        public long notUserId { get; set; }
+        public Nullable<long> notId { get; set; }
+        public Nullable<long> userId { get; set; }
         public bool isRead { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
-        public Nullable<int> posId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
+        public Nullable<long> posId { get; set; }
     
         public virtual notification notification { get; set; }
         public virtual pos pos { get; set; }

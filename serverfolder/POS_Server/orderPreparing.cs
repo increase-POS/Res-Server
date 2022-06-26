@@ -21,15 +21,15 @@ namespace POS_Server
             this.orderPreparingStatus = new HashSet<orderPreparingStatus>();
         }
     
-        public int orderPreparingId { get; set; }
+        public long orderPreparingId { get; set; }
         public string orderNum { get; set; }
-        public Nullable<int> invoiceId { get; set; }
+        public Nullable<long> invoiceId { get; set; }
         public string notes { get; set; }
         public Nullable<decimal> preparingTime { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual invoices invoices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

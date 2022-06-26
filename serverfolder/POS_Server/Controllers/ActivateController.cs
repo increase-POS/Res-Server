@@ -646,7 +646,7 @@ namespace POS_Server.Controllers
                         //get booked pos and serialId
                         if (unlimitedser.serial != null || unlimitedser.serial != "")
                         {
-                            int unlimitedserialId = 0;
+                            long unlimitedserialId = 0;
                             List<PosSerialSend> linkdpos = getserialsinfo();
                             linkdpos = linkdpos.Where(x => x.isBooked == true).ToList();
                             //add unlimited serial
@@ -681,7 +681,7 @@ namespace POS_Server.Controllers
                             // change serialId
                             foreach (PosSerialSend newrow in linkdpos)
                             {
-                                int? posId = newrow.posId == null ? 0 : newrow.posId;
+                                long? posId = newrow.posId == null ? 0 : newrow.posId;
                                 var posdb = entity.posSetting.Where(x => x.posId == posId).FirstOrDefault();
                                 posdb.posSerialId = unlimitedserialId;
                                 entity.SaveChanges();
@@ -915,7 +915,7 @@ namespace POS_Server.Controllers
 
         public async Task<int> checkIncServerConn()
         {
-            int id = 1;
+            long id = 1;
             int item = 0;
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("id", id.ToString());

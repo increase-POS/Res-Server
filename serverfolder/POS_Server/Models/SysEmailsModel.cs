@@ -7,7 +7,7 @@ namespace POS_Server.Models
 {
     public class SysEmailsModel
     {
-        public int emailId { get; set; }
+        public long emailId { get; set; }
         public string name { get; set; }
         public string email { get; set; }
         public string password { get; set; }
@@ -16,10 +16,10 @@ namespace POS_Server.Models
         public string smtpClient { get; set; }
         public string side { get; set; }
         public string notes { get; set; }
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> branchId { get; set; }
         public byte isActive { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public bool isMajor { get; set; }

@@ -14,13 +14,13 @@ namespace POS_Server
     
     public partial class groups
     {
-        public int groupId { get; set; }
+        public long groupId { get; set; }
         public string name { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public int isActive { get; set; }
     
         public virtual users users { get; set; }

@@ -7,7 +7,7 @@ namespace POS_Server.Models
 {
     public class BackupModel
     {
-        public int logId { get; set; }
+        public long logId { get; set; }
 
         public string result { get; set; }
        // public string fileName { get; set; }

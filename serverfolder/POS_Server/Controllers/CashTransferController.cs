@@ -31,39 +31,39 @@ namespace POS_Server.Controllers
             string message = "";
             if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.updateUserId = id;
             }
             if (newObject.createUserId == 0 || newObject.createUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.createUserId = id;
             }
 
             if (newObject.agentId == 0 || newObject.agentId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.agentId = id;
             }
             if (newObject.invId == 0 || newObject.invId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.invId = id;
             }
             if (newObject.posIdCreator == 0 || newObject.posIdCreator == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.posIdCreator = id;
             }
 
             if (newObject.cashTransIdSource == 0 || newObject.cashTransIdSource == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.cashTransIdSource = id;
             }
             if (newObject.bankId == 0 || newObject.bankId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.bankId = id;
             }
 
@@ -560,7 +560,7 @@ namespace POS_Server.Controllers
             else
             {
 
-                int invId = 0;
+                long invId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -568,7 +568,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "invId")
                     {
-                        invId = int.Parse(c.Value);
+                        invId = long.Parse(c.Value);
                     }
 
 
@@ -785,7 +785,7 @@ namespace POS_Server.Controllers
             {
                 string type = "";
                 string side = "";
-                int posId = 0;
+                long posId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -799,7 +799,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "posId")
                     {
-                        posId = int.Parse(c.Value);
+                        posId = long.Parse(c.Value);
                     }
 
                 }
@@ -922,7 +922,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int bondId = 0;
+                long bondId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -930,7 +930,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "bondId")
                     {
-                        bondId = int.Parse(c.Value);
+                        bondId = long.Parse(c.Value);
                     }
 
 
@@ -1077,7 +1077,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int cTId = 0;
+                long cTId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1085,7 +1085,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "cashTransId")
                     {
-                        cTId = int.Parse(c.Value);
+                        cTId = long.Parse(c.Value);
                     }
 
 
@@ -1406,39 +1406,39 @@ namespace POS_Server.Controllers
 
                         if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.updateUserId = id;
                         }
                         if (newObject.createUserId == 0 || newObject.createUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.createUserId = id;
                         }
 
                         if (newObject.agentId == 0 || newObject.agentId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.agentId = id;
                         }
                         if (newObject.invId == 0 || newObject.invId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.invId = id;
                         }
                         if (newObject.posIdCreator == 0 || newObject.posIdCreator == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.posIdCreator = id;
                         }
 
                         if (newObject.cashTransIdSource == 0 || newObject.cashTransIdSource == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.cashTransIdSource = id;
                         }
                         if (newObject.bankId == 0 || newObject.bankId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.bankId = id;
                         }
 
@@ -1526,39 +1526,39 @@ namespace POS_Server.Controllers
             //cashTransfer Obj = JsonConvert.DeserializeObject<cashTransfer>(Object, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
             //if (Obj.updateUserId == 0 || Obj.updateUserId == null)
             //{
-            //    Nullable<int> id = null;
+            //    Nullable<long> id = null;
             //    Obj.updateUserId = id;
             //}
             //if (Obj.createUserId == 0 || Obj.createUserId == null)
             //{
-            //    Nullable<int> id = null;
+            //    Nullable<long> id = null;
             //    Obj.createUserId = id;
             //}
 
             //if (Obj.agentId == 0 || Obj.agentId == null)
             //{
-            //    Nullable<int> id = null;
+            //    Nullable<long> id = null;
             //    Obj.agentId = id;
             //}
             //if (Obj.invId == 0 || Obj.invId == null)
             //{
-            //    Nullable<int> id = null;
+            //    Nullable<long> id = null;
             //    Obj.invId = id;
             //}
             //if (Obj.posIdCreator == 0 || Obj.posIdCreator == null)
             //{
-            //    Nullable<int> id = null;
+            //    Nullable<long> id = null;
             //    Obj.posIdCreator = id;
             //}
 
             //if (Obj.cashTransIdSource == 0 || Obj.cashTransIdSource == null)
             //{
-            //    Nullable<int> id = null;
+            //    Nullable<long> id = null;
             //    Obj.cashTransIdSource = id;
             //}
             //if (Obj.bankId == 0 || Obj.bankId == null)
             //{
-            //    Nullable<int> id = null;
+            //    Nullable<long> id = null;
             //    Obj.bankId = id;
             //}
 
@@ -1641,7 +1641,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int sourceId = 0;
+                long sourceId = 0;
                 string side = "";
 
                 string type = "all";
@@ -1650,7 +1650,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "sourceId")
                     {
-                        sourceId = int.Parse(c.Value);
+                        sourceId = long.Parse(c.Value);
                     }
                     else if (c.Type == "side")
                     {
@@ -1716,7 +1716,7 @@ namespace POS_Server.Controllers
                         // one row mean type=d
                         if (cachlist.Count == 1)
                         {
-                            int? pullposcashtransid = cachlist.First().cashTransIdSource;
+                            long? pullposcashtransid = cachlist.First().cashTransIdSource;
 
                             //
                             var cachadd = (from C in entity.cashTransfer
@@ -1934,8 +1934,8 @@ namespace POS_Server.Controllers
         public string Delete(string token)
         {
 
-            // int cashTransId
-            //int Id, int userId
+            // long cashTransId
+            //long Id, long userId
             string message = "";
 
 
@@ -1948,7 +1948,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int cashTransId = 0;
+                long cashTransId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1956,7 +1956,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "cashTransId")
                     {
-                        cashTransId = int.Parse(c.Value);
+                        cashTransId = long.Parse(c.Value);
                     }
 
 
@@ -1990,7 +1990,7 @@ namespace POS_Server.Controllers
                                     entity.cashTransfer.Remove(cashobject);
 
                                 }
-                                int res = entity.SaveChanges();
+                                long res = entity.SaveChanges();
                                 if (res > 0)
                                 {
                                     message = "1";
@@ -2082,8 +2082,8 @@ namespace POS_Server.Controllers
         public string MovePosCash(string token)
         {
 
-            // int cashTransId, int userIdD
-            //int Id, int userId
+            // long cashTransId, int userIdD
+            //long Id, long userId
             string message = "";
 
 
@@ -2096,19 +2096,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int cashTransId = 0;
-                int userIdD = 0;
+                long cashTransId = 0;
+                long userIdD = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "cashTransId")
                     {
-                        cashTransId = int.Parse(c.Value);
+                        cashTransId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userIdD")
                     {
-                        userIdD = int.Parse(c.Value);
+                        userIdD = long.Parse(c.Value);
                     }
 
                 }
@@ -2121,8 +2121,8 @@ namespace POS_Server.Controllers
 
                 pos posobject = new pos();
                 pos posobjectD = new pos();
-                int? posidPull = 0;
-                int? posidD = 0;
+                long? posidPull = 0;
+                long? posidD = 0;
                 decimal? cash = 0;
 
                 try
@@ -2322,7 +2322,7 @@ namespace POS_Server.Controllers
             #endregion
         }
 
-        public List<CashTransferModel> Getpostransmodel(int cashTransId)
+        public List<CashTransferModel> Getpostransmodel(long cashTransId)
         {
             string side = "p";
             string type = "all";
@@ -2378,7 +2378,7 @@ namespace POS_Server.Controllers
                 // one row mean type=d
                 if (cachlist.Count == 1)
                 {
-                    int? pullposcashtransid = cachlist.First().cashTransIdSource;
+                    long? pullposcashtransid = cachlist.First().cashTransIdSource;
 
                     //
                     var cachadd = (from C in entity.cashTransfer
@@ -2457,7 +2457,7 @@ namespace POS_Server.Controllers
             {
                 string type = "all";
                 string side = "all";
-                int invId = 0;
+                long invId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -2465,7 +2465,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "invId")
                     {
-                        invId = int.Parse(c.Value);
+                        invId = long.Parse(c.Value);
                     }
 
 
@@ -2643,7 +2643,7 @@ namespace POS_Server.Controllers
             else
             {
 
-                int invId = 0;
+                long invId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -2651,7 +2651,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "invId")
                     {
-                        invId = int.Parse(c.Value);
+                        invId = long.Parse(c.Value);
                     }
 
 
@@ -2826,20 +2826,20 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invId = 0;
+                long invId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "invoiceId")
                     {
-                        invId = int.Parse(c.Value);
+                        invId = long.Parse(c.Value);
                     }
                 }
                 try
                 {
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        int cachtrans = entity.cashTransfer.Where(C => C.invId == invId && C.processType != "inv").ToList().Count();
+                        long cachtrans = entity.cashTransfer.Where(C => C.invId == invId && C.processType != "inv").ToList().Count();
                         return TokenManager.GenerateToken(cachtrans);
                     }
                 }
@@ -2854,7 +2854,7 @@ namespace POS_Server.Controllers
         [Route("payByAmount")]
         public string payByAmount(string token)
         {
-            //int agentId, decimal amount, string payType, string cashTransfer 
+            //long agentId, decimal amount, string payType, string cashTransfer 
             string message = "";
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -2867,7 +2867,7 @@ namespace POS_Server.Controllers
                 string Object = "";
                 // bondes newObject = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
-                int agentId = 0;
+                long agentId = 0;
                 decimal amount = 0;
                 string payType = "";
                 cashTransfer cashTr = new cashTransfer();
@@ -2882,7 +2882,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "agentId")
                     {
-                        agentId = int.Parse(c.Value);
+                        agentId = long.Parse(c.Value);
                     }
                     else if (c.Type == "amount")
                     {
@@ -2968,7 +2968,7 @@ namespace POS_Server.Controllers
                             {
                                 foreach (InvoiceModel inv in invList)
                                 {
-                                    int invoiceId = inv.invoiceId;
+                                    long invoiceId = inv.invoiceId;
 
                                     var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
 
@@ -3263,7 +3263,7 @@ namespace POS_Server.Controllers
         {
 
 
-            //int userId, decimal amount, string payType, string cashTransfer
+            //long userId, decimal amount, string payType, string cashTransfer
             string message = "";
 
 
@@ -3281,7 +3281,7 @@ namespace POS_Server.Controllers
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
 
                 decimal amount = 0;
-                int userId = 0;
+                long userId = 0;
 
                 string payType = "";
                 cashTransfer cashTr = new cashTransfer();
@@ -3296,7 +3296,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "amount")
                     {
@@ -3377,7 +3377,7 @@ namespace POS_Server.Controllers
                             {
                                 foreach (InvoiceModel inv in invList)
                                 {
-                                    int invoiceId = inv.invoiceId;
+                                    long invoiceId = inv.invoiceId;
 
                                     var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
 
@@ -3767,7 +3767,7 @@ namespace POS_Server.Controllers
         public string payShippingCompanyByAmount(string token)
         {
 
-            //int shippingCompanyId, decimal amount, string payType, string cashTransfer
+            //long shippingCompanyId, decimal amount, string payType, string cashTransfer
             string message = "";
 
 
@@ -3785,7 +3785,7 @@ namespace POS_Server.Controllers
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
 
                 decimal amount = 0;
-                int shippingCompanyId = 0;
+                long shippingCompanyId = 0;
 
                 string payType = "";
                 cashTransfer cashTr = new cashTransfer();
@@ -3800,7 +3800,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "shippingCompanyId")
                     {
-                        shippingCompanyId = int.Parse(c.Value);
+                        shippingCompanyId =long.Parse(c.Value);
                     }
                     else if (c.Type == "amount")
                     {
@@ -3883,7 +3883,7 @@ namespace POS_Server.Controllers
                             {
                                 foreach (InvoiceModel inv in invList)
                                 {
-                                    int invoiceId = inv.invoiceId;
+                                    long invoiceId = inv.invoiceId;
 
                                     var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
 
@@ -4267,10 +4267,10 @@ namespace POS_Server.Controllers
         public string payListOfInvoices(string token)
         {
 
-            // int agentId, string invoices, string payType, string cashTransfer
+            // long agentId, string invoices, string payType, string cashTransfer
             // {
 
-            //int shippingCompanyId, decimal amount, string payType, string cashTransfer
+            //long shippingCompanyId, decimal amount, string payType, string cashTransfer
             string message = "";
 
 
@@ -4290,7 +4290,7 @@ namespace POS_Server.Controllers
                 // bondes newObject = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
 
-                int agentId = 0;
+                long agentId = 0;
 
                 string payType = "";
                 cashTransfer cashTr = new cashTransfer();
@@ -4313,7 +4313,7 @@ namespace POS_Server.Controllers
 
                     else if (c.Type == "agentId")
                     {
-                        agentId = int.Parse(c.Value);
+                        agentId = long.Parse(c.Value);
                     }
 
                     else if (c.Type == "payType")
@@ -4578,10 +4578,10 @@ namespace POS_Server.Controllers
             //public string payListOfInvoices(string token)
             //{
 
-            // int userId, string invoices, string payType, string cashTransfer
+            // long userId, string invoices, string payType, string cashTransfer
             // {
 
-            //int shippingCompanyId, decimal amount, string payType, string cashTransfer
+            //long shippingCompanyId, decimal amount, string payType, string cashTransfer
             string message = "";
 
 
@@ -4601,7 +4601,7 @@ namespace POS_Server.Controllers
                 // bondes newObject = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
 
-                int userId = 0;
+                long userId = 0;
 
                 string payType = "";
                 cashTransfer cashTr = new cashTransfer();
@@ -4624,7 +4624,7 @@ namespace POS_Server.Controllers
 
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                     else if (c.Type == "payType")
@@ -4811,7 +4811,7 @@ namespace POS_Server.Controllers
             //public string payListOfInvoices(string token)
             //{
 
-            // int shippingCompanyId, string invoices, string payType, string cashTransfer
+            // long shippingCompanyId, string invoices, string payType, string cashTransfer
             // {
 
             string message = "";
@@ -4833,7 +4833,7 @@ namespace POS_Server.Controllers
                 // bondes newObject = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
 
-                int shippingCompanyId = 0;
+                long shippingCompanyId = 0;
 
                 string payType = "";
                 cashTransfer cashTr = new cashTransfer();
@@ -4856,7 +4856,7 @@ namespace POS_Server.Controllers
 
                     else if (c.Type == "shippingCompanyId")
                     {
-                        shippingCompanyId = int.Parse(c.Value);
+                        shippingCompanyId =long.Parse(c.Value);
                     }
 
                     else if (c.Type == "payType")
@@ -5032,7 +5032,7 @@ namespace POS_Server.Controllers
         #region old
         //[HttpPost]
         //[Route("payOrderInvoice")]
-        //public IHttpActionResult payOrderInvoice(int invoiceId, int invStatusId , decimal amount, string payType, string cashTransfer)
+        //public IHttpActionResult payOrderInvoice(long invoiceId, int invStatusId , decimal amount, string payType, string cashTransfer)
         //{
         //    var re = Request;
         //    var headers = re.Headers;
@@ -5141,7 +5141,7 @@ namespace POS_Server.Controllers
             //public string payListOfInvoices(string token)
             //{
 
-            //int invoiceId, int invStatusId, decimal amount, string payType, string cashTransfer)
+            //long invoiceId, int invStatusId, decimal amount, string payType, string cashTransfer)
             // {
 
             string message = "";
@@ -5163,8 +5163,8 @@ namespace POS_Server.Controllers
                 // bondes newObject = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
 
-                int invoiceId = 0;
-                int invStatusId = 0;
+                long invoiceId = 0;
+                long invStatusId = 0;
                 string payType = "";
                 decimal amount = 0;
                 cashTransfer cashTr = new cashTransfer();
@@ -5181,11 +5181,11 @@ namespace POS_Server.Controllers
 
                     else if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                     else if (c.Type == "invStatusId")
                     {
-                        invStatusId = int.Parse(c.Value);
+                        invStatusId = long.Parse(c.Value);
                     }
                     else if (c.Type == "amount")
                     {
@@ -5431,7 +5431,7 @@ namespace POS_Server.Controllers
             //public string payListOfInvoices(string token)
             //{
 
-            //int invoiceId, int invStatusId, decimal amount, string payType, string cashTransfer)
+            //long invoiceId, int invStatusId, decimal amount, string payType, string cashTransfer)
             // {
 
             string message = "";
@@ -5542,7 +5542,7 @@ namespace POS_Server.Controllers
             //public string payListOfInvoices(string token)
             //{
 
-            //int invoiceId, int invStatusId, decimal amount, string payType, string cashTransfer)
+            //long invoiceId, int invStatusId, decimal amount, string payType, string cashTransfer)
             // {
 
             string message = "";
@@ -5664,39 +5664,39 @@ namespace POS_Server.Controllers
 
         //            if (newObject.updateUserId == 0 || newObject.updateUserId == null)
         //            {
-        //                Nullable<int> id = null;
+        //                Nullable<long> id = null;
         //                newObject.updateUserId = id;
         //            }
         //            if (newObject.createUserId == 0 || newObject.createUserId == null)
         //            {
-        //                Nullable<int> id = null;
+        //                Nullable<long> id = null;
         //                newObject.createUserId = id;
         //            }
 
         //            if (newObject.agentId == 0 || newObject.agentId == null)
         //            {
-        //                Nullable<int> id = null;
+        //                Nullable<long> id = null;
         //                newObject.agentId = id;
         //            }
         //            if (newObject.invId == 0 || newObject.invId == null)
         //            {
-        //                Nullable<int> id = null;
+        //                Nullable<long> id = null;
         //                newObject.invId = id;
         //            }
         //            if (newObject.posIdCreator == 0 || newObject.posIdCreator == null)
         //            {
-        //                Nullable<int> id = null;
+        //                Nullable<long> id = null;
         //                newObject.posIdCreator = id;
         //            }
 
         //            if (newObject.cashTransIdSource == 0 || newObject.cashTransIdSource == null)
         //            {
-        //                Nullable<int> id = null;
+        //                Nullable<long> id = null;
         //                newObject.cashTransIdSource = id;
         //            }
         //            if (newObject.bankId == 0 || newObject.bankId == null)
         //            {
-        //                Nullable<int> id = null;
+        //                Nullable<long> id = null;
         //                newObject.bankId = id;
         //            }
 
@@ -5766,11 +5766,11 @@ namespace POS_Server.Controllers
         //}
         #endregion
 
-        public int Save(cashTransfer newObject)
+        public long Save(cashTransfer newObject)
         {
 
             //string Object
-            int message = 0;
+            long message = 0;
 
 
 
@@ -5782,39 +5782,39 @@ namespace POS_Server.Controllers
 
                     if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.updateUserId = id;
                     }
                     if (newObject.createUserId == 0 || newObject.createUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.createUserId = id;
                     }
 
                     if (newObject.agentId == 0 || newObject.agentId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.agentId = id;
                     }
                     if (newObject.invId == 0 || newObject.invId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.invId = id;
                     }
                     if (newObject.posIdCreator == 0 || newObject.posIdCreator == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.posIdCreator = id;
                     }
 
                     if (newObject.cashTransIdSource == 0 || newObject.cashTransIdSource == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.cashTransIdSource = id;
                     }
                     if (newObject.bankId == 0 || newObject.bankId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.bankId = id;
                     }
 
@@ -5894,14 +5894,14 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int posId = 0;
+                long posId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "posId")
                     {
-                        posId = int.Parse(c.Value);
+                        posId = long.Parse(c.Value);
                     }
                 }
                 try

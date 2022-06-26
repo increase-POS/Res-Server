@@ -14,16 +14,18 @@ namespace POS_Server
     
     public partial class itemOrderPreparing
     {
-        public int itemOrderId { get; set; }
-        public Nullable<int> itemUnitId { get; set; }
-        public Nullable<int> orderPreparingId { get; set; }
+        public long itemOrderId { get; set; }
+        public Nullable<long> itemUnitId { get; set; }
+        public Nullable<long> orderPreparingId { get; set; }
         public Nullable<int> quantity { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
+        public Nullable<long> itemsTransId { get; set; }
     
+        public virtual itemsTransfer itemsTransfer { get; set; }
         public virtual itemsUnits itemsUnits { get; set; }
         public virtual orderPreparing orderPreparing { get; set; }
         public virtual users users { get; set; }

@@ -80,9 +80,9 @@ namespace POS_Server.Models.VM
 
                 // check if any user logged in with same user account 
                 string userLogInID = claims.Where(x => x.Type == "userLogInID").Select(x => x.Value).FirstOrDefault();
-                int logInID = 0;
+                long logInID = 0;
                 if (userLogInID != null && userLogInID != "")
-                    logInID = int.Parse(userLogInID);
+                    logInID = long.Parse(userLogInID);
                 if (logInID != 0)
                 {
                     UsersLogsController uc = new UsersLogsController();

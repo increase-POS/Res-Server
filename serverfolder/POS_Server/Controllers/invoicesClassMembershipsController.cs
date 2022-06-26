@@ -53,14 +53,14 @@ namespace POS_Server.Controllers
             }
         }
         /*
-   public int invClassMemberId { get; set; }
-        public Nullable<int> membershipId { get; set; }
+   public long invClassMemberId { get; set; }
+        public Nullable<long> membershipId { get; set; }
         public Nullable<int> invClassId { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
          * */
         [HttpPost]
         [Route("GetById")]
@@ -74,13 +74,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invClassMemberId = 0;
+                long invClassMemberId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        invClassMemberId = int.Parse(c.Value);
+                        invClassMemberId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -135,22 +135,22 @@ namespace POS_Server.Controllers
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 if (newObject.membershipId == 0 || newObject.membershipId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.membershipId = id;
                 }
                 if (newObject.invClassId == 0 || newObject.invClassId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.invClassId = id;
                 }
                 try
@@ -214,19 +214,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invClassMemberId = 0;
-                int userId = 0;
+                long invClassMemberId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        invClassMemberId = int.Parse(c.Value);
+                        invClassMemberId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -289,8 +289,8 @@ namespace POS_Server.Controllers
             {
                 string strObject = "";
                 List<invoicesClassMemberships> newListObj = null;
-                int membershipId = 0;
-                int updateUserId = 0;
+                long membershipId = 0;
+                long updateUserId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -303,12 +303,12 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "membershipId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        membershipId = long.Parse(c.Value);
                     }
                     else
                   if (c.Type == "updateUserId")
                     {
-                        updateUserId = int.Parse(c.Value);
+                        updateUserId = long.Parse(c.Value);
                     }
                 }
 
@@ -339,22 +339,22 @@ namespace POS_Server.Controllers
                         {
                             if (newListObj[i].updateUserId == 0 || newListObj[i].updateUserId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].updateUserId = id;
                             }
                             if (newListObj[i].createUserId == 0 || newListObj[i].createUserId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].createUserId = id;
                             }
                             if (newListObj[i].membershipId == 0 || newListObj[i].membershipId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].membershipId = id;
                             }
                             if (newListObj[i].invClassId == 0 || newListObj[i].invClassId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].invClassId = id;
                             }
                             var branchEntity = entity.Set<invoicesClassMemberships>();

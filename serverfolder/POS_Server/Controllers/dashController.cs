@@ -41,26 +41,26 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
                 try
                 {
                     StatisticsController sts = new StatisticsController();
-                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var invListm = (from I in entity.invoices
@@ -158,26 +158,26 @@ namespace POS_Server.Controllers
             }
             else
             {
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
                 try
                 {
                     //StatisticsController sts = new StatisticsController();
-                    //List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    //List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var invListm = (from A in entity.agents
@@ -244,26 +244,26 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
                 try
                 {
                     StatisticsController sts = new StatisticsController();
-                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -305,7 +305,7 @@ namespace POS_Server.Controllers
                         {
                             UserOnlineCount newrow = new UserOnlineCount();
                             newrow.allPos = row.posAll;
-                            newrow.branchId = (int)row.branchId;
+                            newrow.branchId = (long)row.branchId;
                             newrow.branchName = row.name;
                             newrow.offlineUsers = row.posAll;
                             newrow.userOnlineCount = 0;
@@ -387,7 +387,7 @@ namespace POS_Server.Controllers
                             userOnlineCount = g.Count(),
                             allPos = listposb.Where(b => b.branchId == g.FirstOrDefault().branchId).FirstOrDefault().posAll,
                             offlineUsers = listposb.Where(b => b.branchId == g.FirstOrDefault().branchId).FirstOrDefault().posAll - g.Count(),//offline= all -online
-                            branchId = (int)g.FirstOrDefault().branchId,
+                            branchId = (long)g.FirstOrDefault().branchId,
                             branchName = g.FirstOrDefault().branchName,
                             //  userOnlinelist = grouplist.Where(b => b.branchId == g.FirstOrDefault().branchId).ToList(),
                             //   userOnlinelist = grouplist.ToList(),
@@ -445,26 +445,26 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
                 try
                 {
                     StatisticsController sts = new StatisticsController();
-                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -473,7 +473,7 @@ namespace POS_Server.Controllers
                                         join p in entity.pos on log.posId equals p.posId
                                         join u in entity.users on log.userId equals u.userId
 
-                                        where (brIds.Contains((int)p.branchId)&&(log.sOutDate == null && log.users.isOnline == 1))
+                                        where (brIds.Contains((long)p.branchId)&&(log.sOutDate == null && log.users.isOnline == 1))
 
                                         select new
                                         {
@@ -567,19 +567,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -587,7 +587,7 @@ namespace POS_Server.Controllers
                 {
                     List<BranchOnlineCount> list = new List<BranchOnlineCount>();
                     StatisticsController sts = new StatisticsController();
-                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -623,7 +623,7 @@ namespace POS_Server.Controllers
                         List<UserOnlineCount> grop = grouplist.GroupBy(g => g.branchId).Select(g => new UserOnlineCount
                         {
 
-                            branchId = (int)g.FirstOrDefault().branchId,
+                            branchId = (long)g.FirstOrDefault().branchId,
                             branchName = g.FirstOrDefault().branchName,
                         }).ToList();
                         BranchOnlineCount brow = new BranchOnlineCount();
@@ -658,8 +658,8 @@ namespace POS_Server.Controllers
 
             // public ResponseVM GetPurinv(string token)
 
-            int mainBranchId = 0;
-            int userId = 0;
+            long mainBranchId = 0;
+            long userId = 0;
 
        
 
@@ -676,11 +676,11 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -689,7 +689,7 @@ namespace POS_Server.Controllers
                 try
                 {
                     StatisticsController sts = new StatisticsController();
-                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var invListmtmp = (from I in entity.invoices
@@ -774,25 +774,25 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
                 Calculate calc = new Calculate();
                 StatisticsController sts = new StatisticsController();
-                List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                 try
                 {
                     using (incposdbEntities entity = new incposdbEntities())
@@ -904,8 +904,8 @@ namespace POS_Server.Controllers
             else
             {
                 string IUList = "";
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 List<itemsUnits> newiuObj = new List<itemsUnits>();
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -921,11 +921,11 @@ namespace POS_Server.Controllers
                    
                        else if (c.Type == "mainBranchId")
                         {
-                            mainBranchId = int.Parse(c.Value);
+                            mainBranchId = long.Parse(c.Value);
                         }
                         else if (c.Type == "userId")
                         {
-                            userId = int.Parse(c.Value);
+                            userId = long.Parse(c.Value);
                         }
 
                   
@@ -937,8 +937,8 @@ namespace POS_Server.Controllers
                 try
                 {
                     StatisticsController sts = new StatisticsController();
-                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
-                    List<int> iuIds = new List<int>();
+                    List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    List<long> iuIds = new List<long>();
                     List<IUStorage> list = new List<IUStorage>();
                     List<branches> brlist = new List<branches>();
                     using (incposdbEntities entity1 = new incposdbEntities())
@@ -1096,19 +1096,19 @@ namespace POS_Server.Controllers
             {
                
                 Calculate calc = new Calculate();
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -1118,7 +1118,7 @@ namespace POS_Server.Controllers
                     int month;
                     int days;
                     //StatisticsController sts = new StatisticsController();
-                    //List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    //List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     List<branches> brlist = new List<branches>();
                     List<TotalPurSale> totalinMonth = new List<TotalPurSale>();
                     List<TotalPurSale> totalinday = new List<TotalPurSale>();
@@ -1203,13 +1203,13 @@ namespace POS_Server.Controllers
 
         //in day
 
-        public List<TotalPurSale> GetTotalPurSaleday(DateTime dayDate, int number,int mainBranchId,int userId)
+        public List<TotalPurSale> GetTotalPurSaleday(DateTime dayDate, int number,long mainBranchId,long userId)
         {
             Calculate calc = new Calculate();
             TotalPurSale totalrow = new TotalPurSale();
             List<TotalPurSale> totalList = new List<TotalPurSale>();
             StatisticsController sts = new StatisticsController();
-            List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+            List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
             using (incposdbEntities entity = new incposdbEntities())
             {
                 var invListm1 = (from I in entity.invoices
@@ -1280,19 +1280,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -1300,7 +1300,7 @@ namespace POS_Server.Controllers
                 try
                 {
                     StatisticsController sts = new StatisticsController();
-                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
 
@@ -1397,8 +1397,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 DateTime dNow = DateTime.Now;
                 List<BranchInvoicedata> invbranch = new List<BranchInvoicedata>();
                 List<BranchInvoicedata> branches = new List<BranchInvoicedata>();
@@ -1410,18 +1410,18 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
                 try
                 {
                     StatisticsController sts = new StatisticsController();
-                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     DateTime firstdate = dNow.AddMonths(-12);
 
                     DateTime first = new DateTime(firstdate.Year, firstdate.Month, 1);
@@ -1471,10 +1471,10 @@ namespace POS_Server.Controllers
                         finalRow.branchId = branchrow.branchCreatorId;
 
                         finalRow.branchName = branchrow.branchCreatorName;
-                        finalRow.CountinMonthsList = GetCountinMonths(dNow, (int)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
+                        finalRow.CountinMonthsList = GetCountinMonths(dNow, (long)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
 
-                        finalRow.CountinDaysList = GetCountindays(dNow, (int)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
-                        finalRow.CountinHoursList = GetCountinHours(dNow, (int)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
+                        finalRow.CountinDaysList = GetCountindays(dNow, (long)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
+                        finalRow.CountinHoursList = GetCountinHours(dNow, (long)branchrow.branchCreatorId, branchrow.branchCreatorName, templist);
                         finalList.Add(finalRow);
 
 
@@ -1514,7 +1514,7 @@ namespace POS_Server.Controllers
             }
 
         }
-        public BranchInvoiceCount GetCountbyBranch(int branchCreatorId, string branchCreatorName, DateTime fromDate, DateTime toDate, List<BranchInvoicedata> Listbranch, int dateindex)
+        public BranchInvoiceCount GetCountbyBranch(long branchCreatorId, string branchCreatorName, DateTime fromDate, DateTime toDate, List<BranchInvoicedata> Listbranch, int dateindex)
         {
             BranchInvoiceCount BranchInvoiceobj = new BranchInvoiceCount();
             if (branchCreatorId == 0)
@@ -1547,7 +1547,7 @@ namespace POS_Server.Controllers
             return BranchInvoiceobj;
 
         }
-        public List<BranchInvoiceCount> GetCountinMonths(DateTime dNow, int branchCreatorId, string branchCreatorName, List<BranchInvoicedata> Listbranch)
+        public List<BranchInvoiceCount> GetCountinMonths(DateTime dNow, long branchCreatorId, string branchCreatorName, List<BranchInvoicedata> Listbranch)
         {
             List<BranchInvoiceCount> List = new List<BranchInvoiceCount>();
             List<BranchInvoiceCount> tempList = new List<BranchInvoiceCount>();
@@ -1594,7 +1594,7 @@ namespace POS_Server.Controllers
             }
             return List;
         }
-        public List<BranchInvoiceCount> GetCountindays(DateTime dNow, int branchCreatorId, string branchCreatorName, List<BranchInvoicedata> Listbranch)
+        public List<BranchInvoiceCount> GetCountindays(DateTime dNow, long branchCreatorId, string branchCreatorName, List<BranchInvoicedata> Listbranch)
         {
             List<BranchInvoiceCount> List = new List<BranchInvoiceCount>();
             BranchInvoiceCount rowObj = new BranchInvoiceCount();
@@ -1638,7 +1638,7 @@ namespace POS_Server.Controllers
                     //break;
             }
         }
-        public List<BranchInvoiceCount> GetCountinHours(DateTime dNow, int branchCreatorId, string branchCreatorName, List<BranchInvoicedata> Listbranch)
+        public List<BranchInvoiceCount> GetCountinHours(DateTime dNow, long branchCreatorId, string branchCreatorName, List<BranchInvoicedata> Listbranch)
         {
             List<BranchInvoiceCount> List = new List<BranchInvoiceCount>();
             BranchInvoiceCount rowObj = new BranchInvoiceCount();
@@ -1683,19 +1683,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -1708,7 +1708,7 @@ namespace POS_Server.Controllers
                 try
                 {
                     StatisticsController sts = new StatisticsController();
-                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var invListmtmp = (from I in entity.invoices

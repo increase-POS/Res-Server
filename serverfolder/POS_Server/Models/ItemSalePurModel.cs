@@ -7,7 +7,7 @@ namespace POS_Server.Models
 {
     public class ItemSalePurModel
     {
-        public int? itemId { get; set; }
+        public long? itemId { get; set; }
         public string code { get; set; }
         public string name { get; set; }
         public string details { get; set; }
@@ -17,18 +17,18 @@ namespace POS_Server.Models
         public byte isActive { get; set; }
         public int min { get; set; }
         public int max { get; set; }
-        public Nullable<int> categoryId { get; set; }
+        public Nullable<long> categoryId { get; set; }
         public string categoryName { get; set; }
-        public Nullable<int> parentId { get; set; }
+        public Nullable<long> parentId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
-        public Nullable<int> minUnitId { get; set; }
-        public Nullable<int> maxUnitId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
+        public Nullable<long> minUnitId { get; set; }
+        public Nullable<long> maxUnitId { get; set; }
         public int itemCount { get; set; }
         public Boolean canDelete { get; set; }
-        public Nullable<int> tagId { get; set; }
+        public Nullable<long> tagId { get; set; }
         public decimal avgPurchasePrice { get; set; }
 
         public string notes { get; set; }
@@ -44,16 +44,16 @@ namespace POS_Server.Models
         public decimal price { get; set; }
         public Nullable<decimal> basicPrice { get; set; }
         public decimal priceWithService { get; set; }
-        public Nullable<int> unitId { get; set; }
+        public Nullable<long> unitId { get; set; }
         public string unitName { get; set; }
         public string offerName { get; set; }
-        public Nullable<int> offerId { get; set; }
+        public Nullable<long> offerId { get; set; }
         public string discountType { get; set; }
         public Nullable<decimal> discountValue { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
         public byte isActiveOffer { get; set; }
-        public Nullable<int> itemUnitId { get; set; }
+        public Nullable<long> itemUnitId { get; set; }
         public short defaultSale { get; set; }
         public decimal priceTax { get; set; }
         public short defaultPurchase { get; set; }

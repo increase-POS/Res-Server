@@ -7,7 +7,7 @@ namespace POS_Server.Models
 {
     public class TablesStatisticsModel
     {
-        public int branchId { get; set; }
+        public long branchId { get; set; }
         public string branchName { get; set; }
         public int openedCount { get; set; }
         public int emptyCount { get; set; }

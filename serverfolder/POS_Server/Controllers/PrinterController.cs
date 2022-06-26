@@ -34,19 +34,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -127,8 +127,8 @@ namespace POS_Server.Controllers
 //        public string printFor { get; set; }
 //        public Nullable<System.DateTime> createDate { get; set; }
 //        public Nullable<System.DateTime> updateDate { get; set; }
-//        public Nullable<int> createUserId { get; set; }
-//        public Nullable<int> updateUserId { get; set; }
+//        public Nullable<long> createUserId { get; set; }
+//        public Nullable<long> updateUserId { get; set; }
 
 
 //                    */
@@ -162,13 +162,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int printerId = 0;
+                long printerId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "printerId")
                     {
-                        printerId = int.Parse(c.Value);
+                        printerId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -275,12 +275,12 @@ namespace POS_Server.Controllers
                     printers tmpObject;
                     if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.updateUserId = id;
                     }
                     if (newObject.createUserId == 0 || newObject.createUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.createUserId = id;
                     }
 
@@ -356,12 +356,12 @@ namespace POS_Server.Controllers
             //    printers newObject = JsonConvert.DeserializeObject<printers>(Object, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
             //    if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.updateUserId = id;
             //    }
             //    if (newObject.createUserId == 0 || newObject.createUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.createUserId = id;
             //    }
 
@@ -428,7 +428,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int printerId = 0;
+                long printerId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -436,7 +436,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "printerId")
                     {
-                        printerId = int.Parse(c.Value);
+                        printerId = long.Parse(c.Value);
                     }
 
                 }

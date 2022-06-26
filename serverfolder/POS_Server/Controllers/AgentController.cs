@@ -87,7 +87,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (agentsList[i].isActive == 1)
                             {
-                                int agentId = (int)agentsList[i].agentId;
+                                long agentId = (long)agentsList[i].agentId;
                                 var invoicesL = entity.invoices.Where(x => x.agentId == agentId).Select(b => new { b.invoiceId }).FirstOrDefault();
                                 var cachTransferL = entity.cashTransfer.Where(x => x.agentId == agentId).Select(x => new { x.cashTransId }).FirstOrDefault();
                                 if ((invoicesL is null) && (cachTransferL is null))
@@ -242,13 +242,13 @@ namespace POS_Server.Controllers
             else
             {
                 {
-                    int agentId = 0;
+                    long agentId = 0;
                     IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                     foreach (Claim c in claims)
                     {
                         if (c.Type == "agentId")
                         {
-                            agentId = int.Parse(c.Value);
+                            agentId = long.Parse(c.Value);
                         }
                     }
                     using (incposdbEntities entity = new incposdbEntities())
@@ -377,19 +377,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int agentId = 0;
-                int userId = 0;
+                long agentId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        agentId = int.Parse(c.Value);
+                        agentId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -590,14 +590,14 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int agentId = 0;
+                long agentId = 0;
                 decimal balance = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "agentId")
                     {
-                        agentId = int.Parse(c.Value);
+                        agentId = long.Parse(c.Value);
                     }
                     else if (c.Type == "balance")
                     {
@@ -684,13 +684,13 @@ namespace POS_Server.Controllers
             else
             {
 
-                int membershipId = 0;
+                long membershipId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        membershipId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -755,13 +755,13 @@ namespace POS_Server.Controllers
             else
             {
 
-                int membershipId = 0;
+                long membershipId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        membershipId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -815,10 +815,10 @@ namespace POS_Server.Controllers
         }
 
          * */
-        public int UpdateMembershipId(int agentId,int membershipId)
+        public long UpdateMembershipId(long agentId,long membershipId)
         {
-           
-            int message =0;
+
+            long message =0;
                 try
                 {
                     agents agent;
@@ -840,7 +840,7 @@ namespace POS_Server.Controllers
                 }
            
         }
-        public int resetMembershipId(  int membershipId)
+        public int resetMembershipId(  long membershipId)
         {
 
             int message = 0;

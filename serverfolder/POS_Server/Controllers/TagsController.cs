@@ -34,13 +34,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int categoryId = 0;
+                long categoryId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "categoryId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -71,7 +71,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (item.isActive == 1)
                             {
-                                int cId = (int)item.tagId;
+                                long cId = (long)item.tagId;
                                 var casht = entity.items.Where(x => x.tagId == cId).Select(x => new { x.tagId }).FirstOrDefault();
 
                                 if ((casht is null))
@@ -97,13 +97,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int cId = 0;
+                long cId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        cId = int.Parse(c.Value);
+                        cId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -237,19 +237,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int tagId = 0;
-                int userId = 0;
+                long tagId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        tagId = int.Parse(c.Value);
+                        tagId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

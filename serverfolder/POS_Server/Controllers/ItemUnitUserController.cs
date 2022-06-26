@@ -55,14 +55,14 @@ namespace POS_Server.Controllers
 
         //                                }).ToList();
         //                    /*
-        //                         public int id { get; set; }
+        //                         public long id { get; set; }
         //        public Nullable<int> itemUnitId { get; set; }
-        //        public Nullable<int> userId { get; set; }
+        //        public Nullable<long> userId { get; set; }
         //        public string notes { get; set; }
         //        public Nullable<System.DateTime> createDate { get; set; }
         //        public Nullable<System.DateTime> updateDate { get; set; }
-        //        public Nullable<int> createUserId { get; set; }
-        //        public Nullable<int> updateUserId { get; set; }
+        //        public Nullable<long> createUserId { get; set; }
+        //        public Nullable<long> updateUserId { get; set; }
         //        public Nullable<byte> isActive { get; set; }
 
         // id
@@ -94,7 +94,7 @@ namespace POS_Server.Controllers
         // GET api/<controller>
         //[HttpPost]
         //[Route("GetByID")]
-        //public IHttpActionResult GetByID(int id)
+        //public IHttpActionResult GetByID(long id)
         //{
         //    var re = Request;
         //    var headers = re.Headers;
@@ -144,7 +144,7 @@ namespace POS_Server.Controllers
         [Route("GetByUserId")]
         public string GetByUserId(string token)
         {
-            // public string GetUsersByGroupId(string token)int userId
+            // public string GetUsersByGroupId(string token)long userId
 
 
             token = TokenManager.readToken(HttpContext.Current.Request);
@@ -156,7 +156,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int userId = 0;
+                long userId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -164,7 +164,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
 
@@ -270,23 +270,23 @@ namespace POS_Server.Controllers
         //        itemUnitUser newObject = JsonConvert.DeserializeObject<itemUnitUser>(Object, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
         //        if (newObject.updateUserId == 0 || newObject.updateUserId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.updateUserId = id;
         //        }
         //        if (newObject.createUserId == 0 || newObject.createUserId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.createUserId = id;
         //        }
         //        if (newObject.itemUnitId == 0 || newObject.itemUnitId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.itemUnitId = id;
         //        }
 
         //        if (newObject.userId == 0 || newObject.userId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.userId = id;
         //        }
 
@@ -358,8 +358,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int userId = 0;
-                // int offerId = 0;
+                long userId = 0;
+                // long offerId = 0;
 
                 List<itemUnitUser> newObject = new List<itemUnitUser>();
                 string Object = "";
@@ -378,7 +378,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
 
@@ -406,7 +406,7 @@ namespace POS_Server.Controllers
                     foreach (itemUnitUser newrow in newObject)
                     {
                         message = saveRow(newrow, userId);
-                        if (int.Parse(message) > 0)
+                        if (long.Parse(message) > 0)
                         {
                             count++;
                         }
@@ -423,8 +423,8 @@ namespace POS_Server.Controllers
             }
 
             //string message = "";
-            //int userId = 0;
-            //int offerId = 0;
+            //long userId = 0;
+            //long offerId = 0;
             //var re = Request;
             //var headers = re.Headers;
             //int res = 0;
@@ -476,28 +476,28 @@ namespace POS_Server.Controllers
         }
 
 
-        public string saveRow(itemUnitUser newObject, int userId)
+        public string saveRow(itemUnitUser newObject, long userId)
         {
             string message = "";
             if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.updateUserId = id;
             }
             if (newObject.createUserId == 0 || newObject.createUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.createUserId = id;
             }
             if (newObject.itemUnitId == 0 || newObject.itemUnitId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.itemUnitId = id;
             }
 
             if (newObject.userId == 0 || newObject.userId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.userId = id;
             }
 
@@ -551,7 +551,7 @@ namespace POS_Server.Controllers
         }
         //[HttpPost]
         //[Route("Delete")]
-        //public string Delete(int id)
+        //public string Delete(long id)
         //{
         //    var re = Request;
         //    var headers = re.Headers;

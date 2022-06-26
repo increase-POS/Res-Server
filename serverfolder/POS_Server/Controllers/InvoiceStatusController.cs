@@ -28,13 +28,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int invoiceId = 0;
+                long invoiceId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())

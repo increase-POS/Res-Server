@@ -30,10 +30,10 @@ namespace POS_Server
             this.orderPreparing = new HashSet<orderPreparing>();
         }
     
-        public int invoiceId { get; set; }
+        public long invoiceId { get; set; }
         public string invNumber { get; set; }
-        public Nullable<int> agentId { get; set; }
-        public Nullable<int> createUserId { get; set; }
+        public Nullable<long> agentId { get; set; }
+        public Nullable<long> createUserId { get; set; }
         public string invType { get; set; }
         public string discountType { get; set; }
         public decimal discountValue { get; set; }
@@ -44,24 +44,24 @@ namespace POS_Server
         public Nullable<System.DateTime> deservedDate { get; set; }
         public Nullable<System.DateTime> invDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> updateUserId { get; set; }
-        public Nullable<int> invoiceMainId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
+        public Nullable<long> invoiceMainId { get; set; }
         public string invCase { get; set; }
         public Nullable<System.TimeSpan> invTime { get; set; }
         public string notes { get; set; }
         public string vendorInvNum { get; set; }
         public Nullable<System.DateTime> vendorInvDate { get; set; }
-        public Nullable<int> branchId { get; set; }
-        public Nullable<int> posId { get; set; }
+        public Nullable<long> branchId { get; set; }
+        public Nullable<long> posId { get; set; }
         public decimal tax { get; set; }
         public int taxtype { get; set; }
         public string name { get; set; }
         public byte isApproved { get; set; }
-        public Nullable<int> shippingCompanyId { get; set; }
-        public Nullable<int> branchCreatorId { get; set; }
-        public Nullable<int> shipUserId { get; set; }
+        public Nullable<long> shippingCompanyId { get; set; }
+        public Nullable<long> branchCreatorId { get; set; }
+        public Nullable<long> shipUserId { get; set; }
         public string prevStatus { get; set; }
-        public Nullable<int> userId { get; set; }
+        public Nullable<long> userId { get; set; }
         public decimal manualDiscountValue { get; set; }
         public string manualDiscountType { get; set; }
         public bool isActive { get; set; }
@@ -69,13 +69,13 @@ namespace POS_Server
         public decimal cashReturn { get; set; }
         public int printedcount { get; set; }
         public bool isOrginal { get; set; }
-        public Nullable<int> waiterId { get; set; }
+        public Nullable<long> waiterId { get; set; }
         public decimal shippingCost { get; set; }
         public decimal realShippingCost { get; set; }
         public Nullable<long> reservationId { get; set; }
         public Nullable<System.DateTime> orderTime { get; set; }
         public decimal shippingCostDiscount { get; set; }
-        public Nullable<int> membershipId { get; set; }
+        public Nullable<long> membershipId { get; set; }
         public string invBarcode { get; set; }
     
         public virtual agents agents { get; set; }

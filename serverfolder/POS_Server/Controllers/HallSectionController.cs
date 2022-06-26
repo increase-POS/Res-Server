@@ -55,7 +55,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (section.isActive == 1)
                             {
-                                int cId = (int)section.sectionId;
+                                long cId = (int)section.sectionId;
                                 var tables = entity.tables.Where(x => x.sectionId == cId).FirstOrDefault();
 
                                 if (tables is null)
@@ -81,13 +81,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -128,13 +128,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int sectionId = 0;
+                long sectionId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        sectionId = int.Parse(c.Value);
+                        sectionId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -231,19 +231,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int sectionId = 0;
-                int userId = 0;
+                long sectionId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "sectionId")
                     {
-                        sectionId = int.Parse(c.Value);
+                        sectionId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

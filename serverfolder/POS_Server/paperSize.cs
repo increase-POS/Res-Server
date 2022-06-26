@@ -21,7 +21,7 @@ namespace POS_Server
             this.posSetting1 = new HashSet<posSetting>();
         }
     
-        public int sizeId { get; set; }
+        public long sizeId { get; set; }
         public string paperSize1 { get; set; }
         public string printfor { get; set; }
         public string sizeValue { get; set; }

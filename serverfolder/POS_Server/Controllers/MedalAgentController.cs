@@ -110,7 +110,7 @@ namespace POS_Server.Controllers
             var re = Request;
             var headers = re.Headers;
             string token = "";
-            int cId = 0;
+            long cId = 0;
             if (headers.Contains("APIKey"))
             {
                 token = headers.GetValues("APIKey").First();
@@ -234,7 +234,7 @@ namespace POS_Server.Controllers
 
         [HttpPost]
         [Route("Delete")]
-        public IHttpActionResult Delete(int Id, int userId, Boolean final)
+        public IHttpActionResult Delete(long Id, long userId, Boolean final)
         {
             var re = Request;
             var headers = re.Headers;
@@ -300,8 +300,8 @@ namespace POS_Server.Controllers
         [Route("UpdateAgentsByMedalId")]
         public int UpdateAgentsByMedalId(string newagentlist)
         {
-            int userId = 0;
-            int medalId = 0;
+            long userId = 0;
+            long medalId = 0;
             var re = Request;
             var headers = re.Headers;
             int res = 0;
@@ -312,11 +312,11 @@ namespace POS_Server.Controllers
             }
             if (headers.Contains("medalId"))
             {
-                medalId = Convert.ToInt32(headers.GetValues("medalId").First());
+                medalId = Convert.ToInt64(headers.GetValues("medalId").First());
             }
             if (headers.Contains("userId"))
             {
-                userId = Convert.ToInt32(headers.GetValues("userId").First());
+                userId = Convert.ToInt64(headers.GetValues("userId").First());
             }
             Validation validation = new Validation();
             bool valid = validation.CheckApiKey(token);

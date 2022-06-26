@@ -68,7 +68,7 @@ var strP = TokenManager.GetPrincipal(token);
                             canDelete = false;
                             if (posList[i].isActive == 1)
                             {
-                                int posId = (int)posList[i].posId;
+                                long posId = (long)posList[i].posId;
                                 var cashTransferL = entity.cashTransfer.Where(x => x.posId == posId).Select(b => new { b.cashTransId }).FirstOrDefault();
                                 var posUsersL = entity.posUsers.Where(x => x.posId == posId).Select(x => new { x.posUserId }).FirstOrDefault();
                                
@@ -97,13 +97,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int posId = 0;
+                long posId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        posId = int.Parse(c.Value);
+                        posId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -162,12 +162,12 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 try
@@ -236,19 +236,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int posId = 0;
-                int userId = 0;
+                long posId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        posId = int.Parse(c.Value);
+                        posId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -306,7 +306,7 @@ var strP = TokenManager.GetPrincipal(token);
                 string setObject = "";
                 string activationCode = "";
                 string deviceCode = "";
-                int countryId = 0;
+                long countryId = 0;
                 string userName = "";
                 string password = "";
                 string branchName = "";
@@ -334,7 +334,7 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                     else if (c.Type == "countryId")
                     {
-                        countryId = int.Parse(c.Value);
+                        countryId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userName")
                     {
@@ -461,7 +461,7 @@ var strP = TokenManager.GetPrincipal(token);
             {
                 string activationCode = "";
                 string deviceCode = "";
-                int posId = 0;               
+                long posId = 0;               
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -476,7 +476,7 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                     else if (c.Type == "posId")
                     {
-                        posId = int.Parse(c.Value);
+                        posId = long.Parse(c.Value);
                     }  
                 }
 
@@ -566,8 +566,8 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int posId = 0;
-                int userId = 0;
+                long posId = 0;
+                long userId = 0;
                 string boxState = "";
                 string cashObject = "";
                 int isAdminClose = 0;
@@ -578,11 +578,11 @@ var strP = TokenManager.GetPrincipal(token);
                 {
                     if (c.Type == "posId")
                     {
-                        posId = int.Parse(c.Value);
+                        posId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "isAdminClose")
                     {
@@ -629,13 +629,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())

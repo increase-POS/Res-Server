@@ -28,13 +28,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
+                long invoiceId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                 }
                 try
@@ -129,7 +129,7 @@ namespace POS_Server.Controllers
                 #region params
                 string statusStr = "";
                 List<string> statusL = new List<string>();
-                int branchId = 0;
+                long branchId = 0;
                 int duration = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -143,7 +143,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
@@ -345,7 +345,7 @@ namespace POS_Server.Controllers
                 #region params
                 string statusStr = "";
                 List<string> statusL = new List<string>();
-                int branchId = 0;
+                long branchId = 0;
                 int duration = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -359,7 +359,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
@@ -466,7 +466,7 @@ namespace POS_Server.Controllers
             else
             {
                 #region params
-                int branchId = 0;
+                long branchId = 0;
                 int duration = 0;
                 string type = "";
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -474,7 +474,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
@@ -595,13 +595,13 @@ namespace POS_Server.Controllers
                 #region params
                 string statusStr = "";
                 List<string> statusL = new List<string>();
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "status")
                     {
@@ -756,7 +756,7 @@ namespace POS_Server.Controllers
                 #region params
                 string statusStr = "";
                 List<string> statusL = new List<string>();
-                int branchId = 0;
+                long branchId = 0;
                 int duration = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -770,7 +770,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
@@ -862,7 +862,7 @@ namespace POS_Server.Controllers
 
                 try
                 {
-                    int orderId = savePreparingOrder(newObject);
+                    long orderId = savePreparingOrder(newObject);
                     if (orderId > 0)
                     {
                         string res = savePreparingOrderItems(items, orderId);
@@ -901,7 +901,7 @@ namespace POS_Server.Controllers
                 string itemsObject = "";
                 string statusObject = "";
                 string statusesOfPreparingOrder = "";
-                int branchId = 0;
+                long branchId = 0;
                 orderPreparing newObject = null;
                 List<itemOrderPreparing> items = null;
                 orderPreparingStatus status = null;
@@ -928,7 +928,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "statusesOfPreparingOrder")
                     {
@@ -956,7 +956,7 @@ namespace POS_Server.Controllers
                         newObject.orderNum = invoiceNum;
                         #endregion
                         newObject.orderPreparingId = 0;
-                        int orderId = savePreparingOrder(newObject);
+                        long orderId = savePreparingOrder(newObject);
                         message = orderId.ToString();
                         if (orderId > 0)
                         {
@@ -1036,7 +1036,7 @@ namespace POS_Server.Controllers
                 string orderObject = "";
 
                 decimal preparingTime = 0;
-                int userId = 0;
+                long userId = 0;
                 List<orderPreparing> preparingOrders = new List<orderPreparing>();
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1054,7 +1054,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
 
@@ -1120,7 +1120,7 @@ namespace POS_Server.Controllers
                 {
                     foreach (orderPreparing or in preparingOrders)
                     {
-                        int orderId = savePreparingOrder(or);
+                        long orderId = savePreparingOrder(or);
                         if (orderId > 0)
                         {
                             string res = saveInvoiceStatus(status, orderId);
@@ -1150,9 +1150,9 @@ namespace POS_Server.Controllers
             else
             {
                 #region params
-                int invoiceId = 0;
-                int? shipUserId = 0;
-                int shippingCompanyId = 0;
+                long invoiceId = 0;
+                long? shipUserId = 0;
+                long shippingCompanyId = 0;
                 string statusObject = "";
                 orderPreparingStatus status = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1160,13 +1160,13 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                     else if (c.Type == "shipUserId")
                     {
                         try
                         {
-                            shipUserId = int.Parse(c.Value);
+                            shipUserId = long.Parse(c.Value);
                         }
                         catch
                         {
@@ -1175,7 +1175,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "shippingCompanyId")
                     {
-                        shippingCompanyId = int.Parse(c.Value);
+                        shippingCompanyId = long.Parse(c.Value);
                     }
                     else if (c.Type == "statusObject")
                     {
@@ -1203,7 +1203,7 @@ namespace POS_Server.Controllers
 
                         foreach (orderPreparing o in orders)
                         {
-                            int orderId = o.orderPreparingId;
+                            long orderId = o.orderPreparingId;
                             string res = saveInvoiceStatus(status, orderId);
                             if (res == "0")
                                 message = "0";
@@ -1233,21 +1233,21 @@ namespace POS_Server.Controllers
             else
             {
                 #region params
-                int invoiceId = 0;
-                int? shipUserId = 0;
-                int shippingCompanyId = 0;
+                long invoiceId = 0;
+                long? shipUserId = 0;
+                long shippingCompanyId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                     else if (c.Type == "shipUserId")
                     {
                         try
                         {
-                            shipUserId = int.Parse(c.Value);
+                            shipUserId = long.Parse(c.Value);
                         }
                         catch
                         {
@@ -1256,7 +1256,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "shippingCompanyId")
                     {
-                        shippingCompanyId = int.Parse(c.Value);
+                        shippingCompanyId = long.Parse(c.Value);
                     }
 
                 }
@@ -1294,19 +1294,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
-                int userId = 0;
+                long invoiceId = 0;
+                long userId = 0;
                 orderPreparingStatus status = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
 
@@ -1328,7 +1328,7 @@ namespace POS_Server.Controllers
 
                         foreach (OrderPreparingModel o in orders)
                         {
-                            int orderId = o.orderPreparingId;
+                            long orderId = o.orderPreparingId;
 
                             var statusObject = new orderPreparingStatus()
                             {
@@ -1487,9 +1487,9 @@ namespace POS_Server.Controllers
                 return TokenManager.GenerateToken(message);
             }
         }
-        private int savePreparingOrder(orderPreparing newObject)
+        private long savePreparingOrder(orderPreparing newObject)
         {
-            int res = 0;
+            long res = 0;
             orderPreparing tmpInvoice;
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -1518,7 +1518,7 @@ namespace POS_Server.Controllers
                 return res;
             }
         }
-        public string savePreparingOrderItems(List<itemOrderPreparing> newObject, int orderPreparingId)
+        public string savePreparingOrderItems(List<itemOrderPreparing> newObject, long orderPreparingId)
         {
             string message = "";
             try
@@ -1535,7 +1535,7 @@ namespace POS_Server.Controllers
                         itemOrderPreparing t;
                         if (newObject[i].createUserId == 0 || newObject[i].createUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject[i].createUserId = id;
                         }
 
@@ -1555,7 +1555,7 @@ namespace POS_Server.Controllers
             return message;
         }
 
-        private string saveInvoiceStatus(orderPreparingStatus statusObject, int preparingOrderId)
+        private string saveInvoiceStatus(orderPreparingStatus statusObject, long preparingOrderId)
         {
             string message = "0";
             try
@@ -1587,7 +1587,7 @@ namespace POS_Server.Controllers
             else
             {
                 string orderCode = "";
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -1597,7 +1597,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
 
@@ -1605,7 +1605,7 @@ namespace POS_Server.Controllers
                 return TokenManager.GenerateToken(lastNum);
             }
         }
-        private int GetLastNumOfOrder(string orderCode, int branchId)
+        private int GetLastNumOfOrder(string orderCode, long branchId)
         {
             List<string> numberList;
             int lastNum = 0;
@@ -1640,13 +1640,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
+                long invoiceId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                 }
                 try

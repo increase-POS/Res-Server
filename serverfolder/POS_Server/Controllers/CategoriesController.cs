@@ -21,7 +21,7 @@ namespace POS_Server.Controllers
     public class CategoriesController : ApiController
     {
         // GET api/category
-        List<int> categoriesId = new List<int>();
+        List<long> categoriesId = new List<long>();
 
         [HttpPost]
         [Route("Get")]
@@ -75,7 +75,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (categoriesList[i].isActive == 1)
                             {
-                                int categoryId = (int)categoriesList[i].categoryId;
+                                long categoryId = (long)categoriesList[i].categoryId;
                                 var items = entity.items.Where(x => x.categoryId == categoryId).Select(b => new { b.itemId }).FirstOrDefault();
                                 //  var childCategoryL = entity.categories.Where(x => x.parentId == categoryId).Select(b => new { b.categoryId }).FirstOrDefault();
 
@@ -103,13 +103,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int userId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -142,7 +142,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (categoriesList[i].isActive == 1)
                             {
-                                int categoryId = (int)categoriesList[i].categoryId;
+                                long categoryId = (long)categoriesList[i].categoryId;
                                 var items = entity.items.Where(x => x.categoryId == categoryId).Select(b => new { b.itemId }).FirstOrDefault();
                               //  var childCategoryL = entity.categories.Where(x => x.parentId == categoryId).Select(b => new { b.categoryId }).FirstOrDefault();
 
@@ -171,17 +171,17 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int categoryId = 0;
-                int userId = 0;
+                long categoryId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     } else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -254,13 +254,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int categoryId = 0;
+                long categoryId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -302,18 +302,18 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int categoryID = 0;
+                long categoryID = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        categoryID = int.Parse(c.Value);
+                        categoryID = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    int parentid = categoryID; // if want to show the last category 
+                    long parentid = categoryID; // if want to show the last category 
                     while (parentid > 0)
                     {
                         categories tempcate = new categories();
@@ -376,18 +376,18 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int categoryId = 0;
-                int userId = 0;
+                long categoryId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -488,12 +488,12 @@ var strP = TokenManager.GetPrincipal(token);
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 try
@@ -525,9 +525,9 @@ var strP = TokenManager.GetPrincipal(token);
                             tmpCategory.isActive = newObject.isActive;
                             tmpCategory.type = newObject.type;
                             entity.SaveChanges();
-                            int categoryId = tmpCategory.categoryId;
+                            long categoryId = tmpCategory.categoryId;
                             byte isActivecat = tmpCategory.isActive;
-                            int? updateuser = tmpCategory.updateUserId;
+                            long? updateuser = tmpCategory.updateUserId;
 
                             // disactive items related to selected category and subs
                             var catitems = entity.items.Where(U => U.categoryId == categoryId).ToList();
@@ -569,19 +569,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int categoryId = 0;
-                int userId = 0;
+                long categoryId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -791,7 +791,7 @@ var strP = TokenManager.GetPrincipal(token);
             return response;
         }
         [HttpPost]
-        public IEnumerable<categories> Recursive(List<categories> categoriesList, int toplevelid)
+        public IEnumerable<categories> Recursive(List<categories> categoriesList, long toplevelid)
         {
             List<categories> inner = new List<categories>();
            // foreach (var t in categoriesList.Where(item => item.parentId == toplevelid))

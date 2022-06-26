@@ -14,14 +14,14 @@ namespace POS_Server
     
     public partial class residentialSectorsUsers
     {
-        public int id { get; set; }
-        public Nullable<int> residentSecId { get; set; }
-        public Nullable<int> userId { get; set; }
+        public long id { get; set; }
+        public Nullable<long> residentSecId { get; set; }
+        public Nullable<long> userId { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual residentialSectors residentialSectors { get; set; }
         public virtual users users { get; set; }

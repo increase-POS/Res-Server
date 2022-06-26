@@ -28,13 +28,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int itemId = 0;
+                long itemId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -135,19 +135,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int serialId = 0;
-                int userId = 0;
+                long serialId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        serialId = int.Parse(c.Value);
+                        serialId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

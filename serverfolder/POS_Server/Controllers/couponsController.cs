@@ -66,7 +66,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (couponitem.isActive == 1)
                             {
-                                int cId = (int)couponitem.cId;
+                                long cId = (long)couponitem.cId;
                                 var copinv = entity.couponsInvoices.Where(x => x.couponId == cId).Select(x => new { x.id }).FirstOrDefault();
 
                                 if ((copinv is null))
@@ -138,13 +138,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int memberShipId = 0;
+                long memberShipId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "memberShipId")
                     {
-                        memberShipId = int.Parse(c.Value);
+                        memberShipId = long.Parse(c.Value);
                     }
                 }
                 DateTime dtnow = DateTime.Now;
@@ -242,13 +242,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int cId = 0;
+                long cId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        cId = int.Parse(c.Value);
+                        cId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -580,19 +580,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int couponId = 0;
-                int userId = 0;
+                long couponId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        couponId = int.Parse(c.Value);
+                        couponId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -655,13 +655,13 @@ namespace POS_Server.Controllers
             else
             {
 
-                int membershipId = 0;
+                long membershipId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        membershipId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())

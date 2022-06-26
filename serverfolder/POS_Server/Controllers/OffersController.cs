@@ -57,7 +57,7 @@ var strP = TokenManager.GetPrincipal(token);
                         {
                             if (offersList[i].isActive == 1)
                             {
-                                int offerId = (int)offersList[i].offerId;
+                                long offerId = (long)offersList[i].offerId;
                                 var offerItems = entity.itemsOffers.Where(x => x.offerId == offerId).Select(b => new { b.offerId }).FirstOrDefault();
                                
                                 if (offerItems is null) 
@@ -83,13 +83,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int offerId = 0;
+                long offerId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        offerId = int.Parse(c.Value);
+                        offerId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -148,12 +148,12 @@ var strP = TokenManager.GetPrincipal(token);
 
                  if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 try
@@ -212,19 +212,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int offerId = 0;
-                int userId = 0;
+                long offerId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        offerId = int.Parse(c.Value);
+                        offerId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -288,13 +288,13 @@ var strP = TokenManager.GetPrincipal(token);
             else
             {
 
-                int membershipId = 0;
+                long membershipId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        membershipId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())

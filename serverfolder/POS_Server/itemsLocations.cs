@@ -20,18 +20,18 @@ namespace POS_Server
             this.inventoryItemLocation = new HashSet<inventoryItemLocation>();
         }
     
-        public int itemsLocId { get; set; }
-        public Nullable<int> locationId { get; set; }
+        public long itemsLocId { get; set; }
+        public Nullable<long> locationId { get; set; }
         public long quantity { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public Nullable<System.DateTime> startDate { get; set; }
         public Nullable<System.DateTime> endDate { get; set; }
-        public Nullable<int> itemUnitId { get; set; }
+        public Nullable<long> itemUnitId { get; set; }
         public string notes { get; set; }
-        public Nullable<int> invoiceId { get; set; }
+        public Nullable<long> invoiceId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<inventoryItemLocation> inventoryItemLocation { get; set; }

@@ -21,7 +21,7 @@ namespace POS_Server.Controllers
         [Route("Get")]
         public string Get(string token)
         {
-            //public string GetByGroupId(string token)string tableName, int tableId
+            //public string GetByGroupId(string token)string tableName, long tableId
             //{
 
 
@@ -33,7 +33,7 @@ namespace POS_Server.Controllers
             }
                 else
                 {
-                    int tableId = 0;
+                    long tableId = 0;
                 string tableName = "";
 
                     IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -41,7 +41,7 @@ namespace POS_Server.Controllers
                     {
                         if (c.Type == "tableId")
                         {
-                        tableId = int.Parse(c.Value);
+                        tableId = long.Parse(c.Value);
                         }
                   else  if (c.Type == "tableName")
                     {
@@ -129,7 +129,7 @@ namespace POS_Server.Controllers
         [Route("GetCount")]
         public string GetCount(string token)
         {
-            //string tableName, int tableId
+            //string tableName, long tableId
 
             token = TokenManager.readToken(HttpContext.Current.Request);
             var strP = TokenManager.GetPrincipal(token);
@@ -139,7 +139,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int tableId = 0;
+                long tableId = 0;
                 string tableName = "";
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -147,7 +147,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "tableId")
                     {
-                        tableId = int.Parse(c.Value);
+                        tableId = long.Parse(c.Value);
                     }
                     else if (c.Type == "tableName")
                     {
@@ -354,12 +354,12 @@ namespace POS_Server.Controllers
 
                     if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.updateUserId = id;
                     }
                     if (newObject.createUserId == 0 || newObject.createUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.createUserId = id;
                     }
                     try
@@ -425,12 +425,12 @@ namespace POS_Server.Controllers
             //    docImages imageDocObj = JsonConvert.DeserializeObject<docImages>(docImageObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
             //    if (imageDocObj.updateUserId == 0 || imageDocObj.updateUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        imageDocObj.updateUserId = id;
             //    }
             //    if (imageDocObj.createUserId == 0 || imageDocObj.createUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        imageDocObj.createUserId = id;
             //    }
             //    try
@@ -513,12 +513,12 @@ namespace POS_Server.Controllers
 
                     if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.updateUserId = id;
                     }
                     if (newObject.createUserId == 0 || newObject.createUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.createUserId = id;
                     }
                     try
@@ -569,12 +569,12 @@ namespace POS_Server.Controllers
             //    docImages docImageObj = JsonConvert.DeserializeObject<docImages>(docImageObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
             //    if (docImageObj.updateUserId == 0 || docImageObj.updateUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        docImageObj.updateUserId = id;
             //    }
             //    if (docImageObj.createUserId == 0 || docImageObj.createUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        docImageObj.createUserId = id;
             //    }
             //    try
@@ -614,14 +614,14 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int docId = 0;
+                long docId = 0;
            
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "docId")
                     {
-                        docId = int.Parse(c.Value);
+                        docId = long.Parse(c.Value);
                    
                     }
                 }

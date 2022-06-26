@@ -24,7 +24,7 @@ namespace POS_Server.Controllers
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId    DateTime? date=new DateTime?();
+            //long mainBranchId, long userId    DateTime? date=new DateTime?();
            
             
             

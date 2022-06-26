@@ -87,18 +87,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemUnitId = 0;
-                int itemId = 0;
+                long itemUnitId = 0;
+                long itemId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemUnitId")
                     {
-                        itemUnitId = int.Parse(c.Value);
+                        itemUnitId = long.Parse(c.Value);
                     }
                     else if (c.Type == "itemId")
                     {
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -113,14 +113,14 @@ namespace POS_Server.Controllers
                         smallUnitPrice = price / totalNum;
 
                     var smallestUnitId = (from iu in entity.itemsUnits
-                                          where (itemUnits.Contains((int)iu.itemUnitId) && iu.unitId == iu.subUnitId)
+                                          where (itemUnits.Contains((long)iu.itemUnitId) && iu.unitId == iu.subUnitId)
                                           select iu.itemUnitId).FirstOrDefault();
 
                     if (smallestUnitId == null || smallestUnitId == 0)
                     {
                         smallestUnitId = (from u in entity.itemsUnits
                                           where !entity.itemsUnits.Any(y => u.subUnitId == y.unitId)
-                                          where (itemUnits.Contains((int)u.itemUnitId))
+                                          where (itemUnits.Contains((long)u.itemUnitId))
                                           select u.itemUnitId).FirstOrDefault();
                     }
                     if (itemUnitId == smallestUnitId || smallestUnitId == null || smallestUnitId == 0)
@@ -145,13 +145,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
+                long invoiceId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -234,13 +234,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainInvoiceId = 0;
+                long mainInvoiceId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        mainInvoiceId = int.Parse(c.Value);
+                        mainInvoiceId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -296,13 +296,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
+                long invoiceId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -361,7 +361,7 @@ namespace POS_Server.Controllers
             else
             {
                 string invNum = "";
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -371,7 +371,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -484,7 +484,7 @@ namespace POS_Server.Controllers
             else
             {
                 string invType = "";
-                int branchId = 0;
+                long branchId = 0;
                 List<string> invTypeL = new List<string>();
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -499,7 +499,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
 
@@ -555,7 +555,7 @@ namespace POS_Server.Controllers
                         {
                             for (int i = 0; i < invoicesList.Count; i++)
                             {
-                                int invoiceId = invoicesList[i].invoiceId;
+                                long invoiceId = invoicesList[i].invoiceId;
                                 int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                                 invoicesList[i].itemsCount = itemCount;
                             }
@@ -610,7 +610,7 @@ namespace POS_Server.Controllers
                         {
                             for (int i = 0; i < invoicesList.Count; i++)
                             {
-                                int invoiceId = invoicesList[i].invoiceId;
+                                long invoiceId = invoicesList[i].invoiceId;
                                 int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                                 invoicesList[i].itemsCount = itemCount;
                             }
@@ -634,7 +634,7 @@ namespace POS_Server.Controllers
             else
             {
                 string invType = "";
-                int branchId = 0;
+                long branchId = 0;
                 List<string> invTypeL = new List<string>();
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -649,7 +649,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
 
@@ -706,7 +706,7 @@ namespace POS_Server.Controllers
                     {
                         for (int i = 0; i < invoicesList.Count; i++)
                         {
-                            int invoiceId = invoicesList[i].invoiceId;
+                            long invoiceId = invoicesList[i].invoiceId;
                             int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                             invoicesList[i].itemsCount = itemCount;
                         }
@@ -729,7 +729,7 @@ namespace POS_Server.Controllers
             else
             {
                 string invType = "";
-                int branchId = 0;
+                long branchId = 0;
                 List<string> invTypeL = new List<string>();
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -744,7 +744,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
 
@@ -808,7 +808,7 @@ namespace POS_Server.Controllers
                     {
                         for (int i = 0; i < invoicesList.Count; i++)
                         {
-                            int invoiceId = invoicesList[i].invoiceId;
+                            long invoiceId = invoicesList[i].invoiceId;
                             int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                             invoicesList[i].itemsCount = itemCount;
                         }
@@ -834,7 +834,7 @@ namespace POS_Server.Controllers
             {
                 #region params
                 string invType = "";
-                int createUserId = 0;
+                long createUserId = 0;
                 int duration = 0;
                 int hours = 0;
                 List<string> invTypeL = new List<string>();
@@ -851,7 +851,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "createUserId")
                     {
-                        createUserId = int.Parse(c.Value);
+                        createUserId = long.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
@@ -951,7 +951,7 @@ namespace POS_Server.Controllers
                         for (int i = 0; i < invoicesList.Count; i++)
                         {
                             //complete = "ready";
-                            int invoiceId = invoicesList[i].invoiceId;
+                            long invoiceId = invoicesList[i].invoiceId;
                             //int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                             var itemList = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
                             invoicesList[i].itemsCount = itemList.Count;
@@ -1068,7 +1068,7 @@ namespace POS_Server.Controllers
                     {
                         for (int i = 0; i < invoicesList.Count; i++)
                         {
-                            int invoiceId = invoicesList[i].invoiceId;
+                            long invoiceId = invoicesList[i].invoiceId;
                             int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                             invoicesList[i].itemsCount = itemCount;
                         }
@@ -1149,7 +1149,7 @@ namespace POS_Server.Controllers
             {
                 #region params
                 string invType = "";
-                int createUserId = 0;
+                long createUserId = 0;
                 int duration = 0;
                 int hours = 0;
                 List<string> invTypeL = new List<string>();
@@ -1166,7 +1166,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "createUserId")
                     {
-                        createUserId = int.Parse(c.Value);
+                        createUserId = long.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
@@ -1258,8 +1258,8 @@ namespace POS_Server.Controllers
             {
                 #region params
                 string invType = "";
-                int branchCreatorId = 0;
-                int branchId = 0;
+                long branchCreatorId = 0;
+                long branchId = 0;
                 int duration = 0;
                 List<string> invTypeL = new List<string>();
 
@@ -1275,11 +1275,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchCreatorId")
                     {
-                        branchCreatorId = int.Parse(c.Value);
+                        branchCreatorId = long.Parse(c.Value);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
@@ -1348,7 +1348,7 @@ namespace POS_Server.Controllers
                     {
                         for (int i = 0; i < invoicesList.Count; i++)
                         {
-                            int invoiceId = invoicesList[i].invoiceId;
+                            long invoiceId = invoicesList[i].invoiceId;
                             int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                             invoicesList[i].itemsCount = itemCount;
                         }
@@ -1373,8 +1373,8 @@ namespace POS_Server.Controllers
             {
                 BranchesController bc = new BranchesController();
                 string invNum = "";
-                int branchId = 0;
-                int userId = 0;
+                long branchId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -1384,18 +1384,18 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
                     //get user branches permission
                     var branches = bc.BrListByBranchandUser(branchId, userId);
-                    List<int> branchesIds = new List<int>();
+                    List<long> branchesIds = new List<long>();
                     for (int i = 0; i < branches.Count; i++)
                         branchesIds.Add(branches[i].branchId);
 
@@ -1460,7 +1460,7 @@ namespace POS_Server.Controllers
         //    else
         //    {
         //        string invType = "";
-        //        int userId = 0;
+        //        long userId = 0;
         //        List<string> invTypeL = new List<string>();
 
         //        IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1475,7 +1475,7 @@ namespace POS_Server.Controllers
         //            }
         //            else if (c.Type == "userId")
         //            {
-        //                userId = int.Parse(c.Value);
+        //                userId = long.Parse(c.Value);
         //            }
         //        }
 
@@ -1522,7 +1522,7 @@ namespace POS_Server.Controllers
         //            {
         //                for (int i = 0; i < invoicesList.Count; i++)
         //                {
-        //                    int invoiceId = invoicesList[i].invoiceId;
+        //                    long invoiceId = invoicesList[i].invoiceId;
         //                    int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
         //                    invoicesList[i].itemsCount = itemCount;
         //                }
@@ -1545,8 +1545,8 @@ namespace POS_Server.Controllers
             else
             {
                 string invType = "";
-                int branchCreatorId = 0;
-                int branchId = 0;
+                long branchCreatorId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -1556,11 +1556,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchCreatorId")
                     {
-                        branchCreatorId = int.Parse(c.Value);
+                        branchCreatorId = long.Parse(c.Value);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 var invoicesList = getUnhandeledOrdersList(invType, branchCreatorId, branchId);
@@ -1582,9 +1582,9 @@ namespace POS_Server.Controllers
             else
             {
                 string invType = "";
-                int branchCreatorId = 0;
-                int branchId = 0;
-                int userId = 0;
+                long branchCreatorId = 0;
+                long branchId = 0;
+                long userId = 0;
                 int duration = 0;
                 List<string> invTypeL = new List<string>();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1599,11 +1599,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchCreatorId")
                     {
-                        branchCreatorId = int.Parse(c.Value);
+                        branchCreatorId = long.Parse(c.Value);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
@@ -1611,7 +1611,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
 
@@ -1661,8 +1661,8 @@ namespace POS_Server.Controllers
             {
                 #region params
                 string invType = "";
-                int branchCreatorId = 0;
-                int branchId = 0;
+                long branchCreatorId = 0;
+                long branchId = 0;
                 int duration = 0;
                 List<string> invTypeL = new List<string>();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1677,11 +1677,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchCreatorId")
                     {
-                        branchCreatorId = int.Parse(c.Value);
+                        branchCreatorId = long.Parse(c.Value);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "duration")
                     {
@@ -1731,14 +1731,14 @@ namespace POS_Server.Controllers
             else
             {
                 #region params
-                int shipUserId = 0;
+                long shipUserId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "userId")
                     {
-                        shipUserId = int.Parse(c.Value);
+                        shipUserId = long.Parse(c.Value);
                     }
                 }
                 #endregion
@@ -1859,14 +1859,14 @@ namespace POS_Server.Controllers
             else
             {
                 #region params
-                int shipUserId = 0;
+                long shipUserId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "userId")
                     {
-                        shipUserId = int.Parse(c.Value);
+                        shipUserId = long.Parse(c.Value);
                     }
                 }
                 #endregion
@@ -1956,13 +1956,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 List<string> statusL = new List<string>();
@@ -2031,7 +2031,7 @@ namespace POS_Server.Controllers
                     {
                         for (int i = 0; i < invoicesList.Count; i++)
                         {
-                            int invoiceId = invoicesList[i].invoiceId;
+                            long invoiceId = invoicesList[i].invoiceId;
                             int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                             invoicesList[i].itemsCount = itemCount;
                         }
@@ -2054,19 +2054,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
-                int agentId = 0;
+                long branchId = 0;
+                long agentId = 0;
                 string type = "";
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "agentId")
                     {
-                        agentId = int.Parse(c.Value);
+                        agentId = long.Parse(c.Value);
                     }
                     else if (c.Type == "type")
                     {
@@ -2141,7 +2141,7 @@ namespace POS_Server.Controllers
                         List<InvoiceModel> res = new List<InvoiceModel>();
                         foreach (InvoiceModel inv in invoicesList)
                         {
-                            int invoiceId = inv.invoiceId;
+                            long invoiceId = inv.invoiceId;
 
                             var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
 
@@ -2158,7 +2158,7 @@ namespace POS_Server.Controllers
                     {
                         for (int i = 0; i < invoicesList.Count; i++)
                         {
-                            int invoiceId = invoicesList[i].invoiceId;
+                            long invoiceId = invoicesList[i].invoiceId;
                             int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                             invoicesList[i].itemsCount = itemCount;
                         }
@@ -2180,13 +2180,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int agentId = 0;
+                long agentId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        agentId = int.Parse(c.Value);
+                        agentId = long.Parse(c.Value);
                     }
                 }
 
@@ -2246,19 +2246,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
-                int shippingCompanyId = 0;
+                long branchId = 0;
+                long shippingCompanyId = 0;
                 string type = "";
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "shippingCompanyId")
                     {
-                        shippingCompanyId = int.Parse(c.Value);
+                        shippingCompanyId = long.Parse(c.Value);
                     }
                     else if (c.Type == "type")
                     {
@@ -2326,7 +2326,7 @@ namespace POS_Server.Controllers
                         List<InvoiceModel> res = new List<InvoiceModel>();
                         foreach (InvoiceModel inv in invoicesList)
                         {
-                            int invoiceId = inv.invoiceId;
+                            long invoiceId = inv.invoiceId;
 
                             var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
 
@@ -2346,7 +2346,7 @@ namespace POS_Server.Controllers
                         {
                             for (int i = 0; i < invoicesList.Count; i++)
                             {
-                                int invoiceId = invoicesList[i].invoiceId;
+                                long invoiceId = invoicesList[i].invoiceId;
                                 int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                                 invoicesList[i].itemsCount = itemCount;
                             }
@@ -2369,19 +2369,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
-                int userId = 0;
+                long branchId = 0;
+                long userId = 0;
                 string type = "";
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "type")
                     {
@@ -2445,7 +2445,7 @@ namespace POS_Server.Controllers
                         List<InvoiceModel> res = new List<InvoiceModel>();
                         foreach (InvoiceModel inv in invoicesList)
                         {
-                            int invoiceId = inv.invoiceId;
+                            long invoiceId = inv.invoiceId;
 
                             var statusObj = entity.orderPreparingStatus.Where(x => x.orderPreparing.invoiceId == invoiceId && x.status == "Done").FirstOrDefault();
 
@@ -2465,7 +2465,7 @@ namespace POS_Server.Controllers
                         {
                             for (int i = 0; i < invoicesList.Count; i++)
                             {
-                                int invoiceId = invoicesList[i].invoiceId;
+                                long invoiceId = invoicesList[i].invoiceId;
                                 int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                                 invoicesList[i].itemsCount = itemCount;
                             }
@@ -2489,7 +2489,7 @@ namespace POS_Server.Controllers
             else
             {
                 string invType = "";
-                int branchId = 0;
+                long branchId = 0;
                 List<string> invTypeL = new List<string>();
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -2504,7 +2504,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
 
@@ -2559,7 +2559,7 @@ namespace POS_Server.Controllers
                         {
                             for (int i = 0; i < invoicesList.Count; i++)
                             {
-                                int invoiceId = invoicesList[i].invoiceId;
+                                long invoiceId = invoicesList[i].invoiceId;
                                 int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                                 invoicesList[i].itemsCount = itemCount;
                             }
@@ -2615,7 +2615,7 @@ namespace POS_Server.Controllers
                         {
                             for (int i = 0; i < invoicesList.Count; i++)
                             {
-                                int invoiceId = invoicesList[i].invoiceId;
+                                long invoiceId = invoicesList[i].invoiceId;
                                 int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
                                 invoicesList[i].itemsCount = itemCount;
                             }
@@ -2639,7 +2639,7 @@ namespace POS_Server.Controllers
             else
             {
                 string invCode = "";
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -2649,7 +2649,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 List<string> numberList;
@@ -2688,14 +2688,14 @@ namespace POS_Server.Controllers
             {
                 string invCode = "";
                 string invType = "";
-                int branchId = 0;
+                long branchId = 0;
                 List<string> invTypeL = new List<string>();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "invType")
                     {
@@ -2743,14 +2743,14 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
+                long invoiceId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -2790,7 +2790,7 @@ namespace POS_Server.Controllers
             {
                 #region params
                 string classObject = "";
-                int invoiceId = 0;
+                long invoiceId = 0;
                 invoicesClass Object = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -2804,7 +2804,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
 
                 }
@@ -2953,9 +2953,9 @@ namespace POS_Server.Controllers
                 return TokenManager.GenerateToken(message);
             }
         }
-        public int saveInvoice(invoices newObject)
+        public long saveInvoice(invoices newObject)
         {
-            int res = 0;
+            long res = 0;
             invoices tmpInvoice;
             ProgramDetailsController pc = new ProgramDetailsController();
             using (incposdbEntities entity = new incposdbEntities())
@@ -3091,7 +3091,7 @@ namespace POS_Server.Controllers
 
                 try
                 {
-                    int invoiceId = saveInvoice(newObject);
+                    long invoiceId = saveInvoice(newObject);
                     if (invoiceId > 0)
                     {
                         string res = tc.saveInvoiceItems(items, invoiceId);
@@ -3156,10 +3156,10 @@ namespace POS_Server.Controllers
 
                 try
                 {
-                    int invoiceId = saveInvoice(newObject);
+                    long invoiceId = saveInvoice(newObject);
                     if (invoiceId > 0)
                     {
-                        string res = tc.saveInvoiceItems(items, invoiceId);
+                        string res = tc.saveInvoiceItems(items,invoiceId);
                         if (res == "0")
                             message = "0";
                         else
@@ -3214,7 +3214,7 @@ namespace POS_Server.Controllers
 
                 try
                 {
-                    int invoiceId = saveInvoice(newObject);
+                    long invoiceId = saveInvoice(newObject);
                     message = invoiceId.ToString();
                     if (invoiceId > 0)
                     {
@@ -3244,9 +3244,9 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
-                int? reservationId = null;
-                int userId = 0;
+                long invoiceId = 0;
+                long? reservationId = null;
+                long userId = 0;
                 string tablesObject = "";
                 List<tables> tables = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -3254,13 +3254,13 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                     else if (c.Type == "reservationId")
                     {
                         try
                         {
-                            reservationId = int.Parse(c.Value);
+                            reservationId = long.Parse(c.Value);
                         }
                         catch
                         {
@@ -3269,7 +3269,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "tablesObject")
                     {
@@ -3326,7 +3326,7 @@ namespace POS_Server.Controllers
                 return TokenManager.GenerateToken(message);
             }
         }
-        public string saveInvoiceTables(List<tables> newObject, int invoiceId, int userId)
+        public string saveInvoiceTables(List<tables> newObject, long invoiceId, long userId)
         {
             string message = "";
             try
@@ -3343,7 +3343,7 @@ namespace POS_Server.Controllers
                         invoiceTables tr = new invoiceTables();
                         if (newObject[i].createUserId == 0 || newObject[i].createUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject[i].createUserId = id;
                         }
 
@@ -3382,7 +3382,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int id = 0;
+                long id = 0;
                 int countstep = 0;
                 bool isOrginal = false;
                 bool updateOrginalstate = false;
@@ -3394,7 +3394,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "id")
                     {
-                        id = int.Parse(c.Value);
+                        id = long.Parse(c.Value);
                     }
                     else if (c.Type == "countstep")
                     {
@@ -3471,13 +3471,13 @@ namespace POS_Server.Controllers
             {
                 try
                 {
-                    int invoiceId = 0;
+                    long invoiceId = 0;
                     IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                     foreach (Claim c in claims)
                     {
                         if (c.Type == "itemId")
                         {
-                            invoiceId = int.Parse(c.Value);
+                            invoiceId = long.Parse(c.Value);
                         }
                     }
 
@@ -3513,13 +3513,13 @@ namespace POS_Server.Controllers
             {
                 try
                 {
-                    int invoiceId = 0;
+                    long invoiceId = 0;
                     IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                     foreach (Claim c in claims)
                     {
                         if (c.Type == "itemId")
                         {
-                            invoiceId = int.Parse(c.Value);
+                            invoiceId = long.Parse(c.Value);
                         }
                     }
 
@@ -3600,7 +3600,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
+                long invoiceId = 0;
                 string Object = "";
                 List<itemsTransfer> newObject = new List<itemsTransfer>();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -3644,7 +3644,7 @@ namespace POS_Server.Controllers
 
             }
         }
-        private decimal GetAvgPrice(int itemUnitId, int itemId, int numInvoice)
+        private decimal GetAvgPrice(long itemUnitId, long itemId, int numInvoice)
         {
             decimal price = 0;
             int totalNum = 0;
@@ -3653,7 +3653,7 @@ namespace POS_Server.Controllers
             using (incposdbEntities entity = new incposdbEntities())
             {
                 var itemUnits = (from i in entity.itemsUnits where (i.itemId == itemId) select (i.itemUnitId)).ToList();
-                List<int> invoicesIds = new List<int>();
+                List<long> invoicesIds = new List<long>();
                 if (numInvoice == 0)
                 {
                     invoicesIds = (from p in entity.invoices
@@ -3678,7 +3678,7 @@ namespace POS_Server.Controllers
 
             }
         }
-        private int getUpperUnitValue(int itemUnitId, int basicItemUnitId)
+        private int getUpperUnitValue(long itemUnitId, long basicItemUnitId)
         {
             int unitValue = 0;
             using (incposdbEntities entity = new incposdbEntities())
@@ -3696,7 +3696,7 @@ namespace POS_Server.Controllers
                 return unitValue;
             }
         }
-        private decimal getItemUnitSumPrice(List<int> itemUnits)
+        private decimal getItemUnitSumPrice(List<long> itemUnits)
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -3711,7 +3711,7 @@ namespace POS_Server.Controllers
                     return 0;
             }
         }
-        private decimal getLastPrice(List<int> itemUnits, List<int> invoiceIds)
+        private decimal getLastPrice(List<long> itemUnits, List<long> invoiceIds)
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -3724,7 +3724,7 @@ namespace POS_Server.Controllers
                     return 0;
             }
         }
-        private int getItemUnitLastNum(List<int> itemUnits, List<int> invoiceIds)
+        private int getItemUnitLastNum(List<long> itemUnits, List<long> invoiceIds)
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -3769,7 +3769,7 @@ namespace POS_Server.Controllers
                 }
             }
         }
-        private long getLastNum(int itemUnitId, List<int> invoiceIds)
+        private long getLastNum(long itemUnitId, List<long> invoiceIds)
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -3797,7 +3797,7 @@ namespace POS_Server.Controllers
                     return 0;
             }
         }
-        private long getItemUnitNum(int itemUnitId)
+        private long getItemUnitNum(long itemUnitId)
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -3820,7 +3820,7 @@ namespace POS_Server.Controllers
                     return 0;
             }
         }
-        private long getItemUnitNum(int itemUnitId, int invoiceNum)
+        private long getItemUnitNum(long itemUnitId, int invoiceNum)
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -3843,7 +3843,7 @@ namespace POS_Server.Controllers
                     return 0;
             }
         }
-        private int getItemUnitTotalNum(List<int> itemUnits)
+        private int getItemUnitTotalNum(List<long> itemUnits)
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -3879,7 +3879,7 @@ namespace POS_Server.Controllers
                     return 0;
             }
         }
-        public List<InvoiceModel> getUnhandeledOrdersList(string invType, int branchCreatorId, int branchId, int duration = 0, int userId = 0)
+        public List<InvoiceModel> getUnhandeledOrdersList(string invType, long branchCreatorId, long branchId, int duration = 0, long userId = 0)
         {
             string[] invTypeArray = invType.Split(',');
             List<string> invTypeL = new List<string>();
@@ -3944,7 +3944,7 @@ namespace POS_Server.Controllers
                     for (int i = 0; i < invoicesList.Count(); i++)
                     {
                         //string complete = "ready";
-                        int invoiceId = invoicesList[i].invoiceId;
+                        long invoiceId = invoicesList[i].invoiceId;
                         var itemList = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
                         invoicesList[i].itemsCount = itemList.Count;
                         //foreach (itemsTransfer tr in itemList)
@@ -3964,7 +3964,7 @@ namespace POS_Server.Controllers
                 return invoicesList;
             }
         }
-        public decimal AvgItemPurPrice(int itemUnitId, int itemId)
+        public decimal AvgItemPurPrice(long itemUnitId, long itemId)
         {
 
             decimal price = 0;

@@ -29,13 +29,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemUnitId = 0;
+                long itemUnitId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemUnitId")
                     {
-                        itemUnitId = int.Parse(c.Value);
+                        itemUnitId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())

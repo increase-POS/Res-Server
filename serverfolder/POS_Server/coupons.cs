@@ -21,7 +21,7 @@ namespace POS_Server
             this.couponsMemberships = new HashSet<couponsMemberships>();
         }
     
-        public int cId { get; set; }
+        public long cId { get; set; }
         public string name { get; set; }
         public string code { get; set; }
         public byte isActive { get; set; }
@@ -36,8 +36,8 @@ namespace POS_Server
         public decimal invMax { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public string barcode { get; set; }
         public string forAgents { get; set; }
     

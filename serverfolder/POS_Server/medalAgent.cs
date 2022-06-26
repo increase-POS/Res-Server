@@ -14,15 +14,15 @@ namespace POS_Server
     
     public partial class medalAgent
     {
-        public int id { get; set; }
-        public Nullable<int> medalId { get; set; }
-        public Nullable<int> agentId { get; set; }
+        public long id { get; set; }
+        public Nullable<long> medalId { get; set; }
+        public Nullable<long> agentId { get; set; }
         public string notes { get; set; }
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual agents agents { get; set; }
         public virtual medals medals { get; set; }

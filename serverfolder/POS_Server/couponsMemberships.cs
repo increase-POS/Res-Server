@@ -14,14 +14,14 @@ namespace POS_Server
     
     public partial class couponsMemberships
     {
-        public int couponMembershipId { get; set; }
-        public Nullable<int> cId { get; set; }
-        public Nullable<int> membershipId { get; set; }
+        public long couponMembershipId { get; set; }
+        public Nullable<long> cId { get; set; }
+        public Nullable<long> membershipId { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual coupons coupons { get; set; }
         public virtual memberships memberships { get; set; }

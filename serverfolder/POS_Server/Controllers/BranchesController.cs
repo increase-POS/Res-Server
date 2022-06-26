@@ -72,7 +72,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (branchesList[i].isActive == 1)
                             {
-                                int branchId = (int)branchesList[i].branchId;
+                                long branchId = (long)branchesList[i].branchId;
                                 var parentBrancheL = entity.branches.Where(x => x.parentId == branchId).Select(x => new { x.branchId }).FirstOrDefault();
                                 var posL = entity.pos.Where(x => x.branchId == branchId).Select(b => new { b.posId }).FirstOrDefault();
                                 // var locationsL = entity.locations.Where(x => x.branchId == branchId).Select(x => new { x.locationId }).FirstOrDefault();
@@ -219,13 +219,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -256,18 +256,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    int parentid = branchId; // if want to show the last category 
+                    long parentid = branchId; // if want to show the last category 
                     while (parentid > 0)
                     {
                         branches tempbranch = new branches();
@@ -311,7 +311,7 @@ namespace POS_Server.Controllers
 
 
 
-                        parentid = (int)tempbranch.parentId;
+                        parentid = (long)tempbranch.parentId;
 
                         treebranch.Add(tempbranch);
 
@@ -376,7 +376,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (branchesList[i].isActive == 1)
                             {
-                                int branchId = (int)branchesList[i].branchId;
+                                long branchId = (long)branchesList[i].branchId;
                                 var parentBrancheL = entity.branches.Where(x => x.parentId == branchId).Select(x => new { x.branchId }).FirstOrDefault();
                                 var posL = entity.pos.Where(x => x.branchId == branchId).Select(b => new { b.posId }).FirstOrDefault();
                                 // var locationsL = entity.locations.Where(x => x.branchId == branchId).Select(x => new { x.locationId }).FirstOrDefault();
@@ -443,13 +443,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -497,18 +497,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                
@@ -534,13 +534,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int mainBranchId = 0;
+                long mainBranchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                 }
                 var List = BranchesByBranch(mainBranchId);
@@ -563,13 +563,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int userId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 var List = BranchesByUser(userId);
@@ -578,7 +578,7 @@ namespace POS_Server.Controllers
             }
         }
 
-        public List<BranchModel> BranchesByBranch(int mainBranchId)
+        public List<BranchModel> BranchesByBranch(long mainBranchId)
         {
             // List<branches> blist = new List<branches>();
 
@@ -653,7 +653,7 @@ namespace POS_Server.Controllers
         }
 
 
-        public List<BranchModel> BranchesByUser(int userId)
+        public List<BranchModel> BranchesByUser(long userId)
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -689,7 +689,7 @@ namespace POS_Server.Controllers
 
         }
 
-        public List<branches> BrListByBranchandUser(int mainBranchId, int userId)
+        public List<branches> BrListByBranchandUser(long mainBranchId, long userId)
         {
             List<BranchModel> Listb = new List<BranchModel>();
             List<BranchModel> Listu = new List<BranchModel>();
@@ -754,20 +754,20 @@ namespace POS_Server.Controllers
                         break;
                     }
                 }
-                int branchId = 0;
-                int secfreezoneId = 0;
-                int seckitchenId = 0;
-                int lockitchenId = 0;
-                int locfreezoneId = 0;
-                int res = 0;
+                long branchId = 0;
+                long secfreezoneId = 0;
+                long seckitchenId = 0;
+                long lockitchenId = 0;
+                long locfreezoneId = 0;
+                long res = 0;
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 try
@@ -845,7 +845,7 @@ namespace POS_Server.Controllers
                                             res = seckitchenId;
                                             if (res == -2)
                                             {
-                                                res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+                                                res = DeleteBranch(branchId, (long)newObject.createUserId, true);
                                             }
                                         }
 
@@ -867,9 +867,9 @@ namespace POS_Server.Controllers
                                             res = locfreezoneId;
                                             if (res == -2)
                                             {
-                                                res = DeleteSec(secfreezoneId, (int)newObject.createUserId, true);
+                                                res = DeleteSec(secfreezoneId, (long)newObject.createUserId, true);
                                              //   res = DeleteSec(seckitchenId, (int)newObject.createUserId, true);
-                                                res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+                                                res = DeleteBranch(branchId, (long)newObject.createUserId, true);
 
                                             }
                                             else
@@ -890,11 +890,11 @@ namespace POS_Server.Controllers
                                                 res = lockitchenId;
                                                 if (res == -2)
                                                 {
-                                                    res = DeleteLoc(locfreezoneId, (int)newObject.createUserId, true);
-                                                    res = DeleteSec(secfreezoneId, (int)newObject.createUserId, true);
-                                                    res = DeleteSec(seckitchenId, (int)newObject.createUserId, true);
+                                                    res = DeleteLoc(locfreezoneId, (long)newObject.createUserId, true);
+                                                    res = DeleteSec(secfreezoneId, (long)newObject.createUserId, true);
+                                                    res = DeleteSec(seckitchenId, (long)newObject.createUserId, true);
                                                  
-                                                    res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+                                                    res = DeleteBranch(branchId, (long)newObject.createUserId, true);
 
                                                 }
                                             }
@@ -904,18 +904,18 @@ namespace POS_Server.Controllers
                                         {
                                             // error locaion : delete sec+branch
 
-                                            res = DeleteLoc(lockitchenId, (int)newObject.createUserId, true);
-                                            res = DeleteLoc(locfreezoneId, (int)newObject.createUserId, true);
-                                            res = DeleteSec(secfreezoneId, (int)newObject.createUserId, true);
-                                            res = DeleteSec(seckitchenId, (int)newObject.createUserId, true);
-                                            res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+                                            res = DeleteLoc(lockitchenId, (long)newObject.createUserId, true);
+                                            res = DeleteLoc(locfreezoneId, (long)newObject.createUserId, true);
+                                            res = DeleteSec(secfreezoneId, (long)newObject.createUserId, true);
+                                            res = DeleteSec(seckitchenId, (long)newObject.createUserId, true);
+                                            res = DeleteBranch(branchId, (long)newObject.createUserId, true);
 
                                         }
                                     }
                                     catch
                                     {
                                         //error section: delete branch
-                                        res = DeleteBranch(branchId, (int)newObject.createUserId, true);
+                                        res = DeleteBranch(branchId, (long)newObject.createUserId, true);
 
                                         //  return TokenManager.GenerateToken("0");
 
@@ -985,19 +985,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
-                int userId = 0;
+                long branchId = 0;
+                long userId = 0;
                 bool final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -1027,7 +1027,7 @@ namespace POS_Server.Controllers
                     }
                     else
                     {
-                        int dbbranchId = 0;
+                        long dbbranchId = 0;
                         bool isdel = true;
 
                         var res = entity.branches.Where(x => x.parentId == branchId).Select(x => new { x.branchId }).FirstOrDefault();
@@ -1193,8 +1193,8 @@ namespace POS_Server.Controllers
           
         }
 
-        List<int> branchIdlist = new List<int>();
-        public IEnumerable<branches> Recursive(List<branches> branchList, int toplevelid)
+        List<long> branchIdlist = new List<long>();
+        public IEnumerable<branches> Recursive(List<branches> branchList, long toplevelid)
         {
             List<branches> inner = new List<branches>();
 
@@ -1207,7 +1207,7 @@ namespace POS_Server.Controllers
 
             return inner;
         }
-        public List<BranchModel> BranchSonsbyId(int parentId)
+        public List<BranchModel> BranchSonsbyId(long parentId)
         {
 
             using (incposdbEntities entity = new incposdbEntities())
@@ -1222,8 +1222,8 @@ namespace POS_Server.Controllers
                   })
                  .ToList();
 
-                List<int> branchesIdlist = new List<int>();
-                List<int> catIdlist = new List<int>();
+                List<long> branchesIdlist = new List<long>();
+                List<long> catIdlist = new List<long>();
                 branchesIdlist.Add(parentId);
 
 
@@ -1267,23 +1267,23 @@ namespace POS_Server.Controllers
       
         //functions for save branch
         #region savefunctions
-        public int SaveSec(sections newObject)
+        public long SaveSec(sections newObject)
         {
-            int message = 0;
+            long message = 0;
 
             if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.updateUserId = id;
             }
             if (newObject.createUserId == 0 || newObject.createUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.createUserId = id;
             }
             if (newObject.branchId == 0 || newObject.branchId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.branchId = id;
             }
             try
@@ -1325,10 +1325,10 @@ namespace POS_Server.Controllers
             return message;
         }
 
-        public int DeleteSec(int sectionId, int userId, bool final = true)
+        public long DeleteSec(long sectionId, long userId, bool final = true)
         {
 
-            int message = 0;
+            long message = 0;
             if (final)
             {
                 try
@@ -1371,25 +1371,25 @@ namespace POS_Server.Controllers
         }
 
 
-        public int SaveLoc(locations newObject)
+        public long SaveLoc(locations newObject)
         {
-            int message = 0;
+            long message = 0;
 
 
 
             if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.updateUserId = id;
             }
             if (newObject.createUserId == 0 || newObject.createUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.createUserId = id;
             }
             if (newObject.sectionId == 0 || newObject.sectionId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.sectionId = id;
             }
             try
@@ -1435,9 +1435,9 @@ namespace POS_Server.Controllers
         }
 
 
-        public int DeleteLoc(int locationId, int userId, bool final = true)
+        public long DeleteLoc(long locationId, long userId, bool final = true)
         {
-            int message = 0;
+            long message = 0;
             if (final)
             {
                 try
@@ -1484,9 +1484,9 @@ namespace POS_Server.Controllers
         // delete branch
 
 
-        public int DeleteBranch(int branchId, int userId, bool final = true)
+        public long DeleteBranch(long branchId, long userId, bool final = true)
         {
-            int message = 0;
+            long message = 0;
 
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -1511,7 +1511,7 @@ namespace POS_Server.Controllers
                 }
                 else
                 {
-                    int dbbranchId = 0;
+                    long dbbranchId = 0;
                     bool isdel = true;
 
                     var res = entity.branches.Where(x => x.parentId == branchId).Select(x => new { x.branchId }).FirstOrDefault();
@@ -1650,7 +1650,7 @@ namespace POS_Server.Controllers
         #endregion
 
 
-        public branches GetBranchByPosId(int? posId)
+        public branches GetBranchByPosId(long? posId)
         {
             branches branch = new branches();
             try

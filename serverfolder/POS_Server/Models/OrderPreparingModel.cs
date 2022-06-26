@@ -7,20 +7,20 @@ namespace POS_Server.Models
 {
     public class OrderPreparingModel
     {
-        public int orderPreparingId { get; set; }
+        public long orderPreparingId { get; set; }
         public string orderNum { get; set; }
-        public Nullable<int> invoiceId { get; set; }
+        public Nullable<long> invoiceId { get; set; }
         public string notes { get; set; }
         public Nullable<decimal> preparingTime { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
 
 
         // item
         public string itemName { get; set; }
-        public Nullable<int> itemUnitId { get; set; }
+        public Nullable<long> itemUnitId { get; set; }
         public int quantity { get; set; }
         //order
         public string status { get; set; }
@@ -33,16 +33,16 @@ namespace POS_Server.Models
         //invoice
         public string invNum { get; set; }
         public string invType { get; set; }
-        public Nullable<int> shippingCompanyId { get; set; }
+        public Nullable<long> shippingCompanyId { get; set; }
 
 
         public List<itemOrderPreparingModel> items { get; set; }
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> branchId { get; set; }
         public string branchName { get; set; }
         public Nullable<System.DateTime> invDate { get; set; }
         public Nullable<System.TimeSpan> invTime { get; set; }
         //category
-        public Nullable<int> categoryId { get; set; }
+        public Nullable<long> categoryId { get; set; }
         public string categoryCode { get; set; }
         public string categoryName { get; set; }
         //sections
@@ -51,24 +51,24 @@ namespace POS_Server.Models
     }
     public class itemOrderPreparingModel
     {
-        public int itemOrderId { get; set; }
-        public Nullable<int> itemUnitId { get; set; }
-        public Nullable<int> orderPreparingId { get; set; }
+        public long itemOrderId { get; set; }
+        public Nullable<long> itemUnitId { get; set; }
+        public Nullable<long> orderPreparingId { get; set; }
         public Nullable<int> quantity { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
 
 
         public string itemName { get; set; }
-        public Nullable<int> itemId { get; set; }
+        public Nullable<long> itemId { get; set; }
 
         public decimal remainingTime { get; set; }
         public int sequence { get; set; }
         //
-        public Nullable<int> categoryId { get; set; }
+        public Nullable<long> categoryId { get; set; }
         public string categoryName { get; set; }
 
     }

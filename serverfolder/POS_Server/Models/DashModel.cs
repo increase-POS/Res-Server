@@ -13,7 +13,7 @@ namespace POS_Server.Models
     }
     public class TotalPurSale
     {
-        public Nullable<int> branchCreatorId { get; set; }
+        public Nullable<long> branchCreatorId { get; set; }
         public string branchCreatorName { get; set; }
         public decimal totalPur { get; set; }
         public decimal totalSale { get; set; }
@@ -24,8 +24,8 @@ namespace POS_Server.Models
     }
     public class UserOnlineCount
     {
-        //  public Nullable<int> branchId { get; set; }
-        public int branchId { get; set; }
+        //  public Nullable<long> branchId { get; set; }
+        public long branchId { get; set; }
         public string branchName { get; set; }
         public int userOnlineCount { get; set; }
 
@@ -36,13 +36,13 @@ namespace POS_Server.Models
 
     public class userOnlineInfo
     {
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> branchId { get; set; }
         public string branchName { get; set; }
         public byte branchisActive { get; set; }
-        public Nullable<int> posId { get; set; }
+        public Nullable<long> posId { get; set; }
         public string posName { get; set; }
         public byte posisActive { get; set; }
-        public Nullable<int> userId { get; set; }
+        public Nullable<long> userId { get; set; }
         public string usernameAccount { get; set; }
         public string userName { get; set; }
         public string lastname { get; set; }
@@ -72,11 +72,11 @@ namespace POS_Server.Models
 
         public string itemName { get; set; }
         public string unitName { get; set; }
-        public int itemUnitId { get; set; }
-        public Nullable<int> itemId { get; set; }
-        public Nullable<int> unitId { get; set; }
+        public long itemUnitId { get; set; }
+        public Nullable<long> itemId { get; set; }
+        public Nullable<long> unitId { get; set; }
         public string branchName { get; set; }
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> branchId { get; set; }
         public long quantity { get; set; }
 
 
@@ -86,10 +86,10 @@ namespace POS_Server.Models
     public class BranchInvoicedata
     {
 
-        public int invoiceId { get; set; }
+        public long invoiceId { get; set; }
         public string invType { get; set; }
         public Nullable<System.DateTime> invDate { get; set; }
-        public Nullable<int> branchCreatorId { get; set; }
+        public Nullable<long> branchCreatorId { get; set; }
         public string branchCreatorName { get; set; }
 
     }
@@ -99,7 +99,7 @@ namespace POS_Server.Models
 
         public DateTime fromDate { get; set; }
         public DateTime toDate { get; set; }
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> branchId { get; set; }
         public string branchName { get; set; }
         public int count { get; set; }
         public int dateindex { get; set; }
@@ -114,7 +114,7 @@ namespace POS_Server.Models
         public List<BranchInvoiceCount> CountinHoursList { get; set; }
 
 
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> branchId { get; set; }
         public string branchName { get; set; }
 
 
@@ -124,7 +124,7 @@ namespace POS_Server.Models
     public class CountByInvType
     {
         public string invType { get; set; }
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> branchId { get; set; }
         public string branchName { get; set; }
         public int dhallCount { get; set; }
         public int selfCount { get; set; }
@@ -135,7 +135,7 @@ namespace POS_Server.Models
     {
         public string branchName { get; set; }
         public decimal balance { get; set; }
-        public int branchId { get; set; }
+        public long branchId { get; set; }
         public string branchType { get; set; }
         public string branchCode { get; set; }
         public byte banchIsActive { get; set; }

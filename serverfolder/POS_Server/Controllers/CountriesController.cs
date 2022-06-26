@@ -23,7 +23,7 @@ namespace POS_Server.Controllers
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId    DateTime? date=new DateTime?();
+            //long mainBranchId, long userId    DateTime? date=new DateTime?();
            
             
             
@@ -35,19 +35,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -165,7 +165,7 @@ namespace POS_Server.Controllers
         {
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId    DateTime? date=new DateTime?();
+            //long mainBranchId, long userId    DateTime? date=new DateTime?();
            
             
             
@@ -264,7 +264,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int countryId = 0;
+                long countryId = 0;
              
                
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -272,7 +272,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "countryId")
                     {
-                        countryId = int.Parse(c.Value);
+                        countryId = long.Parse(c.Value);
                     }
                    
                 }
@@ -300,7 +300,7 @@ namespace POS_Server.Controllers
                             objectrow.isDefault = 1;
                            
        
-                           int res=  entity.SaveChanges();
+                           long res=  entity.SaveChanges();
                             if (res > 0)
                             {
                                 message = objectrow.countryId.ToString();
@@ -396,7 +396,7 @@ namespace POS_Server.Controllers
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId    DateTime? date=new DateTime?();
+            //long mainBranchId, long userId    DateTime? date=new DateTime?();
            
             
             
@@ -408,15 +408,15 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int Id = 0;
-               // int userId = 0;
+                long Id = 0;
+               // long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "Id")
                     {
-                        Id = int.Parse(c.Value);
+                        Id = long.Parse(c.Value);
                     }
                  
 
@@ -460,7 +460,7 @@ namespace POS_Server.Controllers
             //var re = Request;
             //
             //string token = "";
-            //int cId = 0;
+            //long cId = 0;
             //if (headers.Contains("APIKey"))
             //{
             //    token = headers.GetValues("APIKey").First();
@@ -505,7 +505,7 @@ namespace POS_Server.Controllers
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId    DateTime? date=new DateTime?();
+            //long mainBranchId, long userId    DateTime? date=new DateTime?();
            
             
             
@@ -517,7 +517,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                //int mainBranchId = 0;
+                //long mainBranchId = 0;
                int isDefault = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -571,7 +571,7 @@ namespace POS_Server.Controllers
             //var re = Request;
             //
             //string token = "";
-            //int cId = 0;
+            //long cId = 0;
             //if (headers.Contains("APIKey"))
             //{
             //    token = headers.GetValues("APIKey").First();

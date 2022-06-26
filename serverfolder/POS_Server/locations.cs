@@ -20,18 +20,18 @@ namespace POS_Server
             this.itemsLocations = new HashSet<itemsLocations>();
         }
     
-        public int locationId { get; set; }
+        public long locationId { get; set; }
         public string x { get; set; }
         public string y { get; set; }
         public string z { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
-        public Nullable<int> sectionId { get; set; }
+        public Nullable<long> sectionId { get; set; }
         public string notes { get; set; }
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> branchId { get; set; }
         public byte isFreeZone { get; set; }
         public byte isKitchen { get; set; }
     

@@ -71,10 +71,10 @@ namespace POS_Server.Controllers
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public Nullable<byte> isActive { get; set; }
-        public Nullable<int> agentId { get; set; }
+        public Nullable<long> agentId { get; set; }
 
 pointId
 Cash
@@ -102,7 +102,7 @@ isActive
                         {
                             if (List[i].isActive == 1)
                             {
-                                int pointId = (int)List[i].pointId;
+                                long pointId = (long)List[i].pointId;
                                 var itemsI= entity.agents.Where(x => x.pointId == pointId).Select(b => new { b.agentId }).FirstOrDefault();
                                
                                 if ((itemsI is null)  )
@@ -199,17 +199,17 @@ isActive
                 Points newObject = JsonConvert.DeserializeObject<Points>(Object, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 if (newObject.agentId == 0 || newObject.agentId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.agentId = id;
                 }
                 try
@@ -268,7 +268,7 @@ isActive
 
         [HttpPost]
         [Route("Delete")]
-        public string Delete(int pointId, int userId,bool final)
+        public string Delete(long pointId, long userId,bool final)
         {
             var re = Request;
             var headers = re.Headers;

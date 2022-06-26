@@ -20,7 +20,7 @@ namespace POS_Server
             this.posSetting = new HashSet<posSetting>();
         }
     
-        public int id { get; set; }
+        public long id { get; set; }
         public string posSerial { get; set; }
         public string notes { get; set; }
         public bool isActive { get; set; }

@@ -14,11 +14,11 @@ namespace POS_Server
     
     public partial class invoiceOrder
     {
-        public int id { get; set; }
-        public Nullable<int> invoiceId { get; set; }
-        public Nullable<int> orderId { get; set; }
+        public long id { get; set; }
+        public Nullable<long> invoiceId { get; set; }
+        public Nullable<long> orderId { get; set; }
         public Nullable<int> quantity { get; set; }
-        public Nullable<int> itemsTransferId { get; set; }
+        public Nullable<long> itemsTransferId { get; set; }
     
         public virtual invoices invoices { get; set; }
         public virtual invoices invoices1 { get; set; }

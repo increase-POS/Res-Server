@@ -17,7 +17,7 @@ namespace POS_Server.Controllers
     [RoutePrefix("api/ItemsUnits")]
     public class ItemsUnitsController : ApiController
     {
-        List<int> itemUnitsIds = new List<int>();
+        List<long> itemUnitsIds = new List<long>();
         private Classes.Calculate Calc = new Classes.Calculate();
         [HttpPost]
         [Route("Get")]
@@ -31,12 +31,12 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemId = 0;
+                long itemId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                 }
                 try
                 {
@@ -150,13 +150,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemUnitId = 0;
+                long itemUnitId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemUnitId")
                     {
-                        itemUnitId = int.Parse(c.Value);
+                        itemUnitId = long.Parse(c.Value);
                     }
                 }
                 try
@@ -210,14 +210,14 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemId = 0;
+                long itemId = 0;
 
                 bool canDelete = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                 }
 
                 try
@@ -318,12 +318,12 @@ namespace POS_Server.Controllers
             string message = "";
             if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.updateUserId = id;
             }
             if (newObject.createUserId == 0 || newObject.createUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 newObject.createUserId = id;
             }
             try
@@ -361,7 +361,7 @@ namespace POS_Server.Controllers
                     {
                         //update
                         // set the other default sale or purchase to 0 if the new object.default is 1
-                        int itemUnitId = newObject.itemUnitId;
+                        long itemUnitId = newObject.itemUnitId;
                         var tmpItemUnit = entity.itemsUnits.Find(itemUnitId);
 
                         if (newObject.defaultPurchase == 1)
@@ -407,8 +407,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int ItemUnitId = 0;
-                int userId = 0;
+                long ItemUnitId = 0;
+                long userId = 0;
                 bool final = false;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -416,11 +416,11 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "ItemUnitId")
                     {
-                        ItemUnitId = int.Parse(c.Value);
+                        ItemUnitId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -722,12 +722,12 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
             IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
             foreach (Claim c in claims)
             {
                 if (c.Type == "branchId")
-                    branchId = int.Parse(c.Value);
+                    branchId = long.Parse(c.Value);
             }
                 try
                 {
@@ -848,13 +848,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int offerId = 0;
+                long offerId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "offerId")
                     {
-                        offerId = int.Parse(c.Value);
+                        offerId = long.Parse(c.Value);
                     }
                 }
                 try
@@ -914,18 +914,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemId = 0;
-                int itemUnitId = 0;
+                long itemId = 0;
+                long itemUnitId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                     }
                     else if (c.Type == "itemUnitId")
                     {
-                        itemUnitId = int.Parse(c.Value);
+                        itemUnitId = long.Parse(c.Value);
                     }
                 }
                 try
@@ -944,10 +944,10 @@ namespace POS_Server.Controllers
                          .ToList();
 
                         var unitId = entity.itemsUnits.Where(x => x.itemUnitId == itemUnitId).Select(x => x.unitId).Single();
-                        itemUnitsIds = new List<int>();
+                        itemUnitsIds = new List<long>();
                         itemUnitsIds.Add(itemUnitId);
 
-                        var result = Recursive(unitsList, (int)unitId);
+                        var result = Recursive(unitsList, (long)unitId);
 
                         var units = (from iu in entity.itemsUnits.Where(x => x.itemId == itemId && x.isActive == 1)
                                      join u in entity.units on iu.unitId equals u.unitId
@@ -958,7 +958,7 @@ namespace POS_Server.Controllers
                                          subUnitId = iu.subUnitId,
                                          mainUnit = u.name,
 
-                                     }).Where(p => !itemUnitsIds.Contains((int)p.itemUnitId)).ToList();
+                                     }).Where(p => !itemUnitsIds.Contains((long)p.itemUnitId)).ToList();
 
                         return TokenManager.GenerateToken(units);
                     }
@@ -971,7 +971,7 @@ namespace POS_Server.Controllers
             }
         }
 
-        public IEnumerable<itemsUnits> Recursive(List<itemsUnits> unitsList, int smallLevelid)
+        public IEnumerable<itemsUnits> Recursive(List<itemsUnits> unitsList, long smallLevelid)
         {
             List<itemsUnits> inner = new List<itemsUnits>();
 
@@ -1002,18 +1002,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int fromItemUnit = 0;
-                int toItemUnit = 0;
+                long fromItemUnit = 0;
+                long toItemUnit = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "fromItemUnit")
                     {
-                        fromItemUnit = int.Parse(c.Value);
+                        fromItemUnit = long.Parse(c.Value);
                     }
                     else if (c.Type == "toItemUnit")
                     {
-                        toItemUnit = int.Parse(c.Value);
+                        toItemUnit = long.Parse(c.Value);
 
                     }
                 }
@@ -1029,7 +1029,7 @@ namespace POS_Server.Controllers
                 }
             }
         }
-        private int getUnitConversionQuan(int fromItemUnit, int toItemUnit)
+        private int getUnitConversionQuan(long fromItemUnit, long toItemUnit)
         {
             int amount = 0;
 
@@ -1062,18 +1062,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int fromItemUnit = 0;
-                int toItemUnit = 0;
+                long fromItemUnit = 0;
+                long toItemUnit = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "fromItemUnit")
                     {
-                        fromItemUnit = int.Parse(c.Value);
+                        fromItemUnit = long.Parse(c.Value);
                     }
                     else if (c.Type == "toItemUnit")
                     {
-                        toItemUnit = int.Parse(c.Value);
+                        toItemUnit = long.Parse(c.Value);
 
                     }
                 }
@@ -1090,7 +1090,7 @@ namespace POS_Server.Controllers
             }
         }
 
-        public int getLargeUnitConversionQuan(int fromItemUnit, int toItemUnit)
+        public int getLargeUnitConversionQuan(long fromItemUnit, long toItemUnit)
         {
             int amount = 0;
 

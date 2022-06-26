@@ -21,14 +21,14 @@ namespace POS_Server
             this.residentialSectorsUsers = new HashSet<residentialSectorsUsers>();
         }
     
-        public int residentSecId { get; set; }
+        public long residentSecId { get; set; }
         public string name { get; set; }
         public string notes { get; set; }
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public decimal deliveryTime { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

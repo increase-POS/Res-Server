@@ -14,14 +14,14 @@ namespace POS_Server
     
     public partial class Expenses
     {
-        public int exId { get; set; }
+        public long exId { get; set; }
         public string expense { get; set; }
         public string notes { get; set; }
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual users users { get; set; }
     }

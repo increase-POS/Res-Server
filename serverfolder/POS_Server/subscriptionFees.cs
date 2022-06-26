@@ -20,15 +20,15 @@ namespace POS_Server
             this.agentMembershipCash = new HashSet<agentMembershipCash>();
         }
     
-        public int subscriptionFeesId { get; set; }
-        public Nullable<int> membershipId { get; set; }
+        public long subscriptionFeesId { get; set; }
+        public Nullable<long> membershipId { get; set; }
         public int monthsCount { get; set; }
         public decimal Amount { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

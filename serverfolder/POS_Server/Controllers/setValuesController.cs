@@ -37,19 +37,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -254,7 +254,7 @@ namespace POS_Server.Controllers
             else
             {
                string name = "";
-                int userId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -265,7 +265,7 @@ namespace POS_Server.Controllers
                     }
                   else if(c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
 
@@ -504,7 +504,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int Id =0;
+                long Id =0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -512,7 +512,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "Id")
                     {
-                        Id = int.Parse(c.Value);
+                        Id = long.Parse(c.Value);
                     }
 
 
@@ -554,7 +554,7 @@ namespace POS_Server.Controllers
             //var re = Request;
             //
             //string token = "";
-            //int cId = 0;
+            //long cId = 0;
             //if (headers.Contains("APIKey"))
             //{
             //    token = headers.GetValues("APIKey").First();
@@ -637,7 +637,7 @@ namespace POS_Server.Controllers
                     {
                         if (newObject.settingId == 0 || newObject.settingId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.settingId = id;
                         }
                         using (incposdbEntities entity = new incposdbEntities())
@@ -725,7 +725,7 @@ namespace POS_Server.Controllers
             //    {
             //        if (Object.settingId == 0 || Object.settingId == null)
             //        {
-            //            Nullable<int> id = null;
+            //            Nullable<long> id = null;
             //            Object.settingId = id;
             //        }
             //        using (incposdbEntities entity = new incposdbEntities())
@@ -832,7 +832,7 @@ namespace POS_Server.Controllers
                     {
                         if (newObject.settingId == 0 || newObject.settingId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.settingId = id;
                         }
                         using (incposdbEntities entity = new incposdbEntities())
@@ -926,7 +926,7 @@ namespace POS_Server.Controllers
             //    {
             //        if (Object.settingId == 0 || Object.settingId == null)
             //        {
-            //            Nullable<int> id = null;
+            //            Nullable<long> id = null;
             //            Object.settingId = id;
             //        }
             //        using (incposdbEntities entity = new incposdbEntities())
@@ -1000,8 +1000,8 @@ namespace POS_Server.Controllers
         {
 
 
-            // public ResponseVM Delete(string token)int Id, int userId
-            //int Id, int userId
+            // public ResponseVM Delete(string token)long Id, long userId
+            //long Id, long userId
             string message = "";
            
             
@@ -1014,8 +1014,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int Id = 0;
-                int userId = 0;
+                long Id = 0;
+                long userId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1023,11 +1023,11 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "Id")
                     {
-                        Id = int.Parse(c.Value);
+                        Id = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }
@@ -1264,12 +1264,12 @@ namespace POS_Server.Controllers
             ///*
             //if (userObj.updateUserId == 0 || userObj.updateUserId == null)
             //{
-            //    Nullable<int> id = null;
+            //    Nullable<long> id = null;
             //    userObj.updateUserId = id;
             //}
             //if (userObj.createUserId == 0 || userObj.createUserId == null)
             //{
-            //    Nullable<int> id = null;
+            //    Nullable<long> id = null;
             //    userObj.createUserId = id;
             //}
             //*/
@@ -1298,11 +1298,11 @@ namespace POS_Server.Controllers
         }
 
         #endregion 
-        public int Save(setValues newObject)
+        public long Save(setValues newObject)
         {
             //string Object string newObject
             string message = "";
-            int res = 0;
+            long res = 0;
 
             if (newObject != null)
             {
@@ -1315,7 +1315,7 @@ namespace POS_Server.Controllers
                 {
                     if (newObject.settingId == 0 || newObject.settingId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.settingId = id;
                     }
                     using (incposdbEntities entity = new incposdbEntities())

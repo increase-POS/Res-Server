@@ -20,7 +20,7 @@ namespace POS_Server
             this.items = new HashSet<items>();
         }
     
-        public int categoryId { get; set; }
+        public long categoryId { get; set; }
         public string categoryCode { get; set; }
         public string name { get; set; }
         public string details { get; set; }
@@ -29,8 +29,8 @@ namespace POS_Server
         public decimal taxes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public string notes { get; set; }
         public string type { get; set; }
     

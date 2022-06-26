@@ -29,13 +29,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
+                long invoiceId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -76,13 +76,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
+                long invoiceId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -125,13 +125,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int id = 0;
+                long id = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        id = int.Parse(c.Value);
+                        id = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -167,7 +167,7 @@ namespace POS_Server.Controllers
             else
             {
                 string couponsInvoicesObject = "";
-                int invoiceId = 0;
+                long invoiceId = 0;
                 string invType = "";
                 List<couponsInvoices> Object = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -182,7 +182,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                     else if (c.Type == "invType")
                     {
@@ -266,12 +266,12 @@ namespace POS_Server.Controllers
                             {
                                 if (coupon.updateUserId == 0 || coupon.updateUserId == null)
                                 {
-                                    Nullable<int> id = null;
+                                    Nullable<long> id = null;
                                     coupon.updateUserId = id;
                                 }
                                 if (coupon.createUserId == 0 || coupon.createUserId == null)
                                 {
-                                    Nullable<int> id = null;
+                                    Nullable<long> id = null;
                                     coupon.createUserId = id;
                                 }
                                 coupon.createDate = DateTime.Now;

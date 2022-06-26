@@ -61,7 +61,7 @@ namespace POS_Server.Controllers
                         {
                             if (locationsList[i].isActive == 1)
                             {
-                                int locationId = (int)locationsList[i].locationId;
+                                long locationId = (long)locationsList[i].locationId;
                                 var itemsLocationL = entity.itemsLocations.Where(x => x.locationId == locationId).Select(b => new { b.itemsLocId }).FirstOrDefault();
                                  
                                 if ((itemsLocationL is null)  )
@@ -89,13 +89,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int locationId = 0;
+                long locationId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        locationId = int.Parse(c.Value);
+                        locationId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -139,13 +139,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -182,7 +182,7 @@ var strP = TokenManager.GetPrincipal(token);
                         {
                             if (locationsList[i].isActive == 1)
                             {
-                                int locationId = (int)locationsList[i].locationId;
+                                long locationId = (long)locationsList[i].locationId;
                                 var itemsLocationL = entity.itemsLocations.Where(x => x.locationId == locationId).Select(b => new { b.itemsLocId }).FirstOrDefault();
                                 
                                 if ((itemsLocationL is null) )
@@ -207,13 +207,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int sectionId = 0;
+                long sectionId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        sectionId = int.Parse(c.Value);
+                        sectionId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -277,17 +277,17 @@ var strP = TokenManager.GetPrincipal(token);
 
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 if (newObject.sectionId == 0 || newObject.sectionId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.sectionId = id;
                 }
                 try
@@ -347,19 +347,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int locationId = 0;
-                int userId = 0;
+                long locationId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        locationId = int.Parse(c.Value);
+                        locationId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -415,7 +415,7 @@ var strP = TokenManager.GetPrincipal(token);
         public string UpdateLocationBySecId(string token)
         {
 token = TokenManager.readToken(HttpContext.Current.Request);
-            int sectionId = 0;
+            long sectionId = 0;
             int res = 0;
 var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
@@ -489,8 +489,8 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int sectionId = 0;
-                int userId = 0;
+                long sectionId = 0;
+                long userId = 0;
                 string locationsObject = "";
                 List<locations> Object = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -505,11 +505,11 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                     else if (c.Type == "sectionId")
                     {
-                        sectionId = int.Parse(c.Value);
+                        sectionId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -517,7 +517,7 @@ var strP = TokenManager.GetPrincipal(token);
                     var oldList = entity.locations.Where(x => x.sectionId == sectionId).Select(x => new { x.locationId }).ToList();
                     for (int i = 0; i < oldList.Count; i++)
                     {
-                        int locationId = (int)oldList[i].locationId;
+                        long locationId = (long)oldList[i].locationId;
                         var loc = entity.locations.Find(locationId);
 
                         if (Object != null && Object.Count > 0)
@@ -558,12 +558,12 @@ var strP = TokenManager.GetPrincipal(token);
                                 var loc1 = entity.locations.Find(loc.locationId);
                                 if (loc1.updateUserId == 0 || loc1.updateUserId == null)
                                 {
-                                    Nullable<int> id = null;
+                                    Nullable<long> id = null;
                                     loc1.updateUserId = id;
                                 }
                                 if (loc1.createUserId == 0 || loc1.createUserId == null)
                                 {
-                                    Nullable<int> id = null;
+                                    Nullable<long> id = null;
                                     loc1.createUserId = id;
                                 }
                                 loc1.updateDate = DateTime.Now;

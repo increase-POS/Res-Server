@@ -21,18 +21,18 @@ namespace POS_Server
             this.tablesReservations = new HashSet<tablesReservations>();
         }
     
-        public int tableId { get; set; }
+        public long tableId { get; set; }
         public string name { get; set; }
-        public Nullable<int> sectionId { get; set; }
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> sectionId { get; set; }
+        public Nullable<long> branchId { get; set; }
         public string notes { get; set; }
         public string status { get; set; }
         public int personsCount { get; set; }
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual branches branches { get; set; }
         public virtual hallSections hallSections { get; set; }

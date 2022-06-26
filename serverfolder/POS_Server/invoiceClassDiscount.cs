@@ -14,9 +14,9 @@ namespace POS_Server
     
     public partial class invoiceClassDiscount
     {
-        public int invClassDiscountId { get; set; }
-        public Nullable<int> invClassId { get; set; }
-        public Nullable<int> invoiceId { get; set; }
+        public long invClassDiscountId { get; set; }
+        public Nullable<long> invClassId { get; set; }
+        public Nullable<long> invoiceId { get; set; }
         public decimal discountValue { get; set; }
         public byte discountType { get; set; }
     

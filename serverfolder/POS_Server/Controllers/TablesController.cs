@@ -32,18 +32,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
-                int sectionId = 0;
+                long branchId = 0;
+                long sectionId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "sectionId")
                     {
-                        sectionId = int.Parse(c.Value);
+                        sectionId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -81,7 +81,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (item.isActive == 1)
                             {
-                                int cId = (int)item.tableId;
+                                long cId = (long)item.tableId;
                                 var invTable = entity.invoiceTables.Where(x => x.tableId == cId).FirstOrDefault();
                                 var reservTable = entity.tablesReservations.Where(x => x.tableId == cId).FirstOrDefault();
 
@@ -107,7 +107,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 DateTime dateSearch = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
                 DateTime startTimeSearch = DateTime.Now;
                 DateTime endTimeSearch = new DateTime();
@@ -122,7 +122,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "dateSearch")
                     {
@@ -191,7 +191,7 @@ namespace POS_Server.Controllers
                     foreach (TableModel table in tablesList)
                     {
                         #region check reservation status                      
-                        int tableId = table.tableId;
+                        long tableId = table.tableId;
                         bool isOpen = false;
                         var reservPredicate = PredicateBuilder.New<reservations>();
 
@@ -303,7 +303,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 DateTime dateSearch = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
                 DateTime startTime = DateTime.Now;
 
@@ -313,7 +313,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "dateSearch")
                     {
@@ -357,7 +357,7 @@ namespace POS_Server.Controllers
                     foreach (TableModel table in tablesList)
                     {
                         #region check reservation status                      
-                        int tableId = table.tableId;
+                        long tableId = table.tableId;
                         bool isOpen = false;
 
                         var reservPredicate = PredicateBuilder.New<reservations>();
@@ -436,8 +436,8 @@ namespace POS_Server.Controllers
                 DateTime startTime = DateTime.Now;
 
                 #region parameters
-                int mainBranchId = 0;
-                int userId = 0;
+                long mainBranchId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -449,11 +449,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "mainBranchId")
                     {
-                        mainBranchId = int.Parse(c.Value);
+                        mainBranchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 #endregion
@@ -491,7 +491,7 @@ namespace POS_Server.Controllers
                     foreach (TableModel table in tablesList)
                     {
                         #region check reservation status                      
-                        int tableId = table.tableId;
+                        long tableId = table.tableId;
                         bool isOpen = false;
 
                         var reservPredicate = PredicateBuilder.New<reservations>();
@@ -554,7 +554,7 @@ namespace POS_Server.Controllers
                     var branches = entity.branches.Where(x => x.isActive == 1).ToList();
 
                     StatisticsController sts = new StatisticsController();
-                    List<int> brIds = sts.AllowedBranchsId(mainBranchId, userId);
+                    List<long> brIds = sts.AllowedBranchsId(mainBranchId, userId);
                     branches = branches.Where(X => brIds.Contains(X.branchId)).ToList();
 
                     List<TablesStatisticsModel> tablesStatistics = new List<TablesStatisticsModel>();
@@ -587,10 +587,10 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int tableId = 0;
-                int branchId = 0;
-                int reservationId = 0;
-                int invoiceId = 0;
+                long tableId = 0;
+                long branchId = 0;
+                long reservationId = 0;
+                long invoiceId = 0;
                 DateTime dateSearch = DateTime.Parse(DateTime.Now.ToString().Split(' ')[0]);
                 DateTime startDate = DateTime.Now;
                 DateTime endDate = DateTime.Now;
@@ -599,19 +599,19 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "tableId")
                     {
-                        tableId = int.Parse(c.Value);
+                        tableId = long.Parse(c.Value);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "reservationId")
                     {
-                        reservationId = int.Parse(c.Value);
+                        reservationId = long.Parse(c.Value);
                     }
                     else if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                     else if (c.Type == "reservationDate")
                     {
@@ -724,18 +724,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int tableId = 0;
-                int branchId = 0;
+                long tableId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "tableId")
                     {
-                        tableId = int.Parse(c.Value);
+                        tableId = long.Parse(c.Value);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
 
@@ -765,14 +765,14 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
 
                 }
@@ -839,14 +839,14 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int tableId = 0;
+                long tableId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "tableId")
                     {
-                        tableId = int.Parse(c.Value);
+                        tableId = long.Parse(c.Value);
                     }
 
                 }
@@ -906,14 +906,14 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int invoiceId = 0;
+                long invoiceId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "invoiceId")
                     {
-                        invoiceId = int.Parse(c.Value);
+                        invoiceId = long.Parse(c.Value);
                     }
                 }
 
@@ -947,18 +947,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
-                int sectionId = 0;
+                long branchId = 0;
+                long sectionId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "sectionId")
                     {
-                        sectionId = int.Parse(c.Value);
+                        sectionId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -1203,7 +1203,7 @@ namespace POS_Server.Controllers
             else
             {
                 long reservationId = 0;
-                int userId = 0;
+                long userId = 0;
                 string status = "";
                 List<tables> lstTables = new List<tables>(); ;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1215,7 +1215,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "status")
                     {
@@ -1253,19 +1253,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int tableId = 0;
-                int userId = 0;
+                long tableId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "tableId")
                     {
-                        tableId = int.Parse(c.Value);
+                        tableId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -1327,8 +1327,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int sectionId = 0;
-                int userId = 0;
+                long sectionId = 0;
+                long userId = 0;
                 string locationsObject = "";
                 List<tables> Object = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1343,11 +1343,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "sectionId")
                     {
-                        sectionId = int.Parse(c.Value);
+                        sectionId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -1355,7 +1355,7 @@ namespace POS_Server.Controllers
                     var oldList = entity.tables.Where(x => x.sectionId == sectionId).Select(x => new { x.tableId }).ToList();
                     for (int i = 0; i < oldList.Count; i++)
                     {
-                        int locationId = (int)oldList[i].tableId;
+                        long locationId = (long)oldList[i].tableId;
                         var loc = entity.tables.Find(locationId);
 
                         if (Object != null && Object.Count > 0)
@@ -1396,12 +1396,12 @@ namespace POS_Server.Controllers
                                 var loc1 = entity.tables.Find(loc.tableId);
                                 if (loc1.updateUserId == 0 || loc1.updateUserId == null)
                                 {
-                                    Nullable<int> id = null;
+                                    Nullable<long> id = null;
                                     loc1.updateUserId = id;
                                 }
                                 if (loc1.createUserId == 0 || loc1.createUserId == null)
                                 {
-                                    Nullable<int> id = null;
+                                    Nullable<long> id = null;
                                     loc1.createUserId = id;
                                 }
                                 loc1.updateDate = DateTime.Now;
@@ -1439,7 +1439,7 @@ namespace POS_Server.Controllers
             else
             {
                 string reservCode = "";
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -1449,7 +1449,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 List<string> numberList;

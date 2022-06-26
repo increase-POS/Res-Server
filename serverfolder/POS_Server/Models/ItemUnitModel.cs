@@ -7,9 +7,9 @@ namespace POS_Server.Models
 {
     public class ItemUnitModel
     {
-        public int itemUnitId { get; set; }
-        public Nullable<int> itemId { get; set; }
-        public Nullable<int> unitId { get; set; }
+        public long itemUnitId { get; set; }
+        public Nullable<long> itemId { get; set; }
+        public Nullable<long> unitId { get; set; }
         public Nullable<int> unitValue { get; set; }
         public short defaultSale { get; set; }
         public short defaultPurchase { get; set; }
@@ -18,11 +18,11 @@ namespace POS_Server.Models
         public string barcode { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
-        public Nullable<int> subUnitId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
+        public Nullable<long> subUnitId { get; set; }
         public decimal purchasePrice { get; set; }
-        public Nullable<int> storageCostId { get; set; }
+        public Nullable<long> storageCostId { get; set; }
         public byte isActive { get; set; }
 
       
@@ -34,7 +34,7 @@ namespace POS_Server.Models
         public string itemCode { get; set; }
         public string unitName { get; set; }
         public string type { get; set; }
-        public Nullable<int> categoryId { get; set; }
+        public Nullable<long> categoryId { get; set; }
         public Boolean canDelete { get; set; }
 
         public Nullable<decimal> taxes { get; set; }

@@ -14,14 +14,14 @@ namespace POS_Server
     
     public partial class packages
     {
-        public int packageId { get; set; }
-        public Nullable<int> parentIUId { get; set; }
-        public Nullable<int> childIUId { get; set; }
+        public long packageId { get; set; }
+        public Nullable<long> parentIUId { get; set; }
+        public Nullable<long> childIUId { get; set; }
         public int quantity { get; set; }
         public byte isActive { get; set; }
         public string notes { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
     

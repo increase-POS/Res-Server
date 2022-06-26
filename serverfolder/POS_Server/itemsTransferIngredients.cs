@@ -12,19 +12,15 @@ namespace POS_Server
     using System;
     using System.Collections.Generic;
     
-    public partial class setting
+    public partial class itemsTransferIngredients
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public setting()
-        {
-            this.setValues = new HashSet<setValues>();
-        }
-    
-        public long settingId { get; set; }
-        public string name { get; set; }
+        public long itemsTransIngredId { get; set; }
+        public Nullable<long> itemsTransId { get; set; }
+        public Nullable<long> dishIngredId { get; set; }
+        public byte isActive { get; set; }
         public string notes { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<setValues> setValues { get; set; }
+        public virtual dishIngredients dishIngredients { get; set; }
+        public virtual itemsTransfer itemsTransfer { get; set; }
     }
 }

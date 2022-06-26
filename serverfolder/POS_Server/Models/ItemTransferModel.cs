@@ -7,19 +7,19 @@ namespace POS_Server.Models
 {
     public class ItemTransferModel
     {
-        public int itemsTransId { get; set; }
+        public long itemsTransId { get; set; }
         public long quantity { get; set; }
-        public Nullable<int> invoiceId { get; set; }
+        public Nullable<long> invoiceId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public string notes { get; set; }
         public decimal price { get; set; }
-        public Nullable<int> itemUnitId { get; set; }
+        public Nullable<long> itemUnitId { get; set; }
         public string itemSerial { get; set; }
-        public Nullable<int> inventoryItemLocId { get; set; }
-        public Nullable<int> offerId { get; set; }
+        public Nullable<long> inventoryItemLocId { get; set; }
+        public Nullable<long> offerId { get; set; }
         public string forAgents { get; set; }
 
         public decimal profit { get; set; }
@@ -28,7 +28,7 @@ namespace POS_Server.Models
 
 
       
-        public Nullable<int> itemId { get; set; }
+        public Nullable<long> itemId { get; set; }
         public string itemName { get; set; }
        
         public Nullable<long> lockedQuantity { get; set; }
@@ -41,7 +41,7 @@ namespace POS_Server.Models
   
      
         public string unitName { get; set; }
-        public Nullable<int> unitId { get; set; }
+        public Nullable<long> unitId { get; set; }
         public string barcode { get; set; }
 
         public string itemType { get; set; }

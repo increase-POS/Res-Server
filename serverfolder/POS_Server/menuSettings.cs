@@ -15,7 +15,7 @@ namespace POS_Server
     public partial class menuSettings
     {
         public long menuSettingId { get; set; }
-        public int itemUnitId { get; set; }
+        public long itemUnitId { get; set; }
         public bool sat { get; set; }
         public bool sun { get; set; }
         public bool mon { get; set; }
@@ -27,9 +27,9 @@ namespace POS_Server
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> updateUserId { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> branchId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> branchId { get; set; }
     
         public virtual branches branches { get; set; }
         public virtual itemsUnits itemsUnits { get; set; }

@@ -14,14 +14,14 @@ namespace POS_Server
     
     public partial class invoiceTables
     {
-        public int invTableId { get; set; }
-        public int invoiceId { get; set; }
-        public int tableId { get; set; }
+        public long invTableId { get; set; }
+        public long invoiceId { get; set; }
+        public long tableId { get; set; }
         public byte isActive { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual invoices invoices { get; set; }
         public virtual tables tables { get; set; }

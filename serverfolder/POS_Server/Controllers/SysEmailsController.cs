@@ -36,19 +36,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -157,7 +157,7 @@ namespace POS_Server.Controllers
       public string   GetByID(string token)
         {
 
-            // public ResponseVM GetPurinv(string token)int emailId
+            // public ResponseVM GetPurinv(string token)long emailId
 
            
             
@@ -170,7 +170,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int emailId = 0;
+                long emailId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -178,7 +178,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "emailId")
                     {
-                        emailId = int.Parse(c.Value);
+                        emailId = long.Parse(c.Value);
                     }
 
 
@@ -287,7 +287,7 @@ namespace POS_Server.Controllers
         [Route("GetByBranchIdandSide")]
       public string   GetByBranchIdandSide(string token)
         {
-            // public ResponseVM GetPurinv(string token)int branchId,string side
+            // public ResponseVM GetPurinv(string token)long branchId,string side
 
           token = TokenManager.readToken(HttpContext.Current.Request); 
  var strP = TokenManager.GetPrincipal(token);
@@ -298,13 +298,13 @@ namespace POS_Server.Controllers
             else
             {
                 string side = "";
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "side")
                     {
@@ -444,12 +444,12 @@ namespace POS_Server.Controllers
                     {
                         if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.updateUserId = id;
                         }
                         if (newObject.createUserId == 0 || newObject.createUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.createUserId = id;
                         }
                         using (incposdbEntities entity = new incposdbEntities())
@@ -546,12 +546,12 @@ namespace POS_Server.Controllers
             //    sysEmails newObject = JsonConvert.DeserializeObject<sysEmails>(Object, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
             //    if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.updateUserId = id;
             //    }
             //    if (newObject.createUserId == 0 || newObject.createUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.createUserId = id;
             //    }
 
@@ -626,8 +626,8 @@ namespace POS_Server.Controllers
         [Route("Delete")]
       public string   Delete(string token)
         {
-            // public ResponseVM Delete(string token)int emailId, int userId, bool final
-            //int Id, int userId
+            // public ResponseVM Delete(string token)long emailId, long userId, bool final
+            //long Id, long userId
             string message = "";
            
             
@@ -640,8 +640,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int emailId = 0;
-                int userId = 0;
+                long emailId = 0;
+                long userId = 0;
                 bool final = false;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -649,15 +649,15 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "emailId")
                     {
-                        emailId = int.Parse(c.Value);
+                        emailId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }

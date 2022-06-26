@@ -76,8 +76,8 @@ namespace POS_Server.Controllers
 
             //string itemLocationObject
             string message = "";
-            int offerId = 0;
-            int userId = 0;
+            long offerId = 0;
+            long userId = 0;
 
 
           token = TokenManager.readToken(HttpContext.Current.Request); 
@@ -102,11 +102,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "offerId")
                     {
-                        offerId = int.Parse(c.Value);
+                        offerId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
 
@@ -175,8 +175,8 @@ namespace POS_Server.Controllers
 
             }
 
-            //int userId =0;
-            //int offerId = 0;
+            //long userId =0;
+            //long offerId = 0;
             //var re = Request;
             //var headers = re.Headers;
             //int res = 0;
@@ -257,7 +257,7 @@ namespace POS_Server.Controllers
 
             //string itemLocationObject
             string message = "";
-            int offerId = 0;
+            long offerId = 0;
           
 
 
@@ -276,7 +276,7 @@ namespace POS_Server.Controllers
                 {
                 if (c.Type == "offerId")
                     {
-                        offerId = int.Parse(c.Value);
+                        offerId = long.Parse(c.Value);
                     }
  
                 }
@@ -325,7 +325,7 @@ namespace POS_Server.Controllers
 
 
             }
-            //        int offerId = 0;
+            //        long offerId = 0;
             //        var re = Request;
             //        var headers = re.Headers;
             //        string token = "";
@@ -400,8 +400,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int offerId = 0;
-                int itemUnitId = 0;
+                long offerId = 0;
+                long itemUnitId = 0;
                 int remain = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -409,11 +409,11 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "offerId")
                     {
-                            offerId = int.Parse(c.Value);
+                            offerId = long.Parse(c.Value);
                      }
                     else if (c.Type == "itemUnitId")
                     {
-                        itemUnitId = int.Parse(c.Value);
+                        itemUnitId = long.Parse(c.Value);
                     }
                 }
                 try
@@ -421,7 +421,7 @@ namespace POS_Server.Controllers
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         var iuoffer = (from itofr in entity.itemsOffers
-                                       where itofr.offerId == (int)offerId && itofr.iuId == (int)itemUnitId
+                                       where itofr.offerId == (long)offerId && itofr.iuId == (long)itemUnitId
                                        select new ItemOfferModel()
                                        {
                                            offerId = itofr.offerId,

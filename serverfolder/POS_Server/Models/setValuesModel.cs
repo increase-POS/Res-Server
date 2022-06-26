@@ -7,12 +7,12 @@ namespace POS_Server.Models
 {
     public class setValuesModel
     {
-        public int valId { get; set; }
+        public long valId { get; set; }
         public string value { get; set; }
         public int isDefault { get; set; }
         public int isSystem { get; set; }
         public string notes { get; set; }
-        public Nullable<int> settingId { get; set; }
+        public Nullable<long> settingId { get; set; }
 
 
   

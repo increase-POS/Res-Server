@@ -23,7 +23,7 @@ namespace POS_Server
             this.membershipsOffers = new HashSet<membershipsOffers>();
         }
     
-        public int offerId { get; set; }
+        public long offerId { get; set; }
         public string name { get; set; }
         public string code { get; set; }
         public byte isActive { get; set; }
@@ -33,8 +33,8 @@ namespace POS_Server
         public Nullable<System.DateTime> endDate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public string notes { get; set; }
         public string forAgents { get; set; }
     

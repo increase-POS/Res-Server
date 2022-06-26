@@ -18,22 +18,25 @@ namespace POS_Server
         public itemsTransfer()
         {
             this.invoiceOrder = new HashSet<invoiceOrder>();
+            this.itemOrderPreparing = new HashSet<itemOrderPreparing>();
+            this.itemsTransfer1 = new HashSet<itemsTransfer>();
+            this.itemsTransferIngredients = new HashSet<itemsTransferIngredients>();
             this.itemTransferOffer = new HashSet<itemTransferOffer>();
         }
     
-        public int itemsTransId { get; set; }
+        public long itemsTransId { get; set; }
         public long quantity { get; set; }
-        public Nullable<int> invoiceId { get; set; }
+        public Nullable<long> invoiceId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public string notes { get; set; }
         public decimal price { get; set; }
-        public Nullable<int> itemUnitId { get; set; }
+        public Nullable<long> itemUnitId { get; set; }
         public string itemSerial { get; set; }
-        public Nullable<int> inventoryItemLocId { get; set; }
-        public Nullable<int> offerId { get; set; }
+        public Nullable<long> inventoryItemLocId { get; set; }
+        public Nullable<long> offerId { get; set; }
         public decimal profit { get; set; }
         public decimal purchasePrice { get; set; }
         public string cause { get; set; }
@@ -42,13 +45,21 @@ namespace POS_Server
         public Nullable<decimal> offerValue { get; set; }
         public Nullable<decimal> offerType { get; set; }
         public string forAgents { get; set; }
+        public Nullable<long> mainCourseId { get; set; }
     
         public virtual inventoryItemLocation inventoryItemLocation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<invoiceOrder> invoiceOrder { get; set; }
         public virtual invoices invoices { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<itemOrderPreparing> itemOrderPreparing { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<itemsTransfer> itemsTransfer1 { get; set; }
+        public virtual itemsTransfer itemsTransfer2 { get; set; }
         public virtual itemsUnits itemsUnits { get; set; }
         public virtual offers offers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<itemsTransferIngredients> itemsTransferIngredients { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<itemTransferOffer> itemTransferOffer { get; set; }
     }

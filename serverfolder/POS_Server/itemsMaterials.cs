@@ -14,11 +14,11 @@ namespace POS_Server
     
     public partial class itemsMaterials
     {
-        public int itemMatId { get; set; }
-        public Nullable<int> itemId { get; set; }
-        public Nullable<int> materialId { get; set; }
+        public long itemMatId { get; set; }
+        public Nullable<long> itemId { get; set; }
+        public Nullable<long> materialId { get; set; }
         public decimal quantity { get; set; }
-        public Nullable<int> unitId { get; set; }
+        public Nullable<long> unitId { get; set; }
         public decimal price { get; set; }
     
         public virtual items items { get; set; }

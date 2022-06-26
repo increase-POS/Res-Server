@@ -73,7 +73,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (medalitem.isActive == 1)
                             {
-                                int cId = (int)medalitem.medalId;
+                                long cId = (long)medalitem.medalId;
                                 var casht = entity.medalAgent.Where(x => x.medalId == cId).Select(x => new { x.medalId }).FirstOrDefault();
                       
                                 if ((casht is null) )
@@ -103,7 +103,7 @@ namespace POS_Server.Controllers
             var re = Request;
             var headers = re.Headers;
             string token = "";
-            int cId = 0;
+            long cId = 0;
             if (headers.Contains("APIKey"))
             {
                 token = headers.GetValues("APIKey").First();
@@ -280,7 +280,7 @@ namespace POS_Server.Controllers
 
         [HttpPost]
         [Route("Delete")]
-        public IHttpActionResult Delete(int medalId, int userId, bool final)
+        public IHttpActionResult Delete(long medalId, long userId, bool final)
         {
             var re = Request;
             var headers = re.Headers;

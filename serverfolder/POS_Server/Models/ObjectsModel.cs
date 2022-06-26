@@ -7,9 +7,9 @@ namespace POS_Server.Models
 {
     public class ObjectsModel
     {
-        public int objectId { get; set; }
+        public long objectId { get; set; }
         public string name { get; set; }
-        public Nullable<int> parentObjectId { get; set; }
+        public Nullable<long> parentObjectId { get; set; }
         public string objectType { get; set; }
         public string translate { get; set; }
 
@@ -17,8 +17,8 @@ namespace POS_Server.Models
         public string note { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
         public Boolean canDelete { get; set; }
 

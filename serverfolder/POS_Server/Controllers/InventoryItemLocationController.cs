@@ -29,13 +29,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int inventoryId = 0;
+                long inventoryId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        inventoryId = int.Parse(c.Value);
+                        inventoryId =long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -92,13 +92,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -154,13 +154,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -211,7 +211,7 @@ var strP = TokenManager.GetPrincipal(token);
         public string GetByID(string token)
         {
 token = TokenManager.readToken(HttpContext.Current.Request);
-            int cId = 0;
+            long cId = 0;
 var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
             {
@@ -261,7 +261,7 @@ var strP = TokenManager.GetPrincipal(token);
             {
                 string message = "";
                 string newObject = "";
-                int inventoryId = 0;
+                long inventoryId = 0;
                 List<InventoryItemLocationModel> Object = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -274,7 +274,7 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                     else if (c.Type == "inventoryId")
                     {
-                        inventoryId = int.Parse(c.Value);
+                        inventoryId =long.Parse(c.Value);
                     }
                 }
 
@@ -288,7 +288,7 @@ var strP = TokenManager.GetPrincipal(token);
                             inventoryItemLocation tmp = new inventoryItemLocation();
                             if (il.createUserId == 0 || il.createUserId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 tmp.createUserId = id;
                             }
                          
@@ -452,19 +452,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int id = 0;
-                int userId = 0;
+                long id = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        id = int.Parse(c.Value);
+                        id = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

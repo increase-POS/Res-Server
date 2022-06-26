@@ -7,7 +7,7 @@ namespace POS_Server.Models
 {
     public class PointsModel
     {
-        public int pointId { get; set; }
+        public long pointId { get; set; }
         public decimal Cash { get; set; }
         public int CashPoints { get; set; }
         public int invoiceCount { get; set; }
@@ -19,10 +19,10 @@ namespace POS_Server.Models
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
-        public Nullable<int> agentId { get; set; }
+        public Nullable<long> agentId { get; set; }
 
      
        

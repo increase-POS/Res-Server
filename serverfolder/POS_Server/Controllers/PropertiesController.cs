@@ -50,7 +50,7 @@ var strP = TokenManager.GetPrincipal(token);
                             string values = "";
                             canDelete = false;
 
-                            int propertyId = (int)propertiesList[i].propertyId;
+                            long propertyId = (long)propertiesList[i].propertyId;
                             var propItems = entity.propertiesItems.Where(x => x.propertyId == propertyId).Select(b => new { b.name,b.propertyId }).ToList();
                            
                             if (propItems is null || propItems.Count == 0)
@@ -89,13 +89,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int propertyId = 0;
+                long propertyId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        propertyId = int.Parse(c.Value);
+                        propertyId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -155,7 +155,7 @@ var strP = TokenManager.GetPrincipal(token);
                         {
                             if (propertiesList[i].isActive == 1)
                             {
-                                int propertyItemId = (int)propertiesList[i].propertyItemId;
+                                long propertyItemId = (long)propertiesList[i].propertyItemId;
                                 var Itemsprop = entity.itemsProp.Where(x => x.propertyItemId == propertyItemId).Select(b => new { b.itemPropId }).FirstOrDefault();
 
                                 if (Itemsprop is null)
@@ -182,13 +182,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int propertyId = 0;
+                long propertyId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        propertyId = int.Parse(c.Value);
+                        propertyId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -240,12 +240,12 @@ var strP = TokenManager.GetPrincipal(token);
 
                 if (propertiesObject.updateUserId == 0 || propertiesObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     propertiesObject.updateUserId = id;
                 }
                 if (propertiesObject.createUserId == 0 || propertiesObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     propertiesObject.createUserId = id;
                 }
                 try
@@ -300,19 +300,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int propertyId = 0;
-                int userId = 0;
+                long propertyId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        propertyId = int.Parse(c.Value);
+                        propertyId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

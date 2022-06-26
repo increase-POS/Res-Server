@@ -52,7 +52,7 @@ namespace POS_Server.Controllers
         //                    canDelete = false;
         //                    if (List[i].isActive == 1)
         //                    {
-        //                        int inventoryId = (int)List[i].inventoryId;
+        //                        long inventoryId = (int)List[i].inventoryId;
         //                        var operationsL = entity.inventoryItemLocation.Where(x => x.inventoryId == inventoryId).Select(b => new { b.id }).FirstOrDefault();
 
         //                        if (operationsL is null)
@@ -78,13 +78,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int cId = 0;
+                long cId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        cId = int.Parse(c.Value);
+                        cId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -120,7 +120,7 @@ var strP = TokenManager.GetPrincipal(token);
             else
             {
                 string invCode = "";
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -130,7 +130,7 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 List<string> numberList;
@@ -167,7 +167,7 @@ var strP = TokenManager.GetPrincipal(token);
             else
             {
                 string inventoryType = "";
-                int userId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -176,7 +176,7 @@ var strP = TokenManager.GetPrincipal(token);
                         inventoryType = c.Value;
                     } else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -215,7 +215,7 @@ var strP = TokenManager.GetPrincipal(token);
             else
             {
                 string inventoryType = "";
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -225,7 +225,7 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -265,13 +265,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int inventoryId = 0;
+                long inventoryId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        inventoryId = int.Parse(c.Value);
+                        inventoryId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -324,12 +324,12 @@ var strP = TokenManager.GetPrincipal(token);
 
                 if (Object.updateUserId == 0 || Object.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     Object.updateUserId = id;
                 }
                 if (Object.createUserId == 0 || Object.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     Object.createUserId = id;
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -373,7 +373,7 @@ var strP = TokenManager.GetPrincipal(token);
     }
     //[HttpPost]
     //[Route("delete")]
-    //public string delete(int inventoryId)
+    //public string delete(long inventoryId)
     //{
     //    var re = Request;
     //    var headers = re.Headers;
@@ -418,19 +418,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
         else
         {
-            int inventoryId = 0;
-            int userId = 0;
+            long inventoryId = 0;
+            long userId = 0;
             Boolean final = false;
             IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
             foreach (Claim c in claims)
             {
                 if (c.Type == "itemId")
                 {
-                    inventoryId = int.Parse(c.Value);
+                    inventoryId =long.Parse(c.Value);
                 }
                 else if (c.Type == "userId")
                 {
-                    userId = int.Parse(c.Value);
+                    userId = long.Parse(c.Value);
                 }
                 else if (c.Type == "final")
                 {

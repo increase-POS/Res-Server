@@ -20,17 +20,17 @@ namespace POS_Server
             this.itemsTransfer = new HashSet<itemsTransfer>();
         }
     
-        public int id { get; set; }
+        public long id { get; set; }
         public bool isDestroyed { get; set; }
         public int amount { get; set; }
         public int amountDestroyed { get; set; }
         public int realAmount { get; set; }
-        public Nullable<int> itemLocationId { get; set; }
-        public Nullable<int> inventoryId { get; set; }
+        public Nullable<long> itemLocationId { get; set; }
+        public Nullable<long> inventoryId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
         public string notes { get; set; }
         public string cause { get; set; }

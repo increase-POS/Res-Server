@@ -20,18 +20,18 @@ namespace POS_Server
             this.inventoryItemLocation = new HashSet<inventoryItemLocation>();
         }
     
-        public int inventoryId { get; set; }
+        public long inventoryId { get; set; }
         public string num { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
         public string notes { get; set; }
         public string inventoryType { get; set; }
-        public Nullable<int> branchId { get; set; }
-        public Nullable<int> posId { get; set; }
-        public Nullable<int> mainInventoryId { get; set; }
+        public Nullable<long> branchId { get; set; }
+        public Nullable<long> posId { get; set; }
+        public Nullable<long> mainInventoryId { get; set; }
     
         public virtual branches branches { get; set; }
         public virtual pos pos { get; set; }

@@ -63,13 +63,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int errorId = 0;
+                long errorId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        errorId = int.Parse(c.Value);
+                        errorId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -127,17 +127,17 @@ var strP = TokenManager.GetPrincipal(token);
 
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 if (newObject.posId == 0 || newObject.posId == null)
                 {
-                    Nullable<int> posId = null;
+                    Nullable<long> posId = null;
                     newObject.posId = posId;
                 }
                 if (newObject.branchId == 0 || newObject.branchId == null)
                 {
-                    Nullable<int> branchId = null;
+                    Nullable<long> branchId = null;
                     newObject.branchId = branchId;
                 }
                 try
@@ -198,13 +198,13 @@ var strP = TokenManager.GetPrincipal(token);
             {
                 try
                 {
-                    int errorId = 0;
+                    long errorId = 0;
                     IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                     foreach (Claim c in claims)
                     {
                         if (c.Type == "itemId")
                         {
-                            errorId = int.Parse(c.Value);
+                            errorId = long.Parse(c.Value);
                         }
                     }
                     using (incposdbEntities entity = new incposdbEntities())

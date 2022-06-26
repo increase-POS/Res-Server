@@ -19,8 +19,8 @@ namespace POS_Server.Models
         public int isActive { get; set; }
         public string posName { get; set; }
         public string branchName { get; set; }
-        public Nullable<int> posSettingId { get; set; }
-        public Nullable<int> posId { get; set; }
+        public Nullable<long> posSettingId { get; set; }
+        public Nullable<long> posId { get; set; }
         public bool unLimited { get; set; }
 
 

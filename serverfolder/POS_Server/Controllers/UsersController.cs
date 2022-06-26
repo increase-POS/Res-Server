@@ -301,7 +301,7 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (usersList[i].isActive == 1)
                             {
-                                int userId = (int)usersList[i].userId;
+                                long userId = (long)usersList[i].userId;
                                 var usersPos = entity.posUsers.Where(x => x.userId == userId).Select(b => new { b.posUserId }).FirstOrDefault();
                                 if (usersPos is null)
                                     canDelete = true;
@@ -327,13 +327,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int userId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -442,14 +442,14 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 string deliveryPermission = "";
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "deliveryPermission")
                     {
@@ -501,7 +501,7 @@ namespace POS_Server.Controllers
         {
             token = TokenManager.readToken(HttpContext.Current.Request);
             string job = "";
-            int customerId = 0;
+            long customerId = 0;
 
             var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
@@ -519,7 +519,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "customerId")
                     {
-                        customerId = int.Parse(c.Value);
+                        customerId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -628,12 +628,12 @@ namespace POS_Server.Controllers
                 }
                 if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.updateUserId = id;
                 }
                 if (newObject.createUserId == 0 || newObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.createUserId = id;
                 }
                 try
@@ -668,7 +668,7 @@ namespace POS_Server.Controllers
                                 //for (int i = 0; i < categories.Count; i++)
                                 //{
                                 //    sequence++;
-                                //    int categoryId = categories[i];
+                                //    long categoryId = categories[i];
                                 //    categoryuser cu = new categoryuser()
                                 //    {
                                 //        categoryId = categoryId,
@@ -728,7 +728,7 @@ namespace POS_Server.Controllers
         [HttpPost]
         [Route("Delete")]
         public string Delete(string token)
-        {
+        { 
             token = TokenManager.readToken(HttpContext.Current.Request);
             string message = "";
             var strP = TokenManager.GetPrincipal(token);
@@ -738,19 +738,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int delUserId = 0;
-                int userId = 0;
+                long delUserId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "delUserId")
                     {
-                        delUserId = int.Parse(c.Value);
+                        delUserId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -953,18 +953,18 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int posId = 0;
-                int userId = 0;
+                long posId = 0;
+                long userId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "posId")
                     {
-                        posId = int.Parse(c.Value);
+                        posId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 List<UserModel> users = new List<UserModel>();
@@ -1017,7 +1017,7 @@ namespace POS_Server.Controllers
             else
             {
                 string deviceCode = "";
-                int posId = 0;
+                long posId = 0;
                 string userName = "";
                 string password = "";
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -1029,7 +1029,7 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "posId")
                     {
-                        posId = int.Parse(c.Value);
+                        posId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userName")
                     {
@@ -1045,7 +1045,7 @@ namespace POS_Server.Controllers
 
         }
     }
-        public int checkLoginAvalability(int posId, string deviceCode,string userName, string password)
+        public int checkLoginAvalability(long posId, string deviceCode,string userName, string password)
         {
             // 1 :  can login-
             //  0 : error 

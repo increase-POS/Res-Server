@@ -176,7 +176,7 @@ namespace POS_Server.Controllers
             else
             {
 
-                int logId = 0;
+                long logId = 0;
                 
                 UsersLogsController logcntrlr = new UsersLogsController();
                 usersLogs logITEM = new usersLogs();
@@ -187,7 +187,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "logId")
                     {
-                        logId = int.Parse(c.Value);
+                        logId = long.Parse(c.Value);
                         
                     }
                     if (c.Type == "fileName")
@@ -238,7 +238,7 @@ namespace POS_Server.Controllers
 
                             logITEM.logId = 0;
                             //save newlog row and return the logId
-                            logId = int.Parse(logcntrlr.Save(logITEM));
+                            logId = long.Parse(logcntrlr.Save(logITEM));
 
 
                         }

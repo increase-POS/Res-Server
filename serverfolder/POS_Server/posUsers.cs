@@ -14,13 +14,13 @@ namespace POS_Server
     
     public partial class posUsers
     {
-        public int posUserId { get; set; }
-        public Nullable<int> userId { get; set; }
-        public Nullable<int> posId { get; set; }
+        public long posUserId { get; set; }
+        public Nullable<long> userId { get; set; }
+        public Nullable<long> posId { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
     
         public virtual pos pos { get; set; }
         public virtual users users { get; set; }

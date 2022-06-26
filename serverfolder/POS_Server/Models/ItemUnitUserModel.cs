@@ -7,14 +7,14 @@ namespace POS_Server.Models
 {
     public class ItemUnitUserModel
     {
-        public int id { get; set; }
-        public Nullable<int> itemUnitId { get; set; }
-        public Nullable<int> userId { get; set; }
+        public long id { get; set; }
+        public Nullable<long> itemUnitId { get; set; }
+        public Nullable<long> userId { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
 
    

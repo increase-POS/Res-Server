@@ -61,7 +61,7 @@ var strP = TokenManager.GetPrincipal(token);
                             canDelete = false;
                             if (carditem.isActive == 1)
                             {
-                                int cId = (int)carditem.cardId;
+                                long cId = (int)carditem.cardId;
                                 var casht = entity.cashTransfer.Where(x => x.cardId == cId).Select(x => new { x.cardId }).FirstOrDefault();
 
                                 if ((casht is null))
@@ -87,13 +87,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int cId = 0;
+                long cId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        cId = int.Parse(c.Value);
+                        cId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -247,19 +247,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int cardId = 0;
-                int userId = 0;
+                long cardId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        cardId = int.Parse(c.Value);
+                        cardId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

@@ -25,7 +25,7 @@ namespace POS_Server.Controllers
     {
         private Classes.Calculate Calc = new Classes.Calculate();
 
-        List<int> categoriesId = new List<int>();
+        List<long> categoriesId = new List<long>();
         List<string> purchaseTypes = new List<string>() { "PurchaseNormal", "PurchaseExpire" };
         List<string> salesTypes = new List<string>() { "SalesNormal", "packageItems" };
         [HttpPost]
@@ -153,11 +153,11 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (itemsList[i].isActive == 1)
                             {
-                                int itemId = (int)itemsList[i].itemId;
+                                long itemId = (long)itemsList[i].itemId;
                                 var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
                                 var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                                 string itemType = itemsList[i].type;
-                                int isInInvoice = 0;
+                                long isInInvoice = 0;
                                 if (itemUnitsL != null)
                                 {
                                     isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
@@ -338,11 +338,11 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (itemsList[i].isActive == 1)
                             {
-                                int itemId = (int)itemsList[i].itemId;
+                                long itemId = (long)itemsList[i].itemId;
                                 var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
                                 var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                                 string itemType = itemsList[i].type;
-                                int isInInvoice = 0;
+                                long isInInvoice = 0;
                                 if (itemUnitsL != null)
                                 {
                                     isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
@@ -484,8 +484,8 @@ namespace POS_Server.Controllers
                 #region params
                 string day = "";
                 string invType = "";
-                int branchId = 0;
-                int membershipId = 0;
+                long branchId = 0;
+                long membershipId = 0;
                 DateTime cmpdate = DateTime.Now.AddDays(newdays);
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -500,11 +500,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "membershipId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        membershipId = long.Parse(c.Value);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 #endregion
@@ -753,13 +753,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                 }
                 DateTime cmpdate = DateTime.Now.AddDays(newdays);
@@ -968,11 +968,11 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (itemsList[i].isActive == 1)
                             {
-                                int itemId = (int)itemsList[i].itemId;
+                                long itemId = (long)itemsList[i].itemId;
                                 var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
                                 var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                                 string itemType = itemsList[i].type;
-                                int isInInvoice = 0;
+                                long isInInvoice = 0;
                                 if ( itemUnitsL != null)
                                 {
                                     isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
@@ -1158,11 +1158,11 @@ namespace POS_Server.Controllers
                             canDelete = false;
                             if (itemsList[i].isActive == 1)
                             {
-                                int itemId = (int)itemsList[i].itemId;
+                                long itemId = (long)itemsList[i].itemId;
                                 var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
                                 var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                                 string itemType = itemsList[i].type;
-                                int isInInvoice = 0;
+                                long isInInvoice = 0;
                                 if (itemUnitsL != null)
                                 {
                                     isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
@@ -1236,13 +1236,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int categoryId = 0;
+                long categoryId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "categoryId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -1258,7 +1258,7 @@ namespace POS_Server.Controllers
                       })
                      .ToList();
 
-                    categoriesId = new List<int>();
+                    categoriesId = new List<long>();
                     categoriesId.Add(categoryId);
 
                     // get items
@@ -1304,7 +1304,7 @@ namespace POS_Server.Controllers
                                      categoryString = itm.categoryString,
 
 
-                                 }).Where(p => categoriesId.Contains((int)p.categoryId)).ToList();
+                                 }).Where(p => categoriesId.Contains((long)p.categoryId)).ToList();
 
                     //.Where(t => categoriesId.Contains((int)t.categoryId))
                     // end test
@@ -1318,11 +1318,11 @@ namespace POS_Server.Controllers
                         canDelete = false;
                         if (item.isActive == 1)
                         {
-                            int itemId = (int)item.itemId;
+                            long itemId = (long)item.itemId;
                             var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
                             var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                             string itemType = item.type;
-                            int isInInvoice = 0;
+                            long isInInvoice = 0;
                             if (itemUnitsL != null)
                             {
                                 isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
@@ -1411,19 +1411,19 @@ namespace POS_Server.Controllers
             else
             {
                 ItemsLocationsController ilc = new ItemsLocationsController();
-                int branchId = 0;
-                int categoryId = 0;
+                long branchId = 0;
+                long categoryId = 0;
                 List<string> typeLst = new List<string>();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "categoryId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     }
                 }
 
@@ -1456,7 +1456,7 @@ namespace POS_Server.Controllers
                         var itemO = entity.items.Find(item.itemId);
                         if (item.itemUnitId != null && item.itemUnitId != 0)
                         {
-                            int itemUnitId = (int)item.itemUnitId;
+                            long itemUnitId = (long)item.itemUnitId;
                             int count = ilc.getBranchAmount(itemUnitId, branchId,1);
                             item.itemCount = count;
                             
@@ -1482,19 +1482,19 @@ namespace POS_Server.Controllers
             else
             {
                 ItemsLocationsController ilc = new ItemsLocationsController();
-                int branchId = 0;
-                int categoryId = 0;
+                long branchId = 0;
+                long categoryId = 0;
                 List<string> typeLst = new List<string>();
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "categoryId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     }
                 }
 
@@ -1536,13 +1536,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int categoryId = 0;
+                long categoryId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "categoryId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -1592,13 +1592,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int categoryId = 0;
+                long categoryId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "categoryId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -1614,7 +1614,7 @@ namespace POS_Server.Controllers
                       })
                      .ToList();
 
-                    categoriesId = new List<int>();
+                    categoriesId = new List<long>();
                     categoriesId.Add(categoryId);
 
                     // get items
@@ -1660,7 +1660,7 @@ namespace POS_Server.Controllers
                                      categoryString = itm.categoryString,
 
 
-                                 }).Where(p => categoriesId.Contains((int)p.categoryId)).ToList();
+                                 }).Where(p => categoriesId.Contains((long)p.categoryId)).ToList();
 
                     //.Where(t => categoriesId.Contains((int)t.categoryId))
                     // end test
@@ -1674,11 +1674,11 @@ namespace POS_Server.Controllers
                         canDelete = false;
                         if (item.isActive == 1)
                         {
-                            int itemId = (int)item.itemId;
+                            long itemId = (long)item.itemId;
                             var childItemL = entity.items.Where(x => x.parentId == itemId).Select(b => new { b.itemId }).FirstOrDefault();
                             var itemUnitsL = entity.itemsUnits.Where(x => x.itemId == itemId).Select(b => new { b.itemUnitId }).FirstOrDefault();
                             string itemType = item.type;
-                            int isInInvoice = 0;
+                            long isInInvoice = 0;
                             if (itemUnitsL != null)
                             {
                                 isInInvoice = entity.itemsTransfer.Where(x => x.itemUnitId == itemUnitsL.itemUnitId).Select(x => x.itemsTransId).FirstOrDefault();
@@ -1757,13 +1757,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemId = 0;
+                long itemId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -1832,17 +1832,17 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int categoryId = 0;
+                long categoryId = 0;
                 short defaultSale = 0;
                 short defaultPurchase = 0;
-                int branchId = 0;
+                long branchId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 #region reding params
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "categoryId")
                     {
-                        categoryId = int.Parse(c.Value);
+                        categoryId = long.Parse(c.Value);
                     }
                     else if (c.Type == "defaultSale")
                     {
@@ -1877,12 +1877,12 @@ namespace POS_Server.Controllers
                                  })
                                 .ToList();
 
-                            categoriesId = new List<int>();
+                            categoriesId = new List<long>();
                             categoriesId.Add(categoryId);
 
                             // get items
                             var result = Recursive(categoriesList, categoryId);
-                            searchPredicate = searchPredicate.Or(item => categoriesId.Contains((int)item.categoryId) && item.isActive == 1);
+                            searchPredicate = searchPredicate.Or(item => categoriesId.Contains((long)item.categoryId) && item.isActive == 1);
                         }
                         else
                             searchPredicate = searchPredicate.Or(item => item.isActive == 1);
@@ -2034,7 +2034,7 @@ namespace POS_Server.Controllers
                             {
                                 if (iunlist.itemUnitId != null && iunlist.itemUnitId != 0)
                                 {
-                                    int itemUnitId = (int)iunlist.itemUnitId.Value;
+                                    long itemUnitId = (long)iunlist.itemUnitId.Value;
                                     int count = getItemUnitAmount(itemUnitId, branchId);
                                     iunlist.itemCount = count;
                                 }
@@ -2231,7 +2231,7 @@ namespace POS_Server.Controllers
                             {
                                 if (iunlist.itemUnitId != null && iunlist.itemUnitId != 0)
                                 {
-                                    int itemUnitId = (int)iunlist.itemUnitId.Value;
+                                    long itemUnitId = (long)iunlist.itemUnitId.Value;
                                     int count = getItemUnitAmount(itemUnitId, branchId);
                                     iunlist.itemCount = count;
                                 }
@@ -2470,7 +2470,7 @@ namespace POS_Server.Controllers
                 return TokenManager.GenerateToken("0");
             }
         }
-        private int getItemUnitAmount(int itemUnitId, int branchId, int isKitchen = 0)
+        private int getItemUnitAmount(long itemUnitId, long branchId, int isKitchen = 0)
         {
             int amount = 0;
 
@@ -2512,7 +2512,7 @@ namespace POS_Server.Controllers
         [Route("GetItemByBarcode")]
         public string GetItemByBarcode(string barcode)
         {
-            int itemId = 0;
+            long itemId = 0;
             using (incposdbEntities entity = new incposdbEntities())
             {
                 // itemId = (int)entity.barcodes
@@ -2525,7 +2525,7 @@ namespace POS_Server.Controllers
         }
 
 
-        public IEnumerable<categories> Recursive(List<categories> categoriesList, int toplevelid)
+        public IEnumerable<categories> Recursive(List<categories> categoriesList, long toplevelid)
         {
             List<categories> inner = new List<categories>();
 
@@ -2609,7 +2609,7 @@ namespace POS_Server.Controllers
                                 var it = entity.items.Find(item.itemId);
                                 it.avgPurchasePrice = item.avgPurchasePrice;
 
-                                int itemUnitId = (int)item.itemUnitId;
+                                long itemUnitId = (long)item.itemUnitId;
                                 var itemUnit = entity.itemsUnits.Find(itemUnitId);
                                 itemUnit.price = item.price;
                                 itemUnit.priceWithService = item.priceWithService;
@@ -2632,27 +2632,27 @@ namespace POS_Server.Controllers
             string message = "";
             if (itemObj.updateUserId == 0 || itemObj.updateUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 itemObj.updateUserId = id;
             }
             if (itemObj.createUserId == 0 || itemObj.createUserId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 itemObj.createUserId = id;
             }
             if (itemObj.categoryId == 0 || itemObj.categoryId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 itemObj.categoryId = id;
             }
             if (itemObj.minUnitId == 0 || itemObj.minUnitId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 itemObj.minUnitId = id;
             }
             if (itemObj.maxUnitId == 0 || itemObj.maxUnitId == null)
             {
-                Nullable<int> id = null;
+                Nullable<long> id = null;
                 itemObj.maxUnitId = id;
             }
             try
@@ -2760,16 +2760,16 @@ namespace POS_Server.Controllers
                 if (itemObj != null)
                 {
                     message = saveItem(itemObj);
-                    int itemId = int.Parse(message);
-                    int itemUnitId = 0;
-                    if (int.Parse(message) > 0)
+                    long itemId = long.Parse(message);
+                    long itemUnitId = 0;
+                    if (long.Parse(message) > 0)
                     {
                         using (incposdbEntities entity = new incposdbEntities())
                         {
                            itemUnitId = entity.itemsUnits.Where(x => x.itemId == itemId).Select(x => x.itemUnitId).FirstOrDefault();
                         }
                         ItemsUnitsController ic = new ItemsUnitsController();
-                        itemUnitObj.itemId = int.Parse(message);
+                        itemUnitObj.itemId = long.Parse(message);
                         itemUnitObj.itemUnitId = itemUnitId;
                         ic.saveItemUnit(itemUnitObj);
                     }
@@ -2791,13 +2791,13 @@ namespace POS_Server.Controllers
             else
             {
                 string imageName = "";
-                int itemId =0;
+                long itemId =0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                     }
                     else if (c.Type == "imageName")
                     {
@@ -2837,19 +2837,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemId = 0;
-                int userId = 0;
+                long itemId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -2916,13 +2916,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int itemId = 0;
+                long itemId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -3412,7 +3412,7 @@ namespace POS_Server.Controllers
         #region
         [HttpPost]
         [Route("GetSaleItemsByCategory")]
-        public IHttpActionResult GetSaleItemsByCategory(int categoryId)
+        public IHttpActionResult GetSaleItemsByCategory(long categoryId)
         {
             var re = Request;
             var headers = re.Headers;
@@ -3440,7 +3440,7 @@ namespace POS_Server.Controllers
                       })
                      .ToList();
 
-                    categoriesId = new List<int>();
+                    categoriesId = new List<long>();
                     categoriesId.Add(categoryId);
 
                     // get items
@@ -3484,7 +3484,7 @@ namespace POS_Server.Controllers
                                          offerName = "",
                                          createDate = itm.createDate,
 
-                                     }).Where(t => categoriesId.Contains((int)t.categoryId)).ToList();
+                                     }).Where(t => categoriesId.Contains((long)t.categoryId)).ToList();
 
                     var itemsofferslist = (from off in entity.offers
 
@@ -3656,7 +3656,7 @@ namespace POS_Server.Controllers
         #region
         [HttpPost]
         [Route("GetPurItemsByCategory")]
-        public IHttpActionResult GetPurItemsByCategory(int categoryId)
+        public IHttpActionResult GetPurItemsByCategory(long categoryId)
         {
             var re = Request;
             var headers = re.Headers;
@@ -3684,7 +3684,7 @@ namespace POS_Server.Controllers
                       })
                      .ToList();
 
-                    categoriesId = new List<int>();
+                    categoriesId = new List<long>();
                     categoriesId.Add(categoryId);
 
                     // get items
@@ -3733,7 +3733,7 @@ namespace POS_Server.Controllers
                                          itemUnitId = itun.itemUnitId,
                                          notes = itm.notes,
                                          categoryString = itm.categoryString,
-                                     }).Where(p => p.defaultPurchase == 1 && categoriesId.Contains((int)p.categoryId)).ToList();
+                                     }).Where(p => p.defaultPurchase == 1 && categoriesId.Contains((long)p.categoryId)).ToList();
 
                     //.Where(t => categoriesId.Contains((int)t.categoryId))
                     // end test

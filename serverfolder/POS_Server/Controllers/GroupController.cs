@@ -38,19 +38,19 @@ namespace POS_Server.Controllers
             {
                 bool canDelete = false;
 
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -82,7 +82,7 @@ namespace POS_Server.Controllers
                                 canDelete = false;
                                 if (List[i].isActive == 1)
                                 {
-                                    int groupId = (int)List[i].groupId;
+                                    long groupId = (long)List[i].groupId;
                                     // var operationsL = entity.groupObject.Where(x => x.groupId == groupId).Select(b => new { b.id }).FirstOrDefault();
                                     var operationsu = entity.users.Where(x => x.groupId == groupId).Select(b => new { b.groupId }).FirstOrDefault();
                                     if (operationsu is null)
@@ -143,7 +143,7 @@ namespace POS_Server.Controllers
             //                canDelete = false;
             //                if (List[i].isActive == 1)
             //                {
-            //                    int groupId = (int)List[i].groupId;
+            //                    long groupId = (int)List[i].groupId;
             //                   // var operationsL = entity.groupObject.Where(x => x.groupId == groupId).Select(b => new { b.id }).FirstOrDefault();
             //                    var operationsu = entity.users.Where(x => x.groupId == groupId).Select(b => new { b.groupId }).FirstOrDefault();
             //                    if (operationsu is null)
@@ -179,7 +179,7 @@ namespace POS_Server.Controllers
         //    var re = Request;
         //    var headers = re.Headers;
         //    string token = "";
-        //    int cId = 0;
+        //    long cId = 0;
         //    if (headers.Contains("APIKey"))
         //    {
         //        token = headers.GetValues("APIKey").First();
@@ -234,7 +234,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int groupId = 0;
+                long groupId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -242,7 +242,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "groupId")
                     {
-                        groupId = int.Parse(c.Value);
+                        groupId = long.Parse(c.Value);
                     }
 
 
@@ -353,7 +353,7 @@ namespace POS_Server.Controllers
             //else
             //    return NotFound();
         }
-        public string addObjects(int groupId)
+        public string addObjects(long groupId)
         {
 
             string message = "";
@@ -479,12 +479,12 @@ namespace POS_Server.Controllers
 
                             if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newObject.updateUserId = id;
                             }
                             if (newObject.createUserId == 0 || newObject.createUserId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newObject.createUserId = id;
                             }
                             using (incposdbEntities entity = new incposdbEntities())
@@ -502,7 +502,7 @@ namespace POS_Server.Controllers
                                     entity.groups.Add(newObject);
 
                                 entity.SaveChanges();
-                                int gid = newObject.groupId;
+                                long gid = newObject.groupId;
                                     message = newObject.groupId.ToString();
 
 
@@ -575,12 +575,12 @@ namespace POS_Server.Controllers
 
             //                    if (Object.updateUserId == 0 || Object.updateUserId == null)
             //                    {
-            //                        Nullable<int> id = null;
+            //                        Nullable<long> id = null;
             //                        Object.updateUserId = id;
             //                    }
             //                    if (Object.createUserId == 0 || Object.createUserId == null)
             //                    {
-            //                        Nullable<int> id = null;
+            //                        Nullable<long> id = null;
             //                        Object.createUserId = id;
             //                    }
             //                    using (incposdbEntities entity = new incposdbEntities())
@@ -634,8 +634,8 @@ namespace POS_Server.Controllers
         {
 
 
-            // int groupId, int userId, Boolean final
-            //int Id, int userId
+            // long groupId, long userId, Boolean final
+            //long Id, long userId
             string message = "";
 
 
@@ -648,8 +648,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int groupId = 0;
-                int userId = 0;
+                long groupId = 0;
+                long userId = 0;
                 bool final = false;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -657,11 +657,11 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "groupId")
                     {
-                        groupId = int.Parse(c.Value);
+                        groupId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -784,7 +784,7 @@ namespace POS_Server.Controllers
         [Route("UpdateGroupIdInUsers")]
         public String UpdateGroupIdInUsers(string token)
         {
-            //int groupId, string newList, int userId
+            //long groupId, string newList, long userId
           token = TokenManager.readToken(HttpContext.Current.Request); 
  var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
@@ -794,13 +794,13 @@ namespace POS_Server.Controllers
             else
             {
                 string message = "";
-                int groupId = 0;
-                int userId = 0;
+                long groupId = 0;
+                long userId = 0;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                
                     string newList = "";
-                List<int> newListObj = new List<int>();
+                List<long> newListObj = new List<long>();
                   
                     foreach (Claim c in claims)
                     {
@@ -808,16 +808,16 @@ namespace POS_Server.Controllers
                         {
                         newList = c.Value.Replace("\\", string.Empty);
                         newList = newList.Trim('"');
-                        newListObj = JsonConvert.DeserializeObject<List<int>>(newList, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
+                        newListObj = JsonConvert.DeserializeObject<List<long>>(newList, new IsoDateTimeConverter { DateTimeFormat = "dd/MM/yyyy" });
                             
                         }
                         else if (c.Type == "groupId")
                         {
-                        groupId = int.Parse(c.Value);
+                        groupId = long.Parse(c.Value);
                         }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }

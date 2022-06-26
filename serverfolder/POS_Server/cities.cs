@@ -14,9 +14,9 @@ namespace POS_Server
     
     public partial class cities
     {
-        public int cityId { get; set; }
+        public long cityId { get; set; }
         public string cityCode { get; set; }
-        public Nullable<int> countryId { get; set; }
+        public Nullable<long> countryId { get; set; }
     
         public virtual countriesCodes countriesCodes { get; set; }
     }

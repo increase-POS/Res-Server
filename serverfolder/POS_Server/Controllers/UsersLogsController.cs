@@ -99,11 +99,11 @@ namespace POS_Server.Controllers
             //                     * 
 
 
-            //    public int logId { get; set; }
+            //    public long logId { get; set; }
             //            public Nullable<System.DateTime> sInDate { get; set; }
             //            public Nullable<System.DateTime> sOutDate { get; set; }
-            //            public Nullable<int> posId { get; set; }
-            //            public Nullable<int> userId { get; set; }
+            //            public Nullable<long> posId { get; set; }
+            //            public Nullable<long> userId { get; set; }
             //            public bool canDelete { get; set; }
 
             //logId
@@ -134,7 +134,7 @@ namespace POS_Server.Controllers
         [Route("GetByUserId")]
        public string GetByUserId(string token)
         {
-            //public string GetPurinv(string token)int userId
+            //public string GetPurinv(string token)long userId
 
           
          
@@ -147,7 +147,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int userId = 0;
+                long userId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -155,7 +155,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
 
@@ -227,11 +227,11 @@ namespace POS_Server.Controllers
             //                     * 
 
 
-            //    public int logId { get; set; }
+            //    public long logId { get; set; }
             //            public Nullable<System.DateTime> sInDate { get; set; }
             //            public Nullable<System.DateTime> sOutDate { get; set; }
-            //            public Nullable<int> posId { get; set; }
-            //            public Nullable<int> userId { get; set; }
+            //            public Nullable<long> posId { get; set; }
+            //            public Nullable<long> userId { get; set; }
             //            public bool canDelete { get; set; }
 
             //logId
@@ -262,7 +262,7 @@ namespace POS_Server.Controllers
        public string GetByID(string token)
         {
 
-            //public string GetPurinv(string token)int logId
+            //public string GetPurinv(string token)long logId
 
           
          
@@ -275,7 +275,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int logId = 0;
+                long logId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -283,7 +283,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "logId") 
                     {
-                        logId = int.Parse(c.Value);
+                        logId = long.Parse(c.Value);
                     }
                 }
                 try
@@ -360,7 +360,7 @@ namespace POS_Server.Controllers
        public string checkOtherUser(string token)
         {
 
-            //public string GetPurinv(string token)int userId
+            //public string GetPurinv(string token)long userId
             string message = "";
           
          
@@ -373,7 +373,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int userId = 0;
+                long userId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -381,7 +381,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                 }
                 try
@@ -504,12 +504,12 @@ namespace POS_Server.Controllers
                     {
                         if (newObject.posId == 0 || newObject.posId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.posId = id;
                         }
                         if (newObject.userId == 0 || newObject.userId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.userId = id;
                         }
                         using (incposdbEntities entity = new incposdbEntities())
@@ -601,12 +601,12 @@ namespace POS_Server.Controllers
             //    usersLogs newObject = JsonConvert.DeserializeObject<usersLogs>(Object, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
             //    if (newObject.posId == 0 || newObject.posId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.posId = id;
             //    }
             //    if (newObject.userId == 0 || newObject.userId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.userId = id;
             //    }
 
@@ -676,7 +676,7 @@ namespace POS_Server.Controllers
             //}
             //return message;
         }
-        public bool checkLogByID(int logId)
+        public bool checkLogByID(long logId)
         {
             try
             {
@@ -703,8 +703,8 @@ namespace POS_Server.Controllers
        public string Delete(string token)
         {
 
-            //public string Delete(string token)int logId, int userId,bool final
-            //int Id, int userId
+            //public string Delete(string token)long logId, long userId,bool final
+            //long Id, long userId
             string message = "";
           
          
@@ -717,8 +717,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int logId = 0;
-                int userId = 0;
+                long logId = 0;
+                long userId = 0;
                 bool final = false;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -726,11 +726,11 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "logId")
                     {
-                        logId = int.Parse(c.Value);
+                        logId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -830,12 +830,12 @@ namespace POS_Server.Controllers
                 {
                     if (newObject.posId == 0 || newObject.posId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.posId = id;
                     }
                     if (newObject.userId == 0 || newObject.userId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.userId = id;
                     }
                     using (incposdbEntities entity = new incposdbEntities())
@@ -911,7 +911,7 @@ namespace POS_Server.Controllers
             }
         }
 
-        public usersLogs GetByID(int logId)
+        public usersLogs GetByID(long logId)
         {
             usersLogs item = new usersLogs();
 

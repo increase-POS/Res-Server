@@ -121,7 +121,7 @@ namespace POS_Server.Controllers
         [Route("GetByID")]
        public string GetByID(string token)
         {
-            //public stringGetPurinv(string token)int emailId
+            //public stringGetPurinv(string token)long emailId
 
            
            
@@ -134,7 +134,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int Id = 0;
+                long Id = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -142,7 +142,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "Id")
                     {
-                        Id = int.Parse(c.Value);
+                        Id = long.Parse(c.Value);
                     }
 
 
@@ -186,7 +186,7 @@ namespace POS_Server.Controllers
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
-            //int cId = 0;
+            //long cId = 0;
             //if (headers.Contains("APIKey"))
             //{
             //    token = headers.GetValues("APIKey").First();
@@ -272,12 +272,12 @@ namespace POS_Server.Controllers
                     {
                         if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.updateUserId = id;
                         }
                         if (newObject.createUserId == 0 || newObject.createUserId == null)
                         {
-                            Nullable<int> id = null;
+                            Nullable<long> id = null;
                             newObject.createUserId = id;
                         }
                         using (incposdbEntities entity = new incposdbEntities())
@@ -347,12 +347,12 @@ namespace POS_Server.Controllers
             //    userSetValues newObject = JsonConvert.DeserializeObject<userSetValues>(Object, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
             //    if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.updateUserId = id;
             //    }
             //    if (newObject.createUserId == 0 || newObject.createUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.createUserId = id;
             //    }
 
@@ -405,8 +405,8 @@ namespace POS_Server.Controllers
        public string Delete(string token)
         {
 
-            //public stringDelete(string token)int Id, int userId
-            //int Id, int userId
+            //public stringDelete(string token)long Id, long userId
+            //long Id, long userId
             string message = "";
            
            
@@ -419,8 +419,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int Id = 0;
-                int userId = 0;
+                long Id = 0;
+                long userId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -428,11 +428,11 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "Id")
                     {
-                        Id = int.Parse(c.Value);
+                        Id = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
 
                 }

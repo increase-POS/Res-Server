@@ -120,7 +120,7 @@ namespace POS_Server.Controllers
         //    }
         //    else
         //    {
-        //        int agentId = 0;
+        //        long agentId = 0;
         //        IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
         //        foreach (Claim c in claims)
         //        {
@@ -196,23 +196,23 @@ namespace POS_Server.Controllers
         //        }
         //        if (newObject.updateUserId == 0 || newObject.updateUserId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.updateUserId = id;
         //        }
         //        if (newObject.createUserId == 0 || newObject.createUserId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.createUserId = id;
         //        }
                 
         //        if (newObject.membershipId == 0 || newObject.membershipId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.membershipId = id;
         //        }
         //        if (newObject.agentId == 0 || newObject.agentId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.agentId = id;
         //        }
         //        try
@@ -280,7 +280,7 @@ namespace POS_Server.Controllers
         //    else
         //    {
         //        int agentMembershipsId = 0;
-        //        int userId = 0;
+        //        long userId = 0;
         //        Boolean final = false;
         //        IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
         //        foreach (Claim c in claims)
@@ -291,7 +291,7 @@ namespace POS_Server.Controllers
         //            }
         //            else if (c.Type == "userId")
         //            {
-        //                userId = int.Parse(c.Value);
+        //                userId = long.Parse(c.Value);
         //            }
         //            else if (c.Type == "final")
         //            {
@@ -354,8 +354,8 @@ namespace POS_Server.Controllers
             {
                 string strObject = "";
                 List<AgentMembershipsModel> newListObj = null;
-                int membershipId = 0;
-                int updateUserId = 0;
+                long membershipId = 0;
+                long updateUserId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -368,12 +368,12 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "membershipId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        membershipId = long.Parse(c.Value);
                     }
                     else
                   if (c.Type == "updateUserId")
                     {
-                        updateUserId = int.Parse(c.Value);
+                        updateUserId = long.Parse(c.Value);
                     }
                 }
 
@@ -416,8 +416,8 @@ namespace POS_Server.Controllers
             {
                 string strObject = "";
                 List<agentMemberships> newListObj = null;
-                int membershipId = 0;
-                int updateUserId = 0;
+                long membershipId = 0;
+                long updateUserId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
@@ -430,12 +430,12 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "membershipId")
                     {
-                        membershipId = int.Parse(c.Value);
+                        membershipId = long.Parse(c.Value);
                     }
                     else
                   if (c.Type == "updateUserId")
                     {
-                        updateUserId = int.Parse(c.Value);
+                        updateUserId = long.Parse(c.Value);
                     }
                 }
 
@@ -466,22 +466,22 @@ namespace POS_Server.Controllers
                         {
                             if (newListObj[i].updateUserId == 0 || newListObj[i].updateUserId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].updateUserId = id;
                             }
                             if (newListObj[i].createUserId == 0 || newListObj[i].createUserId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].createUserId = id;
                             }
                             if (newListObj[i].membershipId == 0 || newListObj[i].membershipId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].membershipId = id;
                             }
                             if (newListObj[i].agentId == 0 || newListObj[i].agentId == null)
                             {
-                                Nullable<int> id = null;
+                                Nullable<long> id = null;
                                 newListObj[i].agentId = id;
                             }
                          
@@ -530,8 +530,8 @@ namespace POS_Server.Controllers
         //    {
         //        string strObject = "";
         //        List<agentMemberships> newListObj = null;
-        //        int membershipId = 0;
-        //        int updateUserId = 0;
+        //        long membershipId = 0;
+        //        long updateUserId = 0;
         //        IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
         //        foreach (Claim c in claims)
         //        {
@@ -544,12 +544,12 @@ namespace POS_Server.Controllers
         //            }
         //            else if (c.Type == "membershipId")
         //            {
-        //                membershipId = int.Parse(c.Value);
+        //                membershipId = long.Parse(c.Value);
         //            }
         //            else
         //          if (c.Type == "updateUserId")
         //            {
-        //                updateUserId = int.Parse(c.Value);
+        //                updateUserId = long.Parse(c.Value);
         //            }
         //        }
 
@@ -628,32 +628,32 @@ namespace POS_Server.Controllers
         //    int message = 0;
         //        if (newObject.updateUserId == 0 || newObject.updateUserId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.updateUserId = id;
         //        }
         //        if (newObject.createUserId == 0 || newObject.createUserId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.createUserId = id;
         //        }
         //        if (newObject.subscriptionFeesId == 0 || newObject.subscriptionFeesId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.subscriptionFeesId = id;
         //        }
         //        if (newObject.cashTransId == 0 || newObject.cashTransId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.cashTransId = id;
         //        }
         //        if (newObject.membershipId == 0 || newObject.membershipId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.membershipId = id;
         //        }
         //        if (newObject.agentId == 0 || newObject.agentId == null)
         //        {
-        //            Nullable<int> id = null;
+        //            Nullable<long> id = null;
         //            newObject.agentId = id;
         //        }
         //        try

@@ -14,13 +14,13 @@ namespace POS_Server
     
     public partial class invoiceStatus
     {
-        public int invStatusId { get; set; }
-        public Nullable<int> invoiceId { get; set; }
+        public long invStatusId { get; set; }
+        public Nullable<long> invoiceId { get; set; }
         public string status { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public string notes { get; set; }
         public byte isActive { get; set; }
     

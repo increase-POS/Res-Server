@@ -20,19 +20,19 @@ namespace POS_Server
             this.cashTransfer1 = new HashSet<cashTransfer>();
         }
     
-        public int bondId { get; set; }
+        public long bondId { get; set; }
         public string number { get; set; }
         public decimal amount { get; set; }
         public Nullable<System.DateTime> deserveDate { get; set; }
         public string type { get; set; }
         public byte isRecieved { get; set; }
         public string notes { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public byte isActive { get; set; }
-        public Nullable<int> cashTransId { get; set; }
+        public Nullable<long> cashTransId { get; set; }
     
         public virtual cashTransfer cashTransfer { get; set; }
         public virtual users users { get; set; }

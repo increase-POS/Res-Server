@@ -34,19 +34,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -159,7 +159,7 @@ namespace POS_Server.Controllers
                                 canDelete = false;
                                 if (bonditem.isActive == 1)
                                 {
-                                    int cId = (int)bonditem.bondId;
+                                    long cId = (long)bonditem.bondId;
                                     var casht = entity.cashTransfer.Where(x => x.bondId == cId).Select(x => new { x.bondId }).FirstOrDefault();
 
                                     if ((casht is null))
@@ -357,7 +357,7 @@ namespace POS_Server.Controllers
             //                canDelete = false;
             //                if (bonditem.isActive == 1)
             //                {
-            //                    int cId = (int)bonditem.bondId;
+            //                    long cId = (int)bonditem.bondId;
             //                    var casht = entity.cashTransfer.Where(x => x.bondId == cId).Select(x => new { x.bondId }).FirstOrDefault();
 
             //                    if ((casht is null))
@@ -460,7 +460,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int Id = 0;
+                long Id = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -468,7 +468,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "bondId")
                     {
-                        Id = int.Parse(c.Value);
+                        Id = long.Parse(c.Value);
                     }
 
 
@@ -518,7 +518,7 @@ namespace POS_Server.Controllers
             //var re = Request;
             //var headers = re.Headers;
             //string token = "";
-            //int cId = 0;
+            //long cId = 0;
             //if (headers.Contains("APIKey"))
             //{
             //    token = headers.GetValues("APIKey").First();
@@ -859,8 +859,8 @@ namespace POS_Server.Controllers
         public string  Delete(string token)
         {
 
-            // int bondId, int userId, Boolean final
-            //int Id, int userId
+            // int bondId, long userId, Boolean final
+            //long Id, long userId
             string message = "";
 
 
@@ -873,8 +873,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int bondId = 0;
-                int userId = 0;
+                long bondId = 0;
+                long userId = 0;
                 bool final = false;
              
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -882,11 +882,11 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "bondId")
                     {
-                        bondId = int.Parse(c.Value);
+                        bondId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

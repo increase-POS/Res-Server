@@ -52,7 +52,7 @@ var strP = TokenManager.GetPrincipal(token);
                             canDelete = false;
                             if (propertiesList[i].isActive == 1)
                             {
-                                int propertyItemId = (int)propertiesList[i].propertyItemId;
+                                long propertyItemId = (long)propertiesList[i].propertyItemId;
                                 var Itemsprop = entity.itemsProp.Where(x => x.propertyItemId == propertyItemId).Select(b => new { b.itemPropId ,b.itemId}).ToList();
                                
                                 if ( Itemsprop.Count == 0)
@@ -83,13 +83,13 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int propertyId = 0;
+                long propertyId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        propertyId = int.Parse(c.Value);
+                        propertyId = long.Parse(c.Value);
                     }
                 }
                 using (incposdbEntities entity = new incposdbEntities())
@@ -115,7 +115,7 @@ var strP = TokenManager.GetPrincipal(token);
                             canDelete = false;
                             if (propertiesList[i].isActive == 1)
                             {
-                                int propertyItemId = (int)propertiesList[i].propertyItemId;
+                                long propertyItemId = (long)propertiesList[i].propertyItemId;
                                 var Itemsprop = entity.itemsProp.Where(x => x.propertyItemId == propertyItemId).Select(b => new { b.itemPropId }).FirstOrDefault();
 
                                 if (Itemsprop is null)
@@ -135,7 +135,7 @@ var strP = TokenManager.GetPrincipal(token);
         public string GetPropItemByID(string token)
         {
 token = TokenManager.readToken(HttpContext.Current.Request);
-            int propItemId = 0;
+            long propItemId = 0;
             string message = "";
 var strP = TokenManager.GetPrincipal(token);
             if (strP != "0") //invalid authorization
@@ -198,12 +198,12 @@ var strP = TokenManager.GetPrincipal(token);
 
                 if (propertyItemObject.updateUserId == 0 || propertyItemObject.updateUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     propertyItemObject.updateUserId = id;
                 }
                 if (propertyItemObject.createUserId == 0 || propertyItemObject.createUserId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     propertyItemObject.createUserId = id;
                 }
                 try
@@ -260,19 +260,19 @@ var strP = TokenManager.GetPrincipal(token);
             }
             else
             {
-                int propertyItemId = 0;
-                int userId = 0;
+                long propertyItemId = 0;
+                long userId = 0;
                 Boolean final = false;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "itemId")
                     {
-                        propertyItemId = int.Parse(c.Value);
+                        propertyItemId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {

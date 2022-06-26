@@ -20,12 +20,12 @@ namespace POS_Server
             this.propertiesItems = new HashSet<propertiesItems>();
         }
     
-        public int propertyId { get; set; }
+        public long propertyId { get; set; }
         public string name { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
     
         public virtual users users { get; set; }

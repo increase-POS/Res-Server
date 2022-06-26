@@ -21,9 +21,9 @@ namespace POS_Server
             this.objects1 = new HashSet<objects>();
         }
     
-        public int objectId { get; set; }
+        public long objectId { get; set; }
         public string name { get; set; }
-        public Nullable<int> parentObjectId { get; set; }
+        public Nullable<long> parentObjectId { get; set; }
         public string objectType { get; set; }
         public string translate { get; set; }
         public string translateHint { get; set; }

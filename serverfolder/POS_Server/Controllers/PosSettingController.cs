@@ -24,7 +24,7 @@ namespace POS_Server.Controllers
 
             // public ResponseVM GetPurinv(string token)
 
-            //int mainBranchId, int userId    DateTime? date=new DateTime?();
+            //long mainBranchId, long userId    DateTime? date=new DateTime?();
 
 
 
@@ -36,19 +36,19 @@ namespace POS_Server.Controllers
             }
             else
             {
-                //int mainBranchId = 0;
-                //int userId = 0;
+                //long mainBranchId = 0;
+                //long userId = 0;
 
                 //IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 //foreach (Claim c in claims)
                 //{
                 //    if (c.Type == "mainBranchId")
                 //    {
-                //        mainBranchId = int.Parse(c.Value);
+                //        mainBranchId = long.Parse(c.Value);
                 //    }
                 //    else if (c.Type == "userId")
                 //    {
-                //        userId = int.Parse(c.Value);
+                //        userId = long.Parse(c.Value);
                 //    }
 
                 //}
@@ -196,7 +196,7 @@ namespace POS_Server.Controllers
 
 
         // get by posId
-        private PosSettingModel GetByposId(int posId)
+        private PosSettingModel GetByposId(long posId)
         {
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -256,7 +256,7 @@ namespace POS_Server.Controllers
         [Route("GetByposId")]
         public string GetByposId(string token)
         {
-            // public ResponseVM GetItemByID(string token)int posId
+            // public ResponseVM GetItemByID(string token)long posId
             // {
 
 
@@ -270,13 +270,13 @@ namespace POS_Server.Controllers
             else
             {
                 int message = 0;
-                int posId = 0;
+                long posId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "posId")
                     {
-                        posId = int.Parse(c.Value);
+                        posId = long.Parse(c.Value);
                     }
                 }
 
@@ -358,9 +358,9 @@ namespace POS_Server.Controllers
             //else
             //    return NotFound();
         }
-        private int Save(posSetting newObject)
+        private long Save(posSetting newObject)
         {
-            int message = 0;
+            long message = 0;
             if (newObject != null)
             {
 
@@ -368,32 +368,32 @@ namespace POS_Server.Controllers
                 posSetting tmpObject;
                 if (newObject.posId == 0 || newObject.posId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.posId = id;
                 }
                 if (newObject.reportPrinterId == 0 || newObject.reportPrinterId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.reportPrinterId = id;
                 }
                 if (newObject.saleInvPapersizeId == 0 || newObject.saleInvPapersizeId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.saleInvPapersizeId = id;
                 }
                 if (newObject.saleInvPrinterId == 0 || newObject.saleInvPrinterId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.saleInvPrinterId = id;
                 }
                 if (newObject.kitchenPrinterId == 0 || newObject.kitchenPrinterId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.kitchenPrinterId = id;
                 }
                 if (newObject.kitchenPapersizeId == 0 || newObject.kitchenPapersizeId == null)
                 {
-                    Nullable<int> id = null;
+                    Nullable<long> id = null;
                     newObject.kitchenPapersizeId = id;
                 }
                 /*
@@ -494,32 +494,32 @@ namespace POS_Server.Controllers
                     posSetting tmpObject;
                     if (newObject.posId == 0 || newObject.posId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.posId = id;
                     }
                     if (newObject.reportPrinterId == 0 || newObject.reportPrinterId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.reportPrinterId = id;
                     }
                     if (newObject.saleInvPapersizeId == 0 || newObject.saleInvPapersizeId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.saleInvPapersizeId = id;
                     }
                     if (newObject.saleInvPrinterId == 0 || newObject.saleInvPrinterId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.saleInvPrinterId = id;
                     }
                     if (newObject.kitchenPrinterId == 0 || newObject.kitchenPrinterId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.kitchenPrinterId = id;
                     }
                     if (newObject.kitchenPapersizeId == 0 || newObject.kitchenPapersizeId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.kitchenPapersizeId = id;
                     }
 
@@ -593,22 +593,22 @@ namespace POS_Server.Controllers
             //    posSetting newObject = JsonConvert.DeserializeObject<posSetting>(Object, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
             //    if (newObject.posId == 0 || newObject.posId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.posId = id;
             //    }
             //    if (newObject.reportPrinterId == 0 || newObject.reportPrinterId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.reportPrinterId = id;
             //    }
             //    if (newObject.saleInvPapersizeId == 0 || newObject.saleInvPapersizeId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.saleInvPapersizeId = id;
             //    }
             //    if (newObject.saleInvPrinterId == 0 || newObject.saleInvPrinterId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.saleInvPrinterId = id;
             //    }
 
@@ -675,7 +675,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int posSettingId = 0;
+                long posSettingId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -683,7 +683,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "posSettingId")
                     {
-                        posSettingId = int.Parse(c.Value);
+                        posSettingId = long.Parse(c.Value);
                     }
 
                 }

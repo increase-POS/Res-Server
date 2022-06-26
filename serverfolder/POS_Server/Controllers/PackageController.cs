@@ -193,10 +193,10 @@ namespace POS_Server.Controllers
         //}
 
 
-        public List<int> canNotUpdatePack()
+        public List<long> canNotUpdatePack()
         {
             
-            List<int> listg = new List<int>();
+            List<long> listg = new List<long>();
 
             using (incposdbEntities entity = new incposdbEntities())
             {
@@ -240,7 +240,7 @@ namespace POS_Server.Controllers
 
                 try
                 {
-                    List<int> noUpdateList = new List<int>();
+                    List<long> noUpdateList = new List<long>();
 
                     using (incposdbEntities entity = new incposdbEntities())
                     {
@@ -386,7 +386,7 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int packageId = 0;
+                long packageId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -394,7 +394,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "packageId")
                     {
-                        packageId = int.Parse(c.Value);
+                        packageId = long.Parse(c.Value);
                     }
 
 
@@ -513,22 +513,22 @@ namespace POS_Server.Controllers
 
                     if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.updateUserId = id;
                     }
                     if (newObject.createUserId == 0 || newObject.createUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.createUserId = id;
                     }
                     if (newObject.parentIUId == 0 || newObject.parentIUId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.parentIUId = id;
                     }
                     if (newObject.childIUId == 0 || newObject.childIUId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.childIUId = id;
                     }
 
@@ -604,22 +604,22 @@ namespace POS_Server.Controllers
             //    packages newObject = JsonConvert.DeserializeObject<packages>(Object, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
             //    if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.updateUserId = id;
             //    }
             //    if (newObject.createUserId == 0 || newObject.createUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.createUserId = id;
             //    }
             //    if (newObject.parentIUId == 0 || newObject.parentIUId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.parentIUId = id;
             //    }
             //    if (newObject.childIUId == 0 || newObject.childIUId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.childIUId = id;
             //    }
 
@@ -674,7 +674,7 @@ namespace POS_Server.Controllers
         {
 
 
-            //int packageId, int userId, bool final
+            //int packageId, long userId, bool final
 
             string message = "";
 
@@ -688,8 +688,8 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int packageId = 0;
-                int userId = 0;
+                long packageId = 0;
+                long userId = 0;
                 bool final = false;
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -697,11 +697,11 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "packageId")
                     {
-                        packageId = int.Parse(c.Value);
+                        packageId = long.Parse(c.Value);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "final")
                     {
@@ -830,13 +830,13 @@ namespace POS_Server.Controllers
             }
             else
             {
-                int parentIUId = 0;
+                long parentIUId = 0;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
                 {
                     if (c.Type == "parentIUId")
                     {
-                        parentIUId = int.Parse(c.Value);
+                        parentIUId = long.Parse(c.Value);
                     }
 
 
@@ -936,9 +936,9 @@ namespace POS_Server.Controllers
             {
                 List<packages> newitofObj = new List<packages>();
                 string newlist = "";
-           
-                int userId = 0;
-                int parentIUId = 0;
+
+                long userId = 0;
+                long parentIUId = 0;
 
 
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
@@ -953,11 +953,11 @@ namespace POS_Server.Controllers
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "parentIUId")
                     {
-                        parentIUId = int.Parse(c.Value);
+                        parentIUId = long.Parse(c.Value);
                     }
 
 
@@ -1012,7 +1012,7 @@ namespace POS_Server.Controllers
 
             }
 
-            //int userId = 0;
+            //long userId = 0;
             //int parentIUId = 0;
             //var re = Request;
             //var headers = re.Headers;
@@ -1082,7 +1082,7 @@ namespace POS_Server.Controllers
 
         }
         #endregion
-        public List<PackageModel> GetChildsByParentId(int parentIUId)
+        public List<PackageModel> GetChildsByParentId(long parentIUId)
         {
             List<PackageModel> list = new List<PackageModel>();
 

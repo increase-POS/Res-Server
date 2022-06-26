@@ -32,11 +32,11 @@ var strP = TokenManager.GetPrincipal(token);
             else
             {
                 string obj = "";
-                int branchId = 0;
+                long branchId = 0;
                 string objectName = "";
                 string prefix = "";
-                int userId = 0;
-                int posId = 0;
+                long userId = 0;
+                long posId = 0;
                 notification Object = null;
                 IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
                 foreach (Claim c in claims)
@@ -50,7 +50,7 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                     else if (c.Type == "branchId")
                     {
-                        branchId = int.Parse(c.Value);
+                        branchId = long.Parse(c.Value);
                     }
                     else if (c.Type == "objectName")
                     {
@@ -62,11 +62,11 @@ var strP = TokenManager.GetPrincipal(token);
                     }
                     else if (c.Type == "userId")
                     {
-                        userId = int.Parse(c.Value);
+                        userId = long.Parse(c.Value);
                     }
                     else if (c.Type == "posId")
                     {
-                        posId = int.Parse(c.Value);
+                        posId = long.Parse(c.Value);
                     }
                 }
                 try
@@ -190,7 +190,7 @@ var strP = TokenManager.GetPrincipal(token);
             }
         }
 
-        public void addNotifications(string objectName, string notificationObj, int branchId, string itemName)
+        public void addNotifications(string objectName, string notificationObj, long branchId, string itemName)
         {
             notificationObj = notificationObj.Replace("\\", string.Empty);
             notificationObj = notificationObj.Trim('"');

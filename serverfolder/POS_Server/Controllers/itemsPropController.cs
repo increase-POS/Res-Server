@@ -23,9 +23,9 @@ namespace POS_Server.Controllers
         public string Get(string token)
         {
 
-            //int itemId
+            //long itemId
             string message = "";
-            int itemId = 0;
+            long itemId = 0;
 
 
 
@@ -45,7 +45,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "itemId")
                     {
-                        itemId = int.Parse(c.Value);
+                        itemId = long.Parse(c.Value);
                     }
 
                 }
@@ -156,12 +156,12 @@ namespace POS_Server.Controllers
 
                     if (newObject.updateUserId == 0 || newObject.updateUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.updateUserId = id;
                     }
                     if (newObject.createUserId == 0 || newObject.createUserId == null)
                     {
-                        Nullable<int> id = null;
+                        Nullable<long> id = null;
                         newObject.createUserId = id;
                     }
                     try
@@ -225,12 +225,12 @@ namespace POS_Server.Controllers
             //    itemsProp newObject = JsonConvert.DeserializeObject<itemsProp>(itemsPropObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
             //    if (newObject.updateUserId == 0 || newObject.updateUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.updateUserId = id;
             //    }
             //    if (newObject.createUserId == 0 || newObject.createUserId == null)
             //    {
-            //        Nullable<int> id = null;
+            //        Nullable<long> id = null;
             //        newObject.createUserId = id;
             //    }
             //    try
@@ -272,9 +272,9 @@ namespace POS_Server.Controllers
         public string Delete(string token)
         {
 
-            //int itemPropId
+            //long itemPropId
             string message = "";
-            int itemPropId = 0;
+            long itemPropId = 0;
 
           token = TokenManager.readToken(HttpContext.Current.Request); 
  var strP = TokenManager.GetPrincipal(token);
@@ -290,7 +290,7 @@ namespace POS_Server.Controllers
                 {
                     if (c.Type == "itemPropId")
                     {
-                        itemPropId = int.Parse(c.Value);
+                        itemPropId = long.Parse(c.Value);
                     }
 
                 }

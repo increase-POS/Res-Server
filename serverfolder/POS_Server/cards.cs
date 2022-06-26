@@ -20,13 +20,13 @@ namespace POS_Server
             this.cashTransfer = new HashSet<cashTransfer>();
         }
     
-        public int cardId { get; set; }
+        public long cardId { get; set; }
         public string name { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
         public Nullable<System.DateTime> updateDate { get; set; }
-        public Nullable<int> createUserId { get; set; }
-        public Nullable<int> updateUserId { get; set; }
+        public Nullable<long> createUserId { get; set; }
+        public Nullable<long> updateUserId { get; set; }
         public byte isActive { get; set; }
         public string image { get; set; }
         public bool hasProcessNum { get; set; }
