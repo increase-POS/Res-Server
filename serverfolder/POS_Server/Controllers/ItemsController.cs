@@ -741,6 +741,247 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+        [HttpPost]
+        [Route("GetItemExtras")]
+        public string GetItemExtras(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                #region params
+                string invType = "";
+                long itemId = 0;
+                long membershipId = 0;
+                DateTime cmpdate = DateTime.Now.AddDays(newdays);
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invType")
+                    {
+                        invType = c.Value;
+                    }
+                    else if (c.Type == "membershipId")
+                    {
+                        membershipId = long.Parse(c.Value);
+                    }
+                    else if (c.Type == "itemId")
+                    {
+                        itemId = long.Parse(c.Value);
+                    }
+                }
+                #endregion
+              
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    var itemsList = (from I in entity.items.Where(x =>  x.isActive == 1)
+                                     join IE in entity.itemsExtra.Where(x=> x.itemId == itemId) on I.itemId equals IE.extraId
+                                     join IU in entity.itemsUnits on I.itemId equals IU.itemId
+                                     select new ItemSalePurModel()
+                                     {
+                                         itemId = I.itemId,
+                                         name = I.name,
+                                         code = I.code,
+                                         categoryId = I.categoryId,
+                                         max = I.max,
+                                         maxUnitId = I.maxUnitId,
+                                         minUnitId = I.minUnitId,
+                                         min = I.min,
+                                         tagId = I.tagId,
+                                         parentId = I.parentId,
+                                         isActive = I.isActive,
+                                         image = I.image,
+                                         type = I.type,
+                                         details = I.details,
+                                         taxes = I.taxes,
+                                         createDate = I.createDate,
+                                         updateDate = I.updateDate,
+                                         createUserId = I.createUserId,
+                                         updateUserId = I.updateUserId,
+                                         isNew = 0,
+                                         parentName = entity.items.Where(m => m.itemId == I.parentId).FirstOrDefault().name,
+                                         minUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
+                                         maxUnitName = entity.units.Where(m => m.unitId == I.minUnitId).FirstOrDefault().name,
+                                         avgPurchasePrice = I.avgPurchasePrice,
+                                         notes = I.notes,
+                                         categoryString = I.categoryString,
+                                         
+                                         itemUnitId = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().itemUnitId,
+                                         price = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().price,
+                                         basicPrice = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().price,
+                                         priceWithService = entity.itemsUnits.Where(m => m.itemId == I.itemId && m.defaultSale == 1).FirstOrDefault().priceWithService,
+                                     })
+                                   .ToList();
+                    #region offers
+
+                    var offerslist = (from off in entity.offers
+
+                                      join itof in entity.itemsOffers on off.offerId equals itof.offerId // itemsOffers and offers 
+
+                                      //  join iu in entity.itemsUnits on itof.iuId  equals  iu.itemUnitId //itemsUnits and itemsOffers
+                                      join iu in entity.itemsUnits on itof.iuId equals iu.itemUnitId
+                                      //from un in entity.units
+                                      select new ItemSalePurModel()
+                                      {
+                                          itemId = iu.itemId,
+                                          itemUnitId = itof.iuId,
+                                          offerName = off.name,
+                                          offerId = off.offerId,
+                                          discountValue = off.discountValue,
+                                          isNew = 0,
+                                          isOffer = 1,
+                                          isActiveOffer = off.isActive,
+                                          startDate = off.startDate,
+                                          endDate = off.endDate,
+                                          unitId = iu.unitId,
+                                          itemCount = itof.quantity,
+                                          price = iu.price,
+                                          priceWithService = iu.priceWithService,
+                                          discountType = off.discountType,
+                                          desPrice = iu.price,
+                                          defaultSale = iu.defaultSale,
+                                          used = itof.used,
+                                          forAgent = off.forAgents,
+                                          isActive = off.isActive,
+
+                                      }).Where(IO => IO.isActive == 1 && IO.isActiveOffer == 1 && IO.forAgent == "pb" && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0
+                                                   && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1 && IO.itemCount > IO.used).Distinct().ToList();
+
+                    var membershipOffers = (from off in entity.offers
+                                            join mo in entity.membershipsOffers.Where(x => x.membershipId == membershipId) on off.offerId equals mo.offerId
+
+                                            join itof in entity.itemsOffers on off.offerId equals itof.offerId // itemsOffers and offers 
+
+                                            //  join iu in entity.itemsUnits on itof.iuId  equals  iu.itemUnitId //itemsUnits and itemsOffers
+                                            join iu in entity.itemsUnits on itof.iuId equals iu.itemUnitId
+                                            //from un in entity.units
+                                            select new ItemSalePurModel()
+                                            {
+                                                itemId = iu.itemId,
+                                                itemUnitId = itof.iuId,
+                                                offerName = off.name,
+                                                offerId = off.offerId,
+                                                discountValue = off.discountValue,
+                                                isNew = 0,
+                                                isOffer = 1,
+                                                isActiveOffer = off.isActive,
+                                                startDate = off.startDate,
+                                                endDate = off.endDate,
+                                                unitId = iu.unitId,
+                                                itemCount = itof.quantity,
+                                                price = iu.price,
+                                                priceWithService = iu.priceWithService,
+                                                discountType = off.discountType,
+                                                desPrice = iu.price,
+                                                defaultSale = iu.defaultSale,
+                                                used = itof.used,
+                                                forAgent = off.forAgents,
+                                                isActive = off.isActive,
+
+                                            }).Where(IO => IO.isActive == 1 && IO.isActiveOffer == 1 && DateTime.Compare((DateTime)IO.startDate, DateTime.Now) <= 0
+                                                         && System.DateTime.Compare((DateTime)IO.endDate, DateTime.Now) >= 0 && IO.defaultSale == 1 && IO.itemCount > IO.used).Distinct().ToList();
+
+                    // return membershipOffers.Count.ToString();
+                    offerslist.AddRange(membershipOffers);
+
+                    #endregion
+
+                    for (int i = 0; i < itemsList.Count; i++)
+                    {
+                        if (invType == "diningHall")
+                        {
+                            itemsList[i].price = itemsList[i].priceWithService;
+                        }
+
+                       itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].priceTax) / 100;
+                        // is new
+                        int res = DateTime.Compare((DateTime)itemsList[i].createDate, cmpdate);
+                        if (res >= 0)
+                        {
+                            itemsList[i].isNew = 1;
+                        }
+
+                        decimal totaldis = 0;
+                        foreach (var itofflist in offerslist)
+                        {
+
+
+                            if (itemsList[i].itemId == itofflist.itemId)
+                            {
+
+                                // get unit name of item that has the offer
+                                using (incposdbEntities entitydb = new incposdbEntities())
+                                { // put it in item
+                                    var un = entitydb.units
+                                        .Where(a => a.unitId == itofflist.unitId)
+                                        .Select(u => new
+                                        {
+                                            u.name
+                                        ,
+                                            u.unitId
+                                        }).FirstOrDefault();
+                                    itemsList[i].unitName = un.name;
+                                }
+
+                                itemsList[i].offerName = itemsList[i].offerName + "- " + itofflist.offerName;
+                                itemsList[i].isOffer = 1;
+                                itemsList[i].startDate = itofflist.startDate;
+                                itemsList[i].endDate = itofflist.endDate;
+                                itemsList[i].itemUnitId = itofflist.itemUnitId;
+                                itemsList[i].offerId = itofflist.offerId;
+                                itemsList[i].isActiveOffer = itofflist.isActiveOffer;
+                                itemsList[i].forAgent = itofflist.forAgent;
+
+                                if (invType == "diningHall")
+                                {
+                                    itofflist.price = itofflist.priceWithService;
+                                }
+
+                                itemsList[i].price = itofflist.price;
+                                itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].taxes / 100);
+                                itemsList[i].avgPurchasePrice = itemsList[i].avgPurchasePrice;
+                                itemsList[i].discountType = itofflist.discountType;
+                                itemsList[i].discountValue = itofflist.discountValue;
+
+                                if (itofflist.used == null)
+                                    itofflist.used = 0;
+
+                                if (itemsList[i].itemCount >= (itofflist.itemCount - itofflist.used))
+                                    itemsList[i].itemCount = (itofflist.itemCount - itofflist.used);
+
+                                if (itemsList[i].discountType == "1") // value
+                                {
+
+                                    totaldis = totaldis + (decimal)itemsList[i].discountValue;
+                                }
+                                else if (itemsList[i].discountType == "2") // percent
+                                {
+
+                                    totaldis = totaldis + Calc.percentValue(itemsList[i].price, itemsList[i].discountValue);
+
+                                }
+                            }
+                        }
+                        itemsList[i].price = (decimal)itemsList[i].price - totaldis;
+                        itemsList[i].priceTax = itemsList[i].price + (itemsList[i].price * itemsList[i].taxes / 100);
+
+                        if(itemsList[i].price < 0)
+                        {
+                            itemsList[i].price = 0;
+                            itemsList[i].priceTax = 0;
+                        }
+                    }
+
+
+                    return TokenManager.GenerateToken(itemsList);
+                }
+            }
+        }
         [HttpPost]
         [Route("GetItemsMenuSetting")]
         public string GetItemsMenuSetting(string token)

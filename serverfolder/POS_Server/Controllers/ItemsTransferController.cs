@@ -264,8 +264,7 @@ namespace POS_Server.Controllers
                             newObject[i].itemSerial = "";
 
                         var transferEntity = entity.Set<itemsTransfer>();
-                        long orderId = 0;
-                        try { orderId = (int)newObject[i].invoiceId; } catch { }
+
                         
                         newObject[i].invoiceId = invoiceId;
                         newObject[i].createDate = DateTime.Now;
@@ -290,19 +289,31 @@ namespace POS_Server.Controllers
                         entity.SaveChanges();
                         #endregion
                         #region add extras
-                        //foreach (var ing in itemsTransfer[i].itemsIngredients)
-                        //{
-                        //    var itemIngredient = new itemsTransferIngredients()
-                        //    {
-                        //        dishIngredId = ing.dishIngredId,
-                        //        isActive = ing.isActive,
-                        //        itemsTransId = t.itemsTransId,
-                        //        notes = t.notes,
+                        foreach (var it in itemsTransfer[i].itemExtras)
+                        {
+                            if (it.createUserId == 0 || it.createUserId == null)
+                            {
+                                Nullable<long> id = null;
+                                it.createUserId = id;
+                            }
+                            if (it.offerId == 0)
+                            {
+                                Nullable<long> id = null;
+                                it.offerId = id;
+                            }
+                            if (it.itemSerial == null)
+                                it.itemSerial = "";
 
-                        //    };
-                        //    entity.itemsTransferIngredients.Add(itemIngredient);
-                        //}
-                        //entity.SaveChanges();
+
+                            it.mainCourseId = t.itemsTransId;
+                            it.invoiceId = invoiceId;
+                            it.createDate = DateTime.Now;
+                            it.updateDate = DateTime.Now;
+                            it.updateUserId = it.createUserId;
+
+                            t = entity.itemsTransfer.Add(it);
+                        }
+                        entity.SaveChanges();
                         #endregion
 
                         if (newObject[i].offerId != null && invoice.invType == "s")
