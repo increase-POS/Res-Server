@@ -9048,7 +9048,6 @@ else
 
                         List<ItemUnitInvoiceProfitModel> invListm = (from IT in entity.itemsTransfer
                                                                      from I in entity.invoices.Where(I => I.invoiceId == IT.invoiceId)
-
                                                                      from IU in entity.itemsUnits.Where(IU => IU.itemUnitId == IT.itemUnitId)
                                                                          //  join ITCUSER in entity.users on IT.createUserId equals ITCUSER.userId
                                                                      join ITUPUSER in entity.users on IT.updateUserId equals ITUPUSER.userId
@@ -9082,7 +9081,8 @@ else
                                                                          ITitemId = IU.itemId,
                                                                          ITunitId = IU.unitId,
                                                                          ITquantity = IT.quantity,
-                                                                         avgPurchasePrice = ITEM.avgPurchasePrice,
+                                                                         // avgPurchasePrice = ITEM.avgPurchasePrice,
+                                                                         avgPurchasePrice = IT.purchasePrice,
                                                                          // ITcreateDate = IT.createDate,
                                                                          ITupdateDate = IT.updateDate,
                                                                          //  ITcreateUserId = IT.createUserId,
@@ -9252,9 +9252,15 @@ else
                             totalNoShip = G.FirstOrDefault().totalNoShip,
                             invoiceProfit = 0,
                         }).ToList();
+
                         foreach (ItemUnitInvoiceProfitModel row in invListm)
                         {
-                            row.invoiceProfit = row.subTotalNet - (decimal)row.discountValue - row.purchasePrice + row.shippingProfit;
+                            decimal adminPay = 0;
+                            adminPay = GetAdminpayAmount(row.invoiceId);
+
+
+                            row.invoiceProfit = (row.subTotalNet - (decimal)row.discountValue - row.purchasePrice + row.shippingProfit)-adminPay;
+
                         }
 
 
@@ -9356,7 +9362,8 @@ else
                                                                          ITitemId = IU.itemId,
                                                                          ITunitId = IU.unitId,
                                                                          ITquantity = IT.quantity,
-                                                                         avgPurchasePrice = ITEM.avgPurchasePrice,
+                                                                      //   avgPurchasePrice = ITEM.avgPurchasePrice,
+                                                                         avgPurchasePrice = IT.purchasePrice,                         
                                                                          // ITcreateDate = IT.createDate,
                                                                          ITupdateDate = IT.updateDate,
                                                                          //  ITcreateUserId = IT.createUserId,
@@ -9455,71 +9462,45 @@ else
                             row.purchasePrice = (decimal)row.ITquantity * unitpurchasePrice;
                             row.subTotalNet = (decimal)row.subTotal;
                             row.itemunitProfit = row.subTotalNet - row.purchasePrice;
+                         
+
+
+                        }
+                   
+                       // List<ItemUnitInvoiceProfitModel> basicList = invListm.ToList();
+    List<ItemUnitInvoiceProfitModel> basicList = JsonConvert.DeserializeObject<List<ItemUnitInvoiceProfitModel>>(JsonConvert.SerializeObject(invListm.ToList()));
+
+                        foreach (ItemUnitInvoiceProfitModel row in invListm)
+                        {
+                            decimal invoiceProfit = 0;
+                            decimal invoiceAdminPay = 0;
+                            decimal itemAdminPay = 0;
+                            decimal itemProfit = 0;
+                            decimal itemProfitPercent = 0;
+                            itemProfit = row.itemunitProfit;
+                            invoiceAdminPay = GetAdminpayAmount(row.invoiceId);
+                            if (invoiceAdminPay!=0) {
+                                invoiceProfit = basicList.Where(x => x.invoiceId == row.invoiceId).Sum(x => x.itemunitProfit);
+                                if (invoiceProfit != 0)
+                                {
+                                    itemProfitPercent = itemProfit * (decimal)100 / invoiceProfit;
+                                }
+                                else
+                                {
+                                    itemProfitPercent = 0;
+                                }
+
+                                itemAdminPay = invoiceAdminPay * itemProfitPercent / 100;
+
+                                row.itemunitProfit = itemProfit - itemAdminPay;
+                                //row.itemAdminPay = itemAdminPay;4 test
+                                //row.itemProfitPercent = itemProfitPercent;
+
+
+                            }  
+                            
                         }
 
-                        //////////////////////
-                        //invListm = invListm.GroupBy(G => G.ITitemUnitId).Select(G => new ItemUnitInvoiceProfitModel
-                        //{
-                        //    itemunitProfit= G.Sum(q => q.itemunitProfit),
-                        //    ITitemName = G.FirstOrDefault().ITitemName,
-                        //    ITunitName = G.FirstOrDefault().ITunitName,
-                        //     ITitemsTransId = G.FirstOrDefault().ITitemsTransId,
-                        //     ITitemUnitId = G.FirstOrDefault().ITitemUnitId,
-
-                        //    ITitemId = G.FirstOrDefault().ITitemId,
-                        //    ITunitId = G.FirstOrDefault().ITunitId,
-                        //    ITquantity = G.Sum(q => q.ITquantity),
-                        //    //avgPurchasePrice = ITEM.avgPurchasePrice,
-                        //    purchasePrice = G.Sum(q => q.purchasePrice),//مجموع اسعار الشراء للعناصر
-
-                        //    //ITupdateDate = IT.updateDate,
-
-                        //    //ITupdateUserId = IT.updateUserId,
-
-                        //    //ITprice = IT.price,
-                        //     ITbarcode =G.FirstOrDefault().ITbarcode,
-
-                        //    invoiceId = G.FirstOrDefault().invoiceId,
-
-                        //  //  invNumber = G.FirstOrDefault().invNumber,
-                        //  //  agentId = G.FirstOrDefault().agentId,
-                        //    posId = G.FirstOrDefault().posId,
-                        //    //  invType = G.FirstOrDefault().invType,
-                        //    //  total = G.FirstOrDefault().total,
-                        //    //  totalNet = G.FirstOrDefault().totalNet,
-
-                        //    updateDate = G.FirstOrDefault().updateDate,
-                        //    //updateUserId = G.FirstOrDefault().updateUserId,
-                        //    //branchId = G.FirstOrDefault().branchId,
-
-                        //    //discountValue = G.FirstOrDefault().discountValue,
-                        //    //discountType = G.FirstOrDefault().discountType,
-                        //    //tax = G.FirstOrDefault().tax,
-
-                        //    //branchCreatorId = G.FirstOrDefault().branchCreatorId,
-                        //    //branchCreatorName = G.FirstOrDefault().branchCreatorName,
-
-                        //    posName = G.FirstOrDefault().posName,
-                        //    posCode = G.FirstOrDefault().posCode,
-                        //    //agentName = G.FirstOrDefault().agentName,
-                        //    //agentCode = G.FirstOrDefault().agentCode,
-                        //    //agentType = G.FirstOrDefault().agentType,
-
-                        //    //uuserName = G.FirstOrDefault().uuserName,
-                        //    //uuserLast = G.FirstOrDefault().uuserLast,
-                        //    //uUserAccName = G.FirstOrDefault().uUserAccName,
-                        //    //agentCompany = G.FirstOrDefault().agentCompany,
-                        //    //subTotal = G.FirstOrDefault().subTotal,
-                        //    //shippingCost = G.FirstOrDefault().shippingCost,
-                        //    //realShippingCost = G.FirstOrDefault().realShippingCost,
-                        //    //shippingProfit = G.FirstOrDefault().shippingProfit,
-                        //    //totalNetNoShip = G.FirstOrDefault().totalNetNoShip,
-                        //    //totalNoShip = G.FirstOrDefault().totalNoShip,
-                        //    invoiceProfit = 0,
-
-                        //}).ToList();
-
-                        ///////////////////
                         return TokenManager.GenerateToken(invListm);
 
                     }
@@ -9624,6 +9605,37 @@ else
                 else
                     unitValue *= getUpperUnitValue(upperUnit.itemUnitId, basicItemUnitId);
                 return unitValue;
+            }
+        }
+
+        public decimal GetAdminpayAmount(long? invoiceId)
+        {
+            List<CashTransferModel> list = new List<CashTransferModel>();
+            try
+            {
+                if (invoiceId != null)
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        list = (from C in entity.cashTransfer
+                                where C.invId == invoiceId && C.processType == "admin"
+                                select new CashTransferModel()
+                                {
+                                    cashTransId = C.cashTransId,
+                                    cash = C.cash,
+                                }).ToList();
+                        decimal sum = list.Sum(X => X.cash);
+                        return sum;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch
+            {
+                return 0;
             }
         }
         #endregion
