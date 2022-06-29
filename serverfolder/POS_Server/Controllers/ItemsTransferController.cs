@@ -49,7 +49,7 @@ namespace POS_Server.Controllers
                 {
                     using (incposdbEntities entity = new incposdbEntities())
                     {
-                        var transferList = (from t in entity.itemsTransfer.Where(x => x.invoiceId == invoiceId)
+                        var transferList = (from t in entity.itemsTransfer.Where(x => x.invoiceId == invoiceId && x.mainCourseId == null)
                                             join u in entity.itemsUnits on t.itemUnitId equals u.itemUnitId
                                             join i in entity.items on u.itemId equals i.itemId
                                             join un in entity.units on u.unitId equals un.unitId
@@ -62,7 +62,7 @@ namespace POS_Server.Controllers
                                                 quantity = t.quantity,
                                                 invoiceId = entity.invoiceOrder.Where(x => x.itemsTransferId == t.itemsTransId).Select(x => x.orderId).FirstOrDefault(),
                                                 invNumber = inv.invNumber,
-                                             
+
                                                 createUserId = t.createUserId,
                                                 updateUserId = t.updateUserId,
                                                 notes = t.notes,
@@ -76,10 +76,44 @@ namespace POS_Server.Controllers
                                                 itemSerial = t.itemSerial,
                                                 itemType = i.type,
                                                 offerId = t.offerId,
-                                                forAgents = t.forAgents,
+                                                forAgents = t.forAgents,                                                
                                             })
                                             .ToList();
 
+                        foreach(var item in transferList)
+                        {
+                            item.itemsIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == item.itemsTransId).ToList();
+                            item.itemExtras = (from t in entity.itemsTransfer.Where(x=> x.mainCourseId == item.itemsTransId)
+                                               join u in entity.itemsUnits on t.itemUnitId equals u.itemUnitId
+                                               join i in entity.items on u.itemId equals i.itemId
+                                               join un in entity.units on u.unitId equals un.unitId
+                                               join inv in entity.invoices on t.invoiceId equals inv.invoiceId
+                                               select new ItemTransferModel()
+                                               {
+                                                   itemsTransId = t.itemsTransId,
+                                                   itemId = i.itemId,
+                                                   itemName = i.name,
+                                                   quantity = t.quantity,
+                                                   invoiceId = entity.invoiceOrder.Where(x => x.itemsTransferId == t.itemsTransId).Select(x => x.orderId).FirstOrDefault(),
+                                                   invNumber = inv.invNumber,
+
+                                                   createUserId = t.createUserId,
+                                                   updateUserId = t.updateUserId,
+                                                   notes = t.notes,
+                                                   createDate = t.createDate,
+                                                   updateDate = t.updateDate,
+                                                   itemUnitId = u.itemUnitId,
+                                                   price = t.price,
+                                                   unitName = un.name,
+                                                   unitId = un.unitId,
+                                                   barcode = u.barcode,
+                                                   itemSerial = t.itemSerial,
+                                                   itemType = i.type,
+                                                   offerId = t.offerId,
+                                                   forAgents = t.forAgents,
+                                               })
+                                            .ToList();
+                        }
                         return TokenManager.GenerateToken(transferList);
                     }
 
@@ -289,8 +323,12 @@ namespace POS_Server.Controllers
                         entity.SaveChanges();
                         #endregion
                         #region add extras
-                        foreach (var it in itemsTransfer[i].itemExtras)
+                        foreach (var itm in itemsTransfer[i].itemExtras)
                         {
+                            var str = JsonConvert.SerializeObject(itm);
+                            itemsTransfer it = new itemsTransfer();
+                            it = JsonConvert.DeserializeObject<itemsTransfer>(str, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+
                             if (it.createUserId == 0 || it.createUserId == null)
                             {
                                 Nullable<long> id = null;

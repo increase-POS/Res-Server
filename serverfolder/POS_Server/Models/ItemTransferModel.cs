@@ -53,11 +53,12 @@ namespace POS_Server.Models
         public string offerCode { get; set; }
         public string offerName { get; set; }
         public Nullable<decimal> finalDiscount { get; set; }
+        public Nullable<long> mainCourseId { get; set; }
 
         public int sequence { get; set; }
 
         public List<itemsTransferIngredients> itemsIngredients { get; set; }
-        public List<itemsTransfer> itemExtras { get; set; }
+        public List<ItemTransferModel> itemExtras { get; set; }
 
     }
 }
