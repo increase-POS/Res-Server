@@ -415,7 +415,7 @@ namespace POS_Server.Controllers
                                         {
                                             I.invoiceId,
                                             I.invNumber,
-                                           I.invBarcode,
+                                            I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -710,7 +710,7 @@ namespace POS_Server.Controllers
                                             ITUpdateuserAccName = ITUPUSER.username,
                                             I.invoiceId,
                                             I.invNumber,
-                                           I.invBarcode,
+                                            I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -1959,7 +1959,7 @@ else
                                         from JIMM in JIM.DefaultIfEmpty()
                                         from JAA in JA.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
-                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" ||  I.invType == "ts" || I.invType == "ss")
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "ts" || I.invType == "ss")
 
                                         select new
                                         {
@@ -1989,7 +1989,7 @@ else
                                             ITUpdateuserAccName = ITUPUSER.username,
                                             I.invoiceId,
                                             I.invNumber,
-                                         I.invBarcode,
+                                            I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -2035,7 +2035,7 @@ else
                                             uUserAccName = JUPUS.username,
                                             agentCompany = JAA.company,
                                             subTotal = (IT.price * IT.quantity),
-                                            categoryName= ITEM.categories.name,
+                                            categoryName = ITEM.categories.name,
                                             categoryId = ITEM.categoryId,
                                             //username
 
@@ -2256,7 +2256,7 @@ else
                                         from JIMM in JIM.DefaultIfEmpty()
                                         from JAA in JA.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
-                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" ||  I.invType == "ts" || I.invType == "ss")
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "s" || I.invType == "ts" || I.invType == "ss")
 
                                         select new
                                         {
@@ -2264,7 +2264,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-                                         I.invBarcode,
+                                            I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -2283,12 +2283,12 @@ else
                                             I.updateDate,
                                             I.updateUserId,
                                             I.branchId,
-                                       //     discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
+                                            //     discountValue = (I.discountType == "1" || I.discountType == null) ? I.discountValue : (I.discountType == "2" ? (I.discountValue / 100) : 0),
                                             I.discountType,
                                             I.tax,
                                             I.name,
                                             I.isApproved,
-                                            discountValue=(I.couponsInvoices.Where(X=>X.InvoiceId==I.invoiceId).ToList().Count())==0?0:
+                                            discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
                                            (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
                                             + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
                                             //
@@ -2813,7 +2813,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-                                          I.invBarcode,
+                                            I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -3091,7 +3091,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-                                             I.invBarcode,                                          
+                                            I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -3717,7 +3717,7 @@ else
                                             ITUpdateuserAccName = ITUPUSER.username,
                                             I.invoiceId,
                                             I.invNumber,
-                                          I.invBarcode,                                         
+                                            I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -3740,7 +3740,7 @@ else
                                             discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
                                            (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
                                             + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
-                                           discountType="1",
+                                            discountType = "1",
                                             I.tax,
                                             I.name,
                                             I.isApproved,
@@ -4142,7 +4142,7 @@ else
                                             discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
                                            (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
                                             + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
-                                            discountType="1",
+                                            discountType = "1",
                                             I.tax,
                                             I.name,
                                             I.isApproved,
@@ -4382,7 +4382,8 @@ else
                                 totalDiscount = 0,
                                 subscriptionType = I.memberships.subscriptionType,
                                 agentMembershipcashobjList = entity.agentMembershipCash.Where(x =>
-                                 x.agentId == I.agentId && I.membershipId == x.membershipId && I.memberships.subscriptionType == x.subscriptionType).Select(x => new AgentMembershipCashModel() {
+                                 x.agentId == I.agentId && I.membershipId == x.membershipId && I.memberships.subscriptionType == x.subscriptionType).Select(x => new AgentMembershipCashModel()
+                                 {
                                      agentMembershipCashId = x.agentMembershipCashId,
                                      subscriptionFeesId = x.subscriptionFeesId,
                                      cashTransId = x.cashTransId,
@@ -4401,18 +4402,18 @@ else
                                      monthsCount = x.monthsCount,
 
                                  }).ToList(),
-                               // endDate,
+                                // endDate,
                             }).ToList();
-                       
+
                         //      var tmplist=   entity.agentMembershipCash.Where(x => x.agentId == row.agentId && row.membershipId == x.membershipId && row.subscriptionType == x.subscriptionType).OrderBy(x => x.updateDate).
-                       // Select(x => new { x.endDate }).ToList();
+                        // Select(x => new { x.endDate }).ToList();
 
                         foreach (var row in invListm)
                         {
-                            
-                             //var tmplist=   entity.agentMembershipCash.Where(x => x.agentId == row.agentId && row.membershipId == x.membershipId && row.subscriptionType == x.subscriptionType).OrderBy(x => x.updateDate).
-                             //   Select(x => new { x.endDate }).ToList();
-                            row.endDate = row.agentMembershipcashobjList.ToList()!=null && row.agentMembershipcashobjList.ToList().Count()>0 ? row.agentMembershipcashobjList.ToList().LastOrDefault().endDate :null;
+
+                            //var tmplist=   entity.agentMembershipCash.Where(x => x.agentId == row.agentId && row.membershipId == x.membershipId && row.subscriptionType == x.subscriptionType).OrderBy(x => x.updateDate).
+                            //   Select(x => new { x.endDate }).ToList();
+                            row.endDate = row.agentMembershipcashobjList.ToList() != null && row.agentMembershipcashobjList.ToList().Count() > 0 ? row.agentMembershipcashobjList.ToList().LastOrDefault().endDate : null;
                             row.invclassDiscount = (decimal)row.invoiceClassDiscountList.Sum(X => X.discountType == 2 ? (X.discountValue / 100) * (row.total) : X.discountValue);
                             row.couponDiscount = (decimal)row.CouponInvoiceList.Sum(X => X.discountType == 2 ? (X.discountValue / 100) * (row.total) : X.discountValue);
                             row.offerDiscount = (decimal)row.itemsTransferList.Sum(X => X.offerType == 2 ? ((X.offerValue / 100) * (X.itemUnitPrice)) * X.quantity : X.offerValue * X.quantity);
@@ -4485,7 +4486,7 @@ else
                             join UPUSR in entity.users on I.updateUserId equals UPUSR.userId into JUPUSR
                             //join IM in entity.invoices on I.invoiceMainId equals IM.invoiceId into JIM
                             join P in entity.pos on I.posId equals P.posId into JP
-                            join IC in entity.invoiceClassDiscount on I.invoiceId equals IC.invoiceId  
+                            join IC in entity.invoiceClassDiscount on I.invoiceId equals IC.invoiceId
                             from JBB in JB.DefaultIfEmpty()
                             from JPP in JP.DefaultIfEmpty()
                             from JUU in JU.DefaultIfEmpty()
@@ -4572,12 +4573,12 @@ else
                                 //    finalDiscount = (decimal)X.discountType == 2 ? (X.discountValue / 100) * (I.total) : X.discountValue
                                 //}).ToList(),
 
-                               invClassDiscountId=IC.invClassDiscountId,
-                               invClassdiscountType=IC.discountType,
+                                invClassDiscountId = IC.invClassDiscountId,
+                                invClassdiscountType = IC.discountType,
                                 invClassdiscountValue = IC.discountValue,
-                                invoicesClassName=IC.invoicesClass.name,
-                                invClassId=IC.invClassId,
-                                finalDiscount= (decimal)IC.discountType == 2 ? (IC.discountValue / 100) * (I.total) : IC.discountValue,
+                                invoicesClassName = IC.invoicesClass.name,
+                                invClassId = IC.invClassId,
+                                finalDiscount = (decimal)IC.discountType == 2 ? (IC.discountValue / 100) * (I.total) : IC.discountValue,
 
 
                                 invclassDiscount = 0,
@@ -4585,7 +4586,7 @@ else
                                 offerDiscount = 0,
                                 totalDiscount = 0,
                                 subscriptionType = I.memberships.subscriptionType,
-                               
+
                                 // endDate,
                             }).ToList();
 
@@ -4863,7 +4864,7 @@ else
                                         from JBCC in JBC.DefaultIfEmpty()
 
                                         where (brIds.Contains(JBCC.branchId) || brIds.Contains(JBB.branchId))
-                                        && (I.invType == "p"  || I.invType == "pb")// exw
+                                        && (I.invType == "p" || I.invType == "pb")// exw
                                         && ITEM.type != "sr"
                                         select new
                                         {
@@ -4895,7 +4896,7 @@ else
                                             // UpdateuserAccName = ITUPUSER.username,
                                             I.invoiceId,
                                             I.invNumber,
-                                        I.invBarcode,                                            
+                                            I.invBarcode,
                                             //I.posId,
                                             I.invType,
                                             //I.total,
@@ -5071,7 +5072,7 @@ else
                                             I.updateDate,
                                             I.invoiceId,
                                             I.invNumber,
-                                           I.invBarcode,
+                                            I.invBarcode,
                                             I.invDate,
                                             I.invType,
 
@@ -5228,7 +5229,7 @@ else
                                             UpdateuserAccName = ITUPUSER.username,
                                             I.invoiceId,
                                             I.invNumber,
-                                          I.invBarcode,
+                                            I.invBarcode,
                                             I.agentId,
                                             I.posId,
                                             I.invType,
@@ -5251,7 +5252,7 @@ else
                                             discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
                                            (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
                                             + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
-                                           discountType="1",
+                                            discountType = "1",
                                             I.tax,
                                             I.name,
                                             I.isApproved,
@@ -5415,7 +5416,7 @@ else
                                         from JUU in JU.DefaultIfEmpty()
                                         from JUPUS in JUPUSR.DefaultIfEmpty()
                                         from JBCC in JBC.DefaultIfEmpty()
-                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "sr" || I.invType == "srb"  )
+                                        where (brIds.Contains(JBCC.branchId)) && (I.invType == "sr" || I.invType == "srb")
 
                                         select new
                                         {
@@ -5887,7 +5888,7 @@ else
 
                                             I.invoiceId,
                                             I.invNumber,
-                                              I.invBarcode,
+                                            I.invBarcode,
                                             //I.posId,
                                             //I.invType,
                                             //I.total,
@@ -7040,7 +7041,7 @@ else
                                         join u in entity.users on C.userId equals u.userId into ju
                                         join uc in entity.users on C.updateUserId equals uc.userId into juc
                                         join cr in entity.cards on C.cardId equals cr.cardId into jcr
-                                       // join bo in entity.bondes on C.bondId equals bo.bondId into jbo
+                                        // join bo in entity.bondes on C.bondId equals bo.bondId into jbo
                                         join sh in entity.shippingCompanies on C.shippingCompanyId equals sh.shippingCompanyId into jsh
                                         join inv in entity.invoices on C.invId equals inv.invoiceId into jinv//yasmine
                                         from jbb in jb.DefaultIfEmpty()
@@ -7050,7 +7051,7 @@ else
                                         from jpcc in jpcr.DefaultIfEmpty()
                                         from jucc in juc.DefaultIfEmpty()
                                         from jcrd in jcr.DefaultIfEmpty()
-                                      //  from jbbo in jbo.DefaultIfEmpty()
+                                            //  from jbbo in jbo.DefaultIfEmpty()
                                         from jshh in jsh.DefaultIfEmpty()
                                         from jinvv in jinv.DefaultIfEmpty()//yasmine
                                         where (C.processType != "balance" && (C.side == "c" || C.side == "v" || C.side == "b" || C.side == "u" || C.side == "sh" || C.side == "bnd" || C.side == "mb"))//( C.transType == "p" && C.side==Side)
@@ -7098,7 +7099,7 @@ else
                                             //*createUserJob = jucc.job,
                                             cardName = jcrd.name,
                                             //*bondDeserveDate = jbbo.deserveDate,
-                                           // bondIsRecieved = (byte?)jbbo.isRecieved,////////////////////////
+                                            // bondIsRecieved = (byte?)jbbo.isRecieved,////////////////////////
 
                                             //*agentCompany = jaa.company,
                                             shippingCompanyId = C.shippingCompanyId,
@@ -7113,7 +7114,7 @@ else
                                             shippingCompaniesBType = (byte?)jshh.balanceType,/////////////////
 
                                             invNumber = jinvv.invNumber,//yasmine
-                                            invBarcode =jinvv.invBarcode,
+                                            invBarcode = jinvv.invBarcode,
                                             //  bondNumber = jbbo.number,//yasmine
 
                                             invShippingCompanyId = C.invId == null ? C.shippingCompanyId : jinvv.shippingCompanyId,
@@ -7127,7 +7128,7 @@ else
                                             invAgentId = C.invId == null ? C.agentId : jinvv.agentId,
                                             invAgentName = C.invId == null ? jaa.name : jinvv.agents.name,
 
-                                         
+
 
 
                                         }).ToList();
@@ -7480,7 +7481,7 @@ else
                                                                      //  I.paid,
                                                                      // I.deserved,
                                                                      //I.deservedDate,
-                                                                     invDate= I.invDate,
+                                                                     invDate = I.invDate,
                                                                      //  I.invoiceMainId,
                                                                      // I.invCase,
                                                                      //  I.invTime,
@@ -8003,7 +8004,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-                                           I.invBarcode,
+                                            I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -8025,7 +8026,7 @@ else
                                             discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
                                            (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
                                             + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
-                                           discountType="1",
+                                            discountType = "1",
                                             I.tax,
                                             I.name,
                                             I.isApproved,
@@ -8079,11 +8080,11 @@ else
                                              entity.cards.Where(C => C.cardId == entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().cardId).FirstOrDefault().name
                                              : entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").FirstOrDefault().processType
                                              : "balance",
-                                             I.shippingCompanyId,
-                                             I.shipUserId,
-                                            shippingCompanyName=   I.shippingCompanies.name,
-                                            shipUserName=  I.users4.name,
-                                            shipUserLastName= I.users4.lastname,
+                                            I.shippingCompanyId,
+                                            I.shipUserId,
+                                            shippingCompanyName = I.shippingCompanies.name,
+                                            shipUserName = I.users4.name,
+                                            shipUserLastName = I.users4.lastname,
 
 
 
@@ -8192,7 +8193,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-                                             I.invBarcode,
+                                            I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             I.total,
@@ -8339,9 +8340,9 @@ else
                                         from JBCC in JBC.DefaultIfEmpty()
                                             // where (JUPUS.userId == userId)
                                         where (
-                                      //  (brIds.Contains(JBCC.branchId) || brIds.Contains(JPP.branches.branchId)) &&
-                                        JUU.userId== userId &&
-                                        I.invType=="s" || I.invType == "ss" || I.invType == "ts"
+                                        //  (brIds.Contains(JBCC.branchId) || brIds.Contains(JPP.branches.branchId)) &&
+                                        JUU.userId == userId &&
+                                        I.invType == "s" || I.invType == "ss" || I.invType == "ts"
                                         || I.invType == "ssd" || I.invType == "sd" || I.invType == "tsd" || I.invType == "sb" || I.invType == "sbd")
                                         select new
                                         {
@@ -8371,7 +8372,7 @@ else
                                             discountValue = (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Count()) == 0 ? 0 :
                                            (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
                                             + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
-                                            discountType="1",
+                                            discountType = "1",
                                             I.tax,
                                             I.name,
                                             I.isApproved,
@@ -8407,7 +8408,7 @@ else
                                             uUserAccName = JUPUS.username,
                                             agentCompany = ((JAA.company == null || JAA.company == "") && (I.invType == "s" || I.invType == "sb")) ?
                                             "unknown" : JAA.company,
-                                        
+
                                             processType = entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").ToList().Count() > 0 ?
                                             entity.cashTransfer.Where(x => x.invId == I.invoiceId && x.processType != "inv").ToList().Count() > 1
                                             ? "multiple" :
@@ -8877,7 +8878,7 @@ else
 
                                                                          invoiceId = I.invoiceId,
                                                                          invNumber = I.invNumber,
-                                                                         invBarcode = I.invBarcode,                                                         
+                                                                         invBarcode = I.invBarcode,
                                                                          agentId = I.agentId,
                                                                          posId = I.posId,
                                                                          invType = I.invType,
@@ -8886,7 +8887,7 @@ else
                                                                          //  I.paid,
                                                                          // I.deserved,
                                                                          //I.deservedDate,
-                                                                         invDate= I.invDate,
+                                                                         invDate = I.invDate,
                                                                          //  I.invoiceMainId,
                                                                          // I.invCase,
                                                                          //  I.invTime,
@@ -8902,7 +8903,7 @@ else
                                            (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
                                             + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
 
-                                                                         discountType ="1",
+                                                                         discountType = "1",
                                                                          tax = I.tax,
                                                                          //  I.name,
                                                                          // I.isApproved,
@@ -9106,7 +9107,7 @@ else
                                                                          //  I.paid,
                                                                          // I.deserved,
                                                                          //I.deservedDate,
-                                                                         invDate= I.invDate,
+                                                                         invDate = I.invDate,
                                                                          //  I.invoiceMainId,
                                                                          // I.invCase,
                                                                          //  I.invTime,
@@ -9122,7 +9123,7 @@ else
                                            (I.couponsInvoices.Where(X => X.InvoiceId == I.invoiceId).ToList().Sum(C => C.discountType == 2 ? (C.discountValue * I.total / 100) : C.discountValue))
                                             + (I.discountType == "2" ? I.discountValue * I.total / 100 : I.discountValue),
 
-                                                                         discountType ="1",
+                                                                         discountType = "1",
                                                                          tax = I.tax,
                                                                          //  I.name,
                                                                          // I.isApproved,
@@ -9259,7 +9260,7 @@ else
                             adminPay = GetAdminpayAmount(row.invoiceId);
 
 
-                            row.invoiceProfit = (row.subTotalNet - (decimal)row.discountValue - row.purchasePrice + row.shippingProfit)-adminPay;
+                            row.invoiceProfit = (row.subTotalNet - (decimal)row.discountValue - row.purchasePrice + row.shippingProfit) - adminPay;
 
                         }
 
@@ -9362,8 +9363,8 @@ else
                                                                          ITitemId = IU.itemId,
                                                                          ITunitId = IU.unitId,
                                                                          ITquantity = IT.quantity,
-                                                                      //   avgPurchasePrice = ITEM.avgPurchasePrice,
-                                                                         avgPurchasePrice = IT.purchasePrice,                         
+                                                                         //   avgPurchasePrice = ITEM.avgPurchasePrice,
+                                                                         avgPurchasePrice = IT.purchasePrice,
                                                                          // ITcreateDate = IT.createDate,
                                                                          ITupdateDate = IT.updateDate,
                                                                          //  ITcreateUserId = IT.createUserId,
@@ -9462,45 +9463,71 @@ else
                             row.purchasePrice = (decimal)row.ITquantity * unitpurchasePrice;
                             row.subTotalNet = (decimal)row.subTotal;
                             row.itemunitProfit = row.subTotalNet - row.purchasePrice;
-                         
+
 
 
                         }
-                   
-                       // List<ItemUnitInvoiceProfitModel> basicList = invListm.ToList();
-    List<ItemUnitInvoiceProfitModel> basicList = JsonConvert.DeserializeObject<List<ItemUnitInvoiceProfitModel>>(JsonConvert.SerializeObject(invListm.ToList()));
+
+                        // List<ItemUnitInvoiceProfitModel> basicList = invListm.ToList();
+                        List<ItemUnitInvoiceProfitModel> basicList = JsonConvert.DeserializeObject<List<ItemUnitInvoiceProfitModel>>(JsonConvert.SerializeObject(invListm.ToList()));
 
                         foreach (ItemUnitInvoiceProfitModel row in invListm)
                         {
-                            decimal invoiceProfit = 0;
+                            // item price percent method
+                            decimal invoiceTotal = 0;
                             decimal invoiceAdminPay = 0;
                             decimal itemAdminPay = 0;
+                            decimal itemsubTotalNet = 0;
+                            decimal itemPricePercent = 0;
                             decimal itemProfit = 0;
-                            decimal itemProfitPercent = 0;
+                            itemsubTotalNet = row.subTotalNet;
                             itemProfit = row.itemunitProfit;
                             invoiceAdminPay = GetAdminpayAmount(row.invoiceId);
-                            if (invoiceAdminPay!=0) {
-                                invoiceProfit = basicList.Where(x => x.invoiceId == row.invoiceId).Sum(x => x.itemunitProfit);
-                                if (invoiceProfit != 0)
+                            if (invoiceAdminPay != 0)
+                            {
+                                invoiceTotal = basicList.Where(x => x.invoiceId == row.invoiceId).Sum(x => x.subTotalNet);
+                                if (invoiceTotal != 0)
                                 {
-                                    itemProfitPercent = itemProfit * (decimal)100 / invoiceProfit;
+                                    itemPricePercent = itemsubTotalNet * (decimal)100 / invoiceTotal;
                                 }
                                 else
                                 {
-                                    itemProfitPercent = 0;
+                                    itemPricePercent = 0;
                                 }
 
-                                itemAdminPay = invoiceAdminPay * itemProfitPercent / 100;
+                                itemAdminPay = invoiceAdminPay * itemPricePercent / 100;
 
                                 row.itemunitProfit = itemProfit - itemAdminPay;
-                                //row.itemAdminPay = itemAdminPay;4 test
-                                //row.itemProfitPercent = itemProfitPercent;
+                                /*
+                                 // profit percent method
+                                decimal invoiceProfit = 0;
+                                decimal invoiceAdminPay = 0;
+                                decimal itemAdminPay = 0;
+                                decimal itemProfit = 0;
+                                decimal itemProfitPercent = 0;
+                                itemProfit = row.itemunitProfit;
+                                invoiceAdminPay = GetAdminpayAmount(row.invoiceId);
+                                if (invoiceAdminPay != 0)
+                                {
+                                    invoiceProfit = basicList.Where(x => x.invoiceId == row.invoiceId).Sum(x => x.itemunitProfit);
+                                    if (invoiceProfit != 0)
+                                    {
+                                        itemProfitPercent = itemProfit * (decimal)100 / invoiceProfit;
+                                    }
+                                    else
+                                    {
+                                        itemProfitPercent = 0;
+                                    }
+
+                                    itemAdminPay = invoiceAdminPay * itemProfitPercent / 100;
+
+                                    row.itemunitProfit = itemProfit - itemAdminPay;
 
 
-                            }  
-                            
+                                }
+                                */
+                            }
                         }
-
                         return TokenManager.GenerateToken(invListm);
 
                     }
@@ -9824,7 +9851,7 @@ else
                                             I.invoiceId,
                                             count = entity.itemsTransfer.Where(x => x.invoiceId == I.invoiceId).Count(),
                                             I.invNumber,
-                                         I.invBarcode,
+                                            I.invBarcode,
                                             I.posId,
                                             I.invType,
                                             //I.total,
@@ -9977,7 +10004,7 @@ else
 
                                             I.invoiceId,
                                             I.invNumber,
-                                        I.invBarcode,
+                                            I.invBarcode,
                                             //I.agentId,
                                             I.posId,
                                             I.invType,
@@ -10258,7 +10285,7 @@ else
 
                                             I.invoiceId,
                                             I.invNumber,
-                                             I.invBarcode,
+                                            I.invBarcode,
                                             //I.agentId,
                                             I.posId,
                                             I.invType,
@@ -10347,7 +10374,7 @@ else
                 {
 
                     List<long> brIds = AllowedBranchsId(mainBranchId, userId);
-                    List<OrderPreparingSTSModel> invoices =new List<OrderPreparingSTSModel>();
+                    List<OrderPreparingSTSModel> invoices = new List<OrderPreparingSTSModel>();
                     using (incposdbEntities entity = new incposdbEntities())
                     {
                         //var searchPredicate = PredicateBuilder.New<invoices>();
@@ -10357,57 +10384,57 @@ else
                         //searchPredicate = searchPredicate.And(x => x.shippingCompanyId != null);
 
 
-                         invoices = (from x in entity.invoices
-                                        join o in entity.orderPreparing on x.invoiceId equals o.invoiceId
-                                        join ag in entity.agents on x.agentId equals ag.agentId into gj
-                                        join u in entity.users on x.shipUserId equals u.userId into lj
-                                        from y in lj.DefaultIfEmpty()
-                                        from g in gj.DefaultIfEmpty()
-                                        where (brIds.Contains((long)x.branchId) && x.shippingCompanyId != null
-                                        && (x.invType == "ts" || x.invType == "ss"))
-                                        select new OrderPreparingSTSModel()// InvoiceModel()//
-                                                                           //   OrderPreparingSTSModel
+                        invoices = (from x in entity.invoices
+                                    join o in entity.orderPreparing on x.invoiceId equals o.invoiceId
+                                    join ag in entity.agents on x.agentId equals ag.agentId into gj
+                                    join u in entity.users on x.shipUserId equals u.userId into lj
+                                    from y in lj.DefaultIfEmpty()
+                                    from g in gj.DefaultIfEmpty()
+                                    where (brIds.Contains((long)x.branchId) && x.shippingCompanyId != null
+                                    && (x.invType == "ts" || x.invType == "ss"))
+                                    select new OrderPreparingSTSModel()// InvoiceModel()//
+                                                                       //   OrderPreparingSTSModel
+                                    {
+                                        invNumber = x.invNumber,
+                                        invBarcode = x.invBarcode,
+                                        invoiceId = x.invoiceId,
+                                        shipUserId = x.shipUserId,
+                                        shipUserName = y.name,
+                                        shipUserLastName = y.lastname,
+                                        shippingCompanyId = x.shippingCompanyId,
+                                        shippingCompanyName = x.shippingCompanies.name,
+                                        invType = x.invType,
+
+                                        orderTime = x.orderTime,//
+                                        orderPreparingId = o.orderPreparingId,
+                                        orderNum = o.orderNum,
+                                        createDate = o.createDate,
+                                        createUserId = o.createUserId,
+
+                                        agentId = x.agentId,
+                                        agentName = g.name,
+                                        agentCompany = g.company,
+                                        agentType = g.type,
+                                        agentCode = g.code,
+
+                                        branchId = x.branchId,
+                                        branchName = x.branches.name,
+
+                                        orderStatusList = entity.orderPreparingStatus.Where(X => X.orderPreparingId == o.orderPreparingId && (X.status == "InTheWay" || X.status == "Done")).Select(X => new orderPreparingStatusModel
                                         {
-                                            invNumber = x.invNumber,
-                                            invBarcode = x.invBarcode,
-                                            invoiceId = x.invoiceId,
-                                            shipUserId = x.shipUserId,
-                                            shipUserName = y.name,
-                                            shipUserLastName = y.lastname,
-                                            shippingCompanyId = x.shippingCompanyId,
-                                            shippingCompanyName = x.shippingCompanies.name,
-                                            invType=x.invType,
+                                            status = X.status,
+                                            createDate = X.createDate,
+                                            updateDate = X.updateDate,
+                                            orderPreparingId = X.orderPreparingId,
+                                            orderStatusId = X.orderStatusId,
 
-                                            orderTime = x.orderTime,//
-                                            orderPreparingId = o.orderPreparingId,
-                                            orderNum = o.orderNum,
-                                            createDate = o.createDate,
-                                            createUserId = o.createUserId,
-                                            
-                                            agentId = x.agentId,
-                                            agentName = g.name,
-                                            agentCompany = g.company,
-                                            agentType = g.type,
-                                            agentCode = g.code,
+                                        }).OrderBy(X => X.createDate).ToList(),
 
-                                            branchId=x.branchId,
-                                            branchName=x.branches.name,
+                                        orderDuration = 0,
+                                    }).ToList();
 
-                                            orderStatusList = entity.orderPreparingStatus.Where(X => X.orderPreparingId == o.orderPreparingId && (X.status == "InTheWay" || X.status == "Done")).Select(X => new orderPreparingStatusModel
-                                            {
-                                                status = X.status,
-                                                createDate = X.createDate,
-                                                updateDate = X.updateDate,
-                                                orderPreparingId = X.orderPreparingId,
-                                                orderStatusId = X.orderStatusId,
 
-                                            }).OrderBy(X => X.createDate).ToList(),
 
-                                            orderDuration =0,
-                                        }).ToList();
-
-                    
-                       
                         //o.status == "Done"
                         //foreach (InvoiceModel inv in invoices)
                         //{
@@ -10463,35 +10490,35 @@ else
                         //    invoices = invoices.Where(x => statusL.Contains(x.status)).OrderBy(x => x.invNumber).ToList();
                         //#endregion
 
-                       
+
                     }
-                invoices = invoices.Where(X => X.orderStatusList.LastOrDefault()!=null? X.orderStatusList.LastOrDefault().status == "Done":false).ToList();
-                    if (invoices != null )
+                    invoices = invoices.Where(X => X.orderStatusList.LastOrDefault() != null ? X.orderStatusList.LastOrDefault().status == "Done" : false).ToList();
+                    if (invoices != null)
                     {
-                        if(invoices.Count() > 0)
+                        if (invoices.Count() > 0)
                         {
 
-                        
-                        foreach (OrderPreparingSTSModel row  in invoices.ToList())
-                        {
-                            if (row.orderStatusList != null)
+
+                            foreach (OrderPreparingSTSModel row in invoices.ToList())
                             {
+                                if (row.orderStatusList != null)
+                                {
 
-                                TimeSpan tmp = (TimeSpan)(row.orderStatusList.LastOrDefault().createDate - row.orderStatusList.FirstOrDefault().createDate);
-                                row.orderDuration = (decimal)tmp.TotalMinutes;
+                                    TimeSpan tmp = (TimeSpan)(row.orderStatusList.LastOrDefault().createDate - row.orderStatusList.FirstOrDefault().createDate);
+                                    row.orderDuration = (decimal)tmp.TotalMinutes;
 
+
+                                }
 
                             }
-
-                        }
                         }
                     }
                     return TokenManager.GenerateToken(invoices);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return TokenManager.GenerateToken(ex.ToString());
-                   // return TokenManager.GenerateToken("0");
+                    // return TokenManager.GenerateToken("0");
                 }
             }
         }
