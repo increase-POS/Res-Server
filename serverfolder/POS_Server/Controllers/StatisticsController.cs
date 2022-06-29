@@ -9488,14 +9488,14 @@ else
                                 invoiceTotal = basicList.Where(x => x.invoiceId == row.invoiceId).Sum(x => x.subTotalNet);
                                 if (invoiceTotal != 0)
                                 {
-                                    itemPricePercent = itemsubTotalNet * (decimal)100 / invoiceTotal;
+                                    itemPricePercent = itemsubTotalNet * (decimal)100.0 / invoiceTotal;
                                 }
                                 else
                                 {
                                     itemPricePercent = 0;
                                 }
 
-                                itemAdminPay = invoiceAdminPay * itemPricePercent / 100;
+                                itemAdminPay = invoiceAdminPay * itemPricePercent / (decimal)100.0;
 
                                 row.itemunitProfit = itemProfit - itemAdminPay;
                                 /*
