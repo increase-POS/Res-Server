@@ -953,7 +953,7 @@ namespace POS_Server.Controllers
                             //complete = "ready";
                             long invoiceId = invoicesList[i].invoiceId;
                             //int itemCount = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).Select(x => x.itemsTransId).ToList().Count;
-                            var itemList = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
+                            var itemList = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId && x.mainCourseId ==null).ToList();
                             invoicesList[i].itemsCount = itemList.Count;
                             //if(invTypeL.Contains("or"))
                             //{
