@@ -768,7 +768,7 @@ namespace POS_Server.Controllers
                 {
                     try
                     {
-                        var itemsList = (from I in entity.items.Where(x => salesTypes.Contains(x.type) && x.isActive == 1)
+                        var itemsList = (from I in entity.items.Where(x => salesTypes.Contains(x.type) && x.isActive == 1 && x.categories.name != "extraOrders")
                                          join iu in entity.itemsUnits on I.itemId equals iu.itemId
                                          join m in entity.menuSettings.Where(x => x.branchId == branchId ) on iu.itemUnitId equals m.itemUnitId into yj
                                          from ms in yj.DefaultIfEmpty()
@@ -792,7 +792,7 @@ namespace POS_Server.Controllers
                                              tagId = I.tagId,
                                              image = I.image,
                                              type = I.type,
-                                             details = I.details,
+                                             //details = I.details,
                                              createDate = I.createDate,
                                              updateDate = I.updateDate,
                                              createUserId = ms.createUserId,
@@ -800,7 +800,8 @@ namespace POS_Server.Controllers
                                              itemUnitId = iu.itemUnitId,
                                              price = iu.price,
                                              priceWithService = iu.priceWithService,
-                                         }).Distinct()
+                                         })
+                                         //.Distinct()
                                        .ToList();
 
                         for (int i = 0; i < itemsList.Count; i++)
