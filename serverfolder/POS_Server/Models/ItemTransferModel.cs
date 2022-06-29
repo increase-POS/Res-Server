@@ -55,5 +55,8 @@ namespace POS_Server.Models
         public Nullable<decimal> finalDiscount { get; set; }
 
         public int sequence { get; set; }
+
+        public List<itemsTransferIngredients> itemsIngredients { get; set; }
+
     }
 }

@@ -3110,6 +3110,64 @@ namespace POS_Server.Controllers
                 }
             }
         }
+        [HttpPost]
+        [Route("saveSalesInvoice")]
+        public string saveSalesInvoice(string token)
+        {
+            ItemsTransferController tc = new ItemsTransferController();
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            string message = "";
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                string invoiceObject = "";
+                string itemsObject = "";
+                invoices newObject = null;
+                List<itemsTransfer> items = null;
+                List<ItemTransferModel> itemsModel = null;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceObject")
+                    {
+                        invoiceObject = c.Value.Replace("\\", string.Empty);
+                        invoiceObject = invoiceObject.Trim('"');
+                        newObject = JsonConvert.DeserializeObject<invoices>(invoiceObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                    else if (c.Type == "itemsObject")
+                    {
+                        itemsObject = c.Value.Replace("\\", string.Empty);
+                        itemsObject = itemsObject.Trim('"');
+                        items = JsonConvert.DeserializeObject<List<itemsTransfer>>(itemsObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                        itemsModel = JsonConvert.DeserializeObject<List<ItemTransferModel>>(itemsObject, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+                    }
+                }
+
+                try
+                {
+                    long invoiceId = saveInvoice(newObject);
+                    if (invoiceId > 0)
+                    {
+                        string res = tc.saveSalesInvoiceItems(items, itemsModel, invoiceId);
+                        message = invoiceId.ToString();
+                        if (res == "0")
+                            message = "0";
+                    }
+                    else
+                        message = "0";
+                    return TokenManager.GenerateToken(message);
+                }
+                catch
+                {
+                    message = "0";
+                    return TokenManager.GenerateToken(message);
+                }
+            }
+        }
 
         [HttpPost]
         [Route("saveInvoiceWithItemsAndTables")]
@@ -4004,5 +4062,6 @@ namespace POS_Server.Controllers
 
 
         }
+
     }
 }

@@ -217,6 +217,110 @@ namespace POS_Server.Controllers
             catch { message = "0"; }
             return message;
         }
+
+        public string saveSalesInvoiceItems(List<itemsTransfer> newObject,List<ItemTransferModel> itemsTransfer,long invoiceId)
+        {
+            string message = "";
+            try
+            {
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    #region delete old itemTransfer
+                   
+                    List<invoiceOrder> iol = entity.invoiceOrder.Where(x => x.invoiceId == invoiceId).ToList();
+                    foreach(var item in iol)
+                    {
+                        // remove transfer ingredients
+                        var itemIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == item.itemsTransferId).ToList();
+                        entity.itemsTransferIngredients.RemoveRange(itemIngredients);
+
+                        //remove item transfer extra
+                        var extras = entity.itemsTransfer.Where(x => x.mainCourseId == item.itemsTransferId).ToList();
+                        entity.itemsTransferIngredients.RemoveRange(itemIngredients);
+                        entity.SaveChanges();
+                    }
+                    entity.invoiceOrder.RemoveRange(iol);
+                    entity.SaveChanges();
+                    #endregion
+                    List<itemsTransfer> items = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
+                    entity.itemsTransfer.RemoveRange(items);
+                    entity.SaveChanges();
+
+                    var invoice = entity.invoices.Find(invoiceId);
+                    for (int i = 0; i < newObject.Count; i++)
+                    {
+                        itemsTransfer t;
+                        if (newObject[i].createUserId == 0 || newObject[i].createUserId == null)
+                        {
+                            Nullable<long> id = null;
+                            newObject[i].createUserId = id;
+                        }
+                        if (newObject[i].offerId == 0)
+                        {
+                            Nullable<long> id = null;
+                            newObject[i].offerId = id;
+                        }
+                        if (newObject[i].itemSerial == null)
+                            newObject[i].itemSerial = "";
+
+                        var transferEntity = entity.Set<itemsTransfer>();
+                        long orderId = 0;
+                        try { orderId = (int)newObject[i].invoiceId; } catch { }
+                        
+                        newObject[i].invoiceId = invoiceId;
+                        newObject[i].createDate = DateTime.Now;
+                        newObject[i].updateDate = DateTime.Now;
+                        newObject[i].updateUserId = newObject[i].createUserId;
+
+                        t = entity.itemsTransfer.Add(newObject[i]);
+                        entity.SaveChanges();
+                        #region add ingrediants
+                        foreach (var ing in itemsTransfer[i].itemsIngredients)
+                        {
+                            var itemIngredient = new itemsTransferIngredients()
+                            {
+                                dishIngredId = ing.dishIngredId,
+                                isActive = ing.isActive,
+                                itemsTransId = t.itemsTransId,
+                                notes = t.notes,
+
+                            };
+                            entity.itemsTransferIngredients.Add(itemIngredient);
+                        }
+                        entity.SaveChanges();
+                        #endregion
+                        #region add extras
+                        //foreach (var ing in itemsTransfer[i].itemsIngredients)
+                        //{
+                        //    var itemIngredient = new itemsTransferIngredients()
+                        //    {
+                        //        dishIngredId = ing.dishIngredId,
+                        //        isActive = ing.isActive,
+                        //        itemsTransId = t.itemsTransId,
+                        //        notes = t.notes,
+
+                        //    };
+                        //    entity.itemsTransferIngredients.Add(itemIngredient);
+                        //}
+                        //entity.SaveChanges();
+                        #endregion
+
+                        if (newObject[i].offerId != null && invoice.invType == "s")
+                        {
+                            long offerId = (int)newObject[i].offerId;
+                            long itemUnitId = (int)newObject[i].itemUnitId;
+                            var offer = entity.itemsOffers.Where(x => x.iuId == itemUnitId && x.offerId == offerId).FirstOrDefault();
+
+                            offer.used += (int)newObject[i].quantity;
+                        }
+                    }
+                    entity.SaveChanges();
+                    message = "1";
+                }
+            }
+            catch { message = "0"; }
+            return message;
+        }
         [HttpPost]
         [Route("getOrderItems")]
         public string getOrderItems(string token)
@@ -291,6 +395,73 @@ namespace POS_Server.Controllers
                     return TokenManager.GenerateToken(message);
                 }
 
+            }
+        }
+
+        [HttpPost]
+        [Route("GetItemIngredients")]
+        public string GetItemIngredients(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            Boolean canDelete = false;
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                long itemTransferId = 0;
+                long itemUnitId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "itemTransferId")
+                    {
+                        itemTransferId = long.Parse(c.Value);
+                    }
+                    else if (c.Type == "itemUnitId")
+                    {
+                        itemUnitId = long.Parse(c.Value);
+                    }
+                }
+                using (incposdbEntities entity = new incposdbEntities())
+                {
+                    List<itemsTransferIngredientsModel> List = new List<itemsTransferIngredientsModel>();
+                    if (itemTransferId != 0)
+                    {
+                        List = entity.itemsTransferIngredients.Where(S => S.itemsTransId == itemTransferId)
+                            .Select(S => new itemsTransferIngredientsModel
+                        {
+                            itemsTransIngredId = S.itemsTransIngredId,
+                            dishIngredId = S.dishIngredId,
+                            itemName = S.dishIngredients.itemsUnits.items.name,
+                            DishIngredientName = S.dishIngredients.name,
+                            itemUnitId = S.dishIngredients.itemUnitId,                           
+                            notes = S.notes,
+                            isActive = S.isActive,
+                        }).ToList();
+                    }
+                    else
+                    {
+                        List =entity.dishIngredients.Where(x => x.itemUnitId == itemUnitId && x.isActive == 1)
+                            .Select(S => new itemsTransferIngredientsModel{
+                                dishIngredId = S.dishIngredId,
+                                itemName = S.itemsUnits.items.name,
+                                DishIngredientName = S.name,
+
+                                itemUnitId = S.itemUnitId,
+                                notes = S.notes,
+                                isActive = S.isActive,
+
+
+                        }).ToList();
+                    }
+
+
+                    return TokenManager.GenerateToken(List);
+
+                }
             }
         }
 
