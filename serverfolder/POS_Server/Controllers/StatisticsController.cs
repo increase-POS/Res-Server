@@ -9488,45 +9488,53 @@ else
                                 invoiceTotal = basicList.Where(x => x.invoiceId == row.invoiceId).Sum(x => x.subTotalNet);
                                 if (invoiceTotal != 0)
                                 {
-                                    itemPricePercent = itemsubTotalNet * (decimal)100.0 / invoiceTotal;
+                                    itemPricePercent = itemsubTotalNet  / invoiceTotal;
                                 }
                                 else
                                 {
                                     itemPricePercent = 0;
                                 }
 
-                                itemAdminPay = invoiceAdminPay * itemPricePercent / (decimal)100.0;
+                                itemAdminPay = invoiceAdminPay * itemPricePercent ;
 
                                 row.itemunitProfit = itemProfit - itemAdminPay;
-                                /*
-                                 // profit percent method
-                                decimal invoiceProfit = 0;
-                                decimal invoiceAdminPay = 0;
-                                decimal itemAdminPay = 0;
-                                decimal itemProfit = 0;
-                                decimal itemProfitPercent = 0;
-                                itemProfit = row.itemunitProfit;
-                                invoiceAdminPay = GetAdminpayAmount(row.invoiceId);
-                                if (invoiceAdminPay != 0)
-                                {
-                                    invoiceProfit = basicList.Where(x => x.invoiceId == row.invoiceId).Sum(x => x.itemunitProfit);
-                                    if (invoiceProfit != 0)
-                                    {
-                                        itemProfitPercent = itemProfit * (decimal)100 / invoiceProfit;
-                                    }
-                                    else
-                                    {
-                                        itemProfitPercent = 0;
-                                    }
 
-                                    itemAdminPay = invoiceAdminPay * itemProfitPercent / 100;
+                                ////4test
+                                //row.itemAdminPay = itemAdminPay;
+                                //row.itemPricePercent = itemPricePercent;
+                                //row.invoiceTotal = invoiceTotal;
+                                //row.itemunitProfitOld = itemProfit;
+                                //row.AdminPay = invoiceAdminPay;
 
-                                    row.itemunitProfit = itemProfit - itemAdminPay;
+        /*
+         // profit percent method
+        decimal invoiceProfit = 0;
+        decimal invoiceAdminPay = 0;
+        decimal itemAdminPay = 0;
+        decimal itemProfit = 0;
+        decimal itemProfitPercent = 0;
+        itemProfit = row.itemunitProfit;
+        invoiceAdminPay = GetAdminpayAmount(row.invoiceId);
+        if (invoiceAdminPay != 0)
+        {
+            invoiceProfit = basicList.Where(x => x.invoiceId == row.invoiceId).Sum(x => x.itemunitProfit);
+            if (invoiceProfit != 0)
+            {
+                itemProfitPercent = itemProfit * (decimal)100 / invoiceProfit;
+            }
+            else
+            {
+                itemProfitPercent = 0;
+            }
+
+            itemAdminPay = invoiceAdminPay * itemProfitPercent / 100;
+
+            row.itemunitProfit = itemProfit - itemAdminPay;
 
 
-                                }
-                                */
-                            }
+        }
+        */
+    }
                         }
                         return TokenManager.GenerateToken(invListm);
 
