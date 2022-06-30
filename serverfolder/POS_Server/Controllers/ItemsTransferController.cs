@@ -82,7 +82,15 @@ namespace POS_Server.Controllers
 
                         foreach(var item in transferList)
                         {
-                            item.itemsIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == item.itemsTransId).ToList();
+                            item.itemsIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == item.itemsTransId)
+                                .Select(x => new itemsTransferIngredientsModel() {dishIngredId = x.dishIngredId,
+                                isActive = x.isActive,
+                                    DishIngredientName = x.dishIngredients.name,
+                                itemUnitId = x.itemsTransfer.itemUnitId,
+                               itemsTransId = x.itemsTransId,
+                               itemsTransIngredId = x.itemsTransIngredId}).ToList();
+
+
                             item.itemExtras = (from t in entity.itemsTransfer.Where(x=> x.mainCourseId == item.itemsTransId)
                                                join u in entity.itemsUnits on t.itemUnitId equals u.itemUnitId
                                                join i in entity.items on u.itemId equals i.itemId
@@ -255,28 +263,24 @@ namespace POS_Server.Controllers
         public string saveSalesInvoiceItems(List<itemsTransfer> newObject,List<ItemTransferModel> itemsTransfer,long invoiceId)
         {
             string message = "";
-            try
+           try
             {
                 using (incposdbEntities entity = new incposdbEntities())
                 {
-                    #region delete old itemTransfer
-                   
-                    List<invoiceOrder> iol = entity.invoiceOrder.Where(x => x.invoiceId == invoiceId).ToList();
-                    foreach(var item in iol)
+
+                    List<itemsTransfer> items = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
+                    foreach (var item in items)
                     {
                         // remove transfer ingredients
-                        var itemIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == item.itemsTransferId).ToList();
+                        var itemIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == item.itemsTransId).ToList();
                         entity.itemsTransferIngredients.RemoveRange(itemIngredients);
-
+                        entity.SaveChanges();
                         //remove item transfer extra
-                        var extras = entity.itemsTransfer.Where(x => x.mainCourseId == item.itemsTransferId).ToList();
+                        var extras = entity.itemsTransfer.Where(x => x.mainCourseId == item.itemsTransId).ToList();
                         entity.itemsTransferIngredients.RemoveRange(itemIngredients);
                         entity.SaveChanges();
                     }
-                    entity.invoiceOrder.RemoveRange(iol);
-                    entity.SaveChanges();
-                    #endregion
-                    List<itemsTransfer> items = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
+
                     entity.itemsTransfer.RemoveRange(items);
                     entity.SaveChanges();
 
@@ -307,6 +311,7 @@ namespace POS_Server.Controllers
 
                         t = entity.itemsTransfer.Add(newObject[i]);
                         entity.SaveChanges();
+
                         #region add ingrediants
                         foreach (var ing in itemsTransfer[i].itemsIngredients)
                         {
@@ -319,8 +324,9 @@ namespace POS_Server.Controllers
 
                             };
                             entity.itemsTransferIngredients.Add(itemIngredient);
+                            entity.SaveChanges();
                         }
-                        entity.SaveChanges();
+                       
                         #endregion
                         #region add extras
                         foreach (var itm in itemsTransfer[i].itemExtras)

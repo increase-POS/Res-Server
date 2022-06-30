@@ -57,7 +57,7 @@ namespace POS_Server.Models
 
         public int sequence { get; set; }
 
-        public List<itemsTransferIngredients> itemsIngredients { get; set; }
+        public  List<itemsTransferIngredientsModel> itemsIngredients { get; set; }
         public List<ItemTransferModel> itemExtras { get; set; }
 
     }
