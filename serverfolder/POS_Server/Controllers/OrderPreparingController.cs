@@ -273,8 +273,9 @@ namespace POS_Server.Controllers
                                 #endregion
 
                                 #region extra items - ingredients
-                                if (o.items.Count > 0)
+                                if (o.items.Count > 0 && o.items[0].itemsTransId != null)
                                 {
+
                                     long id = (long)o.items[0].itemsTransId;
                                     o.items[0].itemsIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == id)
                                    .Select(x => new itemsTransferIngredientsModel()
