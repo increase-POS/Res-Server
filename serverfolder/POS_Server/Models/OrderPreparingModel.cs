@@ -55,6 +55,8 @@ namespace POS_Server.Models
         public long itemOrderId { get; set; }
         public Nullable<long> itemUnitId { get; set; }
         public Nullable<long> orderPreparingId { get; set; }
+        public Nullable<long> itemsTransId { get; set; }
+
         public Nullable<int> quantity { get; set; }
         public string notes { get; set; }
         public Nullable<System.DateTime> createDate { get; set; }
@@ -72,5 +74,8 @@ namespace POS_Server.Models
         public Nullable<long> categoryId { get; set; }
         public string categoryName { get; set; }
 
+
+        public List<itemsTransferIngredientsModel> itemsIngredients { get; set; }
+        public List<ItemTransferModel> itemExtras { get; set; }
     }
 }
