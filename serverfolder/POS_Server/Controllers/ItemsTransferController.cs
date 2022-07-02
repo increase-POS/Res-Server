@@ -263,107 +263,142 @@ namespace POS_Server.Controllers
         public string saveSalesInvoiceItems(List<itemsTransfer> newObject,List<ItemTransferModel> itemsTransfer,long invoiceId)
         {
             string message = "";
-           try
+         try
             {
                 using (incposdbEntities entity = new incposdbEntities())
                 {
 
                     List<itemsTransfer> items = entity.itemsTransfer.Where(x => x.invoiceId == invoiceId).ToList();
+
                     foreach (var item in items)
                     {
-                        // remove transfer ingredients
-                        var itemIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == item.itemsTransId).ToList();
-                        entity.itemsTransferIngredients.RemoveRange(itemIngredients);
-                        
-                        //remove item transfer extra
-                        var extras = entity.itemsTransfer.Where(x => x.mainCourseId == item.itemsTransId).ToList();
-                        entity.itemsTransferIngredients.RemoveRange(itemIngredients);
-                        //entity.SaveChanges();
+                        var orderItem = entity.itemOrderPreparing.Where(x => x.itemsTransId == item.itemsTransId).FirstOrDefault();
+                        if (orderItem == null)
+                        {
+                            // remove transfer ingredients
+                            var itemIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == item.itemsTransId).ToList();
+                            entity.itemsTransferIngredients.RemoveRange(itemIngredients);
+
+                            //remove item transfer extra
+                            var extras = entity.itemsTransfer.Where(x => x.mainCourseId == item.itemsTransId).ToList();
+                            entity.itemsTransferIngredients.RemoveRange(itemIngredients);
+                            entity.SaveChanges();
+
+                            var it = entity.itemsTransfer.Find(item.itemsTransId);
+                            entity.itemsTransfer.Remove(it);
+                        }
                     }
-                    entity.SaveChanges();
-                    entity.itemsTransfer.RemoveRange(items);
+                    //entity.SaveChanges();
+
+                    //entity.itemsTransfer.RemoveRange(items);
                     entity.SaveChanges();
 
                     var invoice = entity.invoices.Find(invoiceId);
                     for (int i = 0; i < newObject.Count; i++)
                     {
-                        itemsTransfer t;
-                        if (newObject[i].createUserId == 0 || newObject[i].createUserId == null)
+                        itemOrderPreparing orderItem = null;
+                        if(newObject[i].itemsTransId != 0)
                         {
-                            Nullable<long> id = null;
-                            newObject[i].createUserId = id;
+                            long id = newObject[i].itemsTransId;
+                            orderItem = entity.itemOrderPreparing.Where(x => x.itemsTransId == id).FirstOrDefault();
                         }
-                        if (newObject[i].offerId == 0)
+                            
+                        if (orderItem == null)
                         {
-                            Nullable<long> id = null;
-                            newObject[i].offerId = id;
-                        }
-                        if (newObject[i].itemSerial == null)
-                            newObject[i].itemSerial = "";
-
-                        var transferEntity = entity.Set<itemsTransfer>();
-
-                        
-                        newObject[i].invoiceId = invoiceId;
-                        newObject[i].createDate = DateTime.Now;
-                        newObject[i].updateDate = DateTime.Now;
-                        newObject[i].updateUserId = newObject[i].createUserId;
-
-                        t = entity.itemsTransfer.Add(newObject[i]);
-                        entity.SaveChanges();
-
-                        if (newObject[i].mainCourseId == null)
-                        {
-                            #region add ingrediants
-
-                            foreach (var ing in itemsTransfer[i].itemsIngredients)
+                            itemsTransfer t;
+                            if (newObject[i].createUserId == 0 || newObject[i].createUserId == null)
                             {
-                                var itemIngredient = new itemsTransferIngredients()
-                                {
-                                    dishIngredId = ing.dishIngredId,
-                                    isActive = ing.isActive,
-                                    itemsTransId = t.itemsTransId,
-                                    notes = t.notes,
-
-                                };
-                                entity.itemsTransferIngredients.Add(itemIngredient);
-                                entity.SaveChanges();
+                                Nullable<long> id = null;
+                                newObject[i].createUserId = id;
                             }
-
-                            #endregion
-                            #region add extras
-                            foreach (var itm in itemsTransfer[i].itemExtras)
+                            if (newObject[i].offerId == 0)
                             {
-                                var str = JsonConvert.SerializeObject(itm);
-                                itemsTransfer it = new itemsTransfer();
-                                it = JsonConvert.DeserializeObject<itemsTransfer>(str, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
-
-                                if (it.createUserId == 0 || it.createUserId == null)
-                                {
-                                    Nullable<long> id = null;
-                                    it.createUserId = id;
-                                }
-                                if (it.offerId == 0)
-                                {
-                                    Nullable<long> id = null;
-                                    it.offerId = id;
-                                }
-                                if (it.itemSerial == null)
-                                    it.itemSerial = "";
-
-
-                                it.mainCourseId = t.itemsTransId;
-                                it.invoiceId = invoiceId;
-                                it.createDate = DateTime.Now;
-                                it.updateDate = DateTime.Now;
-                                it.updateUserId = it.createUserId;
-
-                                t = entity.itemsTransfer.Add(it);
+                                Nullable<long> id = null;
+                                newObject[i].offerId = id;
                             }
+                            if (newObject[i].itemSerial == null)
+                                newObject[i].itemSerial = "";
+
+                            var transferEntity = entity.Set<itemsTransfer>();
+
+
+                            newObject[i].invoiceId = invoiceId;
+                            newObject[i].createDate = DateTime.Now;
+                            newObject[i].updateDate = DateTime.Now;
+                            newObject[i].updateUserId = newObject[i].createUserId;
+
+                            t = entity.itemsTransfer.Add(newObject[i]);
                             entity.SaveChanges();
 
-                            #endregion
+                            if (newObject[i].mainCourseId == null)
+                            {
+                                #region add ingrediants
+
+                                foreach (var ing in itemsTransfer[i].itemsIngredients)
+                                {
+                                    var itemIngredient = new itemsTransferIngredients()
+                                    {
+                                        dishIngredId = ing.dishIngredId,
+                                        isActive = ing.isActive,
+                                        itemsTransId = t.itemsTransId,
+                                        notes = t.notes,
+
+                                    };
+                                    entity.itemsTransferIngredients.Add(itemIngredient);
+                                    entity.SaveChanges();
+                                }
+
+                                #endregion
+                                #region add extras
+                                foreach (var itm in itemsTransfer[i].itemExtras)
+                                {
+                                    var str = JsonConvert.SerializeObject(itm);
+                                    itemsTransfer it = new itemsTransfer();
+                                    it = JsonConvert.DeserializeObject<itemsTransfer>(str, new JsonSerializerSettings { DateParseHandling = DateParseHandling.None });
+
+                                    if (it.createUserId == 0 || it.createUserId == null)
+                                    {
+                                        Nullable<long> id = null;
+                                        it.createUserId = id;
+                                    }
+                                    if (it.offerId == 0)
+                                    {
+                                        Nullable<long> id = null;
+                                        it.offerId = id;
+                                    }
+                                    if (it.itemSerial == null)
+                                        it.itemSerial = "";
+
+
+                                    it.mainCourseId = t.itemsTransId;
+                                    it.invoiceId = invoiceId;
+                                    it.createDate = DateTime.Now;
+                                    it.updateDate = DateTime.Now;
+                                    it.updateUserId = it.createUserId;
+
+                                    t = entity.itemsTransfer.Add(it);
+                                }
+                                
+
+                                #endregion
+                            }
                         }
+                        else
+                        {
+                            var itemT = entity.itemsTransfer.Find(newObject[i].itemsTransId);
+                            itemT.updateDate = DateTime.Now;
+                            itemT.updateUserId = newObject[i].createUserId;
+                            itemT.quantity = newObject[i].quantity;
+                            itemT.price = newObject[i].price;
+                            itemT.itemUnitId = newObject[i].itemUnitId;
+                            itemT.offerId = newObject[i].offerId;
+                            itemT.offerType = newObject[i].offerType;
+                            itemT.offerValue = newObject[i].offerValue;
+                            itemT.itemTax = newObject[i].itemTax;
+                            itemT.itemUnitPrice = newObject[i].itemUnitPrice;
+                            itemT.forAgents = newObject[i].forAgents;
+                        }
+                        entity.SaveChanges();
                         if (newObject[i].offerId != null && invoice.invType == "s")
                         {
                             long offerId = (int)newObject[i].offerId;
@@ -377,7 +412,7 @@ namespace POS_Server.Controllers
                     message = "1";
                 }
             }
-            catch { message = "0"; }
+          catch { message = "0"; }
             return message;
         }
         [HttpPost]
