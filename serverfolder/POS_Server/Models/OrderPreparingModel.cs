@@ -16,6 +16,7 @@ namespace POS_Server.Models
         public Nullable<System.DateTime> updateDate { get; set; }
         public Nullable<long> createUserId { get; set; }
         public Nullable<long> updateUserId { get; set; }
+        public Nullable<long> itemsTransId { get; set; }
 
 
         // item

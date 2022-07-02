@@ -60,6 +60,7 @@ namespace POS_Server.Controllers
                                               quantity = (int)i.quantity,
                                               status = s.status,
                                               itemUnitId = i.itemUnitId,
+                                              itemsTransId = i.itemsTransId,
                                           }).OrderBy(x => x.orderNum).ToList();
 
                         int index = 1;
