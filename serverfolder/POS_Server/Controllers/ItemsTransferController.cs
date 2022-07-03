@@ -88,7 +88,8 @@ namespace POS_Server.Controllers
                                     DishIngredientName = x.dishIngredients.name,
                                 itemUnitId = x.itemsTransfer.itemUnitId,
                                itemsTransId = x.itemsTransId,
-                               itemsTransIngredId = x.itemsTransIngredId}).ToList();
+                                    isBasic = x.dishIngredients.isBasic,
+                                    itemsTransIngredId = x.itemsTransIngredId}).ToList();
 
 
                             item.itemExtras = (from t in entity.itemsTransfer.Where(x=> x.mainCourseId == item.itemsTransId)
@@ -534,7 +535,9 @@ namespace POS_Server.Controllers
                             itemUnitId = S.dishIngredients.itemUnitId,                           
                             notes = S.notes,
                             isActive = S.isActive,
-                        }).ToList();
+                            isBasic = S.dishIngredients.isBasic,
+                                
+                            }).ToList();
                     }
                     else
                     {
@@ -548,8 +551,8 @@ namespace POS_Server.Controllers
                                 notes = S.notes,
                                 isActive = S.isActive,
 
-
-                        }).ToList();
+                                isBasic = S.isBasic,
+                            }).ToList();
                     }
 
 

@@ -48,6 +48,7 @@ namespace POS_Server.Controllers
                         updateDate = S.updateDate,
                         createUserId = S.createUserId,
                         updateUserId = S.updateUserId,
+                        isBasic=S.isBasic,
 
                     }).ToList();
 
@@ -101,7 +102,7 @@ namespace POS_Server.Controllers
                         updateDate = S.updateDate,
                         createUserId = S.createUserId,
                         updateUserId = S.updateUserId,
-
+                        isBasic=S.isBasic,
 
 
                     }).ToList();
@@ -183,6 +184,7 @@ namespace POS_Server.Controllers
                        S.updateDate,
                        S.createUserId,
                        S.updateUserId,
+                       S.isBasic,
 
                    })
                    .FirstOrDefault();
@@ -256,6 +258,7 @@ namespace POS_Server.Controllers
                             tmpObject.isActive = newObject.isActive;
                             tmpObject.updateUserId = newObject.createUserId;
                             tmpObject.updateDate = DateTime.Now;
+                            tmpObject.isBasic = newObject.isBasic;
                         }
                         message = entity.SaveChanges().ToString();
                     }

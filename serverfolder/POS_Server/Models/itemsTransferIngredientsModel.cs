@@ -15,6 +15,6 @@ namespace POS_Server.Models
         public string notes { get; set; }
         public string itemName { get; set; }
         public string DishIngredientName { get; set; }
-
+        public bool isBasic { get; set; }
     }
 }

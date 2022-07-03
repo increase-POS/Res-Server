@@ -285,7 +285,8 @@ namespace POS_Server.Controllers
                                        DishIngredientName = x.dishIngredients.name,
                                        itemUnitId = x.itemsTransfer.itemUnitId,
                                        itemsTransId = x.itemsTransId,
-                                       itemsTransIngredId = x.itemsTransIngredId
+                                       itemsTransIngredId = x.itemsTransIngredId,
+                                       isBasic=x.dishIngredients.isBasic,
                                    }).ToList();
 
 
