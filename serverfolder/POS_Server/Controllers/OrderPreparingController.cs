@@ -273,11 +273,12 @@ namespace POS_Server.Controllers
                                 #endregion
 
                                 #region extra items - ingredients
-                                if (o.items.Count > 0 && o.items[0].itemsTransId != null)
+                               
+                                foreach(var it in o.items)
                                 {
-
-                                    long id = (long)o.items[0].itemsTransId;
-                                    o.items[0].itemsIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == id)
+                                  
+                                    long id = (long)it.itemsTransId; 
+                                     it.itemsIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == id)
                                    .Select(x => new itemsTransferIngredientsModel()
                                    {
                                        dishIngredId = x.dishIngredId,
@@ -285,13 +286,12 @@ namespace POS_Server.Controllers
                                        DishIngredientName = x.dishIngredients.name,
                                        itemUnitId = x.itemsTransfer.itemUnitId,
                                        itemsTransId = x.itemsTransId,
-                                       itemsTransIngredId = x.itemsTransIngredId,
-                                       isBasic=x.dishIngredients.isBasic,
+                                       itemsTransIngredId = x.itemsTransIngredId
                                    }).ToList();
 
 
                                     //extras
-                                    o.items[0].itemExtras = (from t in entity.itemsTransfer.Where(x => x.mainCourseId == id)
+                                    it.itemExtras = (from t in entity.itemsTransfer.Where(x => x.mainCourseId == id)
                                                        join u in entity.itemsUnits on t.itemUnitId equals u.itemUnitId
                                                        join i in entity.items on u.itemId equals i.itemId
                                                        join un in entity.units on u.unitId equals un.unitId
@@ -308,31 +308,9 @@ namespace POS_Server.Controllers
                                                        })
                                             .ToList();
                                 }
+                             
                                 #endregion
-                                //#region calculate remaining time
-                                //if (o.preparingTime != null)
-                                //{
-
-                                //    if(o.status == "Listed")
-                                //    {
-                                //        o.remainingTime = (decimal)o.preparingTime;
-                                //    }
-                                //    else
-                                //    {
-                                //        DateTime createDate = (DateTime)entity.orderPreparingStatus
-                                //                                    .Where(x => x.orderPreparingId == o.orderPreparingId && x.status == "Preparing")
-                                //                                    .Select(x => x.createDate).SingleOrDefault();
-
-                                //        createDate = createDate.AddMinutes((double)o.preparingTime);
-                                //        if (createDate > DateTime.Now)
-                                //        {
-                                //            TimeSpan remainingTime = createDate - DateTime.Now;
-                                //            o.remainingTime = (decimal)remainingTime.TotalMinutes;
-                                //        }
-                                //    }
-
-                                //}
-                                //#endregion
+                                
 
                                 // set sequence num to items
                                 int index = 1;
@@ -360,6 +338,7 @@ namespace POS_Server.Controllers
                                     finalRrepOrders.AddRange(prepOrders);
                             }
                         }
+                        
                         return TokenManager.GenerateToken(finalRrepOrders);
                     }
                 }
