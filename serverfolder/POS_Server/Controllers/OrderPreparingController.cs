@@ -273,40 +273,43 @@ namespace POS_Server.Controllers
                                 #endregion
 
                                 #region extra items - ingredients
-                               
+                    
                                 foreach(var it in o.items)
                                 {
-                                  
-                                    long id = (long)it.itemsTransId; 
-                                     it.itemsIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == id)
-                                   .Select(x => new itemsTransferIngredientsModel()
-                                   {
-                                       dishIngredId = x.dishIngredId,
-                                       isActive = x.isActive,
-                                       DishIngredientName = x.dishIngredients.name,
-                                       itemUnitId = x.itemsTransfer.itemUnitId,
-                                       itemsTransId = x.itemsTransId,
-                                       itemsTransIngredId = x.itemsTransIngredId
-                                   }).ToList();
+                                    if (it.itemsTransId != null)
+                                    {
+                                        long id = (long)it.itemsTransId;
+                                   
+                                        it.itemsIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == id)
+                                       .Select(x => new itemsTransferIngredientsModel()
+                                       {
+                                           dishIngredId = x.dishIngredId,
+                                           isActive = x.isActive,
+                                           DishIngredientName = x.dishIngredients.name,
+                                           itemUnitId = x.itemsTransfer.itemUnitId,
+                                           itemsTransId = x.itemsTransId,
+                                           itemsTransIngredId = x.itemsTransIngredId
+                                       }).ToList();
 
+                                     
+                                        //extras
+                                        it.itemExtras = (from t in entity.itemsTransfer.Where(x => x.mainCourseId == id)
+                                                         join u in entity.itemsUnits on t.itemUnitId equals u.itemUnitId
+                                                         join i in entity.items on u.itemId equals i.itemId
+                                                         join un in entity.units on u.unitId equals un.unitId
+                                                         select new ItemTransferModel()
+                                                         {
+                                                             itemsTransId = t.itemsTransId,
+                                                             itemId = i.itemId,
+                                                             itemName = i.name,
+                                                             quantity = t.quantity,
 
-                                    //extras
-                                    it.itemExtras = (from t in entity.itemsTransfer.Where(x => x.mainCourseId == id)
-                                                       join u in entity.itemsUnits on t.itemUnitId equals u.itemUnitId
-                                                       join i in entity.items on u.itemId equals i.itemId
-                                                       join un in entity.units on u.unitId equals un.unitId
-                                                       select new ItemTransferModel()
-                                                       {
-                                                           itemsTransId = t.itemsTransId,
-                                                           itemId = i.itemId,
-                                                           itemName = i.name,
-                                                           quantity = t.quantity,
-
-                                                           notes = t.notes,
-                                                           price = t.price,
-                                                           unitName = un.name,
-                                                       })
-                                            .ToList();
+                                                             notes = t.notes,
+                                                             price = t.price,
+                                                             unitName = un.name,
+                                                         })
+                                                .ToList();
+                                    }
                                 }
                              
                                 #endregion
