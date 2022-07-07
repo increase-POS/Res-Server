@@ -1759,5 +1759,178 @@ namespace POS_Server.Controllers
                 }
             }
         }
+
+
+        [HttpPost]
+        [Route("GetOrdersforPrintByInvoiceId")]
+        public string GetOrdersforPrintByInvoiceId(string token)
+        {
+            token = TokenManager.readToken(HttpContext.Current.Request);
+            var strP = TokenManager.GetPrincipal(token);
+            if (strP != "0") //invalid authorization
+            {
+                return TokenManager.GenerateToken(strP);
+            }
+            else
+            {
+                long invoiceId = 0;
+                IEnumerable<Claim> claims = TokenManager.getTokenClaims(token);
+                foreach (Claim c in claims)
+                {
+                    if (c.Type == "invoiceId")
+                    {
+                        invoiceId = long.Parse(c.Value);
+                    }
+                }
+                try
+                {
+                    using (incposdbEntities entity = new incposdbEntities())
+                    {
+                        var prepOrders = (from o in entity.orderPreparing.Where(x => x.invoiceId == invoiceId)
+                                          join i in entity.itemOrderPreparing on o.orderPreparingId equals i.orderPreparingId
+                                          // join s in entity.orderPreparingStatus on o.orderPreparingId equals s.orderPreparingId
+                                          join INV in entity.invoices on o.invoiceId equals INV.invoiceId
+                                          join WT in entity.users on INV.waiterId equals WT.userId into JWT
+                                          from W in JWT.DefaultIfEmpty()
+                                              //join ITB in entity.invoiceTables on INV.invoiceId equals ITB.invoiceId into JITB
+
+                                              //from TABL in JITB.DefaultIfEmpty()
+                                              //   where (s.orderStatusId == entity.orderPreparingStatus.Where(x => x.orderPreparingId == o.orderPreparingId).Max(x => x.orderStatusId))
+
+                                          select new OrderPreparingModel()
+                                          {
+                                              orderPreparingId = o.orderPreparingId,
+                                              invoiceId = o.invoiceId,
+                                              notes = o.notes,
+                                              orderNum = o.orderNum,
+                                              preparingTime = o.preparingTime,
+                                              updateDate = o.updateDate,
+                                              updateUserId = o.updateUserId,
+                                              createDate = o.createDate,
+                                              createUserId = o.createUserId,
+                                              itemName = i.itemsUnits.items.name,
+                                              quantity = (int)i.quantity,
+                                              // status = s.status,
+                                              itemUnitId = i.itemUnitId,
+                                              waiter = W.name + " " + W.lastname,
+                                              invType = INV.invType,
+                                              invNum = INV.invNumber,
+                                              branchId = INV.branchId,
+                                              branchName = INV.branches.name,
+                                              invDate = INV.invDate,
+                                              invTime = INV.invTime,
+                                              categoryId = i.itemsUnits.items.categoryId,
+                                              categoryCode = i.itemsUnits.items.categories.categoryCode,
+                                              categoryName = i.itemsUnits.items.categories.name,
+                                              items = entity.itemOrderPreparing.Where(x => x.orderPreparingId == o.orderPreparingId)
+                                                                                    .Select(x => new itemOrderPreparingModel()
+                                                                                    {
+                                                                                        itemOrderId = x.itemOrderId,
+                                                                                        itemName = x.itemsUnits.items.name,
+                                                                                        itemId = x.itemsUnits.items.itemId,
+                                                                                        itemUnitId = x.itemUnitId,
+                                                                                        quantity = x.quantity,
+                                                                                        createDate = x.createDate,
+                                                                                        updateDate = x.updateDate,
+                                                                                        createUserId = x.createUserId,
+                                                                                        updateUserId = x.updateUserId,
+                                                                                        categoryId = x.itemsUnits.items.categories.categoryId,
+                                                                                        categoryName = x.itemsUnits.items.categories.name,
+                                                                                        itemsTransId = x.itemsTransId,
+
+                                                                                    }).ToList(),
+
+                                          }).OrderBy(x => new { x.categoryId, x.orderPreparingId }).ToList();
+
+                        //   int index = 1;
+                        //tables
+                        foreach (OrderPreparingModel o in prepOrders)
+                        {
+
+
+
+                            #region get invoice tables
+                            var tables = (from t in entity.tables.Where(x => x.isActive == 1)
+                                          join it in entity.invoiceTables.Where(x => x.invoiceId == o.invoiceId) on t.tableId equals it.tableId
+                                          select new TableModel()
+                                          {
+                                              tableId = t.tableId,
+                                              name = t.name,
+                                              sectionName = t.hallSections.name,
+                                              sectionId = t.hallSections.sectionId,
+                                          }).ToList();
+                            string tablesNames = "";
+                            string sectables = "";
+                            foreach (TableModel tabl in tables)
+                            {
+
+                                if (tablesNames == "")
+                                    tablesNames += tabl.name;
+                                else tablesNames += ", " + tabl.name;
+
+                                if (sectables == "")
+                                    sectables += (tabl.sectionId == null ? "-" : tabl.sectionName) + "/" + tabl.name;
+                                else sectables += ", " + (tabl.sectionId == null ? "-" : tabl.sectionName) + "/" + tabl.name;
+                            }
+                            o.tables = tablesNames;
+                            o.sectionTable = sectables;
+
+                            #endregion
+                            #region extra items - ingredients
+
+                            foreach (var it in o.items)
+                            {
+                                if (it.itemsTransId != null)
+                                {
+                                    long id = (long)it.itemsTransId;
+
+                                    it.itemsIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == id)
+                                   .Select(x => new itemsTransferIngredientsModel()
+                                   {
+                                       dishIngredId = x.dishIngredId,
+                                       isActive = x.isActive,
+                                       DishIngredientName = x.dishIngredients.name,
+                                       itemUnitId = x.itemsTransfer.itemUnitId,
+                                       itemsTransId = x.itemsTransId,
+                                       itemsTransIngredId = x.itemsTransIngredId
+                                   }).ToList();
+
+
+                                    //extras
+                                    it.itemExtras = (from t in entity.itemsTransfer.Where(x => x.mainCourseId == id)
+                                                     join u in entity.itemsUnits on t.itemUnitId equals u.itemUnitId
+                                                     join i in entity.items on u.itemId equals i.itemId
+                                                     join un in entity.units on u.unitId equals un.unitId
+                                                     select new ItemTransferModel()
+                                                     {
+                                                         itemsTransId = t.itemsTransId,
+                                                         itemId = i.itemId,
+                                                         itemName = i.name,
+                                                         quantity = t.quantity,
+
+                                                         notes = t.notes,
+                                                         price = t.price,
+                                                         unitName = un.name,
+                                                     })
+                                            .ToList();
+                                }
+                            }
+
+                            #endregion
+
+                        }
+
+
+
+                        return TokenManager.GenerateToken(prepOrders);
+                    }
+                }
+                catch
+                {
+                    return TokenManager.GenerateToken("0");
+                }
+            }
+        }
+
     }
 }
