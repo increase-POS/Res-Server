@@ -1014,7 +1014,7 @@ namespace POS_Server.Controllers
                                                                                     updateUserId = x.updateUserId,
                                                                                     categoryId = x.itemsUnits.items.categories.categoryId,
                                                                                     categoryName = x.itemsUnits.items.categories.name,
-
+                                                                                    itemsTransId = x.itemsTransId,
                                                                                 }).ToList(),
                                                 status = s.status,
                                             }).FirstOrDefault();
@@ -1066,6 +1066,41 @@ namespace POS_Server.Controllers
                         int index = 1;
                         foreach (itemOrderPreparingModel item in prepOrder.items)
                         {
+                            if (item.itemsTransId != null)
+                            {
+                                long id = (long)item.itemsTransId;
+
+                                item.itemsIngredients = entity.itemsTransferIngredients.Where(x => x.itemsTransId == id)
+                               .Select(x => new itemsTransferIngredientsModel()
+                               {
+                                   dishIngredId = x.dishIngredId,
+                                   isActive = x.isActive,
+                                   DishIngredientName = x.dishIngredients.name,
+                                   itemUnitId = x.itemsTransfer.itemUnitId,
+                                   itemsTransId = x.itemsTransId,
+                                   itemsTransIngredId = x.itemsTransIngredId
+                               }).ToList();
+
+
+                                //extras
+                                item.itemExtras = (from t in entity.itemsTransfer.Where(x => x.mainCourseId == id)
+                                                 join u in entity.itemsUnits on t.itemUnitId equals u.itemUnitId
+                                                 join i in entity.items on u.itemId equals i.itemId
+                                                 join un in entity.units on u.unitId equals un.unitId
+                                                 select new ItemTransferModel()
+                                                 {
+                                                     itemsTransId = t.itemsTransId,
+                                                     itemId = i.itemId,
+                                                     itemName = i.name,
+                                                     quantity = t.quantity,
+
+                                                     notes = t.notes,
+                                                     price = t.price,
+                                                     unitName = un.name,
+                                                 })
+                                        .ToList();
+                            }
+
                             item.sequence = index;
                             index++;
                         }                              
