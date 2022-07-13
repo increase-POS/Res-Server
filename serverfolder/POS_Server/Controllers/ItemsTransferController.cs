@@ -384,7 +384,7 @@ namespace POS_Server.Controllers
                                     it.updateDate = DateTime.Now;
                                     it.updateUserId = it.createUserId;
 
-                                    t = entity.itemsTransfer.Add(it);
+                                    entity.itemsTransfer.Add(it);
                                     entity.SaveChanges();
                                 }
                                 
